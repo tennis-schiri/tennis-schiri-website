@@ -1,0 +1,96 @@
+name: Live-Website in separaten Webspace veröffentlichen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tennis-schiri-live-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Produktivversion nach tennis-schiri-live laden
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Repository abrufen
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Separate Zugangsdaten für den Live-Ordner prüfen
+        shell: bash
+        env:
+          FTP_LIVE_HOST: ${{ secrets.FTP_LIVE_HOST }}
+          FTP_LIVE_USER: ${{ secrets.FTP_LIVE_USER }}
+          FTP_LIVE_PASSWORD: ${{ secrets.FTP_LIVE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : "${FTP_LIVE_HOST:?GitHub Secret FTP_LIVE_HOST fehlt}"
+          : "${FTP_LIVE_USER:?GitHub Secret FTP_LIVE_USER fehlt}"
+          : "${FTP_LIVE_PASSWORD:?GitHub Secret FTP_LIVE_PASSWORD fehlt}"
+          echo "Separate Live-Zugangsdaten sind hinterlegt."
+
+      - name: Produktivdateien getrennt aus der Testversion erzeugen
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import pathlib
+          import re
+          import shutil
+
+          src = pathlib.Path("public")
+          out = pathlib.Path("_live_upload")
+          if out.exists():
+              shutil.rmtree(out)
+          shutil.copytree(src, out)
+          pages = sorted(out.rglob("*.html"))
+          if len(pages) != 11:
+              raise SystemExit(f"Erwartet 11 Seiten, gefunden: {len(pages)}")
+          for page in pages:
+              raw = page.read_text(encoding="utf-8")
+              pattern = r'<meta\s+name=["\']robots["\']\s+content=["\']noindex\s*,\s*nofollow\s*,\s*noarchive["\']\s*/?>'
+              cleaned, count = re.subn(pattern, "", raw, count=1, flags=re.IGNORECASE)
+              if count != 1:
+                  raise SystemExit(f"Fehlende oder unerwartete noindex-Angabe: {page}")
+              if 'Entwicklungsfassung' in cleaned or 'Entwurfsseiten' in cleaned:
+                  raise SystemExit(f"Ungeprüfter Entwicklungsvermerk: {page}")
+              page.write_text(cleaned, encoding="utf-8")
+          (out / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+          for required in [
+              "index.html", "impressum/index.html", "datenschutz/index.html",
+              "favicon.svg", "assets/site.css", "assets/instagram.js",
+              "data/instagram.json",
+          ]:
+              file = out / required
+              if not file.is_file() or not file.stat().st_size:
+                  raise SystemExit(f"Fehlende Live-Datei: {file}")
+          if (src / "robots.txt").read_text(encoding="utf-8").find("Disallow: /") == -1:
+              raise SystemExit("Staging-Schutz wurde unerwartet geändert")
+          print(f"Live-Version mit {len(pages)} Seiten erstellt; Staging bleibt gesperrt.")
+          PY
+
+      - name: Live-Dateien ausschließlich ins freigegebene FTP-Verzeichnis laden
+        shell: bash
+        env:
+          FTP_LIVE_HOST: ${{ secrets.FTP_LIVE_HOST }}
+          FTP_LIVE_USER: ${{ secrets.FTP_LIVE_USER }}
+          FTP_LIVE_PASSWORD: ${{ secrets.FTP_LIVE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          # Der FTP_LIVE_USER muss im KAS auf /tennis-schiri-live/ begrenzt sein.
+          # Es wird kein WordPress-Verzeichnis angefasst und nichts gelöscht.
+          while IFS= read -r -d '' file; do
+            relative="${file#_live_upload/}"
+            echo "Live-Datei: ${relative}"
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
+              --retry 2 --connect-timeout 20 --max-time 120 \
+              --user "${FTP_LIVE_USER}:${FTP_LIVE_PASSWORD}" \
+              --upload-file "${file}" \
+              "ftp://${FTP_LIVE_HOST}:21/${relative}"
+          done < <(find _live_upload -type f -print0 | sort -z)
+          echo "Produktivdateien liegen im separaten Live-Ordner. Die Hauptdomain wird NICHT automatisch umgestellt."
