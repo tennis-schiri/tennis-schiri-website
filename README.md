@@ -74,10 +74,14 @@ Die ursprüngliche Partnerliste wurde aus der vom Betreiber bereitgestellten Dat
 
 ## Instagram-Verlinkungen
 
-Die drei Instagram-Profile sind als einfache Links mit lokal eingebundenem SVG-Icon (ohne externen Feed) im Footer aller statischen Seiten vorhanden:
+Die drei Instagram-Profile sind als einfache Links mit lokal eingebundenem SVG-Icon im Footer aller statischen Seiten vorhanden:
 
 - Tennis-Schiri: https://www.instagram.com/tennis.schiri/
 - TENNILO: https://www.instagram.com/tennilo.app/
 - Michael Wiedeck: https://www.instagram.com/michaelwiedeck/
 
 Die Profile öffnen in einem neuen Tab. Es wird kein Social-Media-Tracking-Skript eingebunden.
+
+Auf der **Startseite** erscheint zusätzlich der eigene Instagram-Feed von Tennis-Schiri und TENNILO mit je drei Vorschaubildern. Die Anzeigen werden aus lokalem JSON und lokalen Bilddateien versorgt. Der tägliche GitHub-Workflow holt neue Beiträge über die offizielle Instagram-Login-API, verschlüsselt den Tokenstand vor einer GitHub-Sicherung und überträgt nur die freigegebenen öffentlichen Vorschauen per FTPS. **Solange die beiden Konten nicht durch den Betreiber autorisiert wurden, erscheinen direkte Profil-Links statt der Beitragsbilder.**
+
+**Ersteinrichtung:** siehe [`docs/instagram-setup.md`](docs/instagram-setup.md). Dafür werden drei neue GitHub-Secrets (`IG_TOKEN_TENNIS_SCHIRI`, `IG_TOKEN_TENNILO`, `IG_ENCRYPTION_KEY`) benötigt. Die Website funktioniert bis dahin ohne Fehlermeldung.
