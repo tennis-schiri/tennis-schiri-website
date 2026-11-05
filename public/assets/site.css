@@ -198,3 +198,72 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .footer-links a:hover{color:#fff}
 @media(max-width:850px){.content-grid{grid-template-columns:1fr;gap:26px}.interior-hero{padding:130px 0 63px}.notice-band .container{display:block}.notice-band a{display:inline-block;margin-top:12px}}
 @media(max-width:620px){.inner-section{padding:52px 0 72px}.event-group{padding:19px}.event-group .date-line{grid-template-columns:1fr;gap:3px}.interior-hero h1{font-size:49px}.interior-hero p{font-size:15px}.card-panel{padding:22px}.secondary-link{margin-left:0;display:block;margin-top:18px}}
+
+
+/* Neue Turnierkarten – gemeinsame Darstellung von Startseite und Turnierübersicht */
+.tournament-meta{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 0}
+.meta-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #d8e2d4;border-radius:999px;background:#eef3e9;color:#355241;font-size:12px;font-weight:750;line-height:1.2;white-space:nowrap}
+.meta-chip .meta-icon{display:inline-block;width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.meta-chip.type-lk{background:#e3f2c9;border-color:#c5dfa1;color:#385926}
+.meta-chip.type-rl{background:#f6e5d4;border-color:#e9cbb1;color:#8f4e24}
+.tournament-cta{display:inline-flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap;background:var(--dark);color:white;padding:12px 18px;border-radius:999px;font-size:13px;font-weight:850;border:0;text-decoration:none;transition:background .2s,transform .2s}
+.tournament-cta:hover{background:#315243;transform:translateY(-1px)}
+.tournament-soon{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:#e8ece5;border:1px solid #d5ddd1;color:#617365;padding:12px 17px;font-size:12px;font-weight:750;white-space:nowrap}
+.featured-tournament{position:relative;overflow:hidden;isolation:isolate;background:#163730;color:#f7f9f3;border-radius:24px;padding:40px 42px;display:grid;grid-template-columns:minmax(0,1fr) 185px;gap:20px;margin:0 0 28px;min-height:335px;box-shadow:0 24px 55px rgba(14,41,31,.13)}
+.featured-tournament:after{content:"";position:absolute;right:-90px;top:-125px;width:330px;height:330px;border:55px solid rgba(200,241,109,.09);border-radius:50%;z-index:-1}
+.featured-tournament .featured-kicker{font-weight:900;color:#c8f16d;letter-spacing:.16em;font-size:11px;text-transform:uppercase}
+.featured-tournament h3{font-size:clamp(26px,3.1vw,43px);letter-spacing:-.06em;line-height:1.08;margin:17px 0 6px;max-width:650px}
+.featured-tournament .featured-location{color:#c4d7c8;font-size:14px}
+.featured-tournament .tournament-meta{margin:19px 0 24px}
+.featured-tournament .meta-chip{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.23);color:#eff9e9}
+.featured-tournament .meta-chip.type-lk{background:#d7f6a1;border-color:#d7f6a1;color:#203c2a}
+.featured-tournament .tournament-cta{background:#c8f16d;color:#193322}
+.featured-tournament .tournament-cta:hover{background:#e2ffad}
+.featured-date{display:flex;flex-direction:column;align-self:center;justify-self:center;text-align:center;position:relative}
+.featured-date strong{font-size:clamp(105px,11vw,158px);line-height:.80;letter-spacing:-.1em;font-weight:900;color:#c8f16d}
+.featured-date span{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:#e4f2d9;font-weight:900;margin-top:20px}
+.event.tournament-row{grid-template-columns:90px minmax(0,1fr) auto;gap:22px;padding:25px 8px}
+.event.tournament-row .datebox .day{font-size:35px}
+.event.tournament-row .event-title{margin:0}
+.event.tournament-row .event-where{margin-top:6px}
+.event.tournament-row .tournament-meta{margin-top:10px}
+.event.tournament-row .event-actions{display:flex;align-items:center;justify-content:flex-end;min-width:170px}
+.event.tournament-row:hover{background:#f0f4ea}
+.tourney-grid{display:grid;grid-template-columns:1fr;gap:16px;margin:29px 0 35px}
+.tourney-card{padding:25px 28px;background:#fff;border:1px solid #dce4d8;border-radius:18px;box-shadow:0 8px 30px rgba(30,59,35,.035);display:grid;grid-template-columns:100px minmax(0,1fr);gap:20px}
+.tourney-card:first-child{border-color:#aac875;box-shadow:0 14px 40px rgba(41,78,34,.09)}
+.tourney-card .datebox .day{font-size:42px}
+.tourney-card h3{font-size:22px;margin:0 0 5px;letter-spacing:-.045em}
+.tourney-card .where{font-size:13px;color:#647768;line-height:1.55}
+.tourney-card .tournament-meta{margin-top:12px}
+.tourney-card .tourney-actions{display:flex;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.tourney-card .category-note{font-size:12px;font-weight:750;color:#64815e}
+.tourney-status-row{padding:13px 0;border-top:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:15px}
+.tourney-status-row .tournament-meta{margin:8px 0 0}
+.tourney-status-row .tournament-soon{flex:none}
+@media(max-width:850px){
+ .featured-tournament{grid-template-columns:minmax(0,1fr) 120px;padding:30px}
+ .featured-date strong{font-size:105px}
+ .event.tournament-row{grid-template-columns:78px minmax(0,1fr);gap:14px}
+ .event.tournament-row .event-actions{grid-column:2;justify-content:flex-start;margin-top:0}
+}
+@media(max-width:620px){
+ .featured-tournament{display:block;min-height:auto;padding:25px 23px}
+ .featured-date{position:absolute;right:19px;top:25px;opacity:.16;pointer-events:none}
+ .featured-date strong{font-size:110px}
+ .featured-date span{display:none}
+ .featured-tournament h3{font-size:30px}
+ .featured-tournament .featured-kicker{max-width:200px}
+ .tournament-meta{gap:6px}
+ .meta-chip{padding:6px 9px;font-size:11px}
+ .meta-chip .meta-icon{width:14px;height:14px}
+ .event.tournament-row{grid-template-columns:64px minmax(0,1fr);gap:13px}
+ .event.tournament-row .event-actions{grid-column:2;grid-row:auto}
+ .event.tournament-row .event-title{font-size:18px}
+ .event.tournament-row .tournament-cta,.event.tournament-row .tournament-soon{font-size:12px;padding:10px 13px}
+ .tourney-card{grid-template-columns:66px minmax(0,1fr);gap:12px;padding:18px 15px}
+ .tourney-card .datebox .day{font-size:32px}
+ .tourney-card h3{font-size:18px}
+ .tourney-status-row{display:block}
+ .tourney-status-row .tournament-soon{margin-top:12px}
+}
