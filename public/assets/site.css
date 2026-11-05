@@ -271,3 +271,24 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 /* Automatisches Weiterblättern der großen Next-Turnier-Karte */
 .event.featured-hidden,.event.event-past{display:none!important}
 .featured-tournament[hidden],.hero-plate[hidden]{display:none!important}
+
+
+/* Startseite: Hinweis auf das nächste Turnier im oberen Titelbereich besser hervorheben */
+.hero-plate{
+  width:290px;
+  padding:23px 27px;
+  border-radius:20px;
+  box-shadow:0 25px 75px rgba(10,25,16,.27);
+}
+.hero-plate .small{font-size:11px;letter-spacing:.10em}
+.hero-plate .date{font-size:35px;line-height:1.12;margin:10px 0 9px}
+.hero-plate .location{font-size:14px;line-height:1.45}
+@media(max-width:850px){
+  .hero-plate{width:260px;padding:19px 22px}
+  .hero-plate .date{font-size:31px}
+}
+@media(max-width:620px){
+  .hero-plate{width:min(255px,78vw);right:5%;bottom:24px;padding:17px 20px}
+  .hero-plate .date{font-size:27px;white-space:normal}
+  .hero-plate .location{font-size:13px}
+}
