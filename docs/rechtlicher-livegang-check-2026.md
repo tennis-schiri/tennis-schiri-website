@@ -22,7 +22,7 @@ Stand: 05.11.2026. Recherche anhand der amtlichen Vorschriften und Anbieterinfor
 **Erledigt:** Verantwortlicher, Zwecke und Rechtsgrundlagen (Hoster, Instagram-Feed, Kontakt), Empfänger, Serverprotokolle, Rechte, Beschwerde, keine automatisierten Einzelentscheidungen. GitHub Actions ist benannt, einschließlich der Möglichkeit von Drittlandverarbeitung.
 
 **Vor dem Livegang klären:**
-- [x] **ALL-INKL-Auftragsverarbeitungsvertrag:** Betreiber bestätigt am 05.11.2026, dass der Vertrag vorliegt. Vor dem Livegang prüfen, dass er für den aktuellen Hostingvertrag gilt und abgeschlossen ist.
+- [x] **ALL-INKL-Auftragsverarbeitungsvertrag:** Laut MembersArea am 23.01.2019 zustande gekommen, Vertragsbedingungen Stand 02.07.2018 (Bestätigung durch Betreiber am 05.11.2026). Der AVV liegt damit nachweislich vor. Da ALL-INKL inzwischen auf Klauseln nach dem EU-Durchführungsbeschluss 2021/915 verweist, kann bei Gelegenheit beim Hoster bestätigt werden, ob die neueren Bedingungen automatisch gelten oder eine Aktualisierung für diesen Altvertrag möglich bzw. erforderlich ist. Aus dem bloßen Datum 2018 folgt keine automatische Unwirksamkeit. Keine privaten/sitzungsgebundenen Download-Links in Repository-Dateien übernehmen.
 - [ ] ALL-INKL Server-/Zugriffsprotokolle und Webstatistik im Kundenaccount konkret prüfen: zusätzliche Protokolle, Speicherdauer, optionale Analysetools.
 - [ ] Wird tatsächlich über ALL-INKL E-Mail empfangen/versendet? Andere E-Mail-/Kalenderanbieter müssen gegebenenfalls in die Datenschutzerklärung aufgenommen werden.
 - [ ] Falls ein Datenschutzbeauftragter gesetzlich bestellt ist, dessen Kontaktdaten ergänzen; für einen allein tätigen Betreiber nicht automatisch erforderlich.
