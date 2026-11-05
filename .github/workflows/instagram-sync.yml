@@ -97,3 +97,31 @@ jobs:
               "ftp://${FTP_HOST}:21/${remote}"
           done
           echo "Instagram-Vorschaudaten wurden aktualisiert."
+
+      - name: Instagram-Vorschauen zusätzlich auf die Live-Website hochladen
+        if: steps.setup.outputs.enabled == 'true'
+        shell: bash
+        env:
+          FTP_LIVE_HOST: ${{ secrets.FTP_LIVE_HOST }}
+          FTP_LIVE_USER: ${{ secrets.FTP_LIVE_USER }}
+          FTP_LIVE_PASSWORD: ${{ secrets.FTP_LIVE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${FTP_LIVE_HOST}" || -z "${FTP_LIVE_USER}" || -z "${FTP_LIVE_PASSWORD}" ]]; then
+            echo "Live-Webspace ist noch nicht über separate GitHub-Secrets konfiguriert; nur Testseite aktualisiert."
+            exit 0
+          fi
+          # Nur der dedizierte FTP-Nutzer für /tennis-schiri-live/ darf hier verwendet werden.
+          shopt -s nullglob
+          files=(public/data/instagram.json public/assets/instagram/*.jpg public/assets/instagram/*.png public/assets/instagram/*.webp)
+          for file in "${files[@]}"; do
+            [[ -s "${file}" ]] || continue
+            remote="${file#public/}"
+            echo "Aktualisiere Live-Instagram-Datei ${remote}"
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
+              --retry 2 --connect-timeout 20 --max-time 120 \
+              --user "${FTP_LIVE_USER}:${FTP_LIVE_PASSWORD}" \
+              --upload-file "${file}" \
+              "ftp://${FTP_LIVE_HOST}:21/${remote}"
+          done
+          echo "Auch die Live-Website erhält künftig die aktuellen Instagram-Vorschauen."
