@@ -69,4 +69,5 @@ Die ursprüngliche Partnerliste wurde aus der vom Betreiber bereitgestellten Dat
 6. RAJ Tennisversand — https://www.raj-tennisversand.de/
 7. myscore.live — https://myscore.live/
 
-**Noch offen: sieben Original-Logo-Bilddateien.** Die HTML-Datei selbst verweist nur auf einen separat gespeicherten Unterordner `Partner – tennis-schiri.de_files`, der bisher nicht mit hochgeladen wurde. Die ursprünglichen Bilddateinamen sind in `public/partner/index.html` jeweils als `data-original-logo` erhalten. Wenn der zugehörige Bilderordner als ZIP vorliegt, werden die Logos lokal nach `public/assets/partner/` übertragen und anstelle der sichtbaren `Original-Logo folgt`-Markierung eingesetzt. Keine externen WordPress-Bildlinks als dauerhafte Lösung verwenden, damit die Seite nach der Abschaltung von WordPress funktioniert.
+**Original-Logos vollständig übernommen:** Der Benutzer stellte den Ordner `Partner – tennis-schiri.de_files.zip` bereit. Daraus wurden genau die sieben auf der ursprünglichen Partnerseite verwendeten Grafiken extrahiert (die CMYK-JPEG-Datei von Precise Resort zur Browserkompatibilität nach RGB konvertiert), als lokale Dateien unter `public/assets/partner/` ins Repository übertragen und in `public/partner/index.html` eingebunden. Sie werden durch den manuellen FTPS-Workflow hochgeladen. Die Original-Partnerlinks bleiben unverändert.
+
