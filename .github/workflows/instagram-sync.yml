@@ -64,7 +64,7 @@ jobs:
           set -euo pipefail
           git config user.name "tennis-schiri Instagram Sync"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- public/data/instagram.json public/assets/instagram
+          git add -A -- public/data/instagram.json public/assets
           if ! git diff --cached --quiet; then
             git commit -m "Instagram-Feed aktualisieren [skip ci]"
             git push origin HEAD:main
