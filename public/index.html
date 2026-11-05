@@ -110,7 +110,7 @@
   if(!featured || !rows.length) return;
   const germanDay=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Berlin'}).format(new Date());
   const next=rows.find(row=>row.dataset.start >= germanDay);
-  rows.forEach(row=>row.classList.toggle('featured-hidden',row===next));
+  rows.forEach(row=>{row.classList.toggle('featured-hidden',row===next);row.classList.toggle('event-past',row.dataset.start<germanDay);});
   if(!next){
     featured.hidden=true;
     const plate=document.querySelector('.hero-plate');
