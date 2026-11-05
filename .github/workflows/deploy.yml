@@ -38,6 +38,13 @@ jobs:
             public/datenschutz/index.html \
             public/partner/index.html \
             public/assets/site.css \
+            public/assets/partner/precise-resort-bad-saarow.jpg \
+            public/assets/partner/sunball-tenniscenter.png \
+            public/assets/partner/sunball-tennis.jpg \
+            public/assets/partner/black-sea-games.jpeg \
+            public/assets/partner/jwts.webp \
+            public/assets/partner/raj-tennisversand.png \
+            public/assets/partner/myscore-live.png \
             public/assets/michael-wiedeck-portrait.jpg \
             public/assets/michael-wiedeck-tennis.jpg \
             public/assets/michael-wiedeck-spiel.jpg \
@@ -64,6 +71,13 @@ jobs:
           # Kein Löschen, kein Zugriff auf WordPress und keine Server-Konfiguration.
           for file in \
             public/assets/site.css \
+            public/assets/partner/precise-resort-bad-saarow.jpg \
+            public/assets/partner/sunball-tenniscenter.png \
+            public/assets/partner/sunball-tennis.jpg \
+            public/assets/partner/black-sea-games.jpeg \
+            public/assets/partner/jwts.webp \
+            public/assets/partner/raj-tennisversand.png \
+            public/assets/partner/myscore-live.png \
             public/assets/michael-wiedeck-portrait.jpg \
             public/assets/michael-wiedeck-tennis.jpg \
             public/assets/michael-wiedeck-spiel.jpg \
