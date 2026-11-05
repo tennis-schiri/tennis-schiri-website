@@ -423,3 +423,27 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .footer-social-links{width:100%;display:grid;grid-template-columns:1fr;gap:8px}
   .footer-social-link{padding:12px 14px}
 }
+
+/* Eigenständig synchronisierter Instagram-Feed (ohne Instagram-JavaScript) */
+.ig-feed-section{background:#edf3e6}
+.ig-feeds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.ig-account{min-width:0;background:#fff;border:1px solid #d8e4d3;border-radius:22px;padding:25px;box-shadow:0 14px 40px rgba(23,46,31,.05)}
+.ig-account-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.ig-account-identity{display:flex;align-items:center;gap:12px;min-width:0}
+.ig-account-symbol{width:45px;height:45px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:#d9f1b3;color:#254732;flex:none}
+.ig-account-identity h3{font-weight:900;font-size:20px;line-height:1.15;letter-spacing:-.04em;margin:0 0 4px}
+.ig-account-identity p{font-size:12px;font-weight:700;color:#748374;margin:0}
+.ig-profile-link{font-size:12px;font-weight:850;color:#35583b;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.ig-post-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;min-height:154px;align-content:start}
+.ig-post{display:block;min-width:0;color:inherit;text-decoration:none;border-radius:12px;overflow:hidden;outline-offset:4px}
+.ig-post-media{position:relative;aspect-ratio:1/1;background:#e9efe5;border-radius:11px;overflow:hidden}
+.ig-post-image{display:block;width:100%;height:100%;object-fit:cover;transition:transform .25s}
+.ig-post:hover .ig-post-image{transform:scale(1.045)}
+.ig-post-icon{position:absolute;right:7px;top:6px;display:grid;place-items:center;width:27px;height:27px;border-radius:9px;background:rgba(16,40,30,.78);color:white;font-size:18px;line-height:1}
+.ig-post-caption{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;line-height:1.4;min-height:2.8em;margin:9px 1px 0;font-size:11px;color:#52675b}
+.ig-empty{grid-column:1/-1;min-height:154px;padding:22px;border:1px dashed #cbd9c7;border-radius:13px;background:#f7f9f3;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:12px}
+.ig-empty p{font-size:13px;line-height:1.55;color:#5d705d;margin:0}
+.ig-empty-link{font-size:12px;font-weight:850;text-decoration:underline;text-underline-offset:3px;color:#265338}
+.ig-feed-footnote{margin:17px 0 0;color:#627669;font-size:11px;line-height:1.55}
+@media(max-width:900px){.ig-feeds{grid-template-columns:1fr}.ig-account{padding:25px}.ig-post-grid{max-width:100%}}
+@media(max-width:620px){.ig-account{padding:19px;border-radius:17px}.ig-account-heading{gap:8px}.ig-account-identity h3{font-size:18px}.ig-profile-link{font-size:11px}.ig-post-grid{gap:7px}.ig-post-caption{font-size:10px}.ig-post-icon{width:23px;height:23px;font-size:15px}}
