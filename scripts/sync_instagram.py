@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Refresh both first-party Instagram feeds for the static tennis-schiri website.
 
-Authentication: Meta's Instagram API with Instagram Login (professional accounts).
-Access tokens never reach public/; the current values are stored as Fernet ciphertext
-outside public/ and re-encrypted only when a refresh changes them.
+Authentication: Meta Instagram API with Unified Login (Business Integration
+System User Access Tokens). Tokens are supplied only as GitHub Action secrets;
+they are never saved to the repository or sent to the public website.
 """
 from __future__ import annotations
 
@@ -18,16 +18,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from cryptography.fernet import Fernet, InvalidToken
-
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "public/data/instagram.json"
 IMAGES = ROOT / "public/assets/instagram"
-TOKEN_STATE = ROOT / "private/instagram-tokens.enc"
-API = "https://graph.instagram.com/v25.0"
+API = "https://graph.facebook.com/v26.0"
 MAX_POSTS = 3
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
-REFRESH_DAYS = 25
 ACCOUNTS = (
     ("tennis-schiri", "tennis.schiri", "Tennis-Schiri", "IG_TOKEN_TENNIS_SCHIRI"),
     ("tennilo", "tennilo.app", "TENNILO", "IG_TOKEN_TENNILO"),
@@ -61,52 +57,6 @@ def json_get(path: str, token: str, params: dict[str, str | int]) -> dict:
     if not isinstance(payload, dict) or "error" in payload:
         raise SyncError(f"Meta API meldet einen Fehler auf {path}")
     return payload
-
-
-def refresh_token(token: str) -> tuple[str, int]:
-    # Meta requires the access_token query parameter for this endpoint.
-    params = urllib.parse.urlencode({
-        "grant_type": "ig_refresh_token", "access_token": token,
-    })
-    request = urllib.request.Request(
-        "https://graph.instagram.com/refresh_access_token?" + params,
-        headers={"Accept": "application/json", "User-Agent": "TennisSchiri-InstagramFeed/1.0"},
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=25) as response:
-            payload = json.load(response)
-    except urllib.error.HTTPError as exc:
-        raise SyncError(f"Token-Refresh HTTP {exc.code} (Details aus Datenschutzgründen ausgeblendet)") from None
-    except (urllib.error.URLError, TimeoutError, ValueError) as exc:
-        raise SyncError(f"Token-Refresh fehlgeschlagen: {type(exc).__name__}") from None
-    if not isinstance(payload, dict) or not isinstance(payload.get("access_token"), str):
-        raise SyncError("Token-Refresh lieferte keinen neuen Token")
-    return payload["access_token"], int(payload.get("expires_in", 0))
-
-
-def load_token_state(fernet: Fernet) -> dict:
-    reauthorize = os.getenv("IG_REAUTHORIZE", "false").lower() == "true"
-    if TOKEN_STATE.exists() and not reauthorize:
-        try:
-            state = json.loads(fernet.decrypt(TOKEN_STATE.read_bytes()))
-            if not isinstance(state, dict) or not all(key in state for key, *_ in ACCOUNTS):
-                raise ValueError("Unvollständiger Kontenstatus")
-            return state
-        except (InvalidToken, ValueError, KeyError, TypeError) as exc:
-            raise SyncError(f"Token-Datei nicht lesbar: {type(exc).__name__}") from None
-    state = {}
-    for key, _username, _label, env in ACCOUNTS:
-        initial = os.getenv(env, "").strip()
-        if not initial:
-            raise SyncError(f"GitHub Secret {env} fehlt (Ersteinrichtung oder erneute Autorisierung)")
-        state[key] = {"access_token": initial, "refreshed_at": None}
-    return state
-
-
-def save_token_state(fernet: Fernet, state: dict) -> None:
-    TOKEN_STATE.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(state, ensure_ascii=False, sort_keys=True).encode("utf-8")
-    TOKEN_STATE.write_bytes(fernet.encrypt(payload))
 
 
 def validate_media_link(value: object) -> bool:
@@ -198,8 +148,8 @@ def write_image(key: str, slot: int, post_id: str, data: bytes, ext: str) -> str
     return "assets/instagram/" + name
 
 
-def get_posts(key: str, token: str, old_json: dict) -> list[dict]:
-    result = json_get("/me/media", token, {
+def get_posts(key: str, account_id: str, token: str, old_json: dict) -> list[dict]:
+    result = json_get(f"/{account_id}/media", token, {
         "fields": "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp", "limit": 18,
     })
     data = result.get("data", [])
@@ -239,57 +189,53 @@ def get_posts(key: str, token: str, old_json: dict) -> list[dict]:
     return posts
 
 
-def maybe_refresh(state: dict, key: str, token: str, now: dt.datetime) -> bool:
-    refreshed_at = state[key].get("refreshed_at")
-    if refreshed_at:
-        try:
-            days = (now - dt.datetime.fromisoformat(refreshed_at)).total_seconds() / 86400
-            if days < REFRESH_DAYS:
-                return False
-        except ValueError:
-            pass
-    try:
-        new_token, expires_in = refresh_token(token)
-    except SyncError as exc:
-        # A dashboard token issued < 24h ago is not yet refreshable.
-        # The next scheduled run retries, without losing currently valid media.
-        print(f"Achtung: Token von {key} konnte noch nicht verlängert werden: {exc}", file=sys.stderr)
-        return False
-    state[key] = {"access_token": new_token, "refreshed_at": now.isoformat()}
-    print(f"Token von {key} erneuert (Gültigkeit ungefähr {expires_in // 86400} Tage)")
-    return True
+
+def find_account_id(token: str, username: str) -> str:
+    """Find an IG professional account explicitly assigned to the system user."""
+    result = json_get("/me/assigned_instagram_accounts", token, {
+        "fields": "id,username", "limit": 100,
+    })
+    accounts = result.get("data", [])
+    if not isinstance(accounts, list):
+        raise SyncError("Meta lieferte eine ungültige Liste freigegebener Instagram-Konten")
+    for account in accounts:
+        if not isinstance(account, dict):
+            continue
+        if str(account.get("username", "")).casefold() == username.casefold():
+            account_id = str(account.get("id") or "")
+            if account_id.isdecimal():
+                return account_id
+    raise SyncError(
+        f"@{username} ist dem Unified-Login-Systemnutzer nicht zugewiesen. "
+        "Bitte Freigabe des Instagram-Kontos in der Meta-App prüfen "
+        "(und ggf. Unified Login neu autorisieren)."
+    )
 
 
 def run() -> None:
-    try:
-        fernet = Fernet(os.environ["IG_ENCRYPTION_KEY"].strip().encode("ascii"))
-    except (KeyError, ValueError) as exc:
-        raise SyncError("IG_ENCRYPTION_KEY fehlt oder ist ungültig (Fernet-Schlüssel benötigt)") from exc
-    state = load_token_state(fernet)
+    # Read tokens fresh on every run; no obsolete 60-day refresh or token files.
+    tokens = {}
+    for key, username, label, env in ACCOUNTS:
+        token = os.getenv(env, "").strip()
+        if not token:
+            raise SyncError(f"GitHub Secret {env} fehlt")
+        tokens[key] = token
+
     old_json = json.loads(DATA.read_text(encoding="utf-8")) if DATA.exists() else {}
     accounts = []
     now = now_utc()
-    modified_tokens = not TOKEN_STATE.exists() or os.getenv("IG_REAUTHORIZE", "false").lower() == "true"
 
-    # Verify BOTH accounts and download BOTH feeds before committing the public JSON.
+    # Verify BOTH accounts and download BOTH feeds before committing public JSON.
     for key, username, label, _env in ACCOUNTS:
-        token = state[key].get("access_token", "")
-        if not isinstance(token, str) or not token:
-            raise SyncError("Ungültiger gespeicherter Kontentoken")
-        me = json_get("/me", token, {"fields": "user_id,username"})
-        if str(me.get("username", "")).casefold() != username.casefold():
-            raise SyncError(f"Der GitHub-Token für {key} gehört nicht zum erwarteten @{username}-Konto")
-        posts = get_posts(key, token, old_json)
+        token = tokens[key]
+        account_id = find_account_id(token, username)
+        posts = get_posts(key, account_id, token, old_json)
         accounts.append({
             "key": key, "username": username, "label": label,
             "profile_url": f"https://www.instagram.com/{username}/", "posts": posts,
         })
         print(f"@{username}: {len(posts)} Vorschauen synchronisiert")
-        if maybe_refresh(state, key, token, now):
-            modified_tokens = True
 
-    if modified_tokens:
-        save_token_state(fernet, state)
     result = {"updated_at": old_json.get("updated_at"), "accounts": accounts}
     if accounts != old_json.get("accounts") or not result["updated_at"]:
         result["updated_at"] = now.replace(microsecond=0).isoformat().replace("+00:00", "Z")
