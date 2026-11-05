@@ -71,3 +71,13 @@ Die ursprüngliche Partnerliste wurde aus der vom Betreiber bereitgestellten Dat
 
 **Original-Logos vollständig übernommen:** Der Benutzer stellte den Ordner `Partner – tennis-schiri.de_files.zip` bereit. Daraus wurden genau die sieben auf der ursprünglichen Partnerseite verwendeten Grafiken extrahiert (die CMYK-JPEG-Datei von Precise Resort zur Browserkompatibilität nach RGB konvertiert), als lokale Dateien unter `public/assets/partner/` ins Repository übertragen und in `public/partner/index.html` eingebunden. Sie werden durch den manuellen FTPS-Workflow hochgeladen. Die Original-Partnerlinks bleiben unverändert.
 
+
+## Instagram-Verlinkungen
+
+Die drei Instagram-Profile sind als einfache Links mit lokal eingebundenem SVG-Icon (ohne externen Feed) im Footer aller statischen Seiten vorhanden:
+
+- Tennis-Schiri: https://www.instagram.com/tennis.schiri/
+- TENNILO: https://www.instagram.com/tennilo.app/
+- Michael Wiedeck: https://www.instagram.com/michaelwiedeck/
+
+Die Profile öffnen in einem neuen Tab. Es wird kein Social-Media-Tracking-Skript eingebunden.
