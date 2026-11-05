@@ -13,7 +13,7 @@ Stand: 05.11.2026. Recherche anhand der amtlichen Vorschriften und Anbieterinfor
 **Erledigt:** Name Michael Wiedeck, Anschrift Hauptstr. 129, 15366 Neuenhagen bei Berlin, E-Mail michael@wiedeck.de, Telefon +49 (172) 3064328, Websites, redaktionell Verantwortlicher (vorsorglich nach § 18 Abs. 2 MStV). Von jeder Unterseite über Footer erreichbar.
 
 **Vor dem Livegang klären:**
-- [ ] **Wirtschafts-Identifikationsnummer (W-IdNr.):** Wurde bereits eine `DE...`-Nummer zugeteilt? Wenn ja, muss sie nach § 5 Abs. 1 Nr. 6 DDG ins Impressum. Normale Steuernummer und persönliche Steuer-ID NICHT angeben. Nach Nutzerangabe ist keine USt-IdNr. vorhanden. Die Zuteilung der W-IdNr. ist laut BZSt gestaffelt.
+- [x] **Wirtschafts-Identifikationsnummer (W-IdNr.):** Laut Betreiber bislang nicht vorhanden (Stand 05.11.2026); daher derzeit keine Angabe im Impressum. Falls künftig zugeteilt, nach § 5 Abs. 1 Nr. 6 DDG ergänzen. Normale Steuernummer und persönliche Steuer-ID NICHT veröffentlichen. Nach Nutzerangabe liegt auch keine USt-IdNr. vor. Die W-IdNr. wird vom BZSt automatisch und stufenweise zugeteilt.
 - [ ] Handelsregister-/Gesellschaftsregistereintrag? Wenn ja, Register und Nummer angeben. Nach bisheriger Angabe läuft Tennis-Schiri über Michael Wiedeck; eine juristische Person ist nicht bekannt.
 - [ ] Tätigkeit behördlich erlaubnispflichtig oder reglementierter Beruf? Falls ja, weitere Aufsichts-, Kammer- und berufsrechtliche Angaben; für gewöhnliche Organisation von Tennisturnieren bisher nicht ersichtlich.
 - [ ] Ladungsfähigkeit und Erreichbarkeit der Adresse/E-Mail auch nach Livegang bestätigen.
