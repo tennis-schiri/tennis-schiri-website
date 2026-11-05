@@ -22,7 +22,7 @@ Stand: 05.11.2026. Recherche anhand der amtlichen Vorschriften und Anbieterinfor
 **Erledigt:** Verantwortlicher, Zwecke und Rechtsgrundlagen (Hoster, Instagram-Feed, Kontakt), Empfänger, Serverprotokolle, Rechte, Beschwerde, keine automatisierten Einzelentscheidungen. GitHub Actions ist benannt, einschließlich der Möglichkeit von Drittlandverarbeitung.
 
 **Vor dem Livegang klären:**
-- [ ] ALL-INKL-MembersArea → **Stammdaten / Auftragsverarbeitung**: Vorhandensein und Anwendbarkeit des Auftragsverarbeitungsvertrags nach Art. 28 DSGVO prüfen (ALL-INKL stellt nach eigenen Angaben die Vereinbarung bereit).
+- [x] **ALL-INKL-Auftragsverarbeitungsvertrag:** Betreiber bestätigt am 05.11.2026, dass der Vertrag vorliegt. Vor dem Livegang prüfen, dass er für den aktuellen Hostingvertrag gilt und abgeschlossen ist.
 - [ ] ALL-INKL Server-/Zugriffsprotokolle und Webstatistik im Kundenaccount konkret prüfen: zusätzliche Protokolle, Speicherdauer, optionale Analysetools.
 - [ ] Wird tatsächlich über ALL-INKL E-Mail empfangen/versendet? Andere E-Mail-/Kalenderanbieter müssen gegebenenfalls in die Datenschutzerklärung aufgenommen werden.
 - [ ] Falls ein Datenschutzbeauftragter gesetzlich bestellt ist, dessen Kontaktdaten ergänzen; für einen allein tätigen Betreiber nicht automatisch erforderlich.
