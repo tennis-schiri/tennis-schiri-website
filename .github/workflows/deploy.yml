@@ -38,6 +38,8 @@ jobs:
             public/datenschutz/index.html \
             public/partner/index.html \
             public/assets/site.css \
+            public/assets/instagram.js \
+            public/data/instagram.json \
             public/assets/partner/precise-resort-bad-saarow.jpg \
             public/assets/partner/sunball-tenniscenter.png \
             public/assets/partner/sunball-tennis.jpg \
@@ -69,8 +71,11 @@ jobs:
 
           # Wichtig: KAS-FTP-Benutzer ist auf /tennis-schiri-neu/ beschränkt.
           # Kein Löschen, kein Zugriff auf WordPress und keine Server-Konfiguration.
+          shopt -s nullglob
           for file in \
             public/assets/site.css \
+            public/assets/instagram.js \
+            public/data/instagram.json \
             public/assets/partner/precise-resort-bad-saarow.jpg \
             public/assets/partner/sunball-tenniscenter.png \
             public/assets/partner/sunball-tennis.jpg \
@@ -92,6 +97,9 @@ jobs:
             public/datenschutz/index.html \
             public/partner/index.html \
             public/robots.txt \
+            public/assets/instagram/*.jpg \
+            public/assets/instagram/*.png \
+            public/assets/instagram/*.webp \
             public/index.html; do
             remote="${file#public/}"
             echo "Übertrage ${remote} ..."
