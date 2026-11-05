@@ -1,0 +1,57 @@
+name: Website per FTPS veröffentlichen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tennis-schiri-website-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Testwebsite sicher hochladen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Website aus GitHub abrufen
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Website-Dateien prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s public/index.html
+          test -s public/robots.txt
+          grep -qi '<!doctype html>' public/index.html
+          grep -qi 'noindex' public/index.html
+
+      - name: Dateien per FTPS in den separaten Webspace hochladen
+        shell: bash
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : "${FTP_HOST:?FTP_HOST fehlt}"
+          : "${FTP_USER:?FTP_USER fehlt}"
+          : "${FTP_PASSWORD:?FTP_PASSWORD fehlt}"
+
+          # Der FTP-Benutzer muss im KAS auf /tennis-schiri-neu/ beschränkt sein.
+          # Upload erfolgt relativ zu seinem Startverzeichnis.
+          # Keine Löschbefehle, keine Änderungen an WordPress.
+          for file in public/robots.txt public/index.html; do
+            remote="${file#public/}"
+            echo "Übertrage ${remote} ..."
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
+              --connect-timeout 20 --max-time 120 \
+              --user "${FTP_USER}:${FTP_PASSWORD}" \
+              --upload-file "${file}" \
+              "ftp://${FTP_HOST}:21/${remote}"
+          done
+          echo "Testwebsite erfolgreich übertragen."
