@@ -292,3 +292,43 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .hero-plate .date{font-size:27px;white-space:normal}
   .hero-plate .location{font-size:13px}
 }
+
+/* Turnierdetails: Konkurrenzen, Meldeschluss und Auslosung */
+.tournament-details{
+  margin:16px 0 2px;
+  display:grid;
+  gap:7px;
+  font-size:12px;
+  line-height:1.52;
+  color:#4a5f50;
+}
+.tournament-detail{
+  display:grid;
+  grid-template-columns:100px minmax(0,1fr);
+  gap:10px;
+  align-items:baseline;
+}
+.tournament-detail dt{margin:0;font-weight:850;color:#374c3d}
+.tournament-detail dd{margin:0;min-width:0}
+.tournament-detail a{font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.tournament-detail a:hover{color:#1c3e2a}
+.featured-tournament .tournament-details{
+  max-width:630px;
+  color:#dfebdd;
+  margin:10px 0 24px;
+  font-size:13px;
+}
+.featured-tournament .tournament-detail{grid-template-columns:113px minmax(0,1fr)}
+.featured-tournament .tournament-detail dt{color:#c8f16d}
+.featured-tournament .tournament-detail a{color:#f3ffd5}
+.tourney-card .tournament-details{margin:17px 0 0;font-size:13px}
+.event.tournament-row .tournament-details{font-size:12px;margin-top:14px}
+.event.tournament-row .tournament-detail{grid-template-columns:92px minmax(0,1fr)}
+@media(max-width:620px){
+  .featured-tournament .tournament-detail,
+  .tournament-detail,
+  .event.tournament-row .tournament-detail{grid-template-columns:1fr;gap:2px}
+  .tournament-details{gap:9px}
+  .featured-tournament .tournament-details{font-size:12px}
+  .tourney-card .tournament-details{font-size:12px}
+}
