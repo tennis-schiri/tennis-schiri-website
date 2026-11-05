@@ -25,12 +25,27 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -s public/index.html
-          test -s public/robots.txt
-          grep -qi '<!doctype html>' public/index.html
-          grep -qi 'noindex' public/index.html
+          for file in \
+            public/index.html \
+            public/turniere/index.html \
+            public/ueber-mich/index.html \
+            public/referenzen/index.html \
+            public/leistungen/index.html \
+            public/regelwissen/index.html \
+            public/kontakt/index.html \
+            public/aktuelles/index.html \
+            public/assets/site.css \
+            public/assets/michael-wiedeck-portrait.jpg \
+            public/assets/michael-wiedeck-tennis.jpg \
+            public/assets/michael-wiedeck-spiel.jpg \
+            public/robots.txt; do
+            test -s "$file" || { echo "::error::Fehlende Datei: $file"; exit 1; }
+          done
+          for file in public/index.html public/*/index.html; do
+            grep -qi 'noindex' "$file" || { echo "::error::noindex fehlt: $file"; exit 1; }
+          done
 
-      - name: Dateien per FTPS in den separaten Webspace hochladen
+      - name: Website-Dateien per FTPS in das Testverzeichnis hochladen
         shell: bash
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
@@ -42,16 +57,28 @@ jobs:
           : "${FTP_USER:?FTP_USER fehlt}"
           : "${FTP_PASSWORD:?FTP_PASSWORD fehlt}"
 
-          # Der FTP-Benutzer muss im KAS auf /tennis-schiri-neu/ beschränkt sein.
-          # Upload erfolgt relativ zu seinem Startverzeichnis.
-          # Keine Löschbefehle, keine Änderungen an WordPress.
-          for file in public/robots.txt public/index.html; do
+          # Wichtig: KAS-FTP-Benutzer ist auf /tennis-schiri-neu/ beschränkt.
+          # Kein Löschen, kein Zugriff auf WordPress und keine Server-Konfiguration.
+          for file in \
+            public/assets/site.css \
+            public/assets/michael-wiedeck-portrait.jpg \
+            public/assets/michael-wiedeck-tennis.jpg \
+            public/assets/michael-wiedeck-spiel.jpg \
+            public/turniere/index.html \
+            public/ueber-mich/index.html \
+            public/referenzen/index.html \
+            public/leistungen/index.html \
+            public/regelwissen/index.html \
+            public/kontakt/index.html \
+            public/aktuelles/index.html \
+            public/robots.txt \
+            public/index.html; do
             remote="${file#public/}"
             echo "Übertrage ${remote} ..."
-            curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
               --connect-timeout 20 --max-time 120 \
               --user "${FTP_USER}:${FTP_PASSWORD}" \
               --upload-file "${file}" \
               "ftp://${FTP_HOST}:21/${remote}"
           done
-          echo "Testwebsite erfolgreich übertragen."
+          echo "Website-Dateien für die Test-Subdomain wurden übertragen."
