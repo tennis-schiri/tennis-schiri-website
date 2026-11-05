@@ -48,7 +48,9 @@ jobs:
           if out.exists():
               shutil.rmtree(out)
           shutil.copytree(src, out)
-          pages = sorted(out.rglob("*.html"))
+          # Nur die 11 eigentlichen Inhaltsseiten erhalten die Live-Robots-Regeln.
+          # Die Google-Search-Console-Bestaetigungsdatei bleibt unveraendert.
+          pages = sorted(out.rglob("index.html"))
           if len(pages) != 11:
               raise SystemExit(f"Erwartet 11 Seiten, gefunden: {len(pages)}")
           for page in pages:
@@ -66,6 +68,7 @@ jobs:
               "index.html", "impressum/index.html", "datenschutz/index.html",
               "favicon.svg", "assets/site.css", "assets/instagram.js",
               "data/instagram.json",
+              "google8cf6756d83169a32.html",
           ]:
               file = out / required
               if not file.is_file() or not file.stat().st_size:
