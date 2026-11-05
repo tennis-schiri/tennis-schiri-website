@@ -338,3 +338,26 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .featured-tournament .tournament-detail{grid-template-columns:130px minmax(0,1fr)}
 .event.tournament-row .tournament-detail{grid-template-columns:112px minmax(0,1fr)}
 @media(max-width:620px){.tournament-detail,.featured-tournament .tournament-detail,.event.tournament-row .tournament-detail{grid-template-columns:1fr}}
+
+
+/* Partner und Kooperationen */
+.partner-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
+.partner-card{background:#fff;border:1px solid #dfe6da;border-radius:20px;padding:24px;display:flex;flex-direction:column;min-height:320px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.partner-card:hover{transform:translateY(-4px);border-color:#92b66b;box-shadow:0 18px 40px rgba(20,43,29,.08)}
+.partner-wordmark{height:100px;border-radius:13px;background:#f1f4ed;display:flex;align-items:center;justify-content:center;text-align:center;margin-bottom:21px;font-size:29px;font-weight:900;letter-spacing:-.05em;line-height:.92;color:#244839}
+.partner-wordmark span{color:#7a9c42}
+.partner-wordmark.sunball{display:block;padding-top:23px;color:#264b32;font-size:27px}
+.partner-wordmark.sunball span{font-size:19px;letter-spacing:.18em;color:#d0893d}
+.partner-wordmark.ntc{color:#2e5c3f;font-size:35px}
+.partner-wordmark.rotation{font-size:22px;color:#163e64}
+.partner-wordmark.rotation span{color:#3f6d8b}
+.partner-wordmark.myscore{font-size:32px;color:#192f4a}
+.partner-wordmark.myscore span{color:#598ed1}
+.partner-wordmark.tennilo-mark{font-size:42px;color:#102b29}
+.partner-wordmark.tennilo-mark span{color:#86b948}
+.partner-kind{font-size:10px;letter-spacing:.13em;font-weight:850;color:#799074;margin-bottom:8px}
+.partner-card h3{font-size:21px;letter-spacing:-.045em;line-height:1.15;margin:0 0 12px}
+.partner-card p{font-size:13px;color:#607164;line-height:1.6;margin:0}
+.partner-open{font-size:13px;font-weight:850;margin-top:auto;padding-top:20px;color:#2e5034}
+@media(max-width:900px){.partner-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.partner-grid{grid-template-columns:1fr}.partner-card{min-height:285px}.partner-wordmark{height:88px}}
