@@ -396,3 +396,30 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 @media(max-width:620px){
   .partner-original .partner-logo-frame{height:115px;padding:12px}
 }
+
+/* Instagram-Profile: Verlinkungen ohne eingebettetes Tracking */
+.footer-social{
+  display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+  padding:25px 0;border-bottom:1px solid #30463e;
+}
+.footer-social-title{
+  color:#f0f8ed;font-size:13px;font-weight:850;letter-spacing:.02em;
+}
+.footer-social-links{display:flex;flex-wrap:wrap;gap:10px}
+.footer-social-link{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid #456256;border-radius:14px;padding:10px 14px;
+  text-decoration:none;color:#f2f8ee;line-height:1.25;
+  transition:background .2s,border-color .2s;
+}
+.footer-social-link:hover,.footer-social-link:focus-visible{
+  background:#27483b;border-color:#91b875;
+}
+.footer-social-icon{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linejoin:round}
+.footer-social-link strong{font-size:12px;font-weight:850;display:block}
+.footer-social-link small{font-size:11px;color:#bbcbbf;display:block;margin-top:2px}
+@media(max-width:620px){
+  .footer-social{align-items:flex-start;flex-direction:column;gap:13px}
+  .footer-social-links{width:100%;display:grid;grid-template-columns:1fr;gap:8px}
+  .footer-social-link{padding:12px 14px}
+}
