@@ -14,7 +14,7 @@ Stand: 05.11.2026. Recherche anhand der amtlichen Vorschriften und Anbieterinfor
 
 **Vor dem Livegang klären:**
 - [x] **Wirtschafts-Identifikationsnummer (W-IdNr.):** Laut Betreiber bislang nicht vorhanden (Stand 05.11.2026); daher derzeit keine Angabe im Impressum. Falls künftig zugeteilt, nach § 5 Abs. 1 Nr. 6 DDG ergänzen. Normale Steuernummer und persönliche Steuer-ID NICHT veröffentlichen. Nach Nutzerangabe liegt auch keine USt-IdNr. vor. Die W-IdNr. wird vom BZSt automatisch und stufenweise zugeteilt.
-- [ ] Handelsregister-/Gesellschaftsregistereintrag? Wenn ja, Register und Nummer angeben. Nach bisheriger Angabe läuft Tennis-Schiri über Michael Wiedeck; eine juristische Person ist nicht bekannt.
+- [x] **Unternehmensform/Register:** Betreiber bestätigt ein als Nebengewerbe angemeldetes Einzelunternehmen ohne Handelsregistereintrag (05.11.2026). Daher kein Handelsregister und keine Registernummer anzugeben; im Impressum steht der bürgerliche Name Michael Wiedeck als verantwortlicher Anbieter. „Tennis-Schiri“ ist keine gesonderte Gesellschaft.
 - [ ] Tätigkeit behördlich erlaubnispflichtig oder reglementierter Beruf? Falls ja, weitere Aufsichts-, Kammer- und berufsrechtliche Angaben; für gewöhnliche Organisation von Tennisturnieren bisher nicht ersichtlich.
 - [ ] Ladungsfähigkeit und Erreichbarkeit der Adresse/E-Mail auch nach Livegang bestätigen.
 
