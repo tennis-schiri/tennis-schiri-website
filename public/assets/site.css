@@ -361,3 +361,12 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .partner-open{font-size:13px;font-weight:850;margin-top:auto;padding-top:20px;color:#2e5034}
 @media(max-width:900px){.partner-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:620px){.partner-grid{grid-template-columns:1fr}.partner-card{min-height:285px}.partner-wordmark{height:88px}}
+
+
+/* Original-Partnerliste aus der alten Website – keine erfundenen Logodarstellungen */
+.partner-original{min-height:260px;gap:0}
+.partner-original .partner-logo-pending{height:105px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#f1f4ee,#f1f4ee 12px,#f7f9f5 12px,#f7f9f5 24px);border:1px dashed #d6e2cf;border-radius:13px;margin-bottom:19px}
+.partner-original .partner-logo-pending span{font-size:11px;letter-spacing:.06em;font-weight:700;text-transform:uppercase;color:#7b8c78}
+.partner-original h3{max-width:100%;overflow-wrap:anywhere;font-size:21px;margin:0 0 13px}
+.partner-original .partner-open{margin-top:auto;padding-top:16px}
+@media(max-width:620px){.partner-original{min-height:240px}.partner-original .partner-logo-pending{height:90px}}
