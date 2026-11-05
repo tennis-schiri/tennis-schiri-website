@@ -42,6 +42,7 @@ jobs:
           import pathlib
           import re
           import shutil
+          import xml.etree.ElementTree as ET
 
           src = pathlib.Path("public")
           out = pathlib.Path("_live_upload")
@@ -62,13 +63,30 @@ jobs:
               if 'Entwicklungsfassung' in cleaned or 'Entwurfsseiten' in cleaned:
                   raise SystemExit(f"Ungeprüfter Entwicklungsvermerk: {page}")
               page.write_text(cleaned, encoding="utf-8")
-          (out / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+          # Sitemap ausschließlich aus echten Inhaltsseiten erzeugen.
+          # Die Google-Bestaetigungsdatei ist keine Inhaltsseite.
+          namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
+          ET.register_namespace("", namespace)
+          urlset = ET.Element(f"{{{namespace}}}urlset")
+          for page in sorted(pages, key=lambda item: (item != out / "index.html", str(item))):
+              relative_parent = page.parent.relative_to(out)
+              site_path = "/" if relative_parent == pathlib.Path(".") else f"/{relative_parent.as_posix()}/"
+              url = ET.SubElement(urlset, f"{{{namespace}}}url")
+              ET.SubElement(url, f"{{{namespace}}}loc").text = f"https://tennis-schiri.de{site_path}"
+          tree = ET.ElementTree(urlset)
+          ET.indent(tree, space="  ")
+          tree.write(out / "sitemap.xml", encoding="utf-8", xml_declaration=True)
+          (out / "robots.txt").write_text(
+              "User-agent: *\\nAllow: /\\n\\nSitemap: https://tennis-schiri.de/sitemap.xml\\n",
+              encoding="utf-8",
+          )
           (out / ".htaccess").write_text("# Kanonische Domain (unabhaengig von der alten WordPress-Installation)\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.tennis-schiri\\.de$ [NC]\nRewriteRule ^(.*)$ https://tennis-schiri.de/$1 [R=301,L]\n\n# Alte WordPress-Pfade auf passende neue Informationsseiten umleiten\nRewriteRule ^anfrage/?$ /kontakt/ [R=301,L]\nRewriteRule ^black-sea-games/?$ /partner/ [R=301,L]\nRewriteRule ^veranstaltungen/?$ /turniere/ [R=301,L]\nRewriteRule ^veranstaltungen/kalender/?$ /turniere/ [R=301,L]\nRewriteRule ^veranstaltungen/meine-buchungen/?$ /turniere/ [R=301,L]\nRewriteRule ^2026/06/15/neuer-livescore-bei-meinen-turnieren/?$ /aktuelles/ [R=301,L]\nRewriteRule ^2025/10/09/save-the-date-hallen-lk-turniere-in-neuenhagen-bei-berlin-2025-2026/?$ /turniere/ [R=301,L]\nRewriteRule ^2025/10/01/save-the-date-hallen-lk-turniere-in-bad-saarow/?$ /turniere/ [R=301,L]\nRewriteRule ^2021/04/13/lk-turniere-in-der-gartenstadt-neuenhagen-bei-berlin-2021/?$ /turniere/ [R=301,L]\nRewriteRule ^2021/04/13/hello-world/?$ /ueber-mich/ [R=301,L]\n", encoding="utf-8")
           for required in [
               "index.html", "impressum/index.html", "datenschutz/index.html",
               "favicon.svg", "assets/site.css", "assets/instagram.js",
               "data/instagram.json",
               "google8cf6756d83169a32.html",
+              "sitemap.xml",
           ]:
               file = out / required
               if not file.is_file() or not file.stat().st_size:
