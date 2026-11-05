@@ -82,6 +82,6 @@ Die drei Instagram-Profile sind als einfache Links mit lokal eingebundenem SVG-I
 
 Die Profile öffnen in einem neuen Tab. Es wird kein Social-Media-Tracking-Skript eingebunden.
 
-Auf der **Startseite** erscheint zusätzlich der eigene Instagram-Feed von Tennis-Schiri und TENNILO mit je drei Vorschaubildern. Die Anzeigen werden aus lokalem JSON und lokalen Bilddateien versorgt. Der tägliche GitHub-Workflow holt neue Beiträge über die offizielle Instagram-Login-API, verschlüsselt den Tokenstand vor einer GitHub-Sicherung und überträgt nur die freigegebenen öffentlichen Vorschauen per FTPS. **Solange die beiden Konten nicht durch den Betreiber autorisiert wurden, erscheinen direkte Profil-Links statt der Beitragsbilder.**
+Auf der **Startseite** erscheint zusätzlich der eigene Instagram-Feed von Tennis-Schiri und TENNILO mit je drei Vorschaubildern. Die Anzeigen werden aus lokalem JSON und lokalen Bilddateien versorgt. Der tägliche GitHub-Workflow holt neue Beiträge über die offizielle Instagram-API mit Unified Login (Systemnutzer-Tokens) und überträgt nur die freigegebenen öffentlichen Vorschauen per FTPS. **Bis zum ersten erfolgreichen Abruf erscheinen direkte Profil-Links statt der Beitragsbilder.**
 
-**Ersteinrichtung:** siehe [`docs/instagram-setup.md`](docs/instagram-setup.md). Dafür werden drei neue GitHub-Secrets (`IG_TOKEN_TENNIS_SCHIRI`, `IG_TOKEN_TENNILO`, `IG_ENCRYPTION_KEY`) benötigt. Die Website funktioniert bis dahin ohne Fehlermeldung.
+**Ersteinrichtung:** siehe [`docs/instagram-setup.md`](docs/instagram-setup.md). Dafür werden zwei GitHub-Secrets (`IG_TOKEN_TENNIS_SCHIRI` und `IG_TOKEN_TENNILO`) benötigt. Die Website funktioniert bis dahin ohne Fehlermeldung.
