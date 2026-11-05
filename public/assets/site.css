@@ -332,3 +332,9 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .featured-tournament .tournament-details{font-size:12px}
   .tourney-card .tournament-details{font-size:12px}
 }
+
+/* Platz für die Bezeichnung „Anmeldeschluss“ */
+.tournament-detail{grid-template-columns:116px minmax(0,1fr)}
+.featured-tournament .tournament-detail{grid-template-columns:130px minmax(0,1fr)}
+.event.tournament-row .tournament-detail{grid-template-columns:112px minmax(0,1fr)}
+@media(max-width:620px){.tournament-detail,.featured-tournament .tournament-detail,.event.tournament-row .tournament-detail{grid-template-columns:1fr}}
