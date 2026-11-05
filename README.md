@@ -25,6 +25,7 @@ Entwicklung der neuen Website für **tennis-schiri.de**. Die bisherige WordPress
 - Aktuelles: `public/aktuelles/index.html`
 - Impressum (Entwurf): `public/impressum/index.html`
 - Datenschutz (Entwurf): `public/datenschutz/index.html`
+- Partner und Kooperationen: `public/partner/index.html`
 - Design: `public/assets/site.css`
 - Persönliche Fotos: `public/assets/michael-wiedeck-*.jpg`
 
@@ -52,3 +53,9 @@ Konkurrenzen (alle drei Turniere): Herren Einzel, Damen Einzel, Herren 30 Einzel
 
 **Anmeldeschluss und Auslosung:** In der öffentlich abrufbaren Fassung der tennis.de-Detailseiten nicht zuverlässig auslesbar. Daher in der Website ausdrücklich **„Auf tennis.de prüfen“** mit Link zum jeweiligen Turnier; keine geschätzten Datums-/Zeitangaben übernehmen. Sobald die verbindlichen Angaben vorliegen, die drei Datensätze in `public/index.html` und `public/turniere/index.html` ergänzen. Bei den vier angekündigten Ranglistenturnieren 2027 sind Konkurrenzen und Fristen noch nicht veröffentlicht bzw. hier nicht verifiziert; Platzhalter bleiben sichtbar.
 
+
+## November 2026: SUNBALL-Fristen und Partnerseite
+
+Anmeldeschluss/Auslosung jeweils zwei Tage vor Turnier: 27.12.2026 → 25.12.2026 um 18:00/19:00 Uhr; 30.01.2027 → 28.01.2027 um 18:00/19:00 Uhr; 06.02.2027 → 04.02.2027 um 18:00/19:00 Uhr.
+
+Die Partnerseite wurde als **vorläufige Übersicht zu belegten Turnierstandorten und Projekten** mit den verifizierten offiziellen Links angelegt: https://www.sunballtennisbsa.de/, https://ntc93.com/, https://tc-rotation.de/, https://myscore.live/de und https://tennilo.de. Die Kacheln verwenden absichtlich **keine als offiziell dargestellten Logos**, sondern neue Textmarken, da die Bilder und die ursprüngliche Partnerliste auf der alten WordPress-Website öffentlich nicht zuverlässig abrufbar waren. Vor finaler Freischaltung Original-Logos und konkrete Partner-/Sponsorenbeziehungen anhand der alten Seite oder vom Auftraggeber bereitgestellter Dateien abgleichen.
