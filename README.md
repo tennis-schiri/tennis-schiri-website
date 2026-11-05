@@ -20,9 +20,11 @@ Entwicklung der neuen Website für **tennis-schiri.de**. Die bisherige WordPress
 - Über mich: `public/ueber-mich/index.html`
 - Referenzen: `public/referenzen/index.html`
 - Leistungen: `public/leistungen/index.html`
-- Regelwissen: `public/regelwissen/index.html`
+- Regelwissen (Coming soon): `public/regelwissen/index.html`
 - Kontakt: `public/kontakt/index.html`
 - Aktuelles: `public/aktuelles/index.html`
+- Impressum (Entwurf): `public/impressum/index.html`
+- Datenschutz (Entwurf): `public/datenschutz/index.html`
 - Design: `public/assets/site.css`
 - Persönliche Fotos: `public/assets/michael-wiedeck-*.jpg`
 
@@ -32,9 +34,9 @@ Entwicklung der neuen Website für **tennis-schiri.de**. Die bisherige WordPress
 
 ## Vor dem endgültigen Domainwechsel
 
-- Termine, Anmeldelinks und genaue Ausschreibungen erneut prüfen, direkte Anmeldelinks ergänzen.
-- Impressum und Datenschutzerklärung **inhaltlich und rechtlich prüfen und neu als lokale Seiten anlegen**. Die Links zeigen derzeit noch auf die alte WordPress-Website. Nicht als endgültige Lösung verwenden.
-- Inhalte der Regelwissensrubrik mit offiziellen Regelreferenzen erweitern.
+- Termine und Ausschreibungen erneut prüfen. Die drei Winter-LK-Termine verlinken momentan auf den TVBB-Wochenkalender und die alte Turnierübersicht; die dortigen **individuellen** Anmeldelinks noch übernehmen, sobald ihre Ziel-URLs eindeutig ausgelesen werden können.
+- Impressum und Datenschutzhinweise liegen nun lokal; **vor Livegang unbedingt vollständige ladungsfähige Anschrift, Rechtsgrundlagen und Hoster-Angaben abgleichen**. Die aktuellen Seiten sind als Entwürfe gekennzeichnet.
+- Regelwissen bleibt vorerst auf Coming soon. Später mit geprüften Inhalten und offiziellen Regelreferenzen ausbauen.
 - Alte WordPress-URLs auf neue Unterseiten per 301 umleiten, soweit nötig.
 - `noindex` und `robots.txt` erst nach dem Produktivwechsel und rechtlicher Prüfung anpassen.
 - Optionale Funktionen (bisheriger Buchungskalender, Partner, Anfrageformulare) vor dem Abschalten von WordPress separat bewerten.
