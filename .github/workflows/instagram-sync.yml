@@ -62,6 +62,10 @@ jobs:
         if: steps.setup.outputs.enabled == 'true'
         run: python -m pip install -r scripts/instagram-requirements.txt
 
+      - name: Feed-Prüfungen ausführen
+        if: steps.setup.outputs.enabled == 'true'
+        run: python -m unittest discover -s tests -v
+
       - name: Instagram synchronisieren und Token bei Bedarf verlängern
         if: steps.setup.outputs.enabled == 'true'
         env:
