@@ -54,8 +54,19 @@ Konkurrenzen (alle drei Turniere): Herren Einzel, Damen Einzel, Herren 30 Einzel
 **Anmeldeschluss und Auslosung:** In der öffentlich abrufbaren Fassung der tennis.de-Detailseiten nicht zuverlässig auslesbar. Daher in der Website ausdrücklich **„Auf tennis.de prüfen“** mit Link zum jeweiligen Turnier; keine geschätzten Datums-/Zeitangaben übernehmen. Sobald die verbindlichen Angaben vorliegen, die drei Datensätze in `public/index.html` und `public/turniere/index.html` ergänzen. Bei den vier angekündigten Ranglistenturnieren 2027 sind Konkurrenzen und Fristen noch nicht veröffentlicht bzw. hier nicht verifiziert; Platzhalter bleiben sichtbar.
 
 
-## November 2026: SUNBALL-Fristen und Partnerseite
+
+## November 2026: SUNBALL-Fristen und Original-Partnerliste
 
 Anmeldeschluss/Auslosung jeweils zwei Tage vor Turnier: 27.12.2026 → 25.12.2026 um 18:00/19:00 Uhr; 30.01.2027 → 28.01.2027 um 18:00/19:00 Uhr; 06.02.2027 → 04.02.2027 um 18:00/19:00 Uhr.
 
-Die Partnerseite wurde als **vorläufige Übersicht zu belegten Turnierstandorten und Projekten** mit den verifizierten offiziellen Links angelegt: https://www.sunballtennisbsa.de/, https://ntc93.com/, https://tc-rotation.de/, https://myscore.live/de und https://tennilo.de. Die Kacheln verwenden absichtlich **keine als offiziell dargestellten Logos**, sondern neue Textmarken, da die Bilder und die ursprüngliche Partnerliste auf der alten WordPress-Website öffentlich nicht zuverlässig abrufbar waren. Vor finaler Freischaltung Original-Logos und konkrete Partner-/Sponsorenbeziehungen anhand der alten Seite oder vom Auftraggeber bereitgestellter Dateien abgleichen.
+Die ursprüngliche Partnerliste wurde aus der vom Betreiber bereitgestellten Datei `Partner – tennis-schiri.de.htm` (HTML-Export der WordPress-Partnerseite) extrahiert und in `public/partner/index.html` übernommen, in genau dieser Reihenfolge:
+
+1. Precise Resort Bad Saarow — https://www.precisehotels.com/bad-saarow
+2. Sunball Tenniscenter Bad Saarow — https://www.sunballtennisbsa.de/
+3. Sunball Tennis — https://sunball-tennis.de/
+4. BLACK SEA GAMES — https://blackseagames.eu/
+5. Junior World Tennis Series (JWTS) — https://www.jwtstennis.com/
+6. RAJ Tennisversand — https://www.raj-tennisversand.de/
+7. myscore.live — https://myscore.live/
+
+**Noch offen: sieben Original-Logo-Bilddateien.** Die HTML-Datei selbst verweist nur auf einen separat gespeicherten Unterordner `Partner – tennis-schiri.de_files`, der bisher nicht mit hochgeladen wurde. Die ursprünglichen Bilddateinamen sind in `public/partner/index.html` jeweils als `data-original-logo` erhalten. Wenn der zugehörige Bilderordner als ZIP vorliegt, werden die Logos lokal nach `public/assets/partner/` übertragen und anstelle der sichtbaren `Original-Logo folgt`-Markierung eingesetzt. Keine externen WordPress-Bildlinks als dauerhafte Lösung verwenden, damit die Seite nach der Abschaltung von WordPress funktioniert.
