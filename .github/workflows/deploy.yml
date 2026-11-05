@@ -36,6 +36,7 @@ jobs:
             public/aktuelles/index.html \
             public/impressum/index.html \
             public/datenschutz/index.html \
+            public/partner/index.html \
             public/assets/site.css \
             public/assets/michael-wiedeck-portrait.jpg \
             public/assets/michael-wiedeck-tennis.jpg \
@@ -75,6 +76,7 @@ jobs:
             public/aktuelles/index.html \
             public/impressum/index.html \
             public/datenschutz/index.html \
+            public/partner/index.html \
             public/robots.txt \
             public/index.html; do
             remote="${file#public/}"
