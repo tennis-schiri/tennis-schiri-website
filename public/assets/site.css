@@ -370,3 +370,29 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .partner-original h3{max-width:100%;overflow-wrap:anywhere;font-size:21px;margin:0 0 13px}
 .partner-original .partner-open{margin-top:auto;padding-top:16px}
 @media(max-width:620px){.partner-original{min-height:240px}.partner-original .partner-logo-pending{height:90px}}
+
+
+/* Original-Partnerlogos aus der vollständigen Browser-Sicherung */
+.partner-original .partner-logo-frame{
+  height:125px;
+  padding:16px;
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #e7ece5;
+  border-radius:14px;
+  background:#fff;
+}
+.partner-original .partner-logo-frame img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+}
+.partner-original:hover .partner-logo-frame{border-color:#c8d8c0}
+@media(max-width:620px){
+  .partner-original .partner-logo-frame{height:115px;padding:12px}
+}
