@@ -46,10 +46,37 @@
      <line x1="82" y1="394" x2="598" y2="394" stroke="#31261e" stroke-width="5" opacity=".75"/>
      <line x1="82" y1="388" x2="598" y2="388" stroke="#e5dfcb" stroke-width="1" opacity=".8"/>
     </g>
-    <ellipse cx="446" cy="247" rx="72" ry="29" fill="#321f18" opacity=".35" filter="url(#shadow)"/>
-    <circle cx="416" cy="212" r="47" fill="url(#ball)"/>
-    <path d="M393 172 C428 196 431 228 399 254 M441 175 C410 201 411 237 444 250" stroke="#fffce4" stroke-width="3.2" fill="none" opacity=".88"/>
-    <path d="M417 165 A47 47 0 0 1 462 212" stroke="#f9ffcb" stroke-width="2" opacity=".55" fill="none"/>
+    <!-- Tennisball: Kugel, Filzstruktur und typische geschwungene Tennisballnaehte -->
+    <ellipse cx="450" cy="264" rx="77" ry="28" fill="#321f18" opacity=".34" filter="url(#shadow)"/>
+    <defs>
+     <radialGradient id="tennisFelt" cx="29%" cy="24%" r="83%" fx="25%" fy="19%">
+      <stop offset="0" stop-color="#f3ff93"/>
+      <stop offset=".29" stop-color="#daf35a"/>
+      <stop offset=".66" stop-color="#abd640"/>
+      <stop offset="1" stop-color="#5e7d2b"/>
+     </radialGradient>
+     <pattern id="tennisFuzz" width="9" height="9" patternUnits="userSpaceOnUse">
+      <path d="M1 2l2 1M6 7l1-2M3 8l-1-1M8 1l-2 1" stroke="#fff8b0" stroke-width=".65" opacity=".54"/>
+      <circle cx="4.5" cy="5" r=".65" fill="#4c7428" opacity=".3"/>
+     </pattern>
+     <clipPath id="tennisBallCut"><circle r="54"/></clipPath>
+    </defs>
+    <g transform="translate(416 207) rotate(-13)">
+     <circle r="54.8" fill="#365828" opacity=".38"/>
+     <g clip-path="url(#tennisBallCut)">
+      <circle r="54" fill="url(#tennisFelt)"/>
+      <circle r="54" fill="url(#tennisFuzz)" opacity=".62"/>
+      <!-- Die Naehte sind als geschwungene, leicht erhabene Filzbaender ausgefuehrt. -->
+      <path d="M-61 -30 C-37 -49 -20 -17 2 -21 S37 -45 61 -28 M-61 28 C-39 47 -20 17 4 22 S39 48 61 29"
+        fill="none" stroke="#5e803b" stroke-width="9" opacity=".56" stroke-linecap="round"/>
+      <path d="M-61 -30 C-37 -49 -20 -17 2 -21 S37 -45 61 -28 M-61 28 C-39 47 -20 17 4 22 S39 48 61 29"
+        fill="none" stroke="#fbfff0" stroke-width="6.2" stroke-linecap="round"/>
+      <path d="M-61 -31 C-37 -50 -20 -18 2 -22 S37 -46 61 -29 M-61 27 C-39 46 -20 16 4 21 S39 47 61 28"
+        fill="none" stroke="#ffffff" stroke-width="1.5" opacity=".72" stroke-linecap="round"/>
+      <ellipse cx="-19" cy="-29" rx="22" ry="12" transform="rotate(-26 -19 -29)" fill="#ffffff" opacity=".12"/>
+     </g>
+     <circle r="53.5" fill="none" stroke="#d8ec7c" stroke-width="1.2" opacity=".38"/>
+    </g>
     <rect width="660" height="780" fill="#142923" opacity=".09"/>
    </svg>
   </div>
