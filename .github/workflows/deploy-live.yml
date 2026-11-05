@@ -61,6 +61,7 @@ jobs:
                   raise SystemExit(f"Ungeprüfter Entwicklungsvermerk: {page}")
               page.write_text(cleaned, encoding="utf-8")
           (out / "robots.txt").write_text("User-agent: *\nAllow: /\n", encoding="utf-8")
+          (out / ".htaccess").write_text("# Kanonische Domain (unabhaengig von der alten WordPress-Installation)\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.tennis-schiri\\.de$ [NC]\nRewriteRule ^(.*)$ https://tennis-schiri.de/$1 [R=301,L]\n\n# Alte WordPress-Pfade auf passende neue Informationsseiten umleiten\nRewriteRule ^anfrage/?$ /kontakt/ [R=301,L]\nRewriteRule ^black-sea-games/?$ /partner/ [R=301,L]\nRewriteRule ^veranstaltungen/?$ /turniere/ [R=301,L]\nRewriteRule ^veranstaltungen/kalender/?$ /turniere/ [R=301,L]\nRewriteRule ^veranstaltungen/meine-buchungen/?$ /turniere/ [R=301,L]\nRewriteRule ^2026/06/15/neuer-livescore-bei-meinen-turnieren/?$ /aktuelles/ [R=301,L]\nRewriteRule ^2025/10/09/save-the-date-hallen-lk-turniere-in-neuenhagen-bei-berlin-2025-2026/?$ /turniere/ [R=301,L]\nRewriteRule ^2025/10/01/save-the-date-hallen-lk-turniere-in-bad-saarow/?$ /turniere/ [R=301,L]\nRewriteRule ^2021/04/13/lk-turniere-in-der-gartenstadt-neuenhagen-bei-berlin-2021/?$ /turniere/ [R=301,L]\nRewriteRule ^2021/04/13/hello-world/?$ /ueber-mich/ [R=301,L]\n", encoding="utf-8")
           for required in [
               "index.html", "impressum/index.html", "datenschutz/index.html",
               "favicon.svg", "assets/site.css", "assets/instagram.js",
