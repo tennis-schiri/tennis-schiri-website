@@ -625,3 +625,111 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .featured-date.datebox-range .day{font-size:28px}
   .featured-date .month{display:block;font-size:11px}
 }
+
+
+/* Startseite: prominenter Turnier-Button im oberen Titelbild */
+.hero-plate{
+  box-sizing:border-box;
+  width:320px;
+  max-width:calc(100vw - 40px);
+  bottom:42px;
+  right:7%;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  padding:21px 22px 19px;
+  overflow:hidden;
+  background:linear-gradient(148deg,#184536 0%,#102f2a 75%,#0c2824 100%);
+  color:#f7fbf1;
+  border:2px solid #bce96d;
+  border-radius:20px;
+  box-shadow:0 12px 0 rgba(13,43,31,.14),0 24px 62px rgba(8,35,26,.47);
+  transform:rotate(2deg);
+  text-decoration:none;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.hero-plate:hover,.hero-plate:focus-visible{
+  transform:translateY(-4px) rotate(0deg);
+  box-shadow:0 14px 0 rgba(13,43,31,.13),0 29px 75px rgba(8,35,26,.55);
+}
+.hero-plate:focus-visible{outline:3px solid #f9ffc9;outline-offset:4px}
+.hero-plate .small{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:max-content;
+  max-width:100%;
+  margin:0;
+  padding:6px 10px;
+  background:rgba(200,241,109,.13);
+  border:1px solid rgba(200,241,109,.35);
+  border-radius:999px;
+  color:#e2ffaa;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.105em;
+  text-transform:uppercase;
+}
+.hero-plate-dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  flex:none;
+  border-radius:50%;
+  background:#c8f16d;
+  box-shadow:0 0 0 3px rgba(200,241,109,.17);
+}
+.hero-plate .date{
+  display:block;
+  margin:14px 0 7px;
+  color:#d3fb81;
+  font-size:32px;
+  line-height:1.06;
+  letter-spacing:-.055em;
+  font-weight:900;
+  white-space:normal;
+}
+.hero-plate .location{
+  display:block;
+  color:#e8f2e6;
+  font-size:13px;
+  line-height:1.45;
+  font-weight:650;
+  overflow-wrap:break-word;
+}
+.hero-plate-cta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:17px;
+  padding:11px 14px;
+  background:#c8f16d;
+  border-radius:11px;
+  color:#16352a;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.005em;
+}
+.hero-plate-cta span{font-size:18px;line-height:1}
+.hero-plate:hover .hero-plate-cta{background:#e2ffaa}
+@media(max-width:850px){
+  .hero-plate{width:294px;right:5%;padding:19px 19px 17px}
+  .hero-plate .date{font-size:29px}
+}
+@media(max-width:620px){
+  .hero-plate{
+    width:min(292px,86vw);
+    bottom:22px;
+    right:5%;
+    padding:16px 17px;
+    border-radius:17px;
+  }
+  .hero-plate .small{font-size:9px;padding:5px 9px}
+  .hero-plate .date{font-size:27px;margin:12px 0 6px}
+  .hero-plate .location{font-size:12px}
+  .hero-plate-cta{margin-top:13px;padding:10px 12px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-plate{transition:none}
+}
