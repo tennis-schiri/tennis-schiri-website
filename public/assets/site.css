@@ -489,3 +489,139 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .ig-post-media{width:60px;height:60px}
   .ig-feed-footnote{line-height:1.35}
 }
+
+
+/* Turnierkalender: Wochentage und mehrtaegige Datumsbereiche */
+.datebox{
+  box-sizing:border-box;
+  min-width:0;
+  min-height:105px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:12px 4px;
+  border:1px solid #d6e5c9;
+  border-top:3px solid #94c84b;
+  border-radius:14px;
+  background:linear-gradient(180deg,#f5faef 0%,#eaf3e1 100%);
+  color:#1c3d2c;
+  text-align:center;
+}
+.datebox .weekday{
+  font-size:11px;
+  line-height:1.1;
+  letter-spacing:.15em;
+  font-weight:900;
+  color:#53733f;
+  white-space:nowrap;
+}
+.datebox .day,
+.event.tournament-row .datebox .day,
+.tourney-card .datebox .day{
+  font-size:37px;
+  line-height:1;
+  letter-spacing:-.07em;
+  font-weight:900;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.datebox.datebox-range .day,
+.event.tournament-row .datebox.datebox-range .day,
+.tourney-card .datebox.datebox-range .day{
+  font-size:24px;
+  line-height:1.4;
+  letter-spacing:-.08em;
+}
+.datebox .month{
+  font-size:10px;
+  line-height:1.2;
+  font-weight:850;
+  letter-spacing:.04em;
+  color:#5c7461;
+  margin-top:0;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+/* Auch die grosse Vorschau zeigt Start- und Enddatum. */
+.featured-date{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:205px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  padding:24px 12px;
+  border:1px solid rgba(200,241,109,.35);
+  border-top:3px solid #c8f16d;
+  border-radius:19px;
+  background:rgba(200,241,109,.08);
+  text-align:center;
+}
+.featured-date .weekday{
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.16em;
+  line-height:1.2;
+  color:#c8f16d;
+  white-space:nowrap;
+}
+.featured-date .day{
+  font-size:clamp(65px,7vw,96px);
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-.085em;
+  color:#c8f16d;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.featured-date.datebox-range .day{font-size:clamp(36px,4vw,55px)}
+.featured-date .month{
+  font-size:11px;
+  line-height:1.2;
+  color:#eff9e4;
+  font-weight:900;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+@media(max-width:850px){
+  .featured-date{min-height:170px;padding:20px 8px}
+  .featured-date .day{font-size:64px}
+  .featured-date.datebox-range .day{font-size:35px}
+}
+@media(max-width:620px){
+  .event.tournament-row{grid-template-columns:84px minmax(0,1fr)}
+  .tourney-card{grid-template-columns:84px minmax(0,1fr)}
+  .datebox{min-height:96px;padding:10px 3px;gap:5px;border-radius:12px}
+  .datebox .weekday{font-size:10px}
+  .datebox .day,
+  .event.tournament-row .datebox .day,
+  .tourney-card .datebox .day{font-size:34px}
+  .datebox.datebox-range .day,
+  .event.tournament-row .datebox.datebox-range .day,
+  .tourney-card .datebox.datebox-range .day{font-size:21px}
+  .datebox .month{font-size:9px}
+  .featured-tournament{display:flex;flex-direction:column;gap:17px}
+  .featured-date{
+    position:static;
+    order:-1;
+    opacity:1;
+    pointer-events:auto;
+    align-self:flex-start;
+    width:115px;
+    min-height:105px;
+    padding:12px 9px;
+    gap:6px;
+    border-radius:13px;
+  }
+  .featured-date .weekday{font-size:11px}
+  .featured-date .day{font-size:43px}
+  .featured-date.datebox-range .day{font-size:28px}
+  .featured-date .month{display:block;font-size:9px}
+}
