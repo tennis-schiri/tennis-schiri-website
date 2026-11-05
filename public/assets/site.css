@@ -535,7 +535,7 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   letter-spacing:-.08em;
 }
 .datebox .month{
-  font-size:10px;
+  font-size:12px;
   line-height:1.2;
   font-weight:850;
   letter-spacing:.04em;
@@ -582,7 +582,7 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 }
 .featured-date.datebox-range .day{font-size:clamp(36px,4vw,55px)}
 .featured-date .month{
-  font-size:11px;
+  font-size:13px;
   line-height:1.2;
   color:#eff9e4;
   font-weight:900;
@@ -606,7 +606,7 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .datebox.datebox-range .day,
   .event.tournament-row .datebox.datebox-range .day,
   .tourney-card .datebox.datebox-range .day{font-size:21px}
-  .datebox .month{font-size:9px}
+  .datebox .month{font-size:11px}
   .featured-tournament{display:flex;flex-direction:column;gap:17px}
   .featured-date{
     position:static;
@@ -623,5 +623,5 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .featured-date .weekday{font-size:11px}
   .featured-date .day{font-size:43px}
   .featured-date.datebox-range .day{font-size:28px}
-  .featured-date .month{display:block;font-size:9px}
+  .featured-date .month{display:block;font-size:11px}
 }
