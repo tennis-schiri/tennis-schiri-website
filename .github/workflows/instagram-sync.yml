@@ -5,12 +5,6 @@ on:
     # Täglich am frühen Morgen, UTC; ausschließlich Feed-Dateien werden hochgeladen.
     - cron: '23 5 * * *'
   workflow_dispatch:
-    inputs:
-      reauthorize:
-        description: 'Nur aktivieren, wenn beide Instagram-Token-Secrets neu hinterlegt wurden'
-        required: false
-        type: boolean
-        default: false
 
 permissions:
   contents: write
@@ -21,7 +15,7 @@ concurrency:
 
 jobs:
   sync:
-    name: Beide Instagram-Konten abrufen
+    name: Beide Instagram-Konten abrufen (Unified Login)
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -31,60 +25,48 @@ jobs:
         with:
           persist-credentials: true
 
-      - name: Prüfen, ob die Instagram-Verbindung eingerichtet ist
+      - name: Prüfen, ob beide Instagram-Token vorhanden sind
         id: setup
         shell: bash
         env:
-          IG_ENCRYPTION_KEY: ${{ secrets.IG_ENCRYPTION_KEY }}
           IG_TOKEN_TENNIS_SCHIRI: ${{ secrets.IG_TOKEN_TENNIS_SCHIRI }}
           IG_TOKEN_TENNILO: ${{ secrets.IG_TOKEN_TENNILO }}
         run: |
           set -euo pipefail
-          if [[ -z "${IG_ENCRYPTION_KEY}" ]]; then
-            echo "enabled=false" >> "${GITHUB_OUTPUT}"
-            echo "Instagram ist noch nicht autorisiert. IG_ENCRYPTION_KEY fehlt."
-          elif [[ -f private/instagram-tokens.enc ]] || [[ -n "${IG_TOKEN_TENNIS_SCHIRI}" && -n "${IG_TOKEN_TENNILO}" ]]; then
+          if [[ -n "${IG_TOKEN_TENNIS_SCHIRI}" && -n "${IG_TOKEN_TENNILO}" ]]; then
             echo "enabled=true" >> "${GITHUB_OUTPUT}"
           else
             echo "enabled=false" >> "${GITHUB_OUTPUT}"
-            echo "Bitte zuerst die beiden Token-Secrets in GitHub hinterlegen."
+            echo "Die beiden Instagram-Token-Secrets müssen in GitHub hinterlegt werden."
           fi
 
-      - name: Python und Verschlüsselung vorbereiten
+      - name: Python vorbereiten
         if: steps.setup.outputs.enabled == 'true'
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-          cache: 'pip'
-          cache-dependency-path: scripts/instagram-requirements.txt
-
-      - name: Benötigte Abhängigkeit installieren
-        if: steps.setup.outputs.enabled == 'true'
-        run: python -m pip install -r scripts/instagram-requirements.txt
 
       - name: Feed-Prüfungen ausführen
         if: steps.setup.outputs.enabled == 'true'
         run: python -m unittest discover -s tests -v
 
-      - name: Instagram synchronisieren und Token bei Bedarf verlängern
+      - name: Instagram über Unified Login synchronisieren
         if: steps.setup.outputs.enabled == 'true'
         env:
-          IG_ENCRYPTION_KEY: ${{ secrets.IG_ENCRYPTION_KEY }}
           IG_TOKEN_TENNIS_SCHIRI: ${{ secrets.IG_TOKEN_TENNIS_SCHIRI }}
           IG_TOKEN_TENNILO: ${{ secrets.IG_TOKEN_TENNILO }}
-          IG_REAUTHORIZE: ${{ inputs.reauthorize || 'false' }}
         run: python scripts/sync_instagram.py
 
-      - name: Neue Vorschaubilder und verschlüsselte Token sicher speichern
+      - name: Neue Vorschaubilder im Repository speichern
         if: steps.setup.outputs.enabled == 'true'
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "tennis-schiri Instagram Sync"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A -- public/data/instagram.json public/assets private/instagram-tokens.enc
+          git add -A -- public/data/instagram.json public/assets/instagram
           if ! git diff --cached --quiet; then
-            git commit -m "Instagram-Feed und verschlüsselten Tokenstand aktualisieren [skip ci]"
+            git commit -m "Instagram-Feed aktualisieren [skip ci]"
             git push origin HEAD:main
           else
             echo "Keine Änderungen zu committen."
@@ -102,7 +84,6 @@ jobs:
           : "${FTP_HOST:?FTP_HOST fehlt}"
           : "${FTP_USER:?FTP_USER fehlt}"
           : "${FTP_PASSWORD:?FTP_PASSWORD fehlt}"
-          # FTPS-Konto ist bereits auf das Testverzeichnis beschränkt.
           shopt -s nullglob
           files=(public/data/instagram.json public/assets/instagram/*.jpg public/assets/instagram/*.png public/assets/instagram/*.webp)
           for file in "${files[@]}"; do
