@@ -267,3 +267,7 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
  .tourney-status-row{display:block}
  .tourney-status-row .tournament-soon{margin-top:12px}
 }
+
+/* Automatisches Weiterblättern der großen Next-Turnier-Karte */
+.event.featured-hidden,.event.event-past{display:none!important}
+.featured-tournament[hidden],.hero-plate[hidden]{display:none!important}
