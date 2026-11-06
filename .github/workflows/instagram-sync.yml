@@ -2,8 +2,18 @@ name: Instagram-Beiträge automatisch aktualisieren
 
 on:
   schedule:
-    # Täglich am frühen Morgen, UTC; ausschließlich Feed-Dateien werden hochgeladen.
-    - cron: '23 5 * * *'
+    # Metricool veröffentlicht die geplanten Feed-Beiträge überwiegend um 10:00 Uhr
+    # deutscher Zeit (Tennis-Schiri: Mi/So und Sondertermine; TENNILO: Sa).
+    # Auch zusätzliche Di/Fr-Termine werden durch den täglichen Abruf berücksichtigt.
+    # Europe/Berlin berücksichtigt MEZ und MESZ automatisch.
+    - cron: '37 10 * * *'
+      timezone: 'Europe/Berlin'
+    # Zweiter Abruf für verzögerte Veröffentlichungen / GitHub-Ausführungen.
+    - cron: '13 13 * * *'
+      timezone: 'Europe/Berlin'
+    # Frühabruf als Rückfallebene, falls ein Beitrag erst später online ging.
+    - cron: '23 6 * * *'
+      timezone: 'Europe/Berlin'
   workflow_dispatch:
 
 permissions:
