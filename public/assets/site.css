@@ -1632,3 +1632,146 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .workshop-upcoming h2{font-size:27px}
   .workshop-upcoming-action{grid-column:1;white-space:normal}
 }
+
+/* Zahlenwelt der Turniere – zurückhaltende Karten und echte Datenvisualisierung. */
+.hero-side{
+  position:relative;
+  z-index:4;
+  grid-column:2;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:18px;
+  min-width:0;
+  width:100%;
+}
+.hero-side .hero-plate{
+  width:min(100%,370px);
+  max-width:100%;
+  flex:none;
+}
+.hero-stat{
+  width:min(100%,420px);
+  color:#f0f9e7;
+  background:rgba(235,255,212,.075);
+  border:1px solid rgba(216,247,186,.22);
+  border-radius:18px;
+  padding:18px 22px 16px;
+  min-height:178px;
+  backdrop-filter:blur(4px);
+}
+.hero-stat-top{display:flex;align-items:center;justify-content:space-between;gap:13px}
+.hero-stat-top>span{font-size:10px;letter-spacing:.15em;font-weight:900;color:#c9ef9c}
+.hero-stat-top a{font-size:11px;font-weight:750;color:#d8f4b6;text-decoration:underline;text-decoration-color:rgba(216,244,182,.4);text-underline-offset:4px}
+.hero-stat-top a:hover{color:#fff}
+.hero-stat-body{display:flex;align-items:center;gap:18px;margin:15px 0 7px;min-height:77px}
+.hero-stat-body>strong{flex:none;font-size:clamp(43px,4.4vw,61px);font-weight:900;letter-spacing:-.08em;line-height:1;color:#d4f78d;font-variant-numeric:tabular-nums}
+.hero-stat-body>div{min-width:0}
+.hero-stat-body span{display:block;font-size:15px;font-weight:850;line-height:1.28;color:#fff}
+.hero-stat-body small{display:block;font-size:11px;line-height:1.45;color:#bcd4c2;margin-top:6px}
+.hero-stat button{background:none;border:0;padding:4px 0;color:#c1e39f;font-family:inherit;font-weight:800;font-size:11px;cursor:pointer}
+.hero-stat button:hover,.hero-stat button:focus-visible{color:#fff;text-decoration:underline}
+.hero-stat button:focus-visible,.hero-stat a:focus-visible{outline:2px solid #d4f78d;outline-offset:4px}
+@media(max-width:960px){
+  .hero-side{grid-column:auto;align-items:flex-start;width:100%;gap:17px;margin-top:30px}
+  .hero-side .hero-plate{margin-top:0;align-self:flex-start}
+  .hero-stat{width:min(100%,430px)}
+}
+@media(max-width:620px){
+  .hero-side{margin-top:24px}
+  .hero-side .hero-plate{width:100%}
+  .hero-stat{width:100%;padding:18px 18px 15px;min-height:160px}
+  .hero-stat-body{gap:15px;margin:14px 0 9px}
+  .hero-stat-body>strong{font-size:clamp(40px,10vw,53px)}
+  .hero-stat-body span{font-size:14px}
+}
+/* Eigenständige Statistikseite */
+.stats-page-hero{
+  background:
+    radial-gradient(ellipse 45% 90% at 89% 33%,rgba(123,190,88,.18),transparent 88%),
+    linear-gradient(117deg,#163c30,#17382e);
+}
+.stats-page-hero h1{max-width:950px}
+.stats-page-hero p{max-width:760px}
+.stats-hero-meta{display:flex;flex-wrap:wrap;gap:9px;margin-top:29px}
+.stats-hero-meta span{border:1px solid rgba(226,249,196,.22);border-radius:999px;padding:8px 13px;font-size:11px;color:#d7eac7;font-weight:800}
+.stats-page-section{background:#f6f8f1;padding:76px 0 96px}
+.stats-section-head{max-width:690px;margin-bottom:28px}
+.stats-section-head h2{font-size:clamp(34px,4vw,50px);line-height:1.05;letter-spacing:-.055em;margin:12px 0}
+.stats-section-head p{color:#5f7364;font-size:15px;line-height:1.6;margin:0}
+.stats-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stats-kpi{background:#fff;border:1px solid #e0e9d8;border-radius:19px;padding:27px 23px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.stats-kpi span{font-size:12px;font-weight:850;color:#56705a}
+.stats-kpi strong{font-size:clamp(42px,4.7vw,68px);line-height:1.13;color:#153d2d;letter-spacing:-.08em;font-variant-numeric:tabular-nums}
+.stats-kpi small{font-size:11px;line-height:1.45;color:#78867b}
+.stats-feature-row{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;margin:89px 0 34px}
+.stats-feature-text h2{font-size:clamp(33px,4.4vw,58px);line-height:1.06;margin:12px 0 20px;letter-spacing:-.06em}
+.stats-feature-text p{font-size:15px;line-height:1.7;color:#67796a;max-width:530px}
+.stats-record{
+  border-radius:25px;
+  padding:34px 36px;
+  min-height:240px;
+  display:flex;
+  flex-direction:column;
+  background:radial-gradient(circle at 90% 12%,rgba(196,245,113,.19),transparent 55%),#173e30;
+  color:#eaffd8;
+  box-shadow:0 15px 38px rgba(29,64,41,.13);
+}
+.stats-record-kicker{font-size:10px;font-weight:900;letter-spacing:.16em;color:#c8f16d}
+.stats-record strong{font-weight:900;font-size:clamp(78px,9vw,128px);line-height:1.13;letter-spacing:-.085em;color:#d1f782}
+.stats-record span{font-size:17px;font-weight:850;color:#fff}
+.stats-record small{font-size:12px;color:#c1d5c4;margin-top:13px;line-height:1.5}
+.stats-chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.stats-chart-card{background:#fff;border:1px solid #dfe9d7;border-radius:22px;padding:30px 34px 34px}
+.stats-chart-card-top{margin-bottom:26px}
+.stats-chart-card h3{font-size:clamp(25px,3vw,34px);letter-spacing:-.04em;line-height:1.15;margin:9px 0 10px}
+.stats-chart-card p{font-size:13px;line-height:1.65;color:#708071;margin:0}
+.stats-chart-wide{grid-column:1/-1}
+.stats-bars{display:grid;gap:18px;min-height:230px}
+.stats-chart-wide .stats-bars{grid-template-columns:repeat(5,minmax(0,1fr));gap:24px;min-height:0}
+.stats-bar-item{min-width:0}
+.stats-bar-top{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:13px;margin-bottom:9px}
+.stats-bar-top strong{font-weight:850;color:#29513c}
+.stats-bar-top span{font-weight:900;color:#1a392a;font-variant-numeric:tabular-nums}
+.stats-bar-track{height:11px;border-radius:999px;overflow:hidden;background:#e9f0e3}
+.stats-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#7faa55,#b4db6b)}
+.stats-chart-wide .stats-bar-fill{background:linear-gradient(90deg,#2f7550,#83b95b)}
+.stats-bar-item small{display:block;color:#829182;font-size:10px;margin-top:8px;line-height:1.5}
+.stats-table-heading{margin-top:82px}
+.stats-table-wrap{overflow-x:auto;background:#fff;border:1px solid #dfe9d7;border-radius:19px}
+.stats-year-table{width:100%;border-collapse:collapse;min-width:650px;font-variant-numeric:tabular-nums}
+.stats-year-table thead{background:#173f30;color:#fff}
+.stats-year-table th,.stats-year-table td{padding:18px 19px;border-bottom:1px solid #e8eee4;text-align:right;white-space:nowrap;font-size:13px}
+.stats-year-table thead th{font-size:11px;letter-spacing:.02em}
+.stats-year-table th:first-child,.stats-year-table td:first-child{text-align:left}
+.stats-year-table tbody th{font-weight:900;color:#1b4230}
+.stats-year-table tbody td{color:#4d6752}
+.stats-year-table tbody tr:last-child th,.stats-year-table tbody tr:last-child td{border-bottom:0}
+.stats-year-table tbody tr:hover{background:#f1f7e9}
+.stats-source-note{background:#ecf3e4;padding:25px 29px;border-radius:18px;margin-top:24px;border:1px solid #d6e3cb}
+.stats-source-note h3{font-size:18px;margin:0 0 13px;color:#19422f}
+.stats-source-note p{font-size:12px;line-height:1.75;color:#5e735f;margin:0 0 12px}
+.stats-source-note p:last-child{margin-bottom:0}
+.stats-return{display:flex;flex-wrap:wrap;gap:22px;align-items:center;margin-top:36px}
+.stats-return-home{font-size:13px;font-weight:850;color:#275539}
+@media(max-width:1050px){
+  .stats-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stats-chart-wide .stats-bars{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:780px){
+  .stats-page-section{padding:55px 0 76px}
+  .stats-feature-row{grid-template-columns:1fr;margin-top:62px}
+  .stats-chart-grid{grid-template-columns:1fr}
+  .stats-chart-wide{grid-column:auto}
+  .stats-chart-wide .stats-bars{grid-template-columns:1fr;gap:18px}
+  .stats-chart-card{padding:26px 25px}
+}
+@media(max-width:620px){
+  .stats-kpi-grid{gap:10px}
+  .stats-kpi{padding:19px 17px;min-height:154px}
+  .stats-kpi strong{font-size:clamp(37px,9vw,52px)}
+  .stats-kpi small{font-size:10px}
+  .stats-record{padding:27px;min-height:215px}
+  .stats-section-head h2{font-size:36px}
+  .stats-source-note{padding:22px}
+}
