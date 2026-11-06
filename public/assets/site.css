@@ -1221,3 +1221,141 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
     background:linear-gradient(120deg,#804d38 0%,#b87853 58%,#9d5c43 100%);
   }
 }
+
+
+/* Prominenter WhatsApp-Turnier-Community-Teaser auf der Startseite */
+.community-spotlight{
+  position:relative;
+  padding:28px 0 25px;
+  background:#f7f7f0;
+}
+.community-panel{
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:78px minmax(0,1fr) auto;
+  align-items:center;
+  gap:24px;
+  padding:33px 39px;
+  border-radius:23px;
+  background:linear-gradient(120deg,#17382f 0%,#1a4536 54%,#275a38 100%);
+  border:1px solid rgba(200,241,109,.45);
+  box-shadow:0 18px 52px rgba(18,55,36,.16);
+  color:#f6fbef;
+}
+.community-panel:after{
+  content:"";
+  position:absolute;
+  right:-110px;
+  bottom:-160px;
+  width:340px;
+  height:340px;
+  border:1px solid rgba(200,241,109,.2);
+  border-radius:50%;
+  pointer-events:none;
+}
+.community-symbol{
+  width:76px;
+  height:76px;
+  display:grid;
+  place-items:center;
+  background:rgba(200,241,109,.12);
+  border:1px solid rgba(200,241,109,.38);
+  border-radius:22px;
+  color:#c8f16d;
+}
+.community-symbol svg{width:57px;height:57px}
+.community-content{position:relative;z-index:1;min-width:0}
+.community-eyebrow{
+  color:#c8f16d;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.16em;
+  line-height:1.5;
+}
+.community-content h2{
+  font-size:clamp(27px,3vw,39px);
+  line-height:1.1;
+  letter-spacing:-.045em;
+  margin:7px 0 8px;
+  color:#f8fff0;
+}
+.community-content p{
+  max-width:640px;
+  margin:0;
+  font-size:14px;
+  line-height:1.6;
+  color:#d6e8d6;
+}
+.community-content p strong{color:#f0ffcf}
+.community-action{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:9px;
+  min-width:212px;
+}
+.community-join{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  width:100%;
+  padding:16px 18px;
+  background:#c8f16d;
+  color:#173e2d;
+  border:2px solid #e1ff9e;
+  border-radius:13px;
+  font-size:14px;
+  font-weight:900;
+  box-shadow:0 6px 0 rgba(10,32,23,.2);
+  transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+.community-join span{font-size:21px;line-height:1}
+.community-join:hover{
+  background:#e4ffa9;
+  transform:translateY(-3px);
+  box-shadow:0 9px 0 rgba(10,32,23,.2);
+}
+.community-join:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.community-action>span{
+  color:#c6dac8;
+  font-size:11px;
+}
+@media(max-width:980px){
+  .community-panel{
+    grid-template-columns:66px minmax(0,1fr);
+    gap:20px;
+    padding:29px 30px;
+  }
+  .community-symbol{width:66px;height:66px;border-radius:18px}
+  .community-symbol svg{width:51px;height:51px}
+  .community-action{
+    grid-column:2;
+    align-items:flex-start;
+    width:max-content;
+    max-width:100%;
+  }
+}
+@media(max-width:620px){
+  .community-spotlight{padding:19px 0 17px}
+  .community-panel{
+    grid-template-columns:1fr;
+    gap:15px;
+    padding:24px 21px;
+    border-radius:18px;
+  }
+  .community-symbol{width:56px;height:56px;border-radius:15px}
+  .community-symbol svg{width:45px;height:45px}
+  .community-content h2{font-size:28px;margin:5px 0 8px}
+  .community-content p{font-size:13px}
+  .community-action{grid-column:1;width:100%;align-items:stretch}
+  .community-join{justify-content:center;padding:14px 16px}
+  .community-action>span{text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  .community-join{transition:none}
+  .community-join:hover{transform:none}
+}
