@@ -1207,18 +1207,28 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 }
 
 
-/* Startseiten-Platzgrafik: voller Platz statt beschnittener SVG-Ausschnitt */
+/* Hero-Platz: durchgehender Sandplatz-Hintergrund, ohne SVG-Randstreifen.
+   Desktop: kompletter vertikaler Platz. Mobil: quer gedrehter Platz,
+   damit die Linien trotz breitem Bildausschnitt vollständig bleiben. */
 .hero-visual{
-  background:linear-gradient(135deg,#7d4937 0%,#bd7850 52%,#95543d 100%);
+  background:
+    radial-gradient(circle at 78% 20%,rgba(255,210,155,.24),transparent 40%),
+    radial-gradient(circle at 16% 70%,rgba(86,35,29,.22),transparent 52%),
+    linear-gradient(140deg,#884a35 0%,#c68152 54%,#99533c 100%);
 }
 .court-svg{
   width:100%;
   height:100%;
   display:block;
 }
+.court-outline{
+  transform-box:view-box;
+  transform-origin:345px 390px;
+  transform:rotate(-9deg) scale(.84);
+}
 @media(max-width:850px){
-  .hero-visual{
-    background:linear-gradient(120deg,#804d38 0%,#b87853 58%,#9d5c43 100%);
+  .court-outline{
+    transform:rotate(-90deg) scale(.82);
   }
 }
 
