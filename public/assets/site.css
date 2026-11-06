@@ -49,7 +49,6 @@ a:hover .arrow{transform:translate(3px,-2px)}
 .hero-foot strong{display:block;color:#fff;font-weight:800;font-size:14px}
 .hero-visual{position:absolute;right:calc((100vw - min(1280px,100vw))/(-2));height:730px;width:53%;top:0;z-index:1;overflow:hidden}
 .hero-visual:before{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(90deg,var(--dark) 0%,rgba(19,43,40,.12) 27%,transparent 55%)}
-.court-svg{height:100%;width:100%;display:block}
 .hero-plate{position:absolute;bottom:57px;right:8%;z-index:4;background:rgba(250,253,244,.96);color:var(--dark);border-radius:16px;padding:16px 20px;width:218px;box-shadow:0 20px 70px rgba(10,25,16,.2);transform:rotate(3deg)}
 .hero-plate .small{font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:900}
 .hero-plate .date{font-size:28px;letter-spacing:-.06em;font-weight:900;margin:4px 0}
@@ -1207,32 +1206,69 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 }
 
 
-/* Eigenständige, maßstabsgetreue Platzgrafiken für Hoch- und Querformat.
-   Kein CSS-Transformieren der SVG-Platzlinien und keine abgeschnittenen Grundlinien. */
-.hero-visual{
+/* Ruhiger Sandplatz-Hero statt Illustration.
+   Nur feine, abstrahierte Linien – kein gezeichnetes Spielfeld und kein Ball. */
+.hero-visual-clean{
   background:
-    radial-gradient(circle at 80% 17%,rgba(245,191,137,.25),transparent 42%),
-    radial-gradient(circle at 19% 74%,rgba(91,37,29,.24),transparent 60%),
-    linear-gradient(145deg,#814b39 0%,#c17a4e 50%,#98553d 100%);
+    radial-gradient(ellipse at 76% 15%,rgba(255,218,171,.18),transparent 48%),
+    radial-gradient(ellipse at 20% 85%,rgba(70,37,33,.27),transparent 64%),
+    linear-gradient(138deg,#7d4839 0%,#aa674b 43%,#bc7a55 68%,#975842 100%);
 }
-.court-svg{display:block;width:100%;height:100%}
-.court-svg-mobile{display:none}
+.hero-visual-clean:before{
+  background:linear-gradient(90deg,var(--dark) 0%,rgba(19,43,40,.54) 20%,rgba(19,43,40,.08) 60%,transparent 100%);
+}
+.hero-surface{position:absolute;inset:0;overflow:hidden}
+.hero-surface:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.25;
+  background:
+    repeating-linear-gradient(132deg,rgba(255,245,226,.052) 0 1px,transparent 1px 22px),
+    linear-gradient(160deg,rgba(255,235,207,.09),transparent 48%);
+}
+.hero-surface:after{
+  content:"";
+  position:absolute;
+  width:95%;
+  height:120%;
+  top:-12%;
+  right:-38%;
+  border:1px solid rgba(255,241,213,.10);
+  border-radius:48%;
+  transform:rotate(-18deg);
+}
+.hero-line{
+  display:block;
+  position:absolute;
+  height:1.5px;
+  background:rgba(253,239,210,.37);
+  transform:rotate(-10deg);
+  transform-origin:left center;
+  z-index:1;
+}
+.hero-line-1{left:52%;top:23%;width:55%}
+.hero-line-2{left:43%;top:54%;width:56%;opacity:.52}
+.hero-line-3{left:58%;top:78%;width:44%;opacity:.32}
 @media(max-width:850px){
-  .hero-visual{
+  .hero-visual-clean{
+    top:auto;
     left:0;
     right:0;
+    bottom:0;
     width:100%;
+    height:355px;
     opacity:1;
-    height:360px;
   }
-  .hero-visual:before{
-    background:linear-gradient(0deg,rgba(19,43,40,.36) 0%,transparent 33%,transparent 100%);
+  .hero-visual-clean:before{
+    background:linear-gradient(0deg,rgba(19,43,40,.45) 0%,rgba(19,43,40,.08) 50%,transparent 100%);
   }
-  .court-svg-desktop{display:none}
-  .court-svg-mobile{display:block}
+  .hero-line-1{left:25%;top:21%;width:78%}
+  .hero-line-2{left:20%;top:49%;width:70%}
+  .hero-line-3{left:40%;top:72%;width:55%}
 }
 @media(max-width:620px){
-  .hero-visual{height:315px;left:0;width:100%}
+  .hero-visual-clean{height:315px;left:0;right:0;width:100%}
 }
 
 /* Große, eigenständige Turniermeldungs-Kachel direkt vor der Community. */
