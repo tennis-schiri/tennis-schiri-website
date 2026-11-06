@@ -97,6 +97,360 @@
       "value": "309",
       "label": "Teilnahmen im bisherigen Jahr 2026",
       "detail": "Noch kein abgeschlossenes Jahresergebnis."
+    },
+    {
+      "value": "217",
+      "label": "Starts bei den Herren 30",
+      "detail": "Erfasste Einzel-Teilnahmen in dieser AK, 2022–2026."
+    },
+    {
+      "value": "171",
+      "label": "Starts in der Jugend U14 (Jungen)",
+      "detail": "Erfasste Einzel-Teilnahmen in dieser AK, 2022–2026."
+    },
+    {
+      "value": "183",
+      "label": "Starts bei den Herren 40",
+      "detail": "Erfasste Einzel-Teilnahmen in dieser AK, 2022–2026."
     }
-  ]
+  ],
+  "age_analysis": {
+    "period": "2022–2026",
+    "counting_note": "Konkurrenz-Einträge je Altersklasse. Doppel und Mixed werden getrennt ausgewiesen, da sie nicht direkt mit Einzel-Altersklassen vergleichbar sind. Es handelt sich nicht um eindeutige Personen. 2026 ist ein Zwischenstand.",
+    "years": [
+      {
+        "year": 2022,
+        "groups": {
+          "Aktive (Einzel)": 44,
+          "AK 30+ (Einzel)": 149,
+          "Jugend (Einzel)": 73,
+          "Doppel & Mixed": 0
+        }
+      },
+      {
+        "year": 2023,
+        "groups": {
+          "Aktive (Einzel)": 193,
+          "AK 30+ (Einzel)": 85,
+          "Jugend (Einzel)": 223,
+          "Doppel & Mixed": 0
+        }
+      },
+      {
+        "year": 2024,
+        "groups": {
+          "Aktive (Einzel)": 145,
+          "AK 30+ (Einzel)": 217,
+          "Jugend (Einzel)": 139,
+          "Doppel & Mixed": 46
+        }
+      },
+      {
+        "year": 2025,
+        "groups": {
+          "Aktive (Einzel)": 102,
+          "AK 30+ (Einzel)": 90,
+          "Jugend (Einzel)": 122,
+          "Doppel & Mixed": 130
+        }
+      },
+      {
+        "year": 2026,
+        "groups": {
+          "Aktive (Einzel)": 73,
+          "AK 30+ (Einzel)": 79,
+          "Jugend (Einzel)": 27,
+          "Doppel & Mixed": 130
+        }
+      }
+    ],
+    "categories": [
+      {
+        "key": "H",
+        "label": "Herren",
+        "group": "Aktive (Einzel)",
+        "total": 458,
+        "by_year": [
+          32,
+          136,
+          127,
+          99,
+          64
+        ]
+      },
+      {
+        "key": "H30",
+        "label": "Herren 30",
+        "group": "AK 30+ (Einzel)",
+        "total": 217,
+        "by_year": [
+          31,
+          46,
+          74,
+          49,
+          17
+        ]
+      },
+      {
+        "key": "H40",
+        "label": "Herren 40",
+        "group": "AK 30+ (Einzel)",
+        "total": 183,
+        "by_year": [
+          48,
+          20,
+          64,
+          27,
+          24
+        ]
+      },
+      {
+        "key": "M14",
+        "label": "Junioren U14",
+        "group": "Jugend (Einzel)",
+        "total": 171,
+        "by_year": [
+          12,
+          64,
+          36,
+          48,
+          11
+        ]
+      },
+      {
+        "key": "MX Aktive",
+        "label": "Mixed Aktive",
+        "group": "Doppel & Mixed",
+        "total": 140,
+        "by_year": [
+          0,
+          0,
+          0,
+          72,
+          68
+        ]
+      },
+      {
+        "key": "M12",
+        "label": "Junioren U12",
+        "group": "Jugend (Einzel)",
+        "total": 105,
+        "by_year": [
+          10,
+          48,
+          28,
+          10,
+          9
+        ]
+      },
+      {
+        "key": "M18",
+        "label": "Junioren U18",
+        "group": "Jugend (Einzel)",
+        "total": 101,
+        "by_year": [
+          23,
+          15,
+          34,
+          25,
+          4
+        ]
+      },
+      {
+        "key": "D",
+        "label": "Damen",
+        "group": "Aktive (Einzel)",
+        "total": 99,
+        "by_year": [
+          12,
+          57,
+          18,
+          3,
+          9
+        ]
+      },
+      {
+        "key": "HDoppel",
+        "label": "Herren-Doppel",
+        "group": "Doppel & Mixed",
+        "total": 82,
+        "by_year": [
+          0,
+          0,
+          28,
+          46,
+          8
+        ]
+      },
+      {
+        "key": "W14",
+        "label": "Juniorinnen U14",
+        "group": "Jugend (Einzel)",
+        "total": 70,
+        "by_year": [
+          0,
+          28,
+          14,
+          25,
+          3
+        ]
+      },
+      {
+        "key": "W12",
+        "label": "Juniorinnen U12",
+        "group": "Jugend (Einzel)",
+        "total": 69,
+        "by_year": [
+          9,
+          27,
+          19,
+          14,
+          0
+        ]
+      },
+      {
+        "key": "H50",
+        "label": "Herren 50",
+        "group": "AK 30+ (Einzel)",
+        "total": 63,
+        "by_year": [
+          25,
+          0,
+          21,
+          6,
+          11
+        ]
+      },
+      {
+        "key": "D30",
+        "label": "Damen 30",
+        "group": "AK 30+ (Einzel)",
+        "total": 58,
+        "by_year": [
+          16,
+          14,
+          18,
+          0,
+          10
+        ]
+      },
+      {
+        "key": "DDoppel",
+        "label": "Damen-Doppel",
+        "group": "Doppel & Mixed",
+        "total": 52,
+        "by_year": [
+          0,
+          0,
+          18,
+          12,
+          22
+        ]
+      },
+      {
+        "key": "D40",
+        "label": "Damen 40",
+        "group": "AK 30+ (Einzel)",
+        "total": 46,
+        "by_year": [
+          10,
+          0,
+          24,
+          4,
+          8
+        ]
+      },
+      {
+        "key": "W18",
+        "label": "Juniorinnen U18",
+        "group": "Jugend (Einzel)",
+        "total": 41,
+        "by_year": [
+          14,
+          19,
+          8,
+          0,
+          0
+        ]
+      },
+      {
+        "key": "D50",
+        "label": "Damen 50",
+        "group": "AK 30+ (Einzel)",
+        "total": 35,
+        "by_year": [
+          19,
+          5,
+          7,
+          4,
+          0
+        ]
+      },
+      {
+        "key": "MX 40",
+        "label": "Mixed 40",
+        "group": "Doppel & Mixed",
+        "total": 24,
+        "by_year": [
+          0,
+          0,
+          0,
+          0,
+          24
+        ]
+      },
+      {
+        "key": "H60",
+        "label": "Herren 60",
+        "group": "AK 30+ (Einzel)",
+        "total": 18,
+        "by_year": [
+          0,
+          0,
+          9,
+          0,
+          9
+        ]
+      },
+      {
+        "key": "M16",
+        "label": "Junioren U16",
+        "group": "Jugend (Einzel)",
+        "total": 16,
+        "by_year": [
+          0,
+          16,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "key": "W16",
+        "label": "Juniorinnen U16",
+        "group": "Jugend (Einzel)",
+        "total": 11,
+        "by_year": [
+          5,
+          6,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "key": "H40Doppel",
+        "label": "Herren-40-Doppel",
+        "group": "Doppel & Mixed",
+        "total": 8,
+        "by_year": [
+          0,
+          0,
+          0,
+          0,
+          8
+        ]
+      }
+    ]
+  }
 }
