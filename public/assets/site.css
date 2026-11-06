@@ -753,7 +753,10 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   border:1px solid #a6d851;
   border-radius:999px;
   box-shadow:0 9px 30px rgba(11,40,26,.28);
-  font:800 13px/1.1 inherit;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.1;
   letter-spacing:.01em;
   white-space:nowrap;
   cursor:pointer;
