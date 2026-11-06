@@ -81,7 +81,7 @@
     <rect width="660" height="780" fill="#142923" opacity=".09"/>
    </svg>
   </div>
-  <a class="hero-plate" href="#turniere" aria-label="Zum nächsten Turnier springen"><span class="small"><span class="hero-plate-dot" aria-hidden="true"></span>Nächstes Turnier</span><strong class="date">SO · 27. DEZ 2026</strong><span class="location">SUNBALL TENNIS · Bad Saarow</span><span class="hero-plate-cta">Turnier ansehen <span aria-hidden="true">↗</span></span></a>
+  <a class="hero-plate" href="#turniere" aria-label="Zum nächsten Turnier springen"><span class="small"><span class="hero-plate-dot" aria-hidden="true"></span>Nächstes Turnier</span><strong class="date">SO · 27. DEZ 2026</strong><span class="hero-plate-title">SUNBALL TENNIS Winter-LK-Cup</span><span class="hero-plate-place">Tennis Center Bad Saarow</span><span class="hero-plate-cta">Turnier ansehen <span aria-hidden="true">↗</span></span></a>
  </div>
 </section>
 <section class="quicknav" aria-label="Direkteinstieg"><div class="container"><div class="quicknav-inner">
@@ -269,8 +269,8 @@
   const plate=document.querySelector('.hero-plate');
   if(plate){
     plate.querySelector('.date').textContent=date.querySelector('.weekday').textContent+' · '+dateLabel+' '+monthLabel;
-    plate.querySelector('.location').textContent=title+' · '+place;
-    plate.querySelector('.small').textContent='Nächstes Turnier';
+    plate.querySelector('.hero-plate-title').textContent=title;
+    plate.querySelector('.hero-plate-place').textContent=place;
   }
 })();
 </script>
