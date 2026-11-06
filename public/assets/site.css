@@ -1014,3 +1014,93 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .venue-other{padding:18px 17px}
   .venue-other-grid{grid-template-columns:1fr;gap:17px}
 }
+
+
+/* Startseite: vier weitere Turniere und Turnieruebersicht mit Seitennavigation */
+.event.tournament-row.home-excess{display:none!important}
+.home-tourney-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px 24px;
+  padding:18px 10px 20px;
+  border-top:1px solid #dfe8d8;
+}
+.home-tourney-footer>span{
+  font-size:12px;
+  font-weight:700;
+  color:#58745c;
+}
+.home-tourney-footer a{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:900;
+  color:#1b5336;
+}
+.home-tourney-footer a:hover,.home-tourney-footer a:focus-visible{
+  text-decoration:underline;
+  text-underline-offset:4px;
+}
+.tourney-card[hidden],.tourney-pages[hidden]{display:none!important}
+.tourney-pages{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px 20px;
+  padding:0 2px 24px;
+  margin-top:-10px;
+  margin-bottom:30px;
+}
+.tourney-page-status{
+  font-size:13px;
+  font-weight:700;
+  color:#59715e;
+  font-variant-numeric:tabular-nums;
+}
+.tourney-page-controls{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.tourney-page-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:39px;
+  min-height:41px;
+  padding:10px 13px;
+  border:1px solid #ccdccc;
+  border-radius:10px;
+  background:#fff;
+  color:#254633;
+  font-family:inherit;
+  font-size:13px;
+  line-height:1.2;
+  font-weight:850;
+  cursor:pointer;
+  transition:border-color .18s ease,background-color .18s ease,color .18s ease;
+}
+.tourney-page-btn:hover:not(:disabled){border-color:#7eae57;background:#eef7e5}
+.tourney-page-btn.is-active{
+  background:#214c38;
+  border-color:#214c38;
+  color:#fff;
+}
+.tourney-page-btn:disabled{opacity:.45;cursor:not-allowed}
+.tourney-page-btn:focus-visible{outline:3px solid #a4d76a;outline-offset:2px}
+#termine{scroll-margin-top:95px}
+@media(max-width:620px){
+  .home-tourney-footer{padding:16px 2px;align-items:flex-start}
+  .tourney-pages{align-items:flex-start;flex-direction:column;margin-top:-5px}
+  .tourney-page-controls{gap:5px}
+  .tourney-page-btn{min-width:37px;min-height:40px;padding:9px 11px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tourney-page-btn{transition:none}
+}
