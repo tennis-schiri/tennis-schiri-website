@@ -56,6 +56,11 @@ jobs:
               raise SystemExit(f"Erwartet 11 Seiten, gefunden: {len(pages)}")
           for page in pages:
               raw = page.read_text(encoding="utf-8")
+              rel = "assets" if page == out / "index.html" else "../assets"
+              expected_css = f'<link rel="stylesheet" href="{rel}/site.css">'
+              expected_script = f'<script src="{rel}/back-to-top.js?v=2" defer></script>'
+              if expected_css not in raw or expected_script not in raw:
+                  raise SystemExit(f"Stylesheet oder Nach-oben-Skript fehlerhaft eingebunden: {page}")
               pattern = r'<meta\s+name=["\']robots["\']\s+content=["\']noindex\s*,\s*nofollow\s*,\s*noarchive["\']\s*/?>'
               cleaned, count = re.subn(pattern, "", raw, count=1, flags=re.IGNORECASE)
               if count != 1:
