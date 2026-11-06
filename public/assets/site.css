@@ -1207,31 +1207,122 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 }
 
 
-/* Hero-Platz: durchgehender Sandplatz-Hintergrund, ohne SVG-Randstreifen.
-   Desktop: kompletter vertikaler Platz. Mobil: quer gedrehter Platz,
-   damit die Linien trotz breitem Bildausschnitt vollständig bleiben. */
+/* Eigenständige, maßstabsgetreue Platzgrafiken für Hoch- und Querformat.
+   Kein CSS-Transformieren der SVG-Platzlinien und keine abgeschnittenen Grundlinien. */
 .hero-visual{
   background:
-    radial-gradient(circle at 78% 20%,rgba(255,210,155,.24),transparent 40%),
-    radial-gradient(circle at 16% 70%,rgba(86,35,29,.22),transparent 52%),
-    linear-gradient(140deg,#884a35 0%,#c68152 54%,#99533c 100%);
+    radial-gradient(circle at 80% 17%,rgba(245,191,137,.25),transparent 42%),
+    radial-gradient(circle at 19% 74%,rgba(91,37,29,.24),transparent 60%),
+    linear-gradient(145deg,#814b39 0%,#c17a4e 50%,#98553d 100%);
 }
-.court-svg{
-  width:100%;
-  height:100%;
-  display:block;
-}
-.court-outline{
-  transform-box:view-box;
-  transform-origin:345px 390px;
-  transform:rotate(-9deg) scale(.84);
-}
+.court-svg{display:block;width:100%;height:100%}
+.court-svg-mobile{display:none}
 @media(max-width:850px){
-  .court-outline{
-    transform:rotate(-90deg) scale(.82);
+  .hero-visual{
+    left:0;
+    right:0;
+    width:100%;
+    opacity:1;
+    height:360px;
   }
+  .hero-visual:before{
+    background:linear-gradient(0deg,rgba(19,43,40,.36) 0%,transparent 33%,transparent 100%);
+  }
+  .court-svg-desktop{display:none}
+  .court-svg-mobile{display:block}
+}
+@media(max-width:620px){
+  .hero-visual{height:315px;left:0;width:100%}
 }
 
+/* Große, eigenständige Turniermeldungs-Kachel direkt vor der Community. */
+.news-spotlight{
+  position:relative;
+  background:#f7f7f0;
+  padding:31px 0 9px;
+}
+.news-panel{
+  display:grid;
+  grid-template-columns:88px minmax(0,1fr) auto;
+  align-items:center;
+  gap:25px;
+  background:linear-gradient(115deg,#e9f5d7 0%,#f0f8e6 55%,#dff0c7 100%);
+  border:1px solid #bfd99d;
+  border-left:6px solid #91c43d;
+  border-radius:21px;
+  padding:30px 34px;
+  box-shadow:0 13px 35px rgba(27,67,41,.09);
+}
+.news-symbol{
+  width:82px;
+  height:82px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  position:relative;
+  overflow:hidden;
+  background:#173f2e;
+  color:#c8f16d;
+  box-shadow:inset 0 0 0 1px rgba(201,242,111,.24);
+}
+.news-symbol-rings{
+  width:57px;
+  height:57px;
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(201,242,111,.36);
+  box-shadow:0 0 0 11px rgba(201,242,111,.07);
+}
+.news-symbol-text{font-size:27px;font-weight:900;letter-spacing:-.06em;position:relative}
+.news-content{min-width:0}
+.news-content .eyebrow{color:#437a2c;font-size:11px;font-weight:900;letter-spacing:.14em}
+.news-content h2{
+  color:#173e2d;
+  font-size:clamp(25px,3vw,36px);
+  letter-spacing:-.046em;
+  line-height:1.1;
+  margin:9px 0 9px;
+}
+.news-content p{
+  max-width:690px;
+  font-size:15px;
+  line-height:1.55;
+  color:#3f594a;
+  margin:0;
+}
+.news-content p strong{color:#173e2d}
+.news-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+  flex-shrink:0;
+  padding:15px 18px;
+  background:#173f2e;
+  color:#f0ffd4;
+  font-size:13px;
+  font-weight:900;
+  border-radius:12px;
+  white-space:nowrap;
+  box-shadow:0 4px 0 rgba(24,63,46,.14);
+  transition:transform .16s ease,background-color .16s ease;
+}
+.news-link span{font-size:21px;line-height:1}
+.news-link:hover{background:#285b3f;transform:translateY(-2px)}
+.news-link:focus-visible{outline:3px solid #648e30;outline-offset:4px}
+@media(max-width:1000px){
+  .news-panel{grid-template-columns:70px minmax(0,1fr);padding:26px 28px;gap:18px}
+  .news-symbol{width:66px;height:66px;border-radius:18px}
+  .news-link{grid-column:2;justify-self:start}
+}
+@media(max-width:620px){
+  .news-spotlight{padding:19px 0 5px}
+  .news-panel{display:block;padding:25px 23px;border-left-width:4px}
+  .news-symbol{display:none}
+  .news-content h2{font-size:27px}
+  .news-content p{font-size:14px}
+  .news-link{margin-top:20px;max-width:100%;white-space:normal}
+}
 
 /* Prominenter WhatsApp-Turnier-Community-Teaser auf der Startseite */
 .community-spotlight{
