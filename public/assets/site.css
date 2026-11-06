@@ -1913,3 +1913,137 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .nav.open{display:flex}
   .nav a{padding:12px;font-size:14px}
 }
+
+/* TiZ und naechstes Turnier: identische Kanten, Breite und klare Spaltenachse. */
+.hero-side{
+  --hero-card-width:400px;
+  width:100%;
+  max-width:var(--hero-card-width);
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:16px;
+  justify-self:end;
+  align-self:center;
+  align-items:stretch;
+}
+.hero-side>.hero-stat,
+.hero-side>.hero-plate{
+  display:block;
+  position:relative;
+  inset:auto;
+  left:auto;
+  right:auto;
+  top:auto;
+  bottom:auto;
+  transform:none;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  max-width:none;
+  margin:0;
+  justify-self:stretch;
+  align-self:stretch;
+}
+.hero-side>.hero-stat{display:flex}
+.hero-side>.hero-plate:hover,.hero-side>.hero-plate:focus-visible{
+  transform:translateY(-3px);
+}
+@media(max-width:960px){
+  .hero-side{justify-self:stretch;align-self:flex-start;margin-top:30px;max-width:430px}
+  .hero-side>.hero-plate{margin:0}
+}
+@media(max-width:620px){
+  .hero-side{margin-top:24px;max-width:100%;gap:13px}
+}
+
+/* Altersklassen: lesbare Ranking-Balken mit Jahresauswahl und Bewertung. */
+.stats-age-section{margin-top:90px}
+.stats-age-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:22px;
+  margin-bottom:25px;
+}
+.stats-age-header .stats-section-head{margin-bottom:0}
+.stats-age-header .stats-section-head h2{max-width:770px}
+.stats-age-header .stats-section-head p{max-width:735px}
+.stats-age-filter{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:center;
+  padding:5px;
+  border:1px solid #dce7d3;
+  border-radius:16px;
+  background:#eaf1e5;
+}
+.stats-age-filter button{
+  border:0;
+  border-radius:11px;
+  padding:9px 13px;
+  background:transparent;
+  color:#526f57;
+  cursor:pointer;
+  font-weight:850;
+  font-size:12px;
+  transition:background .2s;
+}
+.stats-age-filter button:hover{background:#d7e7ce}
+.stats-age-filter button.is-active{background:#1b4934;color:#fff}
+.stats-age-filter button:focus-visible{outline:2px solid #5c8741;outline-offset:2px}
+.stats-age-highlights{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:20px;
+}
+.stats-age-highlights article{
+  padding:22px 24px;
+  background:#e8f2d9;
+  border:1px solid #d5e6c6;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.stats-age-highlights article span{font-size:11px;font-weight:850;color:#537353}
+.stats-age-highlights article strong{font-size:clamp(35px,4vw,52px);font-weight:900;color:#19442e;line-height:1.12;letter-spacing:-.07em;font-variant-numeric:tabular-nums}
+.stats-age-highlights article p{font-size:13px;color:#456f4d;font-weight:750;margin:1px 0 0}
+.stats-age-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.stats-age-bars{min-height:0;gap:15px}
+.stats-age-bars .stats-bar-top{font-size:12px;margin-bottom:7px}
+.stats-age-bars .stats-bar-track{height:9px}
+.stats-age-bars .stats-bar-fill{background:linear-gradient(90deg,#30734e,#9acc4d)}
+.stats-age-empty{color:#6c7f6d;font-size:13px}
+.stats-age-foot{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:30px;
+  margin-top:22px;
+  align-items:center;
+  background:#eaf1e2;
+  border:1px solid #dce7d4;
+  padding:31px 34px;
+  border-radius:20px;
+}
+.stats-age-foot h3{font-size:clamp(23px,2.7vw,32px);letter-spacing:-.04em;margin:10px 0}
+.stats-age-foot p{font-size:13px;line-height:1.75;color:#57715c;margin:0}
+.stats-age-foot-note{background:#fff;border-radius:14px;padding:20px 23px}
+.stats-age-foot-note strong{font-size:12px;color:#244b31;display:block;margin-bottom:8px}
+.stats-age-foot-note p+p{margin-top:9px}
+@media(max-width:960px){
+  .stats-age-grid{grid-template-columns:1fr}
+  .stats-age-header{align-items:flex-start}
+}
+@media(max-width:680px){
+  .stats-age-section{margin-top:65px}
+  .stats-age-highlights{grid-template-columns:1fr}
+  .stats-age-highlights article{padding:18px 20px}
+  .stats-age-filter{width:100%}
+  .stats-age-filter button{flex:1 1 auto}
+  .stats-age-foot{grid-template-columns:1fr;padding:24px 22px;gap:20px}
+  .stats-age-foot-note{padding:18px 19px}
+}
