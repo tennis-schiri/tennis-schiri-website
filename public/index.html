@@ -34,50 +34,39 @@
     <div class="hero-foot"><div><strong>Berlin & Brandenburg</strong>Turniere und Tennis-Community</div><div><strong>Seit 1999</strong>Erfahrung als lizenzierter Schiedsrichter</div></div>
   </div>
   <div class="hero-visual" aria-hidden="true">
-   <svg class="court-svg" viewBox="0 0 660 780" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="courtbg" x1="0" x2="1" y1="1" y2="0"><stop offset="0" stop-color="#783e2c"/><stop offset=".50" stop-color="#d48b5b"/><stop offset="1" stop-color="#9d563c"/></linearGradient><radialGradient id="ball" cx="30%" cy="30%" r="70%"><stop offset="0" stop-color="#eaffb1"/><stop offset=".45" stop-color="#c9f16b"/><stop offset="1" stop-color="#79a542"/></radialGradient><filter id="shadow"><feGaussianBlur stdDeviation="18"/></filter><pattern id="grit" width="13" height="13" patternUnits="userSpaceOnUse"><circle cx="2" cy="4" r="1" fill="#5a3027" opacity=".15"/><circle cx="10" cy="9" r=".6" fill="#f5c08a" opacity=".2"/></pattern></defs>
-    <!-- Tennisplatz: vollstaendiges Doppelfeld mit Randabstand im Bildausschnitt. -->
-    <g class="court-outline" opacity=".93">
-     <rect x="192" y="58" width="306" height="664" fill="none" stroke="#fff9e7" stroke-width="6"/>
-     <rect x="220" y="58" width="250" height="664" fill="none" stroke="#fff9e7" stroke-width="5"/>
-     <line x1="220" y1="211" x2="470" y2="211" stroke="#fff9e7" stroke-width="5"/>
-     <line x1="220" y1="569" x2="470" y2="569" stroke="#fff9e7" stroke-width="5"/>
-     <line x1="345" y1="211" x2="345" y2="569" stroke="#fff9e7" stroke-width="5"/>
-     <line x1="177" y1="393" x2="513" y2="393" stroke="#31261e" stroke-width="5" opacity=".75"/>
-     <line x1="177" y1="387" x2="513" y2="387" stroke="#e5dfcb" stroke-width="1" opacity=".85"/>
-    </g>
-    <!-- Tennisball: Kugel, Filzstruktur und typische geschwungene Tennisballnaehte -->
-    <ellipse cx="450" cy="264" rx="77" ry="28" fill="#321f18" opacity=".34" filter="url(#shadow)"/>
-    <defs>
-     <radialGradient id="tennisFelt" cx="29%" cy="24%" r="83%" fx="25%" fy="19%">
-      <stop offset="0" stop-color="#f3ff93"/>
-      <stop offset=".29" stop-color="#daf35a"/>
-      <stop offset=".66" stop-color="#abd640"/>
-      <stop offset="1" stop-color="#5e7d2b"/>
-     </radialGradient>
-     <pattern id="tennisFuzz" width="9" height="9" patternUnits="userSpaceOnUse">
-      <path d="M1 2l2 1M6 7l1-2M3 8l-1-1M8 1l-2 1" stroke="#fff8b0" stroke-width=".65" opacity=".54"/>
-      <circle cx="4.5" cy="5" r=".65" fill="#4c7428" opacity=".3"/>
-     </pattern>
-     <clipPath id="tennisBallCut"><circle r="54"/></clipPath>
-    </defs>
-    <g transform="translate(416 207) rotate(-13)">
-     <circle r="54.8" fill="#365828" opacity=".38"/>
-     <g clip-path="url(#tennisBallCut)">
-      <circle r="54" fill="url(#tennisFelt)"/>
-      <circle r="54" fill="url(#tennisFuzz)" opacity=".62"/>
-      <!-- Die Naehte sind als geschwungene, leicht erhabene Filzbaender ausgefuehrt. -->
-      <path d="M-61 -30 C-37 -49 -20 -17 2 -21 S37 -45 61 -28 M-61 28 C-39 47 -20 17 4 22 S39 48 61 29"
-        fill="none" stroke="#5e803b" stroke-width="9" opacity=".56" stroke-linecap="round"/>
-      <path d="M-61 -30 C-37 -49 -20 -17 2 -21 S37 -45 61 -28 M-61 28 C-39 47 -20 17 4 22 S39 48 61 29"
-        fill="none" stroke="#fbfff0" stroke-width="6.2" stroke-linecap="round"/>
-      <path d="M-61 -31 C-37 -50 -20 -18 2 -22 S37 -46 61 -29 M-61 27 C-39 46 -20 16 4 21 S39 47 61 28"
-        fill="none" stroke="#ffffff" stroke-width="1.5" opacity=".72" stroke-linecap="round"/>
-      <ellipse cx="-19" cy="-29" rx="22" ry="12" transform="rotate(-26 -19 -29)" fill="#ffffff" opacity=".12"/>
-     </g>
-     <circle r="53.5" fill="none" stroke="#d8ec7c" stroke-width="1.2" opacity=".38"/>
-    </g>
-   </svg>
+    <!-- Desktop: vollständiger, proportionaler Sandplatz -->
+    <svg class="court-svg court-svg-desktop" viewBox="0 0 660 780" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="clayDesk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cf8857"/><stop offset=".65" stop-color="#bb7048"/><stop offset="1" stop-color="#a95f40"/></linearGradient>
+        <radialGradient id="ballDesk" cx="28%" cy="22%" r="78%"><stop offset="0" stop-color="#ecffac"/><stop offset=".54" stop-color="#c8ef63"/><stop offset="1" stop-color="#79a33d"/></radialGradient>
+        <filter id="courtShade" x="-30%" y="-20%" width="160%" height="150%"><feGaussianBlur stdDeviation="12"/></filter>
+      </defs>
+      <g transform="rotate(-7 330 390)">
+        <rect x="165" y="33" width="330" height="714" fill="#2c3126" opacity=".22" transform="translate(13 16)" filter="url(#courtShade)"/>
+        <rect x="165" y="33" width="330" height="714" fill="url(#clayDesk)" stroke="#fff9df" stroke-width="5"/>
+        <path d="M194 33V747 M466 33V747 M194 216H466 M194 564H466 M330 216V564" fill="none" stroke="#fff9df" stroke-width="4.6"/>
+        <path d="M330 33V44 M330 736V747" fill="none" stroke="#fff9df" stroke-width="4"/>
+        <path d="M148 391H512" fill="none" stroke="#352d28" stroke-width="8" opacity=".6"/>
+        <path d="M148 385H512" fill="none" stroke="#fff8de" stroke-width="2.4" opacity=".92"/>
+      </g>
+      <ellipse cx="527" cy="159" rx="57" ry="16" fill="#3b291c" opacity=".27" filter="url(#courtShade)"/>
+      <g transform="translate(519 118) rotate(-19)">
+        <circle r="47" fill="url(#ballDesk)" stroke="#e3ff96" stroke-width="1.6"/>
+        <path d="M-47 -26C-20 -48 10 -11 47 -25 M-47 25C-15 47 13 9 47 27" fill="none" stroke="#f7fff0" stroke-width="5.4" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <!-- Mobil: echte Querformat-Variante statt beschnittener Hochformatgrafik -->
+    <svg class="court-svg court-svg-mobile" viewBox="0 0 780 400" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="clayMobile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cc8252"/><stop offset="1" stop-color="#a66042"/></linearGradient></defs>
+      <g transform="rotate(-3 390 200)">
+        <rect x="47" y="44" width="686" height="312" fill="#3c3027" opacity=".24" transform="translate(9 12)"/>
+        <rect x="47" y="44" width="686" height="312" fill="url(#clayMobile)" stroke="#fff9df" stroke-width="5"/>
+        <path d="M47 73H733 M47 327H733 M222 73V327 M558 73V327 M222 200H558" fill="none" stroke="#fff9df" stroke-width="4.7"/>
+        <path d="M47 200H60 M720 200H733" fill="none" stroke="#fff9df" stroke-width="3.8"/>
+        <path d="M390 27V373" fill="none" stroke="#3b3028" stroke-width="8" opacity=".62"/>
+        <path d="M384 27V373" fill="none" stroke="#fff9df" stroke-width="2.4" opacity=".95"/>
+      </g>
+    </svg>
   </div>
   <a class="hero-plate" href="#turniere" aria-label="Zum nächsten Turnier springen"><span class="small"><span class="hero-plate-dot" aria-hidden="true"></span>Nächstes Turnier</span><strong class="date">SO · 27. DEZ 2026</strong><span class="hero-plate-title">SUNBALL TENNIS Winter-LK-Cup</span><span class="hero-plate-place">Tennis Center Bad Saarow</span><span class="hero-plate-cta">Turnier ansehen <span aria-hidden="true">↗</span></span></a>
  </div>
@@ -87,6 +76,19 @@
   <a class="quick" href="#regelwissen"><div class="quick-top"><span class="quick-index">02 / VERSTEHEN</span><span class="arrow">↗</span></div><h3>Tennisregeln</h3><p>Regelfragen aus der Praxis einfach erklärt.</p></a>
   <a class="quick" href="#leistungen"><div class="quick-top"><span class="quick-index">03 / ORGANISIEREN</span><span class="arrow">↗</span></div><h3>Für Vereine</h3><p>Turnierleitung, Oberschiedsrichter und Workshops.</p></a>
 </div></div></section>
+<section class="news-spotlight" aria-labelledby="turnier-news-heading">
+  <div class="container">
+    <div class="news-panel">
+      <div class="news-symbol" aria-hidden="true"><span class="news-symbol-rings"></span><span class="news-symbol-text">TS</span></div>
+      <div class="news-content">
+        <div class="eyebrow kicker">AUS DEN TURNIEREN</div>
+        <h2 id="turnier-news-heading">Turniere erleben. Auch live.</h2>
+        <p><strong>Livescore bei ausgewählten Veranstaltungen:</strong> Aktuelle Spielstände und Meldungen für Spieler, Trainer und Zuschauer.</p>
+      </div>
+      <a class="news-link" href="aktuelles/">Neuigkeiten ansehen <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</section>
 <section class="community-spotlight" aria-labelledby="community-title">
   <div class="container">
     <div class="community-panel">
@@ -110,7 +112,6 @@
     </div>
   </div>
 </section>
-<section class="notice-band" aria-label="Aktuelle Turniermeldungen"><div class="container"><div><div class="eyebrow kicker">AUS DEN TURNIEREN</div><p><strong>Livescore bei ausgewählten Veranstaltungen:</strong> Mehr Überblick für Spieler, Trainer und Zuschauer. <a href="aktuelles/">Mehr erfahren ↗</a></p></div></div></section>
 <section class="section ig-feed-section" id="instagram" aria-label="Aktuelle Instagram-Beiträge">
   <div class="container">
     <div class="section-head">
