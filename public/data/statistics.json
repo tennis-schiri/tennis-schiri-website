@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "updated_at": "2026-11-06",
+  "scope": "Ausgewählte anonymisierte Kennzahlen aus eigenen Turnierstatistiken",
+  "counting_note": "Teilnahmen sind Start-/Meldeeinträge, keine eindeutigen Personen. Matches beziehen sich auf die in der Tabelle als gespielt erfassten Partien. Die Jahresauswertung 2026 enthält nur bislang erfasste Turniere (letzter Eintrag: August 2026).",
+  "years": [
+    {
+      "year": 2022,
+      "tournaments": 7,
+      "entries": 266,
+      "matches": 239,
+      "match_tiebreaks": 44
+    },
+    {
+      "year": 2023,
+      "tournaments": 16,
+      "entries": 501,
+      "matches": 443,
+      "match_tiebreaks": 73
+    },
+    {
+      "year": 2024,
+      "tournaments": 21,
+      "entries": 547,
+      "matches": 490,
+      "match_tiebreaks": 74
+    },
+    {
+      "year": 2025,
+      "tournaments": 18,
+      "entries": 444,
+      "matches": 352,
+      "match_tiebreaks": 62
+    },
+    {
+      "year": 2026,
+      "tournaments": 12,
+      "entries": 309,
+      "matches": 233,
+      "match_tiebreaks": 45,
+      "partial": true
+    }
+  ],
+  "featured_event": {
+    "year": 2024,
+    "name": "ROHA Open",
+    "entries": 70,
+    "description": "Die größte erfasste Teilnehmerzahl eines einzelnen Turniers in der vorliegenden Jahresübersicht."
+  },
+  "facts": [
+    {
+      "value": "2.067",
+      "label": "Teilnahmen seit 2022",
+      "detail": "Erfasste Starts bei den ausgewerteten Turnieren – nicht unterschiedliche Personen."
+    },
+    {
+      "value": "1.757",
+      "label": "erfasste Matches",
+      "detail": "Aus den Turnierstatistiken der Jahre 2022 bis 2026."
+    },
+    {
+      "value": "74",
+      "label": "erfasste Veranstaltungen",
+      "detail": "Turniertermine der Jahre 2022 bis 2026 in der Statistik."
+    },
+    {
+      "value": "298",
+      "label": "Matches mit Match-Tiebreak",
+      "detail": "In den erfassten Turnieren 2022–2026."
+    },
+    {
+      "value": "547",
+      "label": "Teilnahmen im Jahr 2024",
+      "detail": "Einträge bei 21 ausgewerteten Turnierterminen."
+    },
+    {
+      "value": "490",
+      "label": "erfasste Matches im Jahr 2024",
+      "detail": "Das matchreichste Jahr in dieser Übersicht."
+    },
+    {
+      "value": "501",
+      "label": "Teilnahmen im Jahr 2023",
+      "detail": "Einträge bei 16 erfassten Turnierterminen."
+    },
+    {
+      "value": "45",
+      "label": "Match-Tiebreaks im Jahr 2026",
+      "detail": "In den bisher für 2026 eingetragenen Matches."
+    },
+    {
+      "value": "70",
+      "label": "Teilnahmen bei den ROHA Open 2024",
+      "detail": "Höchster Einzelturnier-Wert in den ausgewerteten Jahresblättern."
+    },
+    {
+      "value": "309",
+      "label": "Teilnahmen im bisherigen Jahr 2026",
+      "detail": "Noch kein abgeschlossenes Jahresergebnis."
+    }
+  ]
+}
