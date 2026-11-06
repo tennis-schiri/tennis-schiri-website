@@ -39,7 +39,7 @@
       <article class="stats-kpi"><span>Turniertermine</span><strong id="stats-total-tournaments">74</strong><small>2022–2026 erfasst</small></article>
       <article class="stats-kpi"><span>Teilnahmen</span><strong id="stats-total-entries">2.067</strong><small>Starts, nicht eindeutige Personen</small></article>
       <article class="stats-kpi"><span>Matches</span><strong id="stats-total-matches">1.757</strong><small>In den Statistiken erfasst</small></article>
-      <article class="stats-kpi"><span>Match-Tiebreaks</span><strong id="stats-total-mtbs">298</strong><small>Entscheidungen im Match-Tiebreak</small></article>
+      <article class="stats-kpi"><span>Match-Tiebreaks</span><strong id="stats-total-mtbs">298</strong><small id="stats-total-mtbs-note">298 von 1.757 Matches (17,0 %)</small></article>
     </div>
     <div class="stats-feature-row">
       <div class="stats-feature-text">
@@ -170,6 +170,14 @@
           <div class="stats-chart-card-top"><div class="eyebrow kicker">NACHWUCHS</div><h3 id="stats-age-youth-heading">Jugend-Altersklassen</h3><p>Erfasste Starts bei Juniorinnen und Junioren von U12 bis U18.</p></div>
           <div class="stats-bars stats-age-bars" id="stats-age-youth-bars" aria-label="Altersklassen der Jugend, nach erfassten Starts sortiert"><p>Junioren U14: 171 Starts.</p></div>
         </section>
+        <section class="stats-chart-card" aria-labelledby="stats-age-open-heading">
+          <div class="stats-chart-card-top"><div class="eyebrow kicker">OFFENE KLASSEN</div><h3 id="stats-age-open-heading">Herren & Damen</h3><p>Einzel-Konkurrenzen ohne feste Altersuntergrenze ab 30.</p></div>
+          <div class="stats-bars stats-age-bars" id="stats-age-active-bars" aria-label="Herren- und Damen-Einzelstarts nach Zeitraum"></div>
+        </section>
+        <section class="stats-chart-card" aria-labelledby="stats-age-double-heading">
+          <div class="stats-chart-card-top"><div class="eyebrow kicker">PAAR-KONKURRENZEN</div><h3 id="stats-age-double-heading">Doppel & Mixed</h3><p>Teilnehmende Starts in Doppel und Mixed, keine Zahl der Teams.</p></div>
+          <div class="stats-bars stats-age-bars" id="stats-age-doubles-bars" aria-label="Doppel- und Mixed-Starts nach Zeitraum"></div>
+        </section>
       </div>
       <div class="stats-age-foot">
         <div>
@@ -180,6 +188,64 @@
         <div class="stats-age-foot-note"><strong>Wichtig für den Vergleich</strong><p>Damen und Herren ohne Altersgrenze, Doppel und Mixed sind nicht Bestandteil der beiden AK-Ranglisten. Das Jahr 2026 ist vorläufig; wechselnde ausgeschriebene Konkurrenzen beeinflussen die Zahlen.</p><p>Die Werte stammen aus den Jahresstatistiken, nicht aus einer repräsentativen Umfrage.</p></div>
       </div>
     </section>
+        <section class="stats-deep-section stats-match-deep" id="stats-matches-deep" aria-labelledby="stats-matches-deep-heading">
+      <div class="stats-deep-header">
+        <div class="stats-section-head">
+          <div class="eyebrow kicker">WIE WURDEN DIE MATCHES ENTSCHIEDEN?</div>
+          <h2 id="stats-matches-deep-heading">Mehr als nur ein Ergebnis.</h2>
+          <p>Siege in zwei Sätzen, Entscheidungen im Match-Tiebreak, Aufgaben und Nichtantritte – immer mit der richtigen Bezugsgröße und dem prozentualen Anteil.</p>
+        </div>
+        <div class="stats-age-filter" id="stats-match-filter" role="group" aria-label="Zeitraum für Matchauswertung auswählen">
+<button type="button" data-match-period="all" class="is-active" aria-pressed="true">Alle Jahre</button>
+<button type="button" data-match-period="2022" aria-pressed="false">2022</button>
+<button type="button" data-match-period="2023" aria-pressed="false">2023</button>
+<button type="button" data-match-period="2024" aria-pressed="false">2024</button>
+<button type="button" data-match-period="2025" aria-pressed="false">2025</button>
+<button type="button" data-match-period="2026" aria-pressed="false">2026 *</button>
+</div>
+      </div>
+      <div class="stats-match-metrics">
+        <article class="stats-match-metric">
+          <span>Match-Tiebreaks</span><strong id="stats-match-mtb-number">298</strong>
+          <p id="stats-match-mtb-relation">298 von 1.757 Matches · 17,0 %</p>
+          <div class="stats-match-progress"><span id="stats-match-mtb-bar" style="width:17%"></span></div>
+        </article>
+        <article class="stats-match-metric">
+          <span>Zwei-Satz-Matches</span><strong id="stats-match-two-number">1.420</strong>
+          <p id="stats-match-two-relation">1.420 von 1.757 Matches · 80,8 %</p>
+          <div class="stats-match-progress"><span id="stats-match-two-bar" style="width:80.8%"></span></div>
+        </article>
+        <article class="stats-match-metric">
+          <span>Aufgaben</span><strong id="stats-match-retired-number">39</strong>
+          <p id="stats-match-retired-relation">39 von 1.075 gespielten Matches · 3,6 % (nur 2024–2026)</p>
+          <div class="stats-match-progress"><span id="stats-match-retired-bar" style="width:3.6%"></span></div>
+        </article>
+        <article class="stats-match-metric">
+          <span>Nichtantritte</span><strong id="stats-match-no-show-number">135</strong>
+          <p id="stats-match-no-show-relation">135 von 1.210 Ansetzungen · 11,2 % (nur 2024–2026)</p>
+          <div class="stats-match-progress"><span id="stats-match-no-show-bar" style="width:11.2%"></span></div>
+        </article>
+      </div>
+      <div class="stats-match-note" id="stats-match-note">Für Aufgaben und Nichtantritte sind nur die vergleichbar getrennt erfassten Daten ab 2024 berücksichtigt; bei Matches und Match-Tiebreaks alle Jahre ab 2022.</div>
+    </section>
+    <section class="stats-deep-section stats-activity-deep" aria-labelledby="stats-activity-heading">
+      <div class="stats-section-head">
+        <div class="eyebrow kicker">NOCH MEHR ZAHLEN</div>
+        <h2 id="stats-activity-heading">Wie viel passiert pro Turnier?</h2>
+        <p>Nicht nur die Gesamtzahlen: ein Blick auf die durchschnittliche Zahl der Starts und Matches je erfasster Veranstaltung.</p>
+      </div>
+      <div class="stats-chart-grid">
+        <section class="stats-chart-card" aria-labelledby="stats-avg-entries-heading">
+          <div class="stats-chart-card-top"><div class="eyebrow kicker">TEILNAHMEN / TURNIER</div><h3 id="stats-avg-entries-heading">Starts im Durchschnitt</h3><p>Jahresteilnahmen geteilt durch die Zahl der ausgewerteten Turniere.</p></div>
+          <div id="stats-avg-entries-chart" class="stats-bars" aria-label="Durchschnittliche Starts pro Turnier nach Jahr"></div>
+        </section>
+        <section class="stats-chart-card" aria-labelledby="stats-avg-matches-heading">
+          <div class="stats-chart-card-top"><div class="eyebrow kicker">MATCHES / TURNIER</div><h3 id="stats-avg-matches-heading">Spiele im Durchschnitt</h3><p>Gespielte Matches geteilt durch die Zahl der ausgewerteten Turniere.</p></div>
+          <div id="stats-avg-matches-chart" class="stats-bars" aria-label="Durchschnittliche Matches pro Turnier nach Jahr"></div>
+        </section>
+      </div>
+      <p class="stats-deep-footnote">Unterschiedliche Formate und Veranstaltungsgrößen können den Durchschnitt deutlich beeinflussen. 2026 ist ein Zwischenstand.</p>
+    </section>
     <div class="stats-section-head stats-table-heading">
       <div class="eyebrow kicker">ALLE ZAHLEN</div>
       <h2>Die Jahre im Vergleich.</h2>
@@ -187,13 +253,13 @@
     </div>
     <div class="stats-table-wrap">
       <table class="stats-year-table">
-        <thead><tr><th scope="col">Jahr</th><th scope="col">Turniere</th><th scope="col">Teilnahmen</th><th scope="col">Matches</th><th scope="col">Match-Tiebreaks</th><th scope="col">MTB-Anteil</th></tr></thead>
+        <thead><tr><th scope="col">Jahr</th><th scope="col">Turniere</th><th scope="col">Teilnahmen</th><th scope="col">Matches</th><th scope="col">MTBs / Matches</th><th scope="col">MTB-Anteil</th></tr></thead>
         <tbody id="stats-year-table-body">
-          <tr><th scope="row">2026 *</th><td>12</td><td>309</td><td>233</td><td>45</td><td>19,3 %</td></tr>
-          <tr><th scope="row">2025</th><td>18</td><td>444</td><td>352</td><td>62</td><td>17,6 %</td></tr>
-          <tr><th scope="row">2024</th><td>21</td><td>547</td><td>490</td><td>74</td><td>15,1 %</td></tr>
-          <tr><th scope="row">2023</th><td>16</td><td>501</td><td>443</td><td>73</td><td>16,5 %</td></tr>
-          <tr><th scope="row">2022</th><td>7</td><td>266</td><td>239</td><td>44</td><td>18,4 %</td></tr>
+          <tr><th scope="row">2026 *</th><td>12</td><td>309</td><td>233</td><td>45 von 233</td><td>19,3 %</td></tr>
+          <tr><th scope="row">2025</th><td>18</td><td>444</td><td>352</td><td>62 von 352</td><td>17,6 %</td></tr>
+          <tr><th scope="row">2024</th><td>21</td><td>547</td><td>490</td><td>74 von 490</td><td>15,1 %</td></tr>
+          <tr><th scope="row">2023</th><td>16</td><td>501</td><td>443</td><td>73 von 443</td><td>16,5 %</td></tr>
+          <tr><th scope="row">2022</th><td>7</td><td>266</td><td>239</td><td>44 von 239</td><td>18,4 %</td></tr>
         </tbody>
       </table>
     </div>
