@@ -1104,3 +1104,104 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 @media(prefers-reduced-motion:reduce){
   .tourney-page-btn{transition:none}
 }
+
+
+/* Auffaelliger Turnierhinweis im Startseiten-Titelbild: Name und Ort getrennt */
+.hero-plate{
+  width:368px;
+  max-width:calc(100vw - 36px);
+  right:6%;
+  bottom:112px;
+  padding:24px 25px 22px;
+  border:3px solid #efffc7;
+  border-radius:23px;
+  background:linear-gradient(145deg,#edffa8 0%,#c8f16d 54%,#b5e85e 100%);
+  color:#153c2c;
+  box-shadow:0 0 0 5px rgba(34,74,39,.22),0 26px 75px rgba(8,26,17,.49);
+  transform:rotate(1.5deg);
+}
+.hero-plate:hover,.hero-plate:focus-visible{
+  transform:translateY(-6px) rotate(0deg);
+  box-shadow:0 0 0 6px rgba(238,255,197,.28),0 31px 80px rgba(8,26,17,.56);
+}
+.hero-plate .small{
+  padding:7px 11px;
+  background:#1b4635;
+  border:1px solid #1b4635;
+  color:#efffc7;
+  font-size:11px;
+  letter-spacing:.105em;
+}
+.hero-plate-dot{
+  background:#c8f16d;
+  box-shadow:0 0 0 3px rgba(200,241,109,.24);
+}
+.hero-plate .date{
+  margin:17px 0 14px;
+  color:#143e2d;
+  font-size:38px;
+  line-height:1.05;
+  letter-spacing:-.06em;
+  font-weight:900;
+}
+.hero-plate-title{
+  display:block;
+  margin:0 0 5px;
+  color:#123a29;
+  font-size:17px;
+  line-height:1.32;
+  letter-spacing:-.02em;
+  font-weight:900;
+  overflow-wrap:break-word;
+}
+.hero-plate-place{
+  display:block;
+  color:#335443;
+  font-size:14px;
+  line-height:1.35;
+  font-weight:700;
+  overflow-wrap:break-word;
+}
+.hero-plate-cta{
+  margin-top:19px;
+  padding:13px 15px;
+  border-radius:12px;
+  background:#153f30;
+  color:#f1ffcd;
+  font-size:14px;
+  box-shadow:0 3px 0 rgba(8,37,25,.16);
+}
+.hero-plate-cta span{font-size:21px}
+.hero-plate:hover .hero-plate-cta{background:#0b2e22}
+@media(max-width:850px){
+  .hero-plate{
+    right:5%;
+    bottom:82px;
+    width:328px;
+    padding:21px 22px 19px;
+  }
+  .hero-plate .date{font-size:34px;margin:15px 0 12px}
+  .hero-plate-title{font-size:16px}
+  .hero-plate-place{font-size:13px}
+  .hero-plate-cta{margin-top:16px;font-size:13px}
+}
+@media(max-width:620px){
+  .hero-plate{
+    width:min(328px,89vw);
+    right:5%;
+    bottom:45px;
+    padding:17px 18px 16px;
+    border-width:2px;
+    border-radius:19px;
+    box-shadow:0 0 0 4px rgba(34,74,39,.21),0 17px 48px rgba(8,26,17,.42);
+  }
+  .hero-plate .small{font-size:9px;padding:6px 10px}
+  .hero-plate .date{font-size:30px;margin:13px 0 10px}
+  .hero-plate-title{font-size:15px;line-height:1.25}
+  .hero-plate-place{font-size:12px}
+  .hero-plate-cta{margin-top:14px;padding:11px 13px;font-size:12px}
+  .hero-plate-cta span{font-size:18px}
+}
+@media(max-width:380px){
+  .hero-plate .date{font-size:27px}
+}
