@@ -2047,3 +2047,127 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .stats-age-foot{grid-template-columns:1fr;padding:24px 22px;gap:20px}
   .stats-age-foot-note{padding:18px 19px}
 }
+
+/* Demografische Sportstatistiken: Gruppen- und Jahresvergleiche. */
+.stats-deep-section{margin-top:86px}
+.stats-deep-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:28px;
+  flex-wrap:wrap;
+  margin-bottom:27px;
+}
+.stats-deep-header .stats-section-head{margin:0}
+.stats-deep-header .stats-section-head p{max-width:675px}
+.stats-demographics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.stats-split-panel{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  padding:29px 31px 28px;
+  background:#fff;
+  border:1px solid #dce8d5;
+  border-radius:21px;
+}
+.stats-split-heading{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.stats-split-heading h3{font-size:21px;font-weight:900;letter-spacing:-.045em;line-height:1.2;color:#214b33;margin:0}
+.stats-split-heading>span{font-size:11px;font-weight:800;color:#72876d;text-align:right}
+.stats-split-values{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:26px 0 19px}
+.stats-split-values>div{display:flex;flex-direction:column;min-width:0}
+.stats-split-values>div>span{font-size:12px;font-weight:750;color:#617864}
+.stats-split-values strong{font-size:clamp(38px,4.2vw,58px);line-height:1.18;letter-spacing:-.075em;font-weight:900;color:#173f2c;font-variant-numeric:tabular-nums}
+.stats-split-values small{font-size:15px;font-weight:900;color:#447c49}
+.stats-split-track{
+  height:16px;
+  width:100%;
+  display:flex;
+  border-radius:999px;
+  overflow:hidden;
+  background:#dfe9d6;
+}
+.stats-split-track span{height:100%;display:block}
+.stats-split-first{background:#2c7351;flex:none;transition:width .35s ease}
+.stats-split-second{background:#b8d967;flex:1}
+.stats-split-age .stats-split-first{background:#2e6549}
+.stats-split-age .stats-split-second{background:#b8d6e0}
+.stats-split-panel>p{font-size:12px;line-height:1.6;color:#6c8170;margin:16px 0 0}
+.stats-demo-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+.stats-demo-breakdown>div{
+  min-width:0;
+  padding:29px 32px;
+  background:#f0f5eb;
+  border:1px solid #dce8d5;
+  border-radius:21px;
+}
+.stats-demo-breakdown h3{font-size:clamp(22px,2.6vw,30px);letter-spacing:-.045em;line-height:1.2;margin:12px 0 20px;color:#214c34}
+.stats-demo-matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.stats-demo-matrix-cell{
+  min-width:0;
+  background:#fff;
+  border:1px solid #dce7d7;
+  border-radius:14px;
+  padding:17px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.stats-demo-matrix-cell>span{font-size:11px;color:#637b68;font-weight:800;line-height:1.3}
+.stats-demo-matrix-cell strong{font-size:clamp(15px,1.5vw,19px);font-weight:900;color:#214d34;font-variant-numeric:tabular-nums}
+.stats-demo-explainer{font-size:12px;line-height:1.5;color:#728275;margin:-5px 0 19px}
+.stats-demo-formats{min-height:0;gap:19px}
+.stats-demo-year-bars{min-height:0;gap:19px;margin-top:23px}
+.stats-demographics-year-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px}
+.stats-demographics-year-grid .stats-chart-card h3{font-size:clamp(23px,2.4vw,31px);margin:13px 0 10px}
+.stats-demographics-year-grid .stats-chart-card>p{font-size:12px;color:#6a7a6c;line-height:1.65}
+.stats-deep-footnote{font-size:12px;line-height:1.7;color:#748374;margin:15px 0 0}
+.stats-match-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.stats-match-metric{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  min-width:0;
+  background:#fff;
+  border:1px solid #dce7d3;
+  border-radius:19px;
+  padding:25px 22px 22px;
+}
+.stats-match-metric>span{font-size:12px;font-weight:850;color:#53705d}
+.stats-match-metric>strong{font-size:clamp(38px,4vw,55px);line-height:1.1;letter-spacing:-.075em;color:#1e4d36;font-variant-numeric:tabular-nums}
+.stats-match-metric p{font-size:12px;color:#617c67;line-height:1.55;margin:0;min-height:56px}
+.stats-match-progress{height:10px;overflow:hidden;border-radius:999px;background:#e4ecdc;margin-top:auto}
+.stats-match-progress>span{display:block;height:100%;background:linear-gradient(90deg,#477f55,#b7d966);border-radius:999px;transition:width .35s}
+.stats-match-metric:first-child{background:#1e4a36;border-color:#2a5c42}
+.stats-match-metric:first-child>span,.stats-match-metric:first-child p{color:#c8ddc3}
+.stats-match-metric:first-child>strong{color:#d5f587}
+.stats-match-metric:first-child .stats-match-progress{background:#34644a}
+.stats-match-note{margin-top:14px;border-radius:13px;background:#e8f1de;border:1px solid #d5e4c9;padding:17px 20px;font-size:12px;line-height:1.65;color:#4e6c56}
+.stats-activity-deep .stats-chart-card h3{font-size:28px}
+@media(max-width:1080px){
+  .stats-match-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:800px){
+  .stats-demographics-grid,.stats-demo-breakdown,.stats-demographics-year-grid{grid-template-columns:1fr}
+  .stats-deep-header{align-items:flex-start}
+  .stats-split-values strong{font-size:clamp(39px,7vw,58px)}
+  .stats-demo-matrix-cell strong{font-size:18px}
+}
+@media(max-width:620px){
+  .stats-deep-section{margin-top:63px}
+  .stats-split-panel,.stats-demo-breakdown>div,.stats-demographics-year-grid .stats-chart-card{padding:22px 20px;border-radius:17px}
+  .stats-match-metrics{gap:9px}
+  .stats-match-metric{padding:20px 17px;border-radius:15px}
+  .stats-match-metric>strong{font-size:clamp(34px,9vw,50px)}
+  .stats-match-metric p{font-size:11px;min-height:0}
+  .stats-demo-matrix-cell{padding:14px}
+  .stats-demo-matrix-cell strong{font-size:14px}
+  .stats-split-values{margin-top:20px;gap:10px}
+  .stats-split-values strong{font-size:clamp(32px,8.8vw,46px)}
+}
+@media(max-width:430px){
+  .stats-match-metrics{grid-template-columns:1fr}
+  .stats-match-metric p{min-height:0}
+  .stats-split-heading h3{font-size:19px}
+  .stats-demo-matrix{gap:7px}
+  .stats-demo-matrix-cell>span{font-size:10px}
+}
