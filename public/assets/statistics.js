@@ -107,6 +107,22 @@
     select('all');
   }
 
+  function populateDataTable(tbodyId, rows) {
+    const body=document.getElementById(tbodyId);
+    if(!body)return;
+    const elements=rows.map(cells=>{
+      const tr=document.createElement('tr');
+      cells.forEach((value,i)=>{
+        const el=document.createElement(i===0?'th':'td');
+        if(i===0)el.scope='row';
+        el.textContent=String(value);
+        tr.appendChild(el);
+      });
+      return tr;
+    });
+    body.replaceChildren(...elements);
+  }
+
   function initDemographics(data) {
     const source = data.demographics?.years;
     if (!source?.length) return;
@@ -163,6 +179,18 @@
     };
     renderYearChart('stats-demo-year-gender','female');
     renderYearChart('stats-demo-year-youth','youth');
+    populateDataTable('stats-demog-year-table-body',source.slice().reverse().map(row=>{
+      const full=baseYears.find(y=>y.year===row.year);
+      const total=row.genders.male+row.genders.female;
+      return [
+        row.year+(full?.partial?' *':''),number(total),
+        number(row.genders.male)+' ('+pct(row.genders.male,total)+')',
+        number(row.genders.female)+' ('+pct(row.genders.female,total)+')',
+        number(row.ages.adult)+' ('+pct(row.ages.adult,total)+')',
+        number(row.ages.youth)+' ('+pct(row.ages.youth,total)+')',
+        number(row.formats.singles),number(row.formats.doubles),number(row.formats.mixed)
+      ];
+    }));
   }
 
   function initMatchBreakdown(data) {
@@ -205,12 +233,21 @@
         updateMetric('stats-match-no-show',null,0,'Ansetzungen');
       }
       let note='';
-      if(period==='all')note='Für Aufgaben und Nichtantritte sind nur die getrennt erfassten Jahre 2024–2026 enthalten: 39 von 1.075 gespielten Matches endeten durch Aufgabe; 135 von 1.210 Ansetzungen waren Nichtantritte. Match-Tiebreaks: 298 von 1.757 gespielten Matches (17,0 %).';
-      else if(period==='2023')note='2023 sind 66 Fälle unter „Aufg. / n.a.“ gemeinsam erfasst. Eine seriöse Aufteilung auf Aufgaben und Nichtantritte ist nicht möglich. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').';
+      if(period==='all'){const comparableYears=selected.filter(row=>row.match_types?.retired!=null);const ret=comparableYears.reduce((n,row)=>n+row.match_types.retired,0);const mat=comparableYears.reduce((n,row)=>n+row.matches,0);const na=comparableYears.reduce((n,row)=>n+row.match_types.not_started,0);const an=comparableYears.reduce((n,row)=>n+row.match_types.scheduled,0);note='Aufgaben: '+number(ret)+' von '+number(mat)+' gespielten Matches ('+pct(ret,mat)+'). Nichtantritte: '+number(na)+' von '+number(an)+' Ansetzungen ('+pct(na,an)+'). Diese Angaben sind nur für die getrennt erfassten Jahre ab 2024 vergleichbar. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').';}
+      else if(period==='2023')note='2023 sind '+number(selected[0].match_types.combined_issues||0)+' Fälle unter „Aufg. / n.a.“ gemeinsam erfasst. Eine seriöse Aufteilung auf Aufgaben und Nichtantritte ist nicht möglich. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').';
       else if(period==='2022')note='2022 wurden Aufgaben und Nichtantritte nicht separat ausgewiesen. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').';
       else note='Aufgaben beziehen sich auf gespielte Matches, Nichtantritte auf geplante Ansetzungen. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').'+(period==='2026'?' 2026 ist noch vorläufig.':'');
       setText('stats-match-note',note);
     });
+    populateDataTable('stats-match-year-table-body',combined.slice().reverse().map(row=>{
+      const total=row.matches,mtb=row.match_tiebreaks,types=row.match_types||{};
+      const ret=types.retired==null?'–':number(types.retired)+' / '+number(total)+' ('+pct(types.retired,total)+')';
+      const noShow=types.not_started==null?'–':number(types.not_started)+' / '+number(types.scheduled)+' ('+pct(types.not_started,types.scheduled)+')';
+      return [row.year+(row.partial?' *':''),number(total),
+        number(types.two_set||0)+' ('+pct(types.two_set||0,total)+')',
+        number(mtb)+' / '+number(total)+' ('+pct(mtb,total)+')',
+        ret,noShow];
+    }));
   }
 
   function initTournamentAverages(data) {
