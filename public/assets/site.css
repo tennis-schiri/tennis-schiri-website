@@ -1205,3 +1205,19 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 @media(max-width:380px){
   .hero-plate .date{font-size:27px}
 }
+
+
+/* Startseiten-Platzgrafik: voller Platz statt beschnittener SVG-Ausschnitt */
+.hero-visual{
+  background:linear-gradient(135deg,#7d4937 0%,#bd7850 52%,#95543d 100%);
+}
+.court-svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+@media(max-width:850px){
+  .hero-visual{
+    background:linear-gradient(120deg,#804d38 0%,#b87853 58%,#9d5c43 100%);
+  }
+}
