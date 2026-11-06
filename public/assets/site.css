@@ -803,3 +803,81 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .back-to-top{transition:none}
   .back-to-top.is-visible:hover{transform:none}
 }
+
+
+/* Vertikale Datumsbereiche fuer mehrtaegige Turniere */
+.datebox.datebox-range{
+  min-height:166px;
+  gap:2px;
+  padding:11px 4px;
+}
+.datebox.datebox-range .weekday{
+  margin-bottom:4px;
+  font-size:10px;
+  letter-spacing:.075em;
+}
+.datebox.datebox-range .day,
+.event.tournament-row .datebox.datebox-range .day,
+.tourney-card .datebox.datebox-range .day{
+  font-size:33px;
+  line-height:1.02;
+  letter-spacing:-.05em;
+}
+.datebox .range-separator,
+.featured-date .range-separator{
+  display:block;
+  font-size:10px;
+  line-height:1.05;
+  font-weight:800;
+  letter-spacing:.07em;
+  color:#53733f;
+  text-transform:none;
+}
+.datebox.datebox-range .month{margin-top:6px}
+.datebox .year{
+  font-size:11px;
+  line-height:1.12;
+  font-weight:800;
+  letter-spacing:.05em;
+  color:#5c7461;
+}
+.featured-date.datebox-range{
+  min-height:256px;
+  gap:5px;
+  padding:20px 10px;
+}
+.featured-date.datebox-range .weekday{font-size:12px}
+.featured-date.datebox-range .day{font-size:52px;line-height:1}
+.featured-date.datebox-range .range-separator{color:#d5efbd;font-size:11px}
+.featured-date.datebox-range .month{margin-top:5px;font-size:14px}
+.featured-date.datebox-range .year{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.1em;
+  color:#e4f2d9;
+}
+@media(max-width:850px){
+  .featured-date.datebox-range{min-height:233px;gap:3px}
+  .featured-date.datebox-range .day{font-size:44px}
+}
+@media(max-width:620px){
+  .datebox.datebox-range{min-height:145px;padding:9px 2px;gap:1px}
+  .datebox.datebox-range .weekday{font-size:9px;margin-bottom:3px}
+  .datebox.datebox-range .day,
+  .event.tournament-row .datebox.datebox-range .day,
+  .tourney-card .datebox.datebox-range .day{font-size:29px}
+  .datebox.datebox-range .range-separator{font-size:9px}
+  .datebox.datebox-range .month{font-size:11px;margin-top:5px}
+  .datebox.datebox-range .year{font-size:10px}
+  .featured-date.datebox-range{
+    min-height:156px;
+    width:115px;
+    padding:10px 6px;
+    gap:2px;
+  }
+  .featured-date.datebox-range .weekday{font-size:10px}
+  .featured-date.datebox-range .day{font-size:30px}
+  .featured-date.datebox-range .range-separator{font-size:9px}
+  .featured-date.datebox-range .month{font-size:11px;margin-top:3px}
+  .featured-date.datebox-range .year{font-size:10px}
+}
