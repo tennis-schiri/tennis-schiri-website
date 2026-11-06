@@ -75,6 +75,68 @@
     years.forEach(year => target.appendChild(createBar(year[prop], max, year.year + (year.partial ? ' *' : ''), null, suffix)));
   }
 
+  function initAgeAnalysis(data) {
+    const analysis = data.age_analysis;
+    const controls = document.getElementById('stats-age-filter');
+    if (!analysis || !controls || !Array.isArray(analysis.categories)) return;
+    const years = data.years.map(item => item.year);
+    const numeric = (category, year) => year === 'all'
+      ? category.total
+      : (category.by_year[years.indexOf(Number(year))] || 0);
+    const byGroup = (name, year) => analysis.categories
+      .filter(category => category.group === name)
+      .map(category => ({label:category.label,value:numeric(category,year)}))
+      .filter(category => category.value > 0)
+      .sort((a,b)=>b.value-a.value || a.label.localeCompare(b.label,'de'));
+    function bars(targetId, categories) {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      target.replaceChildren();
+      if (!categories.length) {
+        const empty=document.createElement('p');
+        empty.className='stats-age-empty';
+        empty.textContent='Für diesen Zeitraum liegen keine Einträge in diesen Altersklassen vor.';
+        target.appendChild(empty);
+        return;
+      }
+      const max=Math.max(...categories.map(item => item.value));
+      categories.forEach(item => target.appendChild(createBar(item.value,max,item.label)));
+    }
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+    function render(year) {
+      const senior = byGroup('AK 30+ (Einzel)',year);
+      const youth = byGroup('Jugend (Einzel)',year);
+      bars('stats-age-senior-bars',senior);
+      bars('stats-age-youth-bars',youth);
+      const bestSenior=senior[0],bestYouth=youth[0];
+      const seniorTotal=senior.reduce((sum,category)=>sum+category.value,0);
+      setText('age-top-senior', bestSenior?number(bestSenior.value):'–');
+      setText('age-top-senior-name', bestSenior?.label||'Keine Einträge');
+      setText('age-top-youth', bestYouth?number(bestYouth.value):'–');
+      setText('age-top-youth-name', bestYouth?.label||'Keine Einträge');
+      setText('age-senior-total', number(seniorTotal));
+      const context=year==='all'?'Von 2022 bis 2026':('Im Jahr '+year+(year==='2026'?' (Zwischenstand)':''));
+      const insight = bestSenior && bestYouth
+        ? context+' führen bei den erfassten Senioren-Einzeln '+bestSenior.label+' ('+number(bestSenior.value)+' Starts), bei den Jugend-Einzeln '+bestYouth.label+' ('+number(bestYouth.value)+' Starts). Die Zahlen spiegeln die ausgeschriebenen Konkurrenzen und die Beteiligung an den ausgewerteten Turnieren wider, nicht eine allgemeine Beliebtheit der AK.'
+        : context+' sind nicht für alle Altersklassen Einträge erfasst. Weniger Starts bedeuten nicht automatisch geringeres Interesse.';
+      setText('stats-age-insight',insight);
+      controls.querySelectorAll('button[data-age-period]').forEach(button=>{
+        const active=button.dataset.agePeriod===year;
+        button.classList.toggle('is-active',active);
+        button.setAttribute('aria-pressed',String(active));
+      });
+    }
+    controls.addEventListener('click',event=>{
+      const button=event.target.closest('button[data-age-period]');
+      if(!button || !controls.contains(button))return;
+      render(button.dataset.agePeriod);
+    });
+    render('all');
+  }
+
   function initDashboard(data) {
     const page = document.getElementById('stats-dashboard');
     if (!page || !data.years?.length) return;
@@ -124,6 +186,7 @@
     if (event && data.featured_event) {
       event.textContent = number(data.featured_event.entries);
     }
+    initAgeAnalysis(data);
     page.dataset.loaded = 'true';
   }
 
