@@ -84,6 +84,7 @@ jobs:
           for required in [
               "index.html", "impressum/index.html", "datenschutz/index.html",
               "favicon.svg", "assets/site.css", "assets/instagram.js",
+              "assets/back-to-top.js",
               "data/instagram.json",
               "google8cf6756d83169a32.html",
               "sitemap.xml",
