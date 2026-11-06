@@ -1217,8 +1217,12 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   content:"";
   position:absolute;
   inset:0;
-  background:radial-gradient(ellipse 48% 50% at 21% 12%,rgba(196,241,111,.045),transparent 78%);
   pointer-events:none;
+  background:
+    radial-gradient(circle at 96% 15%,transparent 0 187px,rgba(219,250,180,.085) 188px 189px,transparent 190px),
+    radial-gradient(circle at 96% 15%,transparent 0 300px,rgba(219,250,180,.058) 301px 302px,transparent 303px),
+    radial-gradient(circle at 96% 15%,transparent 0 417px,rgba(219,250,180,.038) 418px 419px,transparent 420px),
+    radial-gradient(ellipse 48% 50% at 21% 12%,rgba(196,241,111,.045),transparent 78%);
 }
 .hero-inner{
   min-height:0;
@@ -1268,6 +1272,13 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .hero-plate .date{font-size:clamp(29px,2.35vw,36px);line-height:1.1}
 .hero-plate .small{border:0}
 @media(max-width:960px){
+  .hero:before{
+    background:
+      radial-gradient(circle at 116% 24%,transparent 0 152px,rgba(219,250,180,.074) 153px 154px,transparent 155px),
+      radial-gradient(circle at 116% 24%,transparent 0 255px,rgba(219,250,180,.043) 256px 257px,transparent 258px),
+      radial-gradient(ellipse 70% 45% at 18% 11%,rgba(196,241,111,.04),transparent 78%);
+  }
+
   .hero-inner{
     display:flex;
     flex-direction:column;
