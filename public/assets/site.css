@@ -1551,3 +1551,84 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .community-join{transition:none}
   .community-join:hover{transform:none}
 }
+
+/* Kommender Regelworkshop – Startseite und Leistungsseite */
+.service-next-date{
+  margin-top:18px!important;
+  padding:12px 13px;
+  border-radius:11px;
+  background:#e9f3d7;
+  border:1px solid #d3e5b7;
+  color:#26492f!important;
+  font-size:12px!important;
+  line-height:1.65;
+}
+.service-next-date strong{color:#173e2d}
+.workshop-upcoming{
+  margin-top:30px;
+  background:linear-gradient(115deg,#163c30 0%,#24523b 100%);
+  border:1px solid #3a7050;
+  color:#eff8e9;
+  border-radius:22px;
+  padding:28px 30px;
+  display:grid;
+  grid-template-columns:88px minmax(0,1fr) auto;
+  gap:23px;
+  align-items:center;
+  box-shadow:0 20px 45px rgba(23,61,42,.12);
+}
+.workshop-upcoming-date{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:#c8f16d;
+  color:#173d2b;
+  border-radius:16px;
+  padding:14px 8px;
+  min-height:111px;
+  line-height:1.15;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.055em;
+}
+.workshop-upcoming-date strong{font-size:38px;letter-spacing:-.07em;line-height:1.12}
+.workshop-upcoming .eyebrow{color:#c8f16d;letter-spacing:.11em;font-size:11px}
+.workshop-upcoming h2{
+  color:#f7fff1;
+  font-size:clamp(25px,2.8vw,34px);
+  line-height:1.13;
+  letter-spacing:-.04em;
+  margin:9px 0 11px;
+}
+.workshop-upcoming p{color:#d4e8d6;line-height:1.55;font-size:14px;margin:0 0 9px}
+.workshop-upcoming p:last-child{margin-bottom:0}
+.workshop-upcoming-location strong{color:#f7fff1}
+.workshop-upcoming-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  border-radius:12px;
+  padding:14px 17px;
+  background:#c8f16d;
+  color:#183b2b;
+  font-size:13px;
+  font-weight:900;
+  white-space:nowrap;
+  transition:background .2s,transform .2s;
+}
+.workshop-upcoming-action:hover{background:#e1ffa3;transform:translateY(-2px)}
+.workshop-upcoming-action:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:1040px){
+  .workshop-upcoming{grid-template-columns:78px minmax(0,1fr);gap:19px}
+  .workshop-upcoming-date{min-height:100px}
+  .workshop-upcoming-action{grid-column:2;justify-self:start}
+}
+@media(max-width:620px){
+  .workshop-upcoming{grid-template-columns:1fr;padding:23px 21px;gap:15px;margin-top:22px}
+  .workshop-upcoming-date{width:77px;min-height:88px;padding:10px 7px}
+  .workshop-upcoming-date strong{font-size:31px}
+  .workshop-upcoming h2{font-size:27px}
+  .workshop-upcoming-action{grid-column:1;white-space:normal}
+}
