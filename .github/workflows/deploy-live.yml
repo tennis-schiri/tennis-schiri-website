@@ -57,7 +57,7 @@ jobs:
           for page in pages:
               raw = page.read_text(encoding="utf-8")
               rel = "assets" if page == out / "index.html" else "../assets"
-              expected_css = f'<link rel="stylesheet" href="{rel}/site.css?v=20261106-3">'
+              expected_css = f'<link rel="stylesheet" href="{rel}/site.css?v=20261106-4">'
               expected_script = f'<script src="{rel}/back-to-top.js?v=2" defer></script>'
               if expected_css not in raw or expected_script not in raw:
                   raise SystemExit(f"Stylesheet oder Nach-oben-Skript fehlerhaft eingebunden: {page}")
