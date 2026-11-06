@@ -68,6 +68,78 @@
         <div class="stats-bars stats-bars-percent" id="stats-mtb-chart" role="img" aria-label="Anteil der Match-Tiebreaks von 2022 bis 2026, je nach Jahr etwa 15 bis 19 Prozent"></div>
       </section>
     </div>
+    <section class="stats-deep-section" id="stats-demographics" aria-labelledby="stats-demographics-heading">
+      <div class="stats-deep-header">
+        <div class="stats-section-head">
+          <div class="eyebrow kicker">WER SPIELT MIT?</div>
+          <h2 id="stats-demographics-heading">Männlich, weiblich.<br>Jugend, Erwachsene.</h2>
+          <p>Die erfassten Starts nach Geschlecht und Altersbereich – auch im Jahresvergleich. Die Zahlen beziehen sich auf Teilnahmen, nicht auf einzigartige Personen.</p>
+        </div>
+        <div class="stats-age-filter" id="stats-demographics-filter" role="group" aria-label="Zeitraum auswählen">
+<button type="button" data-demo-period="all" class="is-active" aria-pressed="true">Alle Jahre</button>
+<button type="button" data-demo-period="2022" aria-pressed="false">2022</button>
+<button type="button" data-demo-period="2023" aria-pressed="false">2023</button>
+<button type="button" data-demo-period="2024" aria-pressed="false">2024</button>
+<button type="button" data-demo-period="2025" aria-pressed="false">2025</button>
+<button type="button" data-demo-period="2026" aria-pressed="false">2026 *</button>
+</div>
+      </div>
+      <div class="stats-demographics-grid">
+        <article class="stats-split-panel">
+          <div class="stats-split-heading"><h3>Geschlechterverteilung</h3><span id="stats-demo-period-a">2022–2026</span></div>
+          <div class="stats-split-values">
+            <div><span>Männlich</span><strong id="stats-demo-male">1.504</strong><small id="stats-demo-male-pct">72,8 %</small></div>
+            <div><span>Weiblich</span><strong id="stats-demo-female">563</strong><small id="stats-demo-female-pct">27,2 %</small></div>
+          </div>
+          <div class="stats-split-track" id="stats-demo-gender-track" role="img" aria-label="Männlich 1.504 von 2.067, weiblich 563 von 2.067 Teilnahmen">
+            <span class="stats-split-first" id="stats-demo-male-bar" style="width:72.8%"></span><span class="stats-split-second"></span>
+          </div>
+          <p>Mixed-Starts sind den Geschlechtern je zur Hälfte zugeordnet.</p>
+        </article>
+        <article class="stats-split-panel">
+          <div class="stats-split-heading"><h3>Alter der Konkurrenzen</h3><span id="stats-demo-period-b">2022–2026</span></div>
+          <div class="stats-split-values">
+            <div><span>Erwachsene</span><strong id="stats-demo-adult">1.483</strong><small id="stats-demo-adult-pct">71,7 %</small></div>
+            <div><span>Jugend</span><strong id="stats-demo-youth">584</strong><small id="stats-demo-youth-pct">28,3 %</small></div>
+          </div>
+          <div class="stats-split-track stats-split-age" id="stats-demo-age-track" role="img" aria-label="Erwachsene 1.483, Jugend 584 von 2.067 Teilnahmen">
+            <span class="stats-split-first" id="stats-demo-adult-bar" style="width:71.7%"></span><span class="stats-split-second"></span>
+          </div>
+          <p>Einordnung anhand der ausgeschriebenen Jugend- bzw. Erwachsenen-Konkurrenzen.</p>
+        </article>
+      </div>
+      <div class="stats-demo-breakdown">
+        <div>
+          <div class="eyebrow kicker">DIE VIER GRUPPEN</div>
+          <h3 id="stats-demo-detail-heading">Zusammensetzung der <span id="stats-demo-total">2.067</span> Starts</h3>
+          <div id="stats-demo-matrix" class="stats-demo-matrix" aria-label="Teilnahmen aufgeschlüsselt nach Geschlecht und Altersbereich">
+            <div class="stats-demo-matrix-cell"><span>Erwachsene · männlich</span><strong>1.111</strong></div>
+            <div class="stats-demo-matrix-cell"><span>Erwachsene · weiblich</span><strong>372</strong></div>
+            <div class="stats-demo-matrix-cell"><span>Jugend · männlich</span><strong>393</strong></div>
+            <div class="stats-demo-matrix-cell"><span>Jugend · weiblich</span><strong>191</strong></div>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow kicker">WELCHES FORMAT?</div>
+          <h3>Einzel, Doppel oder Mixed</h3>
+          <p class="stats-demo-explainer">Die Einträge sind Teilnahmen: Ein Doppel mit zwei Paaren zählt vier Starts, nicht einen.</p>
+          <div id="stats-demo-format-bars" class="stats-bars stats-demo-formats" aria-label="Teilnahmen nach Einzel, Doppel und Mixed"></div>
+        </div>
+      </div>
+      <div class="stats-demographics-year-grid">
+        <div class="stats-chart-card">
+          <div class="eyebrow kicker">FÜNF JAHRE IM ÜBERBLICK</div><h3>Frauenanteil nach Jahr</h3>
+          <p>Weibliche Starts bezogen auf alle Starts des jeweiligen Jahres.</p>
+          <div id="stats-demo-year-gender" class="stats-bars stats-demo-year-bars" aria-label="Frauenanteil und Starts von 2022 bis 2026"></div>
+        </div>
+        <div class="stats-chart-card">
+          <div class="eyebrow kicker">NACHWUCHS IM FOKUS</div><h3>Jugendanteil nach Jahr</h3>
+          <p>Jugendstarts im Verhältnis zur Gesamtzahl der Teilnahmen pro Jahr.</p>
+          <div id="stats-demo-year-youth" class="stats-bars stats-demo-year-bars" aria-label="Jugendanteil und Starts von 2022 bis 2026"></div>
+        </div>
+      </div>
+      <p class="stats-deep-footnote">Die Beteiligung hängt davon ab, welche Konkurrenzen ausgeschrieben wurden. Kleine oder fehlende Werte bedeuten deshalb nicht automatisch geringeres Interesse. <strong>* 2026</strong> ist noch vorläufig.</p>
+    </section>
     <section class="stats-age-section" id="altersklassen" aria-labelledby="stats-age-heading">
       <div class="stats-age-header">
         <div class="stats-section-head">
