@@ -1204,9 +1204,11 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 }
 
 
-/* Hero-Relaunch: eine durchgehend dunkle Fläche statt einer
-   künstlichen Tennisgrafik. Keine Farbkante, keine Linien und kein Ball. */
+/* Startseite: kompakter Zweispalten-Hero ohne leere Grafik-Spalte.
+   Text und Turnierkarte sitzen im normalen Layoutfluss.
+   Farben bleiben unverändert, der Inhalt bestimmt die Höhe. */
 .hero{
+  min-height:0;
   background:
     radial-gradient(ellipse 43% 65% at 84% 50%,rgba(58,112,78,.23) 0%,transparent 86%),
     linear-gradient(115deg,#17372e 0%,#142f29 58%,#123128 100%);
@@ -1218,55 +1220,99 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   background:radial-gradient(ellipse 48% 50% at 21% 12%,rgba(196,241,111,.045),transparent 78%);
   pointer-events:none;
 }
+.hero-inner{
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,1.13fr) minmax(310px,.87fr);
+  column-gap:clamp(24px,4.4vw,74px);
+  align-items:center;
+  padding-top:116px;
+  padding-bottom:64px;
+}
+.hero-copy{
+  padding-bottom:0;
+  min-width:0;
+}
+.hero h1{
+  font-size:clamp(64px,6vw,96px);
+  line-height:.92;
+  margin:17px 0 22px;
+}
+.hero-desc{
+  max-width:510px;
+  margin-bottom:25px;
+}
+.hero-foot{
+  margin-top:35px;
+  gap:22px;
+}
 .hero-plate{
-  right:6%;
-  bottom:126px;
-  width:356px;
+  position:relative;
+  inset:auto;
+  justify-self:end;
+  align-self:center;
+  margin:0;
+  width:min(100%,370px);
+  max-width:100%;
   padding:24px 25px 22px;
   border:1px solid #dffba9;
   border-radius:21px;
   background:linear-gradient(145deg,#dafa95,#c8f16d);
-  box-shadow:0 22px 64px rgba(6,24,17,.3);
+  box-shadow:0 22px 64px rgba(6,24,17,.30);
   transform:none;
 }
 .hero-plate:hover,.hero-plate:focus-visible{
   transform:translateY(-4px);
   box-shadow:0 26px 70px rgba(6,24,17,.38);
 }
-.hero-plate .date{font-size:36px;line-height:1.1}
+.hero-plate .date{font-size:clamp(29px,2.35vw,36px);line-height:1.1}
 .hero-plate .small{border:0}
-@media(max-width:850px){
+@media(max-width:960px){
   .hero-inner{
     display:flex;
     flex-direction:column;
     align-items:stretch;
     min-height:0;
-    padding-top:130px;
-    padding-bottom:58px;
+    padding-top:112px;
+    padding-bottom:51px;
   }
-  .hero-copy{padding-bottom:0}
+  .hero-copy{
+    padding-bottom:0;
+    max-width:690px;
+  }
+  .hero h1{font-size:clamp(63px,9vw,82px)}
   .hero-plate{
     position:relative;
-    right:auto;
-    bottom:auto;
-    width:min(360px,100%);
-    max-width:100%;
-    margin:42px 0 0 auto;
+    inset:auto;
+    align-self:flex-start;
+    width:min(380px,100%);
+    margin:30px 0 0;
     padding:23px 24px 21px;
   }
   .hero-plate .date{font-size:33px}
+  .hero-foot{margin-top:29px}
 }
 @media(max-width:620px){
-  .hero-inner{min-height:0;padding-top:130px;padding-bottom:52px}
+  .hero-inner{
+    min-height:0;
+    padding-top:113px;
+    padding-bottom:44px;
+  }
   .hero-copy{padding-bottom:0}
+  .hero h1{
+    font-size:clamp(54px,14vw,72px);
+    margin:15px 0 20px;
+  }
+  .hero-desc{margin-bottom:23px}
+  .hero-foot{margin-top:28px;gap:14px}
   .hero-plate{
     width:100%;
-    margin-top:33px;
-    padding:22px 22px 19px;
+    margin-top:28px;
+    padding:21px 21px 19px;
     border-width:1px;
     border-radius:18px;
   }
-  .hero-plate .date{font-size:clamp(27px,8vw,33px);margin:13px 0 11px}
+  .hero-plate .date{font-size:clamp(27px,7.6vw,33px);margin:13px 0 11px}
 }
 
 /* Große, eigenständige Turniermeldungs-Kachel direkt vor der Community. */
