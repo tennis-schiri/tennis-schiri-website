@@ -172,6 +172,66 @@
       "value": "28,3 %",
       "label": "Jugendanteil über fünf Jahre",
       "detail": "584 von 2.067 erfassten Teilnahmen in Jugend-Konkurrenzen."
+    },
+    {
+      "value": "458",
+      "label": "Herren-Starts in offenen Einzeln",
+      "detail": "458 von 2.067 Turnierteilnahmen (22,2 %), 2022–2026."
+    },
+    {
+      "value": "393",
+      "label": "Junioren-Starts in Jugendkonkurrenzen",
+      "detail": "393 von 584 Jugendstarts (67,3 %), 2022–2026."
+    },
+    {
+      "value": "191",
+      "label": "Juniorinnen-Starts in Jugendkonkurrenzen",
+      "detail": "191 von 584 Jugendstarts (32,7 %), 2022–2026."
+    },
+    {
+      "value": "620",
+      "label": "Starts in AK 30+ (Einzel)",
+      "detail": "620 von 2.067 Starts (30,0 %), ohne Doppel/Mixed."
+    },
+    {
+      "value": "164",
+      "label": "Mixed-Teilnahmen seit 2022",
+      "detail": "164 von 2.067 Starts (7,9 %). Gezählt werden Starts, keine Paare."
+    },
+    {
+      "value": "92",
+      "label": "Mixed-Teilnahmen 2026",
+      "detail": "92 von 309 Starts (29,8 %), bis zur bisherigen Datenerfassung."
+    },
+    {
+      "value": "223",
+      "label": "Jugendstarts 2023",
+      "detail": "223 von 501 Starts (44,5 %), also 44,5 % Jugendanteil."
+    },
+    {
+      "value": "346",
+      "label": "Männliche Starts im Jahr 2025",
+      "detail": "346 von 444 Turnierteilnahmen (77,9 %)."
+    },
+    {
+      "value": "98",
+      "label": "Weibliche Starts im Jahr 2026",
+      "detail": "98 von 309 Turnierteilnahmen (31,7 %), vorläufig."
+    },
+    {
+      "value": "39",
+      "label": "Aufgaben von Matches (2024–2026)",
+      "detail": "39 von 1.075 gespielten Matches (3,6 %), nur 2024–2026 vergleichbar."
+    },
+    {
+      "value": "135",
+      "label": "Nichtantritte 2024–2026",
+      "detail": "135 von 1.210 Ansetzungen (11,2 %), nicht von gespielten Matches."
+    },
+    {
+      "value": "26,0",
+      "label": "Starts pro Turnier 2024",
+      "detail": "547 Starts bei 21 erfassten Veranstaltungen."
     }
   ],
   "age_analysis": {
