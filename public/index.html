@@ -179,6 +179,7 @@
  <div class="tournament-detail"><dt>Auslosung</dt><dd>Noch nicht bekannt</dd></div>
  </dl></div><div class="event-actions"><span class="tournament-soon">Anmeldung demnächst</span></div></article>
  </div>
+ <div class="home-tourney-footer"><span id="home-tourney-summary" aria-live="polite">Die nächsten Turniere auf einen Blick</span><a href="turniere/">Alle Turniere in der Übersicht ansehen <span aria-hidden="true">↗</span></a></div>
  <p class="fineprint">Konkurrenzen für die drei SUNBALL-Turniere laut TVBB-Turnierkalender und für das Indoor-Mixed-Turnier laut tennis.de. Meldeschluss und Auslosung bitte in den offiziellen Turnierdetails kontrollieren; bei den übrigen Turnieren folgen die Angaben mit der Ausschreibung. Änderungen vorbehalten.</p>
  </div></section>
 <section class="section rules" id="regelwissen"><div class="container"><div class="rules-layout">
@@ -204,7 +205,7 @@
  const menu=document.getElementById('menu-toggle');const nav=document.getElementById('site-nav');
  menu.addEventListener('click',function(){const isOpen=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(isOpen));menu.setAttribute('aria-label',isOpen?'Menü schließen':'Menü öffnen');menu.textContent=isOpen?'×':'☰';});
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰';}));
- document.querySelectorAll('.filter').forEach(button=>button.addEventListener('click',function(){document.querySelectorAll('.filter').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false')});button.classList.add('active');button.setAttribute('aria-pressed','true');const type=button.dataset.filter;document.querySelectorAll('.event').forEach(row=>row.classList.toggle('hidden',type!=='alle'&&row.dataset.type!==type))}));
+ document.querySelectorAll('.filter').forEach(button=>button.addEventListener('click',function(){document.querySelectorAll('.filter').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false')});button.classList.add('active');button.setAttribute('aria-pressed','true');const type=button.dataset.filter;window.refreshHomepageTournaments?.()}));
 })();
 
 (function(){
@@ -215,6 +216,24 @@
   const germanDay=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Berlin'}).format(new Date());
   const next=rows.find(row=>row.dataset.start >= germanDay);
   rows.forEach(row=>{row.classList.toggle('featured-hidden',row===next);row.classList.toggle('event-past',row.dataset.start<germanDay);});
+  // Auf der Startseite maximal vier weitere, noch bevorstehende Turniere zeigen.
+  // Der aktive Turnierfilter gilt auch fuer diese Vierer-Auswahl.
+  function refreshHomepageTournaments(){
+    const filter=document.querySelector('.filter.active')?.dataset.filter || 'alle';
+    let visible=0;
+    rows.forEach(row=>{
+      const eligible=row!==next && row.dataset.start>=germanDay &&
+        (filter==='alle' || row.dataset.type===filter);
+      const show=eligible && visible<4;
+      row.classList.toggle('home-excess',!show);
+      if(show) visible++;
+    });
+    const summary=document.getElementById('home-tourney-summary');
+    if(summary) summary.textContent=visible===0 ? 'Keine weiteren passenden Turniere angekündigt' :
+      visible===1 ? '1 weiteres Turnier' : visible+' weitere Turniere';
+  }
+  window.refreshHomepageTournaments=refreshHomepageTournaments;
+  refreshHomepageTournaments();
   if(!next){
     featured.hidden=true;
     const plate=document.querySelector('.hero-plate');
