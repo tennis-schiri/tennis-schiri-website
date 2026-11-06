@@ -75,6 +75,162 @@
     years.forEach(year => target.appendChild(createBar(year[prop], max, year.year + (year.partial ? ' *' : ''), null, suffix)));
   }
 
+  const pctValue = (count,total) => total ? count / total * 100 : 0;
+  const pct = (count,total) => pctValue(count,total).toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' %';
+  const formatOne = n => Number(n).toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const setText = (id, content) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(content);
+  };
+  function setRatioBar(id, count, total, label) {
+    const bar = document.getElementById(id);
+    if (bar) bar.style.width = Math.max(0,Math.min(100,pctValue(count,total))) + '%';
+    const track = bar?.parentElement;
+    if (track) track.setAttribute('aria-label',label || number(count)+' von '+number(total)+' ('+pct(count,total)+')');
+  }
+  function bindYearSelector(elementId, attribute, render) {
+    const root = document.getElementById(elementId);
+    if (!root) return;
+    const buttons = root.querySelectorAll('button['+attribute+']');
+    function select(period) {
+      buttons.forEach(button => {
+        const active = button.getAttribute(attribute) === period;
+        button.classList.toggle('is-active',active);
+        button.setAttribute('aria-pressed',String(active));
+      });
+      render(period);
+    }
+    root.addEventListener('click',event => {
+      const button=event.target.closest('button['+attribute+']');
+      if (button && root.contains(button)) select(button.getAttribute(attribute));
+    });
+    select('all');
+  }
+
+  function initDemographics(data) {
+    const source = data.demographics?.years;
+    if (!source?.length) return;
+    const baseYears=data.years;
+    const selected=period=>period==='all'?source:source.filter(x=>x.year===Number(period));
+    const sum=(rows,fn)=>rows.reduce((n,row)=>n+Number(fn(row)||0),0);
+    function update(period) {
+      const rows = selected(period);
+      if (!rows.length) return;
+      const total = sum(rows,x=>x.genders.male+x.genders.female);
+      const male = sum(rows,x=>x.genders.male), female = sum(rows,x=>x.genders.female);
+      const adult = sum(rows,x=>x.ages.adult), youth = sum(rows,x=>x.ages.youth);
+      const periodLabel=period==='all'?'2022–2026':period+(period==='2026'?' (vorläufig)':'');
+      setText('stats-demo-period-a',periodLabel);setText('stats-demo-period-b',periodLabel);
+      setText('stats-demo-male',number(male));setText('stats-demo-female',number(female));
+      setText('stats-demo-adult',number(adult));setText('stats-demo-youth',number(youth));
+      setText('stats-demo-male-pct',pct(male,total));setText('stats-demo-female-pct',pct(female,total));
+      setText('stats-demo-adult-pct',pct(adult,total));setText('stats-demo-youth-pct',pct(youth,total));
+      setRatioBar('stats-demo-male-bar',male,total,'Männlich: '+number(male)+' von '+number(total)+' ('+pct(male,total)+'); weiblich: '+number(female)+' ('+pct(female,total)+')');
+      setRatioBar('stats-demo-adult-bar',adult,total,'Erwachsene: '+number(adult)+' von '+number(total)+' ('+pct(adult,total)+'); Jugend: '+number(youth)+' ('+pct(youth,total)+')');
+      setText('stats-demo-total',number(total));
+      const matrix=document.querySelectorAll('#stats-demo-matrix .stats-demo-matrix-cell strong');
+      const segments=[
+        sum(rows,x=>x.gender_age.male_adult),
+        sum(rows,x=>x.gender_age.female_adult),
+        sum(rows,x=>x.gender_age.male_youth),
+        sum(rows,x=>x.gender_age.female_youth)
+      ];
+      matrix.forEach((item,index)=>{if(index<segments.length)item.textContent=number(segments[index])+' · '+pct(segments[index],total);});
+      const categories=[
+        {key:'singles',label:'Einzel'},
+        {key:'doubles',label:'Doppel'},
+        {key:'mixed',label:'Mixed'}
+      ].map(c=>({...c,value:sum(rows,x=>x.formats[c.key])}));
+      const target=document.getElementById('stats-demo-format-bars');
+      if(target){
+        target.replaceChildren();
+        categories.forEach(c=>target.appendChild(createBar(c.value,total,c.label,pct(c.value,total)+' aller '+number(total)+' Starts')));
+      }
+    }
+    bindYearSelector('stats-demographics-filter','data-demo-period',update);
+    const renderYearChart=(targetId,key)=>{
+      const target=document.getElementById(targetId);
+      if(!target)return;
+      target.replaceChildren();
+      source.forEach(row=>{
+        const full=baseYears.find(y=>y.year===row.year);
+        const total=row.genders.male+row.genders.female;
+        const value=key==='female'?row.genders.female:row.ages.youth;
+        const label=row.year+(full?.partial?' *':'');
+        const percent=+pctValue(value,total).toFixed(1);
+        target.appendChild(createBar(percent,100,label,number(value)+' von '+number(total)+' Starts ('+pct(value,total)+')',' %'));
+      });
+    };
+    renderYearChart('stats-demo-year-gender','female');
+    renderYearChart('stats-demo-year-youth','youth');
+  }
+
+  function initMatchBreakdown(data) {
+    const years=data.years || [],extra=data.demographics?.years || [];
+    if(!years.length || !extra.length)return;
+    const combined=years.map(year=>({...year,match_types:extra.find(row=>row.year===year.year)?.match_types}));
+    const sum=(rows,key)=>rows.reduce((n,row)=>n+(Number(row[key])||0),0);
+    const rowsFor=period=>period==='all'?combined:combined.filter(row=>row.year===Number(period));
+    function updateMetric(prefix,count,denominator,label) {
+      if(count===null || denominator===0){
+        setText(prefix+'-number','–');
+        setText(prefix+'-relation','Für diesen Zeitraum nicht getrennt ausgewiesen.');
+        const bar=document.getElementById(prefix+'-bar');
+        if(bar)bar.style.width='0%';
+        return;
+      }
+      setText(prefix+'-number',number(count));
+      setText(prefix+'-relation',number(count)+' von '+number(denominator)+' '+label+' · '+pct(count,denominator));
+      const bar=document.getElementById(prefix+'-bar');
+      if(bar)bar.style.width=Math.min(100,pctValue(count,denominator))+'%';
+    }
+    bindYearSelector('stats-match-filter','data-match-period',period=>{
+      const selected=rowsFor(period);
+      if(!selected.length)return;
+      const matches=sum(selected,'matches');
+      const mtbs=sum(selected,'match_tiebreaks');
+      const twoSet=selected.reduce((n,row)=>n+(row.match_types?.two_set||0),0);
+      updateMetric('stats-match-mtb',mtbs,matches,'Matches');
+      updateMetric('stats-match-two',twoSet,matches,'Matches');
+      const comparable=selected.filter(row=>row.match_types?.retired!=null && row.match_types?.not_started!=null && row.match_types?.scheduled!=null);
+      if(comparable.length){
+        const retire=comparable.reduce((n,row)=>n+row.match_types.retired,0);
+        const played=sum(comparable,'matches');
+        const noShow=comparable.reduce((n,row)=>n+row.match_types.not_started,0);
+        const planned=comparable.reduce((n,row)=>n+row.match_types.scheduled,0);
+        updateMetric('stats-match-retired',retire,played,'gespielten Matches');
+        updateMetric('stats-match-no-show',noShow,planned,'Ansetzungen');
+      }else{
+        updateMetric('stats-match-retired',null,0,'gespielten Matches');
+        updateMetric('stats-match-no-show',null,0,'Ansetzungen');
+      }
+      let note='';
+      if(period==='all')note='Für Aufgaben und Nichtantritte sind nur die getrennt erfassten Jahre 2024–2026 enthalten: 39 von 1.075 gespielten Matches endeten durch Aufgabe; 135 von 1.210 Ansetzungen waren Nichtantritte. Match-Tiebreaks: 298 von 1.757 gespielten Matches (17,0 %).';
+      else if(period==='2023')note='2023 sind 66 Fälle unter „Aufg. / n.a.“ gemeinsam erfasst. Eine seriöse Aufteilung auf Aufgaben und Nichtantritte ist nicht möglich. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').';
+      else if(period==='2022')note='2022 wurden Aufgaben und Nichtantritte nicht separat ausgewiesen. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').';
+      else note='Aufgaben beziehen sich auf gespielte Matches, Nichtantritte auf geplante Ansetzungen. Match-Tiebreaks: '+number(mtbs)+' von '+number(matches)+' gespielten Matches ('+pct(mtbs,matches)+').'+(period==='2026'?' 2026 ist noch vorläufig.':'');
+      setText('stats-match-note',note);
+    });
+  }
+
+  function initTournamentAverages(data) {
+    const years=data.years || [];
+    function draw(targetId,property,unit){
+      const el=document.getElementById(targetId);
+      if(!el)return;
+      el.replaceChildren();
+      const values=years.map(year=>({year,value:year.tournaments?year[property]/year.tournaments:0}));
+      const max=Math.max(...values.map(item=>item.value),0);
+      values.forEach(item=>{
+        const row=years.find(year=>year.year===item.year);
+        el.appendChild(createBar(+item.value.toFixed(1),max,item.year+(row.partial?' *':''),
+          number(row[property])+' '+unit+' / '+number(row.tournaments)+' Turniere'));
+      });
+    }
+    draw('stats-avg-entries-chart','entries','Starts');
+    draw('stats-avg-matches-chart','matches','Matches');
+  }
+
   function initAgeAnalysis(data) {
     const analysis = data.age_analysis;
     const controls = document.getElementById('stats-age-filter');
@@ -111,6 +267,8 @@
       const youth = byGroup('Jugend (Einzel)',year);
       bars('stats-age-senior-bars',senior);
       bars('stats-age-youth-bars',youth);
+      bars('stats-age-active-bars',byGroup('Aktive (Einzel)',year));
+      bars('stats-age-doubles-bars',byGroup('Doppel & Mixed',year));
       const bestSenior=senior[0],bestYouth=youth[0];
       const seniorTotal=senior.reduce((sum,category)=>sum+category.value,0);
       setText('age-top-senior', bestSenior?number(bestSenior.value):'–');
@@ -154,12 +312,13 @@
     });
     renderChart('stats-entries-chart', years, 'entries');
     renderChart('stats-matches-chart', years, 'matches');
+    setText('stats-total-mtbs-note',number(total('match_tiebreaks'))+' von '+number(total('matches'))+' Matches ('+pct(total('match_tiebreaks'),total('matches'))+')');
     const mtbTarget = document.getElementById('stats-mtb-chart');
     if (mtbTarget) {
       mtbTarget.replaceChildren();
       years.forEach(year => {
         const percentage = Math.round(year.match_tiebreaks / year.matches * 1000) / 10;
-        mtbTarget.appendChild(createBar(percentage, 25, year.year + (year.partial ? ' *' : ''), number(year.match_tiebreaks) + ' von ' + number(year.matches) + ' Matches', ' %'));
+        mtbTarget.appendChild(createBar(percentage, 25, year.year + (year.partial ? ' *' : ''), number(year.match_tiebreaks) + ' von ' + number(year.matches) + ' Matches ('+pct(year.match_tiebreaks,year.matches)+')', ' %'));
       });
     }
     const tbody = document.getElementById('stats-year-table-body');
@@ -170,7 +329,7 @@
         const cells = [
           year.year + (year.partial ? ' *' : ''),
           year.tournaments, number(year.entries), number(year.matches),
-          number(year.match_tiebreaks),
+          number(year.match_tiebreaks)+' von '+number(year.matches),
           (year.match_tiebreaks / year.matches * 100).toLocaleString('de-DE', {maximumFractionDigits:1}) + ' %'
         ];
         cells.forEach((cell, i) => {
@@ -187,6 +346,9 @@
       event.textContent = number(data.featured_event.entries);
     }
     initAgeAnalysis(data);
+    initDemographics(data);
+    initMatchBreakdown(data);
+    initTournamentAverages(data);
     page.dataset.loaded = 'true';
   }
 
