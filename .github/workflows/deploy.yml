@@ -40,6 +40,7 @@ jobs:
             public/favicon.svg \
             public/assets/site.css \
             public/assets/instagram.js \
+            public/assets/back-to-top.js \
             public/data/instagram.json \
             public/assets/partner/precise-resort-bad-saarow.jpg \
             public/assets/partner/sunball-tenniscenter.png \
@@ -77,6 +78,7 @@ jobs:
             public/favicon.svg \
             public/assets/site.css \
             public/assets/instagram.js \
+            public/assets/back-to-top.js \
             public/data/instagram.json \
             public/assets/partner/precise-resort-bad-saarow.jpg \
             public/assets/partner/sunball-tenniscenter.png \
