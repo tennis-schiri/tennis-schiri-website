@@ -256,7 +256,7 @@
       const el=document.getElementById(targetId);
       if(!el)return;
       el.replaceChildren();
-      const values=years.map(year=>({year,value:year.tournaments?year[property]/year.tournaments:0}));
+      const values=years.map(year=>({year:year.year,value:year.tournaments?year[property]/year.tournaments:0}));
       const max=Math.max(...values.map(item=>item.value),0);
       values.forEach(item=>{
         const row=years.find(year=>year.year===item.year);
