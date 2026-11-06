@@ -881,3 +881,136 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .featured-date.datebox-range .month{font-size:11px;margin-top:3px}
   .featured-date.datebox-range .year{font-size:10px}
 }
+
+
+/* Turnieruebersicht: Standorte mit Adressen und Kurzterminen */
+.venue-intro{
+  max-width:690px;
+  margin:8px 0 0;
+  font-size:14px;
+  line-height:1.7;
+  color:#5b6e60;
+}
+.venue-groups{gap:15px;margin-top:20px}
+.venue-card{
+  padding:24px 26px 22px;
+  border-color:#dbe5d5;
+  box-shadow:0 5px 22px rgba(26,59,39,.035);
+}
+.venue-card .kicker{
+  font-size:10px;
+  letter-spacing:.14em;
+}
+.venue-card h3{
+  font-size:21px;
+  line-height:1.2;
+  margin:7px 0 12px;
+}
+.venue-meta{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px 20px;
+}
+.venue-meta address{
+  margin:0;
+  font-size:13px;
+  line-height:1.5;
+  font-style:normal;
+  color:#3f5a48;
+  overflow-wrap:anywhere;
+}
+.venue-meta a{
+  color:#226440;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+  text-decoration:none;
+  text-underline-offset:3px;
+}
+.venue-meta a:hover,.venue-meta a:focus-visible{text-decoration:underline}
+.venue-card .venue-surface{
+  margin:8px 0 16px;
+  font-size:12px;
+  color:#738476;
+}
+.venue-event-list{
+  margin:0;
+  padding:0;
+  list-style:none;
+  border-top:1px solid #e8eee4;
+}
+.venue-event-list li+li{border-top:1px solid #edf0e9}
+.venue-event-list a{
+  display:grid;
+  grid-template-columns:minmax(100px,auto) minmax(0,1fr) auto;
+  align-items:center;
+  column-gap:14px;
+  padding:12px 4px;
+  border-radius:8px;
+  color:#25422f;
+  font-size:13px;
+  text-decoration:none;
+  transition:background .18s ease;
+}
+.venue-event-list a:hover,.venue-event-list a:focus-visible{background:#eff7e8}
+.venue-event-date{
+  color:#426d42;
+  font-size:12px;
+  line-height:1.4;
+  font-weight:900;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.venue-event-title{font-weight:650;line-height:1.45}
+.venue-event-arrow{color:#407343;font-size:16px;font-weight:850}
+.venue-card .venue-upcoming{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:7px 0 0;
+  padding:12px 13px;
+  background:#f2f7ed;
+  border-radius:10px;
+  color:#5b705e;
+  font-size:12px;
+  line-height:1.5;
+}
+.venue-card .venue-upcoming:before{
+  content:"";
+  display:block;
+  width:7px;
+  height:7px;
+  background:#b1d779;
+  border-radius:50%;
+  flex:none;
+}
+.venue-other{
+  margin-top:20px;
+  padding:21px 24px;
+  background:#eff4eb;
+  border:1px solid #dfe8d8;
+  border-radius:16px;
+}
+.venue-other h3{
+  margin:0 0 12px;
+  font-size:17px;
+  letter-spacing:-.02em;
+}
+.venue-other-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.venue-other-grid strong{font-size:13px;color:#263f2d}
+.venue-other-grid p{font-size:12px;line-height:1.65;color:#5e705f;margin:6px 0 0}
+.tourney-card[id]{scroll-margin-top:105px}
+@media(max-width:620px){
+  .venue-card{padding:19px 17px}
+  .venue-card h3{font-size:19px}
+  .venue-meta{display:block}
+  .venue-meta a{display:inline-block;margin-top:8px}
+  .venue-event-list a{grid-template-columns:1fr auto;gap:4px 9px;padding:11px 3px}
+  .venue-event-date{grid-column:1;grid-row:1}
+  .venue-event-title{grid-column:1;grid-row:2}
+  .venue-event-arrow{grid-column:2;grid-row:1/span 2;align-self:center}
+  .venue-other{padding:18px 17px}
+  .venue-other-grid{grid-template-columns:1fr;gap:17px}
+}
