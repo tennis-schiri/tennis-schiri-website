@@ -2171,3 +2171,17 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .stats-demo-matrix{gap:7px}
   .stats-demo-matrix-cell>span{font-size:10px}
 }
+
+/* Tabellen: auch bei vielen Gruppenwerten mobil gezielt horizontal scrollen. */
+.stats-data-table-title{margin:35px 0 15px}
+.stats-data-table-title h3{font-size:clamp(21px,2.4vw,28px);line-height:1.22;letter-spacing:-.045em;margin:0 0 7px;color:#214d33}
+.stats-data-table-title p{font-size:12px;line-height:1.55;color:#758678;margin:0}
+.stats-detail-table-wrap{max-width:100%;overscroll-behavior-x:contain}
+.stats-detail-table-wrap .stats-data-table{min-width:900px}
+.stats-detail-table-wrap .stats-year-table th,
+.stats-detail-table-wrap .stats-year-table td{padding:15px 17px;font-size:12px}
+.stats-detail-table-wrap .stats-year-table td small{font-size:10px;color:#879789;white-space:nowrap}
+@media(max-width:620px){
+  .stats-data-table-title{margin-top:26px}
+  .stats-detail-table-wrap .stats-data-table{min-width:900px}
+}
