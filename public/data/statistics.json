@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "updated_at": "2026-11-06",
   "scope": "Ausgewählte anonymisierte Kennzahlen aus eigenen Turnierstatistiken",
   "counting_note": "Teilnahmen sind Start-/Meldeeinträge, keine eindeutigen Personen. Matches beziehen sich auf die in der Tabelle als gespielt erfassten Partien. Die Jahresauswertung 2026 enthält nur bislang erfasste Turniere (letzter Eintrag: August 2026).",
@@ -64,11 +64,6 @@
       "detail": "Turniertermine der Jahre 2022 bis 2026 in der Statistik."
     },
     {
-      "value": "298",
-      "label": "Matches mit Match-Tiebreak",
-      "detail": "In den erfassten Turnieren 2022–2026."
-    },
-    {
       "value": "547",
       "label": "Teilnahmen im Jahr 2024",
       "detail": "Einträge bei 21 ausgewerteten Turnierterminen."
@@ -82,11 +77,6 @@
       "value": "501",
       "label": "Teilnahmen im Jahr 2023",
       "detail": "Einträge bei 16 erfassten Turnierterminen."
-    },
-    {
-      "value": "45",
-      "label": "Match-Tiebreaks im Jahr 2026",
-      "detail": "In den bisher für 2026 eingetragenen Matches."
     },
     {
       "value": "70",
@@ -112,6 +102,76 @@
       "value": "183",
       "label": "Starts bei den Herren 40",
       "detail": "Erfasste Einzel-Teilnahmen in dieser AK, 2022–2026."
+    },
+    {
+      "value": "298",
+      "label": "Matches mit Match-Tiebreak",
+      "detail": "298 von 1.757 erfassten Matches (17,0 %), 2022–2026."
+    },
+    {
+      "value": "44",
+      "label": "Match-Tiebreaks 2022",
+      "detail": "44 von 239 Matches (18,4 %)."
+    },
+    {
+      "value": "73",
+      "label": "Match-Tiebreaks 2023",
+      "detail": "73 von 443 Matches (16,5 %)."
+    },
+    {
+      "value": "74",
+      "label": "Match-Tiebreaks 2024",
+      "detail": "74 von 490 Matches (15,1 %)."
+    },
+    {
+      "value": "62",
+      "label": "Match-Tiebreaks 2025",
+      "detail": "62 von 352 Matches (17,6 %)."
+    },
+    {
+      "value": "45",
+      "label": "Match-Tiebreaks 2026 (Zwischenstand)",
+      "detail": "45 von 233 Matches (19,3 %)."
+    },
+    {
+      "value": "1.504",
+      "label": "Männliche Turnierstarts",
+      "detail": "72,8 % aller 2.067 erfassten Teilnahmen, 2022–2026."
+    },
+    {
+      "value": "563",
+      "label": "Weibliche Turnierstarts",
+      "detail": "27,2 % aller 2.067 erfassten Teilnahmen, 2022–2026."
+    },
+    {
+      "value": "584",
+      "label": "Jugend-Teilnahmen",
+      "detail": "28,3 % aller 2.067 Starts entfielen auf Jugend-Konkurrenzen."
+    },
+    {
+      "value": "1.483",
+      "label": "Erwachsenen-Teilnahmen",
+      "detail": "71,7 % aller 2.067 Starts entfielen auf Erwachsenen-Konkurrenzen."
+    },
+    {
+      "value": "164",
+      "label": "Teilnahmen in Mixed-Konkurrenzen",
+      "detail": "7,9 % der erfassten Starts. Nicht die Zahl der Paarungen."
+    },
+    {
+      "value": "223",
+      "label": "Jugend-Teilnahmen im Jahr 2023",
+      "detail": "223 von 501 Starts (44,5 %)."
+    },
+    {
+      "value": "70",
+      "label": "Starts bei den ROHA Open 2024",
+      "detail": "Höchster erfasster Einzelturnierwert (Teilnahmen, keine Einzelpersonen)."
+    },
+    {
+      "value": "28,3 %",
+      "label": "Jugendanteil über fünf Jahre",
+      "detail": "584 von 2.067 erfassten Teilnahmen in Jugend-Konkurrenzen."
     }
   ],
   "age_analysis": {
@@ -452,5 +512,163 @@
         ]
       }
     ]
+  },
+  "demographics": {
+    "counting_note": "Die Angaben zählen Teilnahmen, keine einzigartigen Personen. Geschlecht und Jugend/Erwachsene folgen den Konkurrenzklassen; Mixed-Starts werden anhand der gemischten Paarung zu je 50 % auf männlich/weiblich verteilt. Die veröffentlichten 2023–2026-Ergebnisse stimmen mit den Geschlechter-/Alterszusammenfassungen der Originaltabellen überein.",
+    "years": [
+      {
+        "year": 2022,
+        "genders": {
+          "male": 181,
+          "female": 85
+        },
+        "ages": {
+          "adult": 193,
+          "youth": 73
+        },
+        "gender_age": {
+          "male_adult": 136,
+          "female_adult": 57,
+          "male_youth": 45,
+          "female_youth": 28
+        },
+        "formats": {
+          "singles": 266,
+          "doubles": 0,
+          "mixed": 0
+        },
+        "match_types": {
+          "two_set": 195,
+          "match_tiebreak": 44,
+          "retired": null,
+          "not_started": null,
+          "scheduled": null,
+          "combined_issues": null
+        }
+      },
+      {
+        "year": 2023,
+        "genders": {
+          "male": 345,
+          "female": 156
+        },
+        "ages": {
+          "adult": 278,
+          "youth": 223
+        },
+        "gender_age": {
+          "male_adult": 202,
+          "female_adult": 76,
+          "male_youth": 143,
+          "female_youth": 80
+        },
+        "formats": {
+          "singles": 501,
+          "doubles": 0,
+          "mixed": 0
+        },
+        "match_types": {
+          "two_set": 370,
+          "match_tiebreak": 73,
+          "retired": null,
+          "not_started": null,
+          "scheduled": null,
+          "combined_issues": 66
+        }
+      },
+      {
+        "year": 2024,
+        "genders": {
+          "male": 421,
+          "female": 126
+        },
+        "ages": {
+          "adult": 408,
+          "youth": 139
+        },
+        "gender_age": {
+          "male_adult": 323,
+          "female_adult": 85,
+          "male_youth": 98,
+          "female_youth": 41
+        },
+        "formats": {
+          "singles": 501,
+          "doubles": 46,
+          "mixed": 0
+        },
+        "match_types": {
+          "two_set": 395,
+          "match_tiebreak": 74,
+          "retired": 21,
+          "not_started": 71,
+          "scheduled": 561,
+          "combined_issues": null
+        }
+      },
+      {
+        "year": 2025,
+        "genders": {
+          "male": 346,
+          "female": 98
+        },
+        "ages": {
+          "adult": 322,
+          "youth": 122
+        },
+        "gender_age": {
+          "male_adult": 263,
+          "female_adult": 59,
+          "male_youth": 83,
+          "female_youth": 39
+        },
+        "formats": {
+          "singles": 314,
+          "doubles": 58,
+          "mixed": 72
+        },
+        "match_types": {
+          "two_set": 280,
+          "match_tiebreak": 62,
+          "retired": 10,
+          "not_started": 44,
+          "scheduled": 396,
+          "combined_issues": null
+        }
+      },
+      {
+        "year": 2026,
+        "genders": {
+          "male": 211,
+          "female": 98
+        },
+        "ages": {
+          "adult": 282,
+          "youth": 27
+        },
+        "gender_age": {
+          "male_adult": 187,
+          "female_adult": 95,
+          "male_youth": 24,
+          "female_youth": 3
+        },
+        "formats": {
+          "singles": 179,
+          "doubles": 38,
+          "mixed": 92
+        },
+        "match_types": {
+          "two_set": 180,
+          "match_tiebreak": 45,
+          "retired": 8,
+          "not_started": 20,
+          "scheduled": 253,
+          "combined_issues": null
+        }
+      }
+    ]
+  },
+  "match_analysis": {
+    "counting_note": "Match-Tiebreak-Anteil = Match-Tiebreaks / gespielte Matches. Für 2024–2026 sind gesondert Aufgaben (gespielte Matches) sowie Nichtantritte/Ansetzungen dokumentiert. Die älteren Blätter verwenden abweichende Kategorien; diese Werte werden nicht als durchgehende Zeitreihe vermischt."
   }
 }
