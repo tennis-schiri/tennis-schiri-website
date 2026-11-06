@@ -357,6 +357,8 @@
         const percentage = Math.round(year.match_tiebreaks / year.matches * 1000) / 10;
         mtbTarget.appendChild(createBar(percentage, 25, year.year + (year.partial ? ' *' : ''), number(year.match_tiebreaks) + ' von ' + number(year.matches) + ' Matches ('+pct(year.match_tiebreaks,year.matches)+')', ' %'));
       });
+      mtbTarget.setAttribute('aria-label',years.map(year =>
+        year.year+': '+number(year.match_tiebreaks)+' von '+number(year.matches)+' Matches ('+pct(year.match_tiebreaks,year.matches)+')').join('; '));
     }
     const tbody = document.getElementById('stats-year-table-body');
     if (tbody) {
