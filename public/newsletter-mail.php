@@ -42,7 +42,7 @@ define('TS_NEWSLETTER_TEMPLATE',true);
 require_once __DIR__.'/newsletter-template.php';
 function validButtonUrl(string $url): bool {
  if ($url==='') return true;
- if (strlen($url)>500 || preg_match('/[\\r\\n]/',$url) || !filter_var($url,FILTER_VALIDATE_URL)) return false;
+ if (strlen($url)>500 || preg_match('/[\r\n]/',$url) || !filter_var($url,FILTER_VALIDATE_URL)) return false;
  $parts=parse_url($url);
  return is_array($parts) && strtolower((string)($parts['scheme']??''))==='https'
     && !empty($parts['host']) && !isset($parts['user']) && !isset($parts['pass']);
