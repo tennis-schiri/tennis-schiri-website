@@ -11,6 +11,19 @@ Die zentrale Verwaltungsoberfläche für die Kommunikation und Turnierorganisati
 
 Das Backoffice verwendet die vorhandene HTTPS-Session, die nach acht Stunden abläuft. Kein zweites Passwort und kein neuer Webspace sind erforderlich.
 
+## Automatisch vorausgefüllte Turnier-Infomails
+
+Beim Anlegen einer neuen Infomail erkennt das Backoffice den Standort standardmäßig anhand des gewählten Turniers und ergänzt bekannte Informationen als **bearbeitbare Vorschläge**. Für Bad Saarow und Neuenhagen stammen diese aus bisherigen Turniermails; für andere Orte werden nur allgemeine organisatorische Hinweise eingesetzt.
+
+- **Bereits vorausgefüllt und angehakt:** voraussichtliche Anwesenheit/Meldezeit (historische Orientierung 30 Minuten), organisatorischer Kontakt sowie – je nach Mailtyp – Einspielen, Ergebnismeldung, mögliche Wartezeiten und Prüfung aktueller Ansetzungen.
+- **Vorausgefüllter Standortblock:** für Bad Saarow z. B. Laykold, Anmeldung am Counter, Parken hinter der Schranke; für Neuenhagen allgemeine Park-/Clubhausinfos, für Neuenhagen-Halle zudem Advantage Red Court und historischer Meldeort. Diese Angaben werden ausdrücklich als prüfpflichtige historische Vorschläge bezeichnet.
+- **Nur als abgewählte Prüfvorschläge:** frühere Nenngeldbeträge, Zahlungsarten und veranstaltungsspezifische Zählweisen. Sie erscheinen sichtbar im Formular, werden aber nicht ohne bewusste Aktivierung in den Newsletter aufgenommen.
+- **Automatische Standortwahl:** Bad Saarow, Neuenhagen bzw. bei einem Neuenhagener Indoor-/Hallen-Turnier die Hallenvorlage. Die Auswahl kann manuell überschrieben werden.
+- **Bestehende Infomail-Entwürfe:** Der Button „Bekannte Angaben als Vorschläge ergänzen“ übernimmt nur fehlende Werte; eigene Texte bleiben bestehen.
+
+Ein Entwurf kann **auch ungeprüft gespeichert** und später weiterbearbeitet werden. In der HTML-Vorschau bzw. Testmail sind unbestätigte Standortvorschläge als solche gekennzeichnet. Eine Empfängerliste darf erst nach der aktiven Checkbox „Ich habe alle vorausgefüllten Angaben geprüft“ freigegeben werden. Ohne Bestätigung gelangen unbestätigte Standortdaten nicht in echte Teilnehmermails. Es gibt weiterhin keinen automatischen Versand.
+
+Die Vorbelegungslogik liegt in `public/admin/defaults.php`; die private SQLite-Datenbank erhält dazu die Felder `defaults_review_required` und `defaults_reviewed_at` über die bestehende Migration. Die GitHub-Tests prüfen auch den tatsächlichen neuen Entwurf in SQLite.
 ## Funktionen
 
 ### Übersicht
@@ -37,7 +50,7 @@ Verfügbare Platzhalter: {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_li
 
 Die optionalen Infoblöcke werden nur angezeigt, wenn das jeweilige Thema angehakt **und** sein Text oder Link hinterlegt ist. Für **Turnigo** wird ausschließlich eine HTTPS-Adresse auf turnigo.de oder einer passenden Subdomain akzeptiert. Für **MyScore.live** gilt dasselbe für myscore.live. Trage pro Turnier den tatsächlichen Link ein; es werden keine Anmelde- oder Ergebnislinks geraten. Die Auswahl ist nicht mit dem Newsletter-Opt-in verbunden und löst keinen automatischen Versand aus.
 
-Die Checkliste hat eigene Datenbankfelder, die beim ersten Aufruf automatisch ergänzt werden. Bereits bestehende Entwürfe bleiben unverändert; neue Infoblöcke sind zunächst nicht aktiviert.
+Die Checkliste hat eigene Datenbankfelder, die beim ersten Aufruf automatisch ergänzt werden. Alte Entwürfe bleiben unverändert; neue Entwürfe erhalten bewusste, prüfpflichtige Startwerte.
 
 **Absender und Antwortadresse:** turniere@tennis-schiri.de. Der Newsletter nutzt weiterhin news@tennis-schiri.de.
 
