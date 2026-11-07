@@ -35,7 +35,8 @@ try {
  foreach (['headline'=>'TEXT NOT NULL DEFAULT \'\'','preheader'=>'TEXT NOT NULL DEFAULT \'\'',
            'button_label'=>'TEXT NOT NULL DEFAULT \'\'','button_url'=>'TEXT NOT NULL DEFAULT \'\'',
            'event_title'=>'TEXT NOT NULL DEFAULT \'\'','event_date'=>'TEXT NOT NULL DEFAULT \'\'',
-           'event_location'=>'TEXT NOT NULL DEFAULT \'\'', 'selected_events'=>"TEXT NOT NULL DEFAULT '[]'"] as $column=>$definition) {
+           'event_location'=>'TEXT NOT NULL DEFAULT \'\'', 'selected_events'=>"TEXT NOT NULL DEFAULT '[]'",
+           'selected_partners'=>"TEXT NOT NULL DEFAULT '[]'"] as $column=>$definition) {
   if (!in_array($column,$columns,true)) $db->exec('ALTER TABLE newsletter_campaigns ADD COLUMN '.$column.' '.$definition);
  }
 } catch(Throwable $e) { error_log('Newsletter campaigns setup failed: '.$e->getMessage()); http_response_code(503); exit('Datenbank vorübergehend nicht verfügbar.'); }
@@ -44,6 +45,8 @@ define('TS_NEWSLETTER_TEMPLATE',true);
 require_once __DIR__.'/newsletter-template.php';
 define('TS_NEWSLETTER_EVENTS',true);
 require_once __DIR__.'/newsletter-events.php';
+define('TS_NEWSLETTER_PARTNERS',true);
+require_once __DIR__.'/newsletter-partners.php';
 function validButtonUrl(string $url): bool {
  if ($url==='') return true;
  if (strlen($url)>500 || preg_match('/[\r\n]/',$url) || !filter_var($url,FILTER_VALIDATE_URL)) return false;
@@ -62,6 +65,7 @@ function extraFields(array $campaign=[]): string {
  $out.='<label>Termin</label><input type="text" name="event_date" maxlength="80" value="'.h($campaign['event_date']??'').'" placeholder="z. B. 21. November 2026 · ab 10:00 Uhr">';
  $out.='<label>Veranstaltungsort</label><input type="text" name="event_location" maxlength="140" value="'.h($campaign['event_location']??'').'" placeholder="z. B. Bad Saarow · Sandplatzhalle"></div>';
  $out.=newsletterEventSelector((string)($campaign['selected_events']??'[]'));
+ $out.=newsletterPartnersSelector((string)($campaign['selected_partners']??'[]'));
  return $out;
 }
 
@@ -70,7 +74,7 @@ function finish(string $message,int $id=0): never {
 }
 function page(string $contents): never {
  echo '<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Tennis-Schiri Newsletter · E-Mail-Verwaltung</title><style>
- :root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#eef3ef;color:#092b36;font:15px/1.55 system-ui}main{max-width:1050px;margin:36px auto;padding:0 17px}.panel{background:white;border:1px solid #d9e5df;border-radius:14px;padding:24px;margin-bottom:17px}h1{font-size:29px}h2{font-size:21px;margin:0 0 15px}p{margin:8px 0 16px}a{color:#007b7c}label{display:block;font-weight:700;margin:13px 0 6px}input[type=text],input[type=url],textarea,select{font:inherit;border:1px solid #b5c9c3;border-radius:8px;padding:11px;width:100%;background:white;color:#092b36}textarea{min-height:180px}button{background:#092b36;color:#fff;border:0;border-radius:8px;padding:11px 16px;font:inherit;cursor:pointer;margin:8px 8px 8px 0}button:hover{background:#19505b}.muted,small{color:#526e70}.event-editor{margin:23px 0;padding:20px;border:1px solid #c6dbbb;background:#f4f8ee;border-radius:12px}.event-editor>strong{display:block;color:#245039;font-size:17px}.event-editor .muted{margin:6px 0 18px}.newsletter-event-options{margin:28px 0;padding:22px;border:1px solid #c7dec8;border-radius:14px;background:#f2f8ee}.newsletter-event-options legend{font-weight:900;color:#244e36;padding:0 10px;font-size:17px}.newsletter-event-options h3{font-size:14px;margin:20px 0 10px;color:#326043}.newsletter-event-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.newsletter-event-option{background:#fff;border:1px solid #d6e5d4;border-radius:10px;padding:13px;display:flex;flex-direction:column;justify-content:space-between;gap:8px}.event-check{display:flex;gap:11px;align-items:start;cursor:pointer;margin:0}.event-check input{margin-top:4px;width:18px;height:18px;accent-color:#387c4c}.event-check strong{font-size:13px;color:#20472f;display:block}.event-check small{display:block;font-size:11px;line-height:1.55;margin-top:4px}.newsletter-event-option>a{font-weight:700;font-size:11px;color:#326e43;padding-left:30px}.event-old{color:#9b6b35;font-size:11px;font-weight:750}@media(max-width:720px){.newsletter-event-grid{grid-template-columns:1fr}}.warning{border-left:4px solid #eb8959;padding:10px 15px;background:#fff8f2}.success{background:#e8f5e7;padding:12px;border-radius:8px}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.topic{font-weight:700}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #d9e5df;padding:10px;text-align:left}code{font-size:12px} .danger{color:#9c482b} @media(max-width:640px){.panel{padding:17px}table{font-size:12px}}
+ :root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#eef3ef;color:#092b36;font:15px/1.55 system-ui}main{max-width:1050px;margin:36px auto;padding:0 17px}.panel{background:white;border:1px solid #d9e5df;border-radius:14px;padding:24px;margin-bottom:17px}h1{font-size:29px}h2{font-size:21px;margin:0 0 15px}p{margin:8px 0 16px}a{color:#007b7c}label{display:block;font-weight:700;margin:13px 0 6px}input[type=text],input[type=url],textarea,select{font:inherit;border:1px solid #b5c9c3;border-radius:8px;padding:11px;width:100%;background:white;color:#092b36}textarea{min-height:180px}button{background:#092b36;color:#fff;border:0;border-radius:8px;padding:11px 16px;font:inherit;cursor:pointer;margin:8px 8px 8px 0}button:hover{background:#19505b}.muted,small{color:#526e70}.event-editor{margin:23px 0;padding:20px;border:1px solid #c6dbbb;background:#f4f8ee;border-radius:12px}.event-editor>strong{display:block;color:#245039;font-size:17px}.event-editor .muted{margin:6px 0 18px}.newsletter-event-options{margin:28px 0;padding:22px;border:1px solid #c7dec8;border-radius:14px;background:#f2f8ee}.newsletter-event-options legend{font-weight:900;color:#244e36;padding:0 10px;font-size:17px}.newsletter-event-options h3{font-size:14px;margin:20px 0 10px;color:#326043}.newsletter-event-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.newsletter-event-option{background:#fff;border:1px solid #d6e5d4;border-radius:10px;padding:13px;display:flex;flex-direction:column;justify-content:space-between;gap:8px}.event-check{display:flex;gap:11px;align-items:start;cursor:pointer;margin:0}.event-check input{margin-top:4px;width:18px;height:18px;accent-color:#387c4c}.event-check strong{font-size:13px;color:#20472f;display:block}.event-check small{display:block;font-size:11px;line-height:1.55;margin-top:4px}.newsletter-event-option>a{font-weight:700;font-size:11px;color:#326e43;padding-left:30px}.event-old{color:#9b6b35;font-size:11px;font-weight:750}.newsletter-partner-option .partner-choice{display:flex;align-items:center;gap:12px}.newsletter-partner-option .partner-choice img{display:block;max-width:95px;width:95px;height:48px;object-fit:contain;flex-shrink:0;background:#fff;border-radius:6px}.newsletter-partner-option .partner-choice strong{display:block;font-size:13px;line-height:1.3;color:#214835}.newsletter-partner-option .partner-choice small{font-size:11px;color:#6d8174}.newsletter-partner-option>.event-check{gap:9px}@media(max-width:720px){.newsletter-event-grid{grid-template-columns:1fr}}.warning{border-left:4px solid #eb8959;padding:10px 15px;background:#fff8f2}.success{background:#e8f5e7;padding:12px;border-radius:8px}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.topic{font-weight:700}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #d9e5df;padding:10px;text-align:left}code{font-size:12px} .danger{color:#9c482b} @media(max-width:640px){.panel{padding:17px}table{font-size:12px}}
  </style><main><p><a href="/newsletter-admin.php">← Zur Newsletter-Verwaltung</a></p><h1>Newsletter · E-Mail-Verwaltung</h1>'.$contents.'</main></html>'; exit;
 }
 function csrf(): string { return '<input type="hidden" name="csrf" value="'.h($_SESSION['csrf']).'">'; }
@@ -147,6 +151,24 @@ if($method==='POST'){
     page('<section class="panel warning">Ein ausgewählter Termin ist nicht mehr verfügbar. Bitte den Entwurf neu laden und die Auswahl prüfen.</section>');
   }
   $selectedJson=json_encode($selectedEvents,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
+  $rawPartners=$_POST['selected_partners']??[];
+  if(!is_array($rawPartners)||count($rawPartners)>12||
+     count(array_filter($rawPartners,'is_string'))!==count($rawPartners)){
+    page('<section class="panel warning">Ungültige Partnerauswahl. Bitte die Seite neu laden.</section>');
+  }
+  $previousPartners='[]';
+  if($action==='save'){
+    $lookup=$db->prepare("SELECT selected_partners FROM newsletter_campaigns WHERE id=? AND state='draft'");
+    $lookup->execute([$id]);
+    $old=$lookup->fetchColumn();
+    if($old===false)page('<section class="panel warning">Der Entwurf wurde bereits freigegeben oder existiert nicht mehr.</section>');
+    $previousPartners=(string)$old;
+  }
+  $selectedPartners=newsletterResolvePartners($rawPartners,$previousPartners);
+  if(count($selectedPartners)!==count(array_unique($rawPartners))){
+    page('<section class="panel warning">Die gewählte Partnerliste hat sich geändert. Bitte die Seite neu laden.</section>');
+  }
+  $partnersJson=json_encode($selectedPartners,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
   if ($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||
       ($body==='' && count($selectedEvents)===0)||strlen($body)>10000||!array_key_exists($topic,$topics)||
       strlen($headline)>120||strlen($preheader)>160||strlen($buttonLabel)>70||
@@ -156,12 +178,12 @@ if($method==='POST'){
     page('<section class="panel warning">Bitte Betreff, Text, Überschrift, Vorschautext und Button prüfen. Ein Button braucht sowohl Text als auch eine gültige HTTPS-Adresse.</section>');
   }
   if($action==='create'){
-   $q=$db->prepare("INSERT INTO newsletter_campaigns(subject,body,topic,headline,preheader,button_label,button_url,event_title,event_date,event_location,selected_events,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
-   $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$eventTitle,$eventDate,$eventLocation,$selectedJson,$now,$now]);
+   $q=$db->prepare("INSERT INTO newsletter_campaigns(subject,body,topic,headline,preheader,button_label,button_url,event_title,event_date,event_location,selected_events,selected_partners,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
+   $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$eventTitle,$eventDate,$eventLocation,$selectedJson,$partnersJson,$now,$now]);
    finish('Entwurf gespeichert.',(int)$db->lastInsertId());
   }
-  $q=$db->prepare("UPDATE newsletter_campaigns SET subject=?,body=?,topic=?,headline=?,preheader=?,button_label=?,button_url=?,event_title=?,event_date=?,event_location=?,selected_events=?,updated_at=? WHERE id=? AND state='draft'");
-  $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$eventTitle,$eventDate,$eventLocation,$selectedJson,$now,$id]);
+  $q=$db->prepare("UPDATE newsletter_campaigns SET subject=?,body=?,topic=?,headline=?,preheader=?,button_label=?,button_url=?,event_title=?,event_date=?,event_location=?,selected_events=?,selected_partners=?,updated_at=? WHERE id=? AND state='draft'");
+  $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$eventTitle,$eventDate,$eventLocation,$selectedJson,$partnersJson,$now,$id]);
   finish($q->rowCount()?'Änderungen gespeichert.':'Nur unveröffentlichte Entwürfe können bearbeitet werden.',$id);
  }
  if(!$id)finish('Ungültige Kampagne.');
