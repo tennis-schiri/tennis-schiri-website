@@ -90,6 +90,50 @@ HTML;
 HTML;
         }
     }
+    // Optional compact partner/project banner section. Names and links remain usable if images are blocked.
+    $partnerBanners='';
+    $selectedPartners=json_decode((string)($campaign['selected_partners']??'[]'),true);
+    if(is_array($selectedPartners) && $selectedPartners){
+        $bannerRows='';
+        foreach(array_slice($selectedPartners,0,12) as $partner){
+            if(!is_array($partner))continue;
+            $brand=trim((string)($partner['name']??''));
+            $target=trim((string)($partner['url']??''));
+            $imageUrl=trim((string)($partner['logo']??''));
+            if($brand===''||!preg_match('~^https://[^[:space:]<>"]+$~iD',$target))continue;
+            $allowImage=preg_match('~^https://tennis-schiri\.de/assets/partner/[a-z0-9-]+\.(?:png|jpg|jpeg|webp)$~D',$imageUrl)
+                     || $imageUrl==='https://tennilo.de/assets/tennilo-logo.png';
+            $title=$esc($brand);
+            $link=$esc($target);
+            $kind=(($partner['category']??'')==='projekt')?'UNSER PROJEKT':'UNSER PARTNER';
+            $subline=$esc((string)($partner['caption']??''));
+            $bg=(($partner['category']??'')==='projekt')?'#eff7f7':'#f7faf4';
+            $img=$allowImage?'<img src="'.$esc($imageUrl).'" alt="'.$title.'" width="100" style="display:block;border:0;width:100px;max-width:100%;height:auto;max-height:54px;object-fit:contain;">'
+                :'<strong style="font-size:13px;color:#173e2e;">'.$title.'</strong>';
+            $bannerRows.=<<<HTML
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 9px;border:1px solid #dce8d9;background:$bg;border-radius:10px">
+              <tr>
+                <td width="126" valign="middle" style="width:126px;padding:12px 9px 12px 16px;">
+                  <a href="$link" target="_blank" style="display:block;text-decoration:none;">$img</a>
+                </td>
+                <td valign="middle" style="padding:12px 13px 12px 0;font-family:Arial,Helvetica,sans-serif;">
+                  <p style="font-size:9px;letter-spacing:1.2px;font-weight:800;color:#5e886a;margin:0 0 4px;">$kind</p>
+                  <a href="$link" target="_blank" style="display:block;color:#214a34;font-size:15px;font-weight:800;line-height:1.3;text-decoration:none;">$title &#8599;</a>
+                  <p style="font-size:11px;color:#708473;line-height:1.5;margin:3px 0 0;">$subline</p>
+                </td>
+              </tr>
+            </table>
+HTML;
+        }
+        if($bannerRows!==''){
+            $partnerBanners=<<<HTML
+            <div style="margin:30px 0 2px;">
+              <p style="font-family:Arial,Helvetica,sans-serif;color:#477057;font-size:10px;font-weight:800;letter-spacing:1.5px;margin:0 0 13px;">PARTNER &amp; PROJEKTE</p>
+              $bannerRows
+            </div>
+HTML;
+        }
+    }
     $previewBanner=$isPreview?'<tr><td style="background:#f9e5ac;color:#513d19;text-align:center;font-size:12px;font-weight:bold;padding:12px 20px;font-family:Arial,Helvetica,sans-serif">TEST / VORSCHAU – noch nicht an Abonnenten verschickt</td></tr>':'';
     $unsub=$esc($unsubscribeUrl);
     return <<<HTML
@@ -130,6 +174,7 @@ HTML;
    $event
    $selectedCards
    $cta
+   $partnerBanners
   </td></tr>
   <tr><td class="padded" style="background:#f5f9f0;padding:25px 43px;border-top:1px solid #e3eddb">
    <p style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;color:#22533b;margin:0 0 7px">Mehr Tennis. Weniger Suchen.</p>
@@ -177,6 +222,16 @@ function newsletterPlainText(array $campaign,string $unsubscribeUrl): string {
             if(!empty($row['location']))$text.="\nOrt: ".(string)$row['location'];
             $text.="\n".(string)($row['link_label']??'Details ansehen').": ".(string)$row['url'];
         }
+    }
+    $selectedPartners=json_decode((string)($campaign['selected_partners']??'[]'),true);
+    if(is_array($selectedPartners) && $selectedPartners){
+        $lines=[];
+        foreach(array_slice($selectedPartners,0,12) as $partner){
+            if(!is_array($partner)||empty($partner['name'])||
+               !preg_match('~^https://[^[:space:]<>"]+$~iD',(string)($partner['url']??'')))continue;
+            $lines[]=(string)$partner['name'].": ".(string)$partner['url'];
+        }
+        if($lines)$text.="\n\nPARTNER & PROJEKTE\n".implode("\n",$lines);
     }
     $buttonText=trim((string)($campaign['button_label']??''));
     $buttonUrl=trim((string)($campaign['button_url']??''));
