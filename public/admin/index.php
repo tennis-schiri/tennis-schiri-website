@@ -78,8 +78,8 @@ if($method==='POST'){
   $type=boPost('template_type',30);
   if(!isset($templates[$type])||!isset($tournaments[$tournament]))boError('Bitte eine gültige Vorlage und ein Turnier auswählen.');
   $t=$tournaments[$tournament];$template=$templates[$type];
-  $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,'draft',?,?)");
-  $q->execute([$t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],$now,$now]);
+  $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,notes,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,'draft',?,?)");
+  $q->execute([$t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],'',$now,$now]);
   boGo('campaign',(int)$db->lastInsertId(),'Entwurf erstellt. Bitte Text prüfen und bei Bedarf anpassen.');
  }
  $campaignId=filter_var($_POST['campaign_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
@@ -89,9 +89,10 @@ if($method==='POST'){
   if($campaign['state']!=='draft')boError('Nur Entwürfe können geändert werden.');
   $subject=boPost('subject',160);
   $body=boPost('body',15000);
-  if($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||$body===''||strlen($body)>15000)boError('Bitte Betreff (max. 160 Zeichen) und Nachrichtentext (max. 15.000 Zeichen) prüfen.');
-  $q=$db->prepare("UPDATE bo_campaigns SET subject=?,body=?,updated_at=? WHERE id=? AND state='draft'");
-  $q->execute([$subject,$body,$now,$campaignId]);
+  $notes=boPost('notes',3000);
+  if($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||$body===''||strlen($body)>15000||strlen($notes)>3000)boError('Bitte Betreff (max. 160 Zeichen) und Nachrichtentext (max. 15.000 Zeichen) prüfen.');
+  $q=$db->prepare("UPDATE bo_campaigns SET subject=?,body=?,notes=?,updated_at=? WHERE id=? AND state='draft'");
+  $q->execute([$subject,$body,$notes,$now,$campaignId]);
   boGo('campaign',$campaignId,'Entwurf gespeichert.');
  }
  if($action==='campaign_test'){
@@ -258,7 +259,7 @@ if($view==='campaign'&&$id){
  $total=(int)$q->fetchColumn();
  $html='<section class="panel"><div class="row row-between"><div><h2>'.$e($c['tournament_name']).'</h2><p>'.$e($c['tournament_date']).' · '.$e($c['tournament_location']).'</p><a href="'.$e($c['tournament_url']).'" target="_blank" rel="noopener noreferrer">Turnierseite öffnen ↗</a></div><span class="badge '.($labels[$c['state']]??'').'">'.$e(boStatus($c['state'])).'</span></div></section>';
  if($c['state']==='draft'){
-  $html.='<section class="panel"><h2>Betreff und Text bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}} und {{turnier_link}} werden beim Versand individuell ersetzt. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
+  $html.='<section class="panel"><h2>Betreff und Text bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea><p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}} und {{turnier_link}} werden beim Versand individuell ersetzt. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
   $html.='<section class="panel"><h2>Vorschau und Testmail</h2><p>Vorschau mit „Alex Beispiel“ als Musterempfänger. Vor jeder Freigabe Änderungen bitte zuerst speichern.</p><div class="row"><a class="button button-secondary" href="'.boUrl('preview',$id).'" target="_blank" rel="noopener">HTML-Vorschau öffnen</a><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_test"><input type="hidden" name="campaign_id" value="'.$id.'"><button type="submit">Testmail an mw@tennis-schiri.de</button></form></div></section>';
   $html.='<section class="panel"><h2>Empfängerliste freigeben</h2><p><strong>'.$total.'</strong> Kontakte für dieses Turnier. Die Freigabe speichert genau diese Empfängerliste. Es werden dabei noch keine E-Mails verschickt.</p>';
   if($total===0)$html.='<p class="warning">Zuerst Teilnehmer unter <a href="'.boUrl('contacts').'">Teilnehmerverwaltung</a> ergänzen.</p>';
