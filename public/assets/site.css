@@ -2520,3 +2520,8 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .tennis-quote-actions button:hover{background:#e7efe3}
 .tennis-quote-actions a:focus-visible,.tennis-quote-actions button:focus-visible{outline:2px solid #2b7145;outline-offset:4px}
 @media(max-width:820px){.tennis-quote-line{grid-template-columns:1fr auto;gap:12px 18px;padding:19px 0}.tennis-quote-label{grid-column:1/-1;gap:0}.tennis-quote-label>small{display:none}.tennis-quote-figure{grid-column:1/-1;padding-left:15px}.tennis-quote-actions{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:flex-end;gap:18px}.tennis-quote-figure blockquote{font-size:clamp(18px,4.7vw,23px)}}
+
+/* Einheitliche Button-Form: alle regulären CTA-Buttons verwenden dieselbe Pillenform.
+   Kleine Segmentschalter, Datumsfelder und Kacheln behalten ihre eigene Form. */
+:root{--ts-cta-radius:999px}
+.btn,.header-action,.tournament-cta,.community-join,.newsletter-submit,.news-link,.hero-plate-cta,.workshop-upcoming-action,.workshop-feature-cta,.workshop-submit,.footer-social-link{border-radius:var(--ts-cta-radius)}
