@@ -170,7 +170,7 @@ if($method==='POST'){
   }
   $partnersJson=json_encode($selectedPartners,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
   if ($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||
-      ($body==='' && count($selectedEvents)===0)||strlen($body)>10000||!array_key_exists($topic,$topics)||
+      ($body==='' && count($selectedEvents)===0 && count($selectedPartners)===0)||strlen($body)>10000||!array_key_exists($topic,$topics)||
       strlen($headline)>120||strlen($preheader)>160||strlen($buttonLabel)>70||
       !validButtonUrl($buttonUrl)||(($buttonLabel==='')!==($buttonUrl===''))||
       strlen($eventTitle)>120||strlen($eventDate)>80||strlen($eventLocation)>140||
