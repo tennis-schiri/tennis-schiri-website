@@ -18,7 +18,8 @@ $configFile=$base.'/tennis-schiri-newsletter-config.php';
 $dataDir=$base.'/tennis-schiri-newsletter-data';
 $challengeFile=$dataDir.'/.setup-challenge';
 $dbPath=$dataDir.'/tennis-schiri-newsletter.sqlite';
-$mailbox='mw@tennis-schiri.de';
+$mailbox='news@tennis-schiri.de';
+$adminMailbox='mw@tennis-schiri.de';
 function screen(string $title,string $body,int $status=200): never {
  http_response_code($status);
  echo '<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>'.htmlspecialchars($title,ENT_QUOTES,'UTF-8').' · Tennis-Schiri Newsletter</title><style>
@@ -57,7 +58,7 @@ if (($_SERVER['REQUEST_METHOD']??'GET')==='POST' && $action==='send') {
  @chmod($challengeFile,0600);
  $link='https://tennis-schiri.de/newsletter-setup.php?token='.$token;
  $headers=['From: Tennis-Schiri <'.$mailbox.'>','Reply-To: '.$mailbox,'Content-Type: text/plain; charset=UTF-8','MIME-Version: 1.0'];
- $sent=mail($mailbox,'Tennis-Schiri Newsletter: Einrichtung bestaetigen',"Bitte diesen Link innerhalb von 30 Minuten öffnen, um die Newsletter-Einrichtung fortzusetzen:\n\n".$link."\n\nFalls du die Einrichtung nicht angestoßen hast, ignoriere diese Nachricht.",implode("\r\n",$headers),'-f'.$mailbox);
+ $sent=mail($adminMailbox,'Tennis-Schiri Newsletter: Einrichtung bestaetigen',"Bitte diesen Link innerhalb von 30 Minuten öffnen, um die Newsletter-Einrichtung fortzusetzen:\n\n".$link."\n\nFalls du die Einrichtung nicht angestoßen hast, ignoriere diese Nachricht.",implode("\r\n",$headers),'-f'.$mailbox);
  if (!$sent) { @unlink($challengeFile);screen('Mailversand fehlgeschlagen','<p>Der Server konnte keine Nachricht an die hinterlegte Adresse senden. Bitte die PHP-Mailfunktion und das Absenderpostfach prüfen.</p>',503); }
  screen('Bestätigung verschickt','<p>Ein Einrichtungslink wurde an das bereits für Tennis-Schiri verwendete Postfach gesendet. Er ist 30 Minuten gültig.</p><p>Öffne den Link aus der E-Mail und wähle anschließend ein Admin-Passwort.</p>');
 }
