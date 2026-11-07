@@ -10,21 +10,21 @@ if(!defined('TS_BACKOFFICE')){http_response_code(404);exit;}
 function boKnownVenueSuggestions(string $venueId): array {
  $sharedNeuenhagen=[
   'parking'=>"Parkmöglichkeiten an der Tennisanlage und an der Halle. Bitte nur ausgewiesene Plätze nutzen, vor der Hallenfront parallel parken und den Grünstreifen freihalten. Mit der S5 bis Neuenhagen, von dort zu Fuß (laut früheren Informationen etwa 15 Minuten).",
-  'catering'=>"Gastronomie „Due Fratelli“ am Clubhaus. Bitte aktuelle Öffnungszeiten und Bezahlmöglichkeiten prüfen.",
+  'catering'=>"Im Clubhaus befindet sich die Gastronomie „Due Fratelli“. Bitte beachte die jeweils bekanntgegebenen Öffnungszeiten und Zahlungsmöglichkeiten.",
   'facilities'=>"Umkleiden, Duschen und Toiletten im Clubhaus; bei Hallenturnieren auch in der Halle. Im Clubhaus bitte auf saubere Schuhe achten."
  ];
  $badSaarow=[
-  'surface'=>"Hartplatz / Laykold. Bitte geeignete saubere Hallenschuhe und die aktuellen Platzvorgaben beachten.",
-  'checkin'=>"Die Turnierleitung befindet sich nach früheren Informationen am Counter im Eingangsbereich.",
-  'parking'=>"Kostenlose Parkplätze nach früheren Infos hinter der Schranke. Ausfahrt-Ticket ggf. bei Turnierleitung/Gastronomie erhältlich; Feuerwehrzufahrt und Mitarbeiterstellplätze freihalten.",
-  'catering'=>"Gastronomie mit möglichen Verzehrbons; Umfang und Ausgabe richten sich nach der aktuellen Turnierausschreibung."
+  'surface'=>"Gespielt wird auf Laykold-Hartplätzen. Bitte geeignete saubere Hallenschuhe und die Platzvorgaben beachten.",
+  'checkin'=>"Die Turnierleitung findest du am Counter im Eingangsbereich.",
+  'parking'=>"Kostenlose Parkplätze befinden sich hinter der Schranke. Das Ausfahrt-Ticket erhältst du bei der Turnierleitung oder Gastronomie. Bitte Feuerwehrzufahrt und Mitarbeiterstellplätze freihalten.",
+  'catering'=>"Auf der Anlage gibt es eine Gastronomie. Falls Verzehrbons vorgesehen sind, gelten die Bedingungen der aktuellen Ausschreibung."
  ];
  return match($venueId){
   'bad-saarow'=>$badSaarow,
   'neuenhagen'=>$sharedNeuenhagen,
   'neuenhagen-halle'=>array_merge($sharedNeuenhagen,[
-   'surface'=>"Hallenbelag nach bisherigen Infos: Advantage Red Court; saubere Sandplatzschuhe waren zugelassen. Aktuelle Schuhvorgaben prüfen.",
-   'checkin'=>"Turnierleitung bei früheren Hallenturnieren im Vorraum der Halle. Treffpunkt für dieses Turnier bestätigen."
+   'surface'=>"In der Halle wird auf Advantage Red Court gespielt. Bitte saubere Sandplatzschuhe verwenden und die geltenden Schuhvorgaben beachten.",
+   'checkin'=>"Die Turnierleitung findest du im Vorraum der Halle."
   ]),
   'neuenhagen-aussen'=>array_merge($sharedNeuenhagen,[
    'facilities'=>"Umkleiden, Duschen und Toiletten im Clubhaus (rechts am Clubhaus). Bitte auf saubere Schuhe beim Betreten achten."
@@ -84,7 +84,7 @@ function boKnownGuideDefaults(string $venueId,string $type='info'):string {
   $put('draw_changes','Bitte prüfe aktuelle Änderungen über den offiziellen Turnierlink und die Mitteilung der Turnierleitung.');
  }else{
   if(in_array($venueId,['bad-saarow','neuenhagen','neuenhagen-halle','neuenhagen-aussen'],true)){
-   $put('warmup','Bei früheren Turnieren waren fünf Minuten Einspielzeit vorgesehen. Bitte mit der aktuellen Ausschreibung abgleichen.');
+   $put('warmup','Die Einspielzeit beträgt fünf Minuten.');
   }
   $put('results','Bitte das Ergebnis direkt im Anschluss an dein Match bei der Turnierleitung melden, sofern vor Ort nichts anderes angegeben wird.');
   if($type==='info'){
