@@ -2621,3 +2621,14 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
  .ig-tennilo-wordmark{width:115px}
 }
 @media(prefers-reduced-motion:reduce){.tennilo .tennilo-brand-card{transition:none}}
+
+/* Deutlich sichtbarer Einstieg in das erste LK-Turnier neben dem Kalender */
+.lk-home-teaser{display:grid;grid-template-columns:60px minmax(0,1fr) auto;gap:19px;align-items:center;margin:2px 0 25px;padding:21px 24px;border:1px solid #b8d8ae;border-radius:18px;background:linear-gradient(110deg,#f0f9e9,#fbfef7);box-shadow:0 6px 22px rgba(27,72,43,.035)}
+.lk-home-teaser-icon{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:#214f37;color:#e6fbbd;font-size:23px;font-weight:900;letter-spacing:-.04em}
+.lk-home-teaser-copy{min-width:0}
+.lk-home-teaser-copy .eyebrow{font-size:10px;color:#517c4f;margin-bottom:7px}
+.lk-home-teaser-copy h3{color:#193f2c;font-size:clamp(18px,2vw,23px);letter-spacing:-.03em;line-height:1.18;margin:0 0 6px}
+.lk-home-teaser-copy p{font-size:13px;line-height:1.55;color:#4b6a51;margin:0;max-width:630px}
+.lk-home-teaser-cta{white-space:nowrap;font-size:12px;padding:13px 17px}
+@media(max-width:960px){.lk-home-teaser{grid-template-columns:48px minmax(0,1fr)}.lk-home-teaser-icon{width:48px;height:48px;font-size:19px}.lk-home-teaser-cta{grid-column:2;justify-self:start}}
+@media(max-width:590px){.lk-home-teaser{grid-template-columns:1fr;gap:11px;padding:19px}.lk-home-teaser-icon{width:40px;height:40px;font-size:16px}.lk-home-teaser-cta{grid-column:1;justify-self:stretch;white-space:normal;text-align:center}}
