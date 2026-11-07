@@ -7,6 +7,10 @@ on:
       - 'scripts/build_site_branding.py'
       - 'tests/site-branding-test.py'
       - 'public/assets/site.css'
+      - 'public/assets/privacy-consent.js'
+      - 'public/assets/tournament-detail.js'
+      - 'public/turniere/termin.html'
+      - 'tests/privacy-consent-test.mjs'
       - 'public/regelwissen/index.html'
       - 'public/assets/rules-library.css'
       - 'public/assets/rules-library.js'
@@ -53,3 +57,5 @@ jobs:
           node tests/rules-reference-test.mjs
           node --check public/assets/lk-guide.js
           python tests/lk-guide-test.py
+          node --check public/assets/privacy-consent.js
+          node tests/privacy-consent-test.mjs
