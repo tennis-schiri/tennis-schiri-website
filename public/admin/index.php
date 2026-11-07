@@ -98,25 +98,36 @@ if($method==='POST'){
   if(!isset($templates[$type])||!isset($tournaments[$tournament]))boError('Bitte eine gültige Vorlage und ein Turnier auswählen.');
   $t=$tournaments[$tournament];$template=$templates[$type];
   $venueId=boPost('venue_id',80);
+  if($venueId==='auto')$venueId=boVenueBestGuess($t);
   if(!isset($venues[$venueId]))boError('Bitte eine gültige Standortvorlage wählen.');
-  $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,notes,venue_id,venue_data,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
-  $q->execute([$t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],'',$venueId,$venues[$venueId]['data'],$now,$now]);
-  boGo('campaign',(int)$db->lastInsertId(),'Entwurf erstellt. Bitte Text prüfen und bei Bedarf anpassen.');
+  $defaults=boKnownCampaignDefaults($venueId,(string)$venues[$venueId]['data'],$type);
+  $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,notes,venue_id,venue_data,guide_data,info_sections,info_arrival,info_contact,defaults_review_required,defaults_reviewed_at,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
+  $q->execute([$t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],'',$venueId,$defaults['venue_data'],$defaults['guide_data'],$defaults['info_sections'],$defaults['info_arrival']??'',$defaults['info_contact']??'',1,null,$now,$now]);
+  boGo('campaign',(int)$db->lastInsertId(),'Entwurf mit bekannten Vorschlägen angelegt. Bitte alle übernommenen Infos prüfen und im Entwurf bestätigen.');
  }
  $campaignId=filter_var($_POST['campaign_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
  $campaign=$campaignId>0?boCampaign($db,$campaignId):null;
  if(!$campaign)boError('Kampagne nicht gefunden.',404);
+ if($action==='campaign_prefill'){
+  if($campaign['state']!=='draft')boError('Nur offene Entwürfe dürfen mit Vorschlägen ergänzt werden.');
+  $venueId=(string)($campaign['venue_id']??'general');
+  $known=boMergeKnownCampaign($campaign,$venueId);
+  $q=$db->prepare("UPDATE bo_campaigns SET venue_data=?,info_sections=?,info_arrival=?,info_schedule=?,info_parking=?,info_fees=?,info_contact=?,turnigo_url=?,myscore_url=?,guide_data=?,defaults_review_required=1,defaults_reviewed_at=NULL,updated_at=? WHERE id=? AND state='draft'");
+  $q->execute([$known['venue_data'],$known['info_sections'],$known['info_arrival']??'',$known['info_schedule']??'',$known['info_parking']??'',$known['info_fees']??'',$known['info_contact']??'',$known['turnigo_url']??'',$known['myscore_url']??'',$known['guide_data'],$now,$campaignId]);
+  boGo('campaign',$campaignId,'Bekannte Informationen ergänzt. Eigene Texte wurden beibehalten. Bitte die Vorschläge prüfen und bestätigen.');
+ }
  if($action==='campaign_save'){
   if($campaign['state']!=='draft')boError('Nur Entwürfe können geändert werden.');
   $subject=boPost('subject',160);
   $body=boPost('body',15000);
   $notes=boPost('notes',3000);
-  try{$info=boInfoFromPost($_POST);$guideJson=boGuideFromPost($_POST);}
+  $confirmed=boPost('defaults_reviewed',3)==='yes';
+  try{$info=boInfoFromPost($_POST);$guideJson=boGuideFromPost($_POST);$venueJson=boCampaignVenueFromPost($_POST,$campaign,$confirmed);}
   catch(InvalidArgumentException $ex){boError($ex->getMessage());}
 
   if($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||$body===''||strlen($body)>15000||strlen($notes)>3000)boError('Bitte Betreff (max. 160 Zeichen) und Nachrichtentext (max. 15.000 Zeichen) prüfen.');
-  $q=$db->prepare("UPDATE bo_campaigns SET subject=?,body=?,notes=?,info_sections=?,info_arrival=?,info_schedule=?,info_parking=?,info_fees=?,turnigo_url=?,myscore_url=?,info_contact=?,guide_data=?,updated_at=? WHERE id=? AND state='draft'");
-  $q->execute([$subject,$body,$notes,$info['info_sections'],$info['info_arrival'],$info['info_schedule'],$info['info_parking'],$info['info_fees'],$info['turnigo_url'],$info['myscore_url'],$info['info_contact'],$guideJson,$now,$campaignId]);
+  $q=$db->prepare("UPDATE bo_campaigns SET subject=?,body=?,notes=?,info_sections=?,info_arrival=?,info_schedule=?,info_parking=?,info_fees=?,turnigo_url=?,myscore_url=?,info_contact=?,guide_data=?,venue_data=?,defaults_reviewed_at=?,updated_at=? WHERE id=? AND state='draft'");
+  $q->execute([$subject,$body,$notes,$info['info_sections'],$info['info_arrival'],$info['info_schedule'],$info['info_parking'],$info['info_fees'],$info['turnigo_url'],$info['myscore_url'],$info['info_contact'],$guideJson,$venueJson,$confirmed?$now:null,$now,$campaignId]);
   boGo('campaign',$campaignId,'Entwurf gespeichert.');
  }
  if($action==='campaign_test'){
@@ -131,6 +142,7 @@ if($method==='POST'){
   try{
    $check=boCampaign($db,$campaignId);
    if(!$check||$check['state']!=='draft')throw new RuntimeException('Kampagne wurde bereits freigegeben.');
+   if((int)($check['defaults_review_required']??0)===1&&empty($check['defaults_reviewed_at']))throw new RuntimeException('Die übernommenen Vorschläge müssen vor der Empfängerfreigabe ausdrücklich geprüft und gespeichert werden.');
    $q=$db->prepare('SELECT id,email,name FROM bo_contacts WHERE tournament_id=? ORDER BY id');
    $q->execute([$check['tournament_id']]);$all=$q->fetchAll();
    if(!$all)throw new RuntimeException('Für das Turnier sind noch keine Teilnehmer eingetragen.');
