@@ -27,7 +27,7 @@ if(($_POST['action']??'')==='login'){
    $rateDb->prepare('DELETE FROM newsletter_admin_login_attempts WHERE ip_hash=?')->execute([$ipHash]);
    session_regenerate_id(true);$_SESSION['authenticated']=true;$_SESSION['auth_at']=time();
    $_SESSION['csrf']=bin2hex(random_bytes(24));
-   header('Location: /newsletter-admin.php',true,303);exit;
+   header('Location: /admin/',true,303);exit;
   }
   $rateDb->prepare('INSERT INTO newsletter_admin_login_attempts(ip_hash,attempted_at) VALUES(?,?)')->execute([$ipHash,time()]);
  }catch(Throwable $e){error_log('Newsletter admin login rate limit: '.$e->getMessage());http_response_code(503);render('<p>Anmeldung momentan nicht verfügbar.</p>');}
@@ -47,7 +47,7 @@ if(($_GET['export']??'')==='csv'){
 }
 $e=static fn($x)=>htmlspecialchars((string)$x,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
 $confirmed=count(array_filter($rows,static fn($r)=>$r['confirmed_at']!==null));$pending=count($rows)-$confirmed;
-$html='<p><a href="/newsletter-mail.php">Newsletter: Entwürfe und Rundmails</a> · <a href="/turnier-mails.php">Turnier-Mails verwalten</a></p><p><strong>'.count($rows).'</strong> Einträge · <strong>'.$confirmed.'</strong> bestätigt · <strong>'.$pending.'</strong> offen</p><p><a href="?export=csv">CSV exportieren (enthält personenbezogene Daten)</a></p><form method="post"><input type="hidden" name="action" value="logout"><input type="hidden" name="csrf" value="'.$e($_SESSION['csrf']).'"><button>Abmelden</button></form><div style="overflow-x:auto"><table><thead><tr><th>E-Mail</th><th>Gruppe</th><th>Interessen</th><th>Eingetragen</th><th>Status</th></tr></thead><tbody>';
+$html='<p><a href="/admin/">← Backoffice</a> · <a href="/newsletter-mail.php">Newsletter: Entwürfe und Rundmails</a> · <a href="/turnier-mails.php">Turnier-Mails verwalten</a></p><p><strong>'.count($rows).'</strong> Einträge · <strong>'.$confirmed.'</strong> bestätigt · <strong>'.$pending.'</strong> offen</p><p><a href="?export=csv">CSV exportieren (enthält personenbezogene Daten)</a></p><form method="post"><input type="hidden" name="action" value="logout"><input type="hidden" name="csrf" value="'.$e($_SESSION['csrf']).'"><button>Abmelden</button></form><div style="overflow-x:auto"><table><thead><tr><th>E-Mail</th><th>Gruppe</th><th>Interessen</th><th>Eingetragen</th><th>Status</th></tr></thead><tbody>';
 foreach($rows as $r)$html.='<tr><td>'.$e($r['email']).'</td><td>'.$e($r['role']).'</td><td>'.$e($r['interests']).'</td><td>'.date('d.m.Y H:i',(int)$r['created_at']).'</td><td>'.($r['confirmed_at']?'Bestätigt':'Offen').'</td></tr>';
 $html.='</tbody></table></div><p><small>Nur bestätigte Adressen für Aussendungen verwenden. Exportdateien sicher aufbewahren und löschen, wenn sie nicht mehr gebraucht werden.</small></p>';
 render($html);
