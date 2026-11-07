@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#142b29">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<meta name="description" content="Neun typische Tennis-Regelfälle: Linienball, Netzaufschlag, Fußfehler, Doppel und mehr. Selbst entscheiden, Lösung aufklappen und ITF-Regel nachlesen.">
-<title>Regelwissen: 9 Tennis-Regelfälle aus der Praxis | tennis-schiri.de</title>
+<meta name="description" content="Tennisregeln, DTB-Turnierordnung, LK-Regeln und TVBB-Bestimmungen durchsuchen. Mit Regelfragen, offiziellen Dokumenten und neun Praxisfällen.">
+<title>Regelwissen: ITF-, DTB- und TVBB-Regeln durchsuchen | tennis-schiri.de</title>
 <link rel="icon" type="image/png" href="/assets/branding/ts-favicon.png">
 <link rel="apple-touch-icon" href="/assets/branding/ts-favicon.png">
 <meta property="og:site_name" content="Tennis-Schiri">
@@ -14,6 +14,8 @@
 <meta property="og:image:alt" content="Tennis-Schiri – offizielles Logo">
 <link rel="stylesheet" href="../assets/site.css?v=20261107-11">
 <link rel="stylesheet" href="../assets/rules-library.css?v=2">
+<link rel="stylesheet" href="../assets/rules-reference.css?v=1">
+<script src="../assets/rules-reference.js?v=1" defer></script>
 <script src="../assets/rules-library.js?v=1" defer></script>
 <script src="../assets/back-to-top.js?v=2" defer></script>
 </head>
@@ -28,9 +30,55 @@
  <div class="breadcrumb"><a href="../">Startseite</a><span>›</span><span>Regelwissen</span></div>
  <div class="eyebrow" style="margin-top:30px">REGELWISSEN / SPIELSITUATIONEN VERSTEHEN</div>
  <h1>Tennisregeln.<br>Aus der Praxis.</h1>
- <p>Was passiert eigentlich, wenn …? Hier findest du Entscheidungen zu typischen Situationen aus dem Tennisalltag – kurz erklärt und mit dem passenden Regelverweis.</p>
+ <p>Offizielle ITF-, DTB- und TVBB-Ordnungen suchen, Regelfragen stellen und knifflige Spielsituationen verstehen – mit direkten Links zu den maßgeblichen Quellen.</p>
 </div></section>
 <section class="inner-section rules-library" id="faelle"><div class="container">
+ <section class="rulebooks-section" id="regelwerke" aria-labelledby="regelwerke-title">
+  <div class="rulebooks-intro">
+   <div><div class="eyebrow kicker">OFFIZIELLE REGELWERKE</div><h2 id="regelwerke-title">Regeln &amp; Ordnungen finden.</h2>
+   <p>Die wichtigsten ITF-, DTB- und TVBB-Regelwerke an einem Ort. Suche nach Themen wie Fußfehler, Sign-In oder Nenngeld und öffne das zugehörige Originaldokument. Die Sammlung enthält einen redaktionellen Themen- und Paragraphenindex, keine vollständige Kopie der PDFs.</p></div>
+   <span class="rulebooks-status">Quellenstand: 07.11.2026</span>
+  </div>
+  <div class="rulebooks-tools">
+   <input type="search" id="rulebooks-search" class="rulebooks-search" aria-label="Regelwerke und Paragraphen durchsuchen" placeholder="Regel, Paragraph oder Stichwort suchen …" autocomplete="off">
+   <select id="rulebooks-filter" class="rulebooks-filter" aria-label="Regelwerk-Kategorie auswählen">
+    <option value="alle">Alle Regelwerke</option>
+    <option value="spielregeln">ITF-Tennisregeln</option>
+    <option value="turnier">Turnier &amp; LK-Turniere</option>
+    <option value="wertung">LK &amp; Ranglisten</option>
+    <option value="praxis">Schiedsrichter &amp; Verhalten</option>
+    <option value="mannschaft">Wettspielordnung</option>
+    <option value="regional">TVBB-Regeln</option>
+    <option value="sammlung">Dokumentensammlung</option>
+   </select>
+  </div>
+  <p class="rulebooks-explain">Die Suche durchsucht Dokumenttitel, Themen und Regelstellen unseres Indexes; für den vollständigen Wortlaut führt jeder Treffer direkt zur offiziellen Quelle.</p>
+  <div id="rules-topics-results" class="rules-topics-results" aria-live="polite" hidden></div>
+  <div id="rulebooks-grid" class="rulebooks-grid" aria-live="polite"><p>Offizielle Dokumente werden angezeigt …</p></div>
+  <p class="rulebooks-count" id="rulebooks-count"></p>
+  <p class="rulebooks-empty" id="rulebooks-empty" hidden>Keine passenden Dokumente gefunden. Andere Suchbegriffe verwenden oder den Filter zurücksetzen.</p>
+  <noscript><p>Zum direkten Nachschlagen: <a href="https://www.tennis.de/dtb/verband/dokumente.html">DTB-Dokumente und Ordnungen</a>, <a href="https://tvbb.de/verband/">TVBB-Dokumente</a> und <a href="https://www.itftennis.com/media/7221/2026-rules-of-tennis-english.pdf">ITF Rules of Tennis 2026</a>.</p></noscript>
+ </section>
+ <section class="rules-ask-section" id="regelfrage" aria-labelledby="rules-ask-title">
+  <div class="rules-ask-top"><div>
+    <div class="eyebrow kicker" style="color:#c8f16d">DIE REGELFRAGE</div><h2 id="rules-ask-title">Einfach fragen. Quellen finden.</h2>
+    <p>Schreib deine Regelfrage in normaler Sprache. Für häufige Fragen erhältst du eine redaktionell vorbereitete Kurzantwort mit den zugehörigen Regelstellen.</p>
+   </div><span>Mit Quellenangaben</span></div>
+  <form id="rules-ask-form" class="rules-ask-form" role="search">
+   <input id="rules-ask-input" class="rules-ask-input" type="search" placeholder="z. B. Was gilt bei einem Fußfehler?" aria-label="Eine Regelfrage stellen" required minlength="3">
+   <button class="rules-ask-button" type="submit">Regelfrage suchen ↗</button>
+  </form>
+  <div class="rules-ask-examples" aria-label="Beispielfragen">
+   <span>Beispiele:</span>
+   <button type="button" data-rule-question="Ist ein Ball auf der Linie gut oder aus?">Ball auf der Linie?</button>
+   <button type="button" data-rule-question="Was gilt beim Nenngeld oder einem Rückzug?">Nenngeld &amp; Rückzug?</button>
+   <button type="button" data-rule-question="Wie werden LK berechnet?">LK-Berechnung?</button>
+   <button type="button" data-rule-question="Wann wird beim Tie-Break die Seite gewechselt?">Seitenwechsel?</button>
+  </div>
+  <p class="rules-ask-disclaimer">Aktuell keine freie KI-Beratung und keine Volltextsuche in den PDFs: Die Antwortfunktion durchsucht geprüfte Kurzantworten. Wenn eine Antwort nicht sicher zugeordnet werden kann, werden passende Originalquellen angeboten statt zu raten.</p>
+  <div id="rules-ask-result" class="rules-ask-result" hidden aria-live="polite"></div>
+ </section>
+ <div class="rules-info-divider"><div><h2>Praxisfälle &amp; Entscheidungen</h2><p>Teste dein Wissen anhand typischer Situationen auf dem Tennisplatz.</p></div><a href="#regelwerke" style="font-size:12px;font-weight:850;color:#286443">Regelwerke nachschlagen ↑</a></div>
  <div class="rules-library-intro"><div>
   <div class="eyebrow kicker">WISSEN, DAS AUF DEM PLATZ HILFT</div>
   <h2>Wie würdest du entscheiden?</h2>
@@ -102,7 +150,7 @@
  <p id="rules-count" class="rules-count" aria-live="polite">9 Regelfälle</p>
  <p id="rules-empty" class="rules-empty" hidden>Keine Regelfälle zu dieser Suche gefunden. Versuche einen anderen Begriff oder eine andere Kategorie.</p>
  <div class="rules-further">
-  <article id="regelwerk"><div class="eyebrow kicker">OFFIZIELLE GRUNDLAGE</div><h3>Tennisregeln der ITF 2026</h3><p>Die Entscheidungen orientieren sich an den Tennisregeln der ITF in der deutschen Ausgabe des DTB. Für die genaue Auslegung hilft immer der Blick ins vollständige Regelwerk.</p><a href="https://www.tennis.de/content/dam/tennis/lv/tnb/sport/punktspielbetrieb/erwachsene/2026/Tennisregeln%20der%20ITF.pdf.coredownload.pdf" target="_blank" rel="noopener noreferrer">Offizielles Regelwerk ansehen ↗</a></article>
+  <article id="regelwerk"><div class="eyebrow kicker">OFFIZIELLE GRUNDLAGE</div><h3>Tennisregeln der ITF 2026</h3><p>Die Entscheidungen orientieren sich an den Tennisregeln der ITF in der deutschen Ausgabe des DTB. Für die genaue Auslegung hilft immer der Blick ins vollständige Regelwerk.</p><a href="https://www.tennis.de/content/dam/tennis/dtb/Verband/dokumente/satzungen-und-ordnungen/Organisation/Tennisregeln%20der%20ITF.pdf.coredownload.inline.pdf" target="_blank" rel="noopener noreferrer">Offizielles Regelwerk ansehen ↗</a></article>
   <article><div class="eyebrow kicker">FRAGE AUS DER PRAXIS?</div><h3>Welchen Regelfall sollen wir klären?</h3><p>Unklare Situationen bei einem Match, Diskussionen beim Doppel oder eine knifflige Frage aus dem Verein? Schick mir deine Frage – vielleicht wird sie einer der nächsten Beiträge.</p><a href="../kontakt/">Regelfrage einsenden ↗</a></article>
  </div>
 </div></section>
