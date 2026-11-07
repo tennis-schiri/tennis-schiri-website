@@ -117,6 +117,10 @@ function boKnownCampaignDefaults(string $venueId,string $currentVenueJson='{}',s
   boKnownInfoDefaults($venueId,$type)
  );
 }
+/** Only drafts with explicitly reviewed imported suggestions may be approved for real recipients. */
+function boCampaignDefaultsReviewed(array $campaign):bool {
+ return (int)($campaign['defaults_review_required']??0)!==1||!empty($campaign['defaults_reviewed_at']);
+}
 /** Create a real SQLite draft with the prefilled proposals. Testable without login or mail. */
 function boCreateKnownCampaign(PDO $db,array $t,array $template,string $type,string $venueId,string $venueJson,int $now):int {
  $defaults=boKnownCampaignDefaults($venueId,$venueJson,$type);
