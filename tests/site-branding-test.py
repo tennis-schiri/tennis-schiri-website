@@ -19,10 +19,12 @@ for html in pages:
     for required in [
         '<link rel="icon" type="image/png" href="/assets/branding/ts-favicon.png">',
         '<meta property="og:image" content="https://tennis-schiri.de/assets/branding/ts-logo-ball.png">',
-        f'site.css?v=20261107-4',
     ]:
         if required not in data:
             raise SystemExit(f"Veralteter Browser-/Social-Branding-Verweis: {html} -> {required}")
+    css_prefix=f'{prefix}assets/site.css'
+    if not re.search(r'<link\\s+rel="stylesheet"\\s+href="'+re.escape(css_prefix)+r'\\?v=[A-Za-z0-9._-]+">',data):
+        raise SystemExit(f"CSS-Stylesheet fehlt oder ist falsch eingebunden: {html}")
     if '<span class="mark"' in data:
         raise SystemExit(f"Veraltetes CSS-Logo noch vorhanden: {html}")
 
