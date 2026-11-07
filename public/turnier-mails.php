@@ -137,7 +137,7 @@ $all=$db->query('SELECT id,name,day,state FROM tournaments ORDER BY id DESC')->f
 $nav='<section class="panel"><h2>Turniere</h2><table><tr><th>Turnier</th><th>Datum</th><th>Status</th></tr>';
 foreach($all as $row)$nav.='<tr><td><a href="?id='.(int)$row['id'].'">'.esc($row['name']).'</a></td><td>'.esc($row['day']).'</td><td>'.esc($row['state']).'</td></tr>';
 $nav.='</table></section>';
-$message=isset($_GET['info'])?'<p class="notice">'.esc(mb_substr((string)$_GET['info'],0,300)).'</p>':'';
+$message=isset($_GET['info'])?'<p class="notice">'.esc(substr((string)$_GET['info'],0,300)).'</p>':'';
 if($id){
  $t=tournament($db,$id);
  if(!$t)renderPage('<section class="panel">Turnier nicht gefunden.</section>'.$nav);
