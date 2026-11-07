@@ -152,7 +152,7 @@ if($method==='POST'){
   try{
    $check=boCampaign($db,$campaignId);
    if(!$check||$check['state']!=='draft')throw new RuntimeException('Kampagne wurde bereits freigegeben.');
-   if((int)($check['defaults_review_required']??0)===1&&empty($check['defaults_reviewed_at']))throw new RuntimeException('Die übernommenen Vorschläge müssen vor der Empfängerfreigabe ausdrücklich geprüft und gespeichert werden.');
+   if(!boCampaignDefaultsReviewed($check))throw new RuntimeException('Die übernommenen Vorschläge müssen vor der Empfängerfreigabe ausdrücklich geprüft und gespeichert werden.');
    $q=$db->prepare('SELECT id,email,name FROM bo_contacts WHERE tournament_id=? ORDER BY id');
    $q->execute([$check['tournament_id']]);$all=$q->fetchAll();
    if(!$all)throw new RuntimeException('Für das Turnier sind noch keine Teilnehmer eingetragen.');
