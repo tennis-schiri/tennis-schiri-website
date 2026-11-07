@@ -160,7 +160,7 @@ HTML;
  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" class="panel" style="width:600px;max-width:600px;background:#ffffff;border-collapse:separate;border-radius:16px;overflow:hidden">
   <tr><td bgcolor="#143b2c" class="header-pad" style="background:#143b2c;padding:31px 42px 30px;">
    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-    <td valign="middle" style="font-family:Arial,Helvetica,sans-serif;color:#ffffff;"><a href="https://tennis-schiri.de/" target="_blank" style="display:inline-block;text-decoration:none;"><img src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png" alt="Tennis-Schiri" width="250" height="62" style="width:250px;max-width:100%;height:auto;display:block;border:0;border-radius:6px;"></a></td>
+    <td valign="middle" style="font-family:Arial,Helvetica,sans-serif;color:#ffffff;"><a href="https://tennis-schiri.de/" target="_blank" style="display:inline-block;text-decoration:none;"><img src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri" width="250" height="62" style="width:250px;max-width:100%;height:auto;display:block;border:0;border-radius:6px;"></a></td>
     <td align="right" valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;font-weight:bold;color:#c2ee7b;">NEWSLETTER</td>
    </tr></table>
   </td></tr>
