@@ -94,6 +94,7 @@ jobs:
               "assets/statistics.js", "statistiken/index.html",
               "newsletter/index.html", "newsletter.php", "newsletter-setup.php",
               "newsletter-admin.php", "newsletter-mail.php", "newsletter-template.php",
+              "newsletter-events.php",
               "google8cf6756d83169a32.html",
               "sitemap.xml",
           ]:
