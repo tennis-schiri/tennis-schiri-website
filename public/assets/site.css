@@ -23,6 +23,15 @@ a:hover .arrow{transform:translate(3px,-2px)}
 .brand .mark span{display:block;width:17px;height:17px;border:2px solid var(--lime);border-radius:50%;position:relative}
 .brand .mark span:after{content:"";position:absolute;left:7px;top:-1px;height:17px;border-left:1.8px solid var(--lime);transform:rotate(38deg)}
 .brand em{font-style:normal;color:var(--lime)}
+/* Finales Tennis-Schiri-Logo TS-09c: Originalgrafik statt CSS-Initial. */
+.brand-logo{display:inline-flex;align-items:center;line-height:1;flex:none;max-width:100%}
+.brand-logo img{display:block;width:250px;max-width:100%;height:auto;aspect-ratio:670/167;object-fit:contain;border-radius:6px}
+footer .brand-logo img{width:243px}
+.site-head .brand-logo:focus-visible,footer .brand-logo:focus-visible{outline:2px solid var(--lime);outline-offset:5px;border-radius:5px}
+@media(max-width:1100px){.site-head .brand-logo img{width:217px}}
+@media(max-width:850px){.site-head .brand-logo img{width:230px}}
+@media(max-width:620px){.site-head .brand-logo img{width:195px}footer .brand-logo img{width:215px}}
+
 .nav{display:flex;gap:25px;margin-left:auto;align-items:center}
 .nav a{font-size:13px;font-weight:650;color:#d6e1d6;transition:color .2s}
 .nav a:hover{color:var(--lime)}
