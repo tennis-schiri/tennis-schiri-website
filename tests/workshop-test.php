@@ -16,6 +16,11 @@ wsAssert(!hash_equals(workshopCancelToken($row,'test-secret'),workshopCancelToke
 wsAssert(str_contains(workshopPaypalLink(1500,$workshop['id']),'paypal%40tennis-schiri.de'),'PayPal-Empfänger fehlt');
 wsAssert(str_contains(workshopPaypalLink(1500,$workshop['id']),'amount=15.00'),'PayPal-Betrag fehlt');
 [$subject,$text,$html]=workshopMailContent($workshop,$row,'confirmation',workshopSetting($db,'paypal_instructions'));wsAssert(str_contains($subject,'Anmeldung bestätigt'),'Bestätigungsbetreff fehlt');wsAssert(str_contains($text,'15,00 €')&&str_contains($text,'paypal.me/beispiel'),'PayPal-Info fehlt');wsAssert(str_contains($html,'&lt;Alex &amp; Co&gt;'),'HTML-Anrede nicht escaped');wsAssert(str_contains($html,'Vom Regelworkshop abmelden'),'Abmeldebutton fehlt');wsAssert(str_contains($html,'15 € mit PayPal bezahlen'),'PayPal-Button fehlt');
+wsAssert(!str_contains($html,'Jetzt 15 € per PayPal zahlen: https://'),'Keine ausgeschriebene PayPal-URL im HTML');
+wsAssert(!str_contains($html,'Direkt vom Workshop abmelden:'),'Kein doppelter Abmeldelink im HTML');
+wsAssert(str_contains($text,workshopPaypalLink(1500,$workshop['id'])),'PayPal-Link in Textmail fehlt');
+wsAssert(str_contains($text,$row['cancel_url']),'Abmeldelink in Textmail fehlt');
+
 [, $reminderText]=workshopMailContent($workshop,$row,'reminder','paypal.me/beispiel');wsAssert(str_contains($reminderText,'kurze Erinnerung'),'Erinnerungsmail fehlt');
 [, $paymentText]=workshopMailContent($workshop,$row,'payment','paypal.me/beispiel');wsAssert(str_contains($paymentText,'Workshopdatum'),'PayPal-Mail unvollständig');
 [, $cancelText]=workshopMailContent($workshop,$row,'cancelled');
