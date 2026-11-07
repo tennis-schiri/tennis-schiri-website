@@ -40,7 +40,8 @@ E-Mails enthalten einen signierten Abmeldelink. Es werden keine Öffnungs- oder 
 
 ## Betriebshinweise
 
-- Die Funktion erfordert PHP 8.1+, PDO_SQLITE, HTTPS und die PHP-Mailfunktion. Das Absenderpostfach **mw@tennis-schiri.de** sollte funktionieren.
+- Die Funktion erfordert PHP 8.1+, PDO_SQLITE, HTTPS und die PHP-Mailfunktion. Alle Newsletter-Nachrichten werden mit **news@tennis-schiri.de** als Absender und Reply-To verschickt. Das Absenderpostfach sollte aktiv sein, SPF/DKIM/DMARC sind zu prüfen.
+- Die Einrichtungsbestätigung, Testmails und interne Benachrichtigungen werden an **mw@tennis-schiri.de** zugestellt, aber von **news@tennis-schiri.de** versendet.
 - Eine tatsächliche E-Mail-Zustellung erfordert passende Domain-Mailkonfiguration (insbesondere SPF und idealerweise DKIM/DMARC) und muss mit echten Testmails überprüft werden.
 - Bei steigenden Empfängerzahlen sind Versandlimits des Hosters zu beachten; es erfolgt ausdrücklich kein unbeaufsichtigter Massenversand.
 - Für Backups die private SQLite-Datei geschützt sichern. CSV-Exporte enthalten personenbezogene Daten, daher nicht öffentlich ablegen.
