@@ -14,7 +14,7 @@ const htmls=[
  'index.html','aktuelles/index.html','datenschutz/index.html','impressum/index.html',
  'kontakt/index.html','leistungen/index.html','lk-turnier/index.html','newsletter/index.html',
  'partner/index.html','referenzen/index.html','regelwissen/index.html','statistiken/index.html',
- 'turniere/index.html','ueber-mich/index.html','turniere/termin.html'
+ 'turniere/index.html','ueber-mich/index.html','mein-turniertag/index.html','turniere/termin.html'
 ];
 for(const name of htmls){
  const data=fs.readFileSync(path.join(publicDir,name),'utf8');
@@ -105,4 +105,4 @@ const persisted=JSON.parse(second.storage.get('ts-privacy-choice-v1'));
 const third=init(persisted);
 assert.equal(third.get('ts-pc-banner').hidden,true,'Saved preferences must suppress repeat banner');
 assert.equal(third.window.TSPrivacy.mapsAllowed(),true);
-console.log('Privacy consent: 15 pages, opt-in, rejection, one-time maps, revocation and persistence tested.');
+console.log('Privacy consent: 16 pages, opt-in, rejection, one-time maps, revocation and persistence tested.');
