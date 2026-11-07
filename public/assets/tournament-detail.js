@@ -144,6 +144,8 @@
    const description=VALUE(card.querySelector('.workshop-event-description'));
    const time=workshop?(place.match(/(\d{1,2}:\d{2})\s*Uhr/)||[])[1]||'':'';
    const event={id,title,location:place,date,venue,address,meta,details,type:workshop?'workshop':'turnier',time};
+   const myDay=$('event-my-day');
+   if(myDay)myDay.href='../mein-turniertag/?turnier='+encodeURIComponent(id);
    document.title=title+' | Termine | Tennis-Schiri';
    $('event-name').textContent=title;
    $('event-subtitle').textContent=aria+' · '+venue;
