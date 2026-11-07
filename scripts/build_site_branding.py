@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Use the approved TS-09c design files from the archived Google Drive logo set.
+"""Use the approved TS-09c design files.
 
-The source ZIP is checked into branding/. No other fonts or external assets required.
-All logo images are copied byte-for-byte, without recreating the approved typography.
+The original Google Drive logo set is in branding/. The two newer transparent
+variants (for dark / light backgrounds) deliberately replace the framed
+variants from the archive. All source PNG files are copied byte-for-byte.
 """
 import argparse
 import hashlib
@@ -43,6 +44,29 @@ def export(target:Path) -> None:
                 raise SystemExit(f"Logo hat unerwartete Bildabmessungen: {original}")
             (target/exported).write_bytes(data)
             print(f"{exported}: {width}x{height} · {len(data):,} Bytes · SHA256 {hashlib.sha256(data).hexdigest()[:12]}")
+        # Override the old PNGs with the approved, clean, truly transparent
+        # variants. This removes the unwanted white edge and green rectangle.
+        clean_variants = {
+            "ts-logo-dunkel.png": (
+                "tennis-schiri-ts09c-header-transparent.png",
+                "0c6d86dfcb387caa490b2e6d6b9c5969219edfa1792022a0ff37ff9a3856c686",
+            ),
+            "ts-logo-hell.png": (
+                "tennis-schiri-ts09c-light-transparent.png",
+                "313a206c952970093166099ead0e1ed5f5d1a89f88082da8388fd68dd17ecf7c",
+            ),
+        }
+        for output_name, (source_name, expected_sha256) in clean_variants.items():
+            source = ROOT/"branding"/source_name
+            if not source.is_file():
+                raise SystemExit(f"Freigegebenes randloses Logo fehlt: {source}")
+            clean = source.read_bytes()
+            if hashlib.sha256(clean).hexdigest() != expected_sha256:
+                raise SystemExit(f"Randloses Logo weicht vom freigegebenen Stand ab: {source}")
+            if not clean.startswith(b"\x89PNG\r\n\x1a\n") or clean[25] != 6:
+                raise SystemExit(f"Kein transparentes RGBA-PNG: {source}")
+            (target/output_name).write_bytes(clean)
+            print(f"Logo ohne Rahmen aktiviert: {output_name} ({len(clean):,} Bytes)")
         # Legacy /favicon.svg should display the same original TS-09c symbol,
         # never the older hand-drawn icon. Embedded PNG avoids outside resources.
         icon=archive.read("06_favicon.png")
