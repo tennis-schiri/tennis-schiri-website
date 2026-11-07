@@ -24,6 +24,18 @@ Beim Anlegen einer neuen Infomail erkennt das Backoffice den Standort standardm�
 Ein Entwurf kann **auch ungeprüft gespeichert** und später weiterbearbeitet werden. In der HTML-Vorschau bzw. Testmail sind unbestätigte Standortvorschläge als solche gekennzeichnet. Eine Empfängerliste darf erst nach der aktiven Checkbox „Ich habe alle vorausgefüllten Angaben geprüft“ freigegeben werden. Ohne Bestätigung gelangen unbestätigte Standortdaten nicht in echte Teilnehmermails. Es gibt weiterhin keinen automatischen Versand.
 
 Die Vorbelegungslogik liegt in `public/admin/defaults.php`; die private SQLite-Datenbank erhält dazu die Felder `defaults_review_required` und `defaults_reviewed_at` über die bestehende Migration. Die GitHub-Tests prüfen auch den tatsächlichen neuen Entwurf in SQLite.
+## Outdoor-Wetter, Betreff-Emojis und öffentliche Turnierinformationen
+
+- **Outdoor-Erkennung:** Der veröffentlichte Turnierkatalog unterscheidet ausdrücklich zwischen Indoor und Outdoor und enthält Start-/Enddatum. Die Wetterzuordnung verwendet die ungefähren Ortskoordinaten, nicht die exakte Platzadresse.
+- **Wetterprognose:** Ab **7 Tage vor dem Turnier** werden DWD-Vorhersagen über [Bright Sky](https://brightsky.dev/) abgefragt, serverseitig etwa drei Stunden zwischengespeichert und als Tageswerte im Kalender, in Outdoor-Infomails und auf öffentlichen Turnierinfoseiten angezeigt. Bei fehlenden Daten gibt es keine erfundene Prognose.
+- **Sonnenuntergang:** Die astronomische Zeit wird aus dem Turnierdatum und dem ungefähren Standort unter Berücksichtigung von Europe/Berlin berechnet. Sie ist auch weit vor dem Termin verfügbar. Bei mehrtägigen Turnieren zeigt die Wetterauskunft während des Turniers den jeweiligen Tag.
+- **Wetter in der Infomail:** Der neue Haken „Wetterprognose und Sonnenuntergang“ ist in neuen Entwürfen standardmäßig gesetzt. Bei Indoor-Turnieren bleibt der Wetterblock automatisch weg; vor der 7-Tage-Grenze gibt es nur die Sonnenuntergangszeit und einen Hinweis auf die später verfügbare Prognose.
+- **Betreff-Vorlagen:** Teilnehmerinformation „🎾“, Erinnerung „⏰“ und Änderung „📣“ als editierbare Standardvorschläge. Der Newsletter bietet ebenfalls einen Emoji-Betreffvorschlag; Unicode-Betreffzeilen werden bereits MIME-kodiert.
+- **Öffentliche Turnierinformationen:** Nur **nach abgeschlossenem Mailversand mit mindestens einem vom Mailserver angenommenen Versand** kann der Admin eine **separate öffentliche Zusammenfassung** freigeben. Dafür muss er ausdrücklich `VEROEFFENTLICHEN` eingeben. Veröffentlicht werden freigegebene allgemeine Standort- und Ablaufbausteine, nicht die personalisierte Nachricht, Empfängerlisten, individuelle Anrede, interne Notizen oder Kontaktdaten. Rücknahme ist möglich.
+- **Kalenderverlinkung:** Freigegebene öffentliche Informationen erscheinen im Kalender bei dem jeweiligen Turnier; veröffentlichte Seiten bleiben auch im Archiv erreichbar.
+- **Archiv und Status:** Der Kalender sortiert laufende und zukünftige Turniere vorne. Ab dem Berliner Kalendertag nach dem Enddatum wechselt die Veranstaltung ins Archiv. Auf der Startseite steht „Aktuelles Turnier“, wenn das Turnier läuft oder der auf der Website angegebene Auslosungstermin erreicht ist. Sonst steht „Nächstes Turnier“.
+
+**Wichtig:** Eine Infomail wird weiterhin niemals von selbst versendet oder öffentlich freigegeben. Wetterdaten können ausfallen und ersetzen keine aktuellen Anweisungen der Turnierleitung. Die öffentliche Darstellung und der echte Mailversand sind nach dem manuellen Live-Upload zu testen.
 ## Funktionen
 
 ### Übersicht
