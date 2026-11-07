@@ -43,7 +43,7 @@ function boVenueBestGuess(array $tournament):string {
  $haystack=strtolower((string)($tournament['location']??'').' '.(string)($tournament['title']??''));
  if(str_contains($haystack,'saarow'))return 'bad-saarow';
  if(str_contains($haystack,'neuenhagen')||str_contains($haystack,'ntc')){
-  if(str_contains($haystack,'halle')||str_contains($haystack,'hallen')||str_contains($haystack,'winter'))return 'neuenhagen-halle';
+  if(str_contains($haystack,'halle')||str_contains($haystack,'hallen')||str_contains($haystack,'winter')||str_contains($haystack,'indoor'))return 'neuenhagen-halle';
   if(str_contains($haystack,'außen')||str_contains($haystack,'aussen')||str_contains($haystack,'freiplatz')||str_contains($haystack,'sandplatz'))return 'neuenhagen-aussen';
   return 'neuenhagen';
  }
@@ -91,6 +91,18 @@ function boKnownGuideDefaults(string $venueId,string $type='info'):string {
    $put('breaks','Zwischen den Matches kann es zu Wartezeiten kommen. Bitte melde dich bei der Turnierleitung, falls du die Anlage vorübergehend verlassen möchtest.');
    $put('draw_changes','Prüfe die aktuelle Ansetzung möglichst am Vorabend und noch einmal am Turniertag. Änderungen sind möglich; verbindlich sind die aktuellen offiziellen Informationen.');
    $put('withdrawal','Für Rücktritt oder Nichtantreten gelten die aktuelle Ausschreibung und die jeweils gültigen DTB-Regelungen. Bitte die Turnierleitung umgehend informieren.');
+  }
+ }
+ // Historical amounts or tournament-specific match formats are *visible* as proposals
+ // but NOT activated; the organizer must confirm and tick them individually.
+ if($type!=='update'){
+  if($venueId==='bad-saarow'){
+   $values['fees_detail']="Historische Orientierung (UNGEPRÜFT): Jugend 45 €, Erwachsene 55 €, Mixed 60 €; damals inklusive DTB-Gebühr und je nach Konkurrenz Verzehrbon. Bitte vollständig mit der aktuellen Ausschreibung abgleichen und Text ersetzen.";
+   $values['payment']="Historisch genannt (UNGEPRÜFT): Barzahlung, Kartenzahlung, Apple Pay und PayPal. Bitte nur tatsächlich zugelassene Zahlungsarten auswählen.";
+  }elseif(str_starts_with($venueId,'neuenhagen')){
+   $values['fees_detail']="Frühere Turniere hatten unterschiedliche Beträge (UNGEPRÜFT): z. B. 40 € je Doppelteam, 40 € Erwachsene / 30 € Jugend, beim früheren Hallen-Doppelturnier 60 € je Team. Nur die aktuellen Gebühren übernehmen.";
+   $values['payment']="Historische Zahlungsarten (UNGEPRÜFT): bar, Karte, teils PayPal. Bitte die gültigen Zahlungsarten aktuell prüfen.";
+   if($venueId==='neuenhagen-halle')$values['scoring']="Beispiel eines früheren Hallen-Doppelturniers (UNGEPRÜFT): zwei Gewinnsätze, dritter Satz Match-Tiebreak, No-Ad. Nur übernehmen, wenn die aktuelle Ausschreibung das bestätigt.";
   }
  }
  return json_encode(['selected'=>$selected,'values'=>$values],JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
