@@ -2185,3 +2185,201 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .stats-data-table-title{margin-top:26px}
   .stats-detail-table-wrap .stats-data-table{min-width:900px}
 }
+
+/* Tennis-Schiri Newsletter – kuratierte, interessenbezogene Anmeldung. */
+.newsletter-section{
+  padding:85px 0 92px;
+  background:linear-gradient(120deg,#e9f1df 0%,#f4f7ec 62%,#edf3e3 100%);
+  border-top:1px solid #dce8d1;
+}
+.newsletter-home-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(360px,.87fr);
+  gap:clamp(36px,6vw,86px);
+  align-items:center;
+}
+.newsletter-home-copy h2{
+  font-size:clamp(42px,5vw,72px);
+  line-height:1.02;
+  letter-spacing:-.06em;
+  margin:16px 0 22px;
+  color:#173b2b;
+}
+.newsletter-home-copy>p{
+  font-size:17px;
+  line-height:1.65;
+  max-width:510px;
+  color:#587263;
+}
+.newsletter-home-perks{display:flex;gap:9px;flex-wrap:wrap;margin:27px 0}
+.newsletter-home-perks span{
+  display:inline-flex;
+  border:1px solid #c4d8ba;
+  border-radius:999px;
+  padding:9px 13px;
+  background:#f5f9ef;
+  color:#2f5d3b;
+  font-size:12px;
+  font-weight:800;
+}
+.newsletter-home-info{font-size:13px;color:#1c563a;font-weight:850;text-decoration:underline;text-underline-offset:5px}
+.newsletter-home-info:hover{color:#438248}
+.newsletter-signup{
+  min-width:0;
+  border-radius:23px;
+  padding:34px;
+  background:#fff;
+  border:1px solid #d4e4cc;
+  box-shadow:0 22px 65px rgba(21,58,35,.12);
+}
+.newsletter-signup-home{
+  background:#173d2e;
+  color:#f5ffe9;
+  border-color:#315a40;
+  box-shadow:0 25px 65px rgba(13,42,28,.19);
+}
+.newsletter-signup-home .eyebrow{color:#b9e971}
+.newsletter-form-head h2,
+.newsletter-form-head h3{
+  font-size:clamp(29px,3.3vw,41px);
+  color:inherit;
+  letter-spacing:-.05em;
+  margin:11px 0 20px;
+  line-height:1.09;
+}
+.newsletter-form-head p{color:#677d6d;font-size:14px;line-height:1.58;margin:0 0 24px}
+.newsletter-form label:not(.newsletter-check):not(.newsletter-consent){
+  display:block;
+  font-size:12px;
+  font-weight:850;
+  color:#315641;
+  margin-bottom:9px;
+}
+.newsletter-form input[type=email]{
+  display:block;
+  width:100%;
+  border:1px solid #adc9b3;
+  border-radius:11px;
+  padding:15px 17px;
+  font:inherit;
+  font-size:15px;
+  color:#1b3c2a;
+  background:#fff;
+  outline-offset:3px;
+  margin-bottom:23px;
+}
+.newsletter-form input[type=email]:focus{outline:2px solid #78a94c;border-color:#78a94c}
+.newsletter-form fieldset{border:0;padding:0;margin:0 0 19px;min-width:0}
+.newsletter-form legend{padding:0;margin:0 0 13px;font-size:12px;font-weight:900;color:#305641}
+.newsletter-form .newsletter-check{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 12px;
+  cursor:pointer;
+  font-size:13px;
+  line-height:1.4;
+  color:#2f5240;
+  font-weight:720;
+}
+.newsletter-form input[type=checkbox]{
+  flex:none;
+  accent-color:#7eb346;
+  height:18px;
+  width:18px;
+  cursor:pointer;
+}
+.newsletter-form .newsletter-consent{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  color:#657a68;
+  line-height:1.6;
+  font-size:11px;
+  margin:19px 0 23px;
+  cursor:pointer;
+}
+.newsletter-consent input[type=checkbox]{margin:2px 0 0}
+.newsletter-consent a,.newsletter-fineprint a{text-decoration:underline;text-underline-offset:3px;color:inherit}
+.newsletter-consent a:hover,.newsletter-fineprint a:hover{color:#5aa044}
+.newsletter-required{color:#b55433}
+.newsletter-submit{
+  width:100%;
+  padding:15px 21px;
+  border:none;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  background:#bfea73;
+  color:#163d28;
+  font:inherit;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  transition:background .2s,transform .2s;
+}
+.newsletter-submit:hover{background:#d6f99e;transform:translateY(-1px)}
+.newsletter-submit:focus-visible{outline:3px solid #7aae41;outline-offset:3px}
+.newsletter-fineprint{font-size:11px;line-height:1.6;color:#637864;margin:16px 0 0}
+.newsletter-honeypot{position:absolute!important;left:-9999px!important;top:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+.newsletter-signup-home .newsletter-form label:not(.newsletter-check):not(.newsletter-consent),
+.newsletter-signup-home .newsletter-form legend{color:#effde4}
+.newsletter-signup-home .newsletter-form .newsletter-check{color:#e0eedf}
+.newsletter-signup-home .newsletter-form .newsletter-consent,
+.newsletter-signup-home .newsletter-fineprint{color:#b9d0be}
+.newsletter-signup-home .newsletter-form input[type=email]{border-color:#91ae9b}
+.newsletter-signup-home .newsletter-consent a:hover,
+.newsletter-signup-home .newsletter-fineprint a:hover{color:#daffa3}
+.newsletter-page-hero{
+  background:radial-gradient(ellipse 65% 90% at 90% 30%,rgba(171,225,103,.17),transparent 80%),linear-gradient(125deg,#15392d,#1e4e37);
+}
+.newsletter-page-content{background:#f4f7ee;padding:82px 0 100px}
+.newsletter-page-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(355px,.84fr);
+  gap:clamp(35px,7vw,105px);
+  align-items:start;
+}
+.newsletter-page-copy{padding-top:33px}
+.newsletter-page-copy>h2{font-size:clamp(38px,4.5vw,57px);margin:15px 0 32px;color:#173f2d}
+.newsletter-benefit{display:flex;align-items:flex-start;gap:21px;padding:20px 0;border-top:1px solid #d5e2d0}
+.newsletter-benefit>span{
+  width:33px;height:33px;flex:none;
+  border:1px solid #c4d6b7;border-radius:50%;
+  display:flex;justify-content:center;align-items:center;
+  font-weight:900;font-size:11px;color:#487452;
+}
+.newsletter-benefit h3{font-size:19px;letter-spacing:-.035em;margin:1px 0 8px;color:#1c422d}
+.newsletter-benefit p{font-size:13px;line-height:1.65;color:#667c6b;margin:0}
+.newsletter-transparent{
+  font-size:13px;
+  line-height:1.7;
+  color:#5f7865;
+  margin:25px 0 0;
+  background:#eaf2dd;
+  border-radius:13px;
+  padding:18px 21px;
+}
+.newsletter-signup-light{border-top:5px solid #a6d55c}
+.newsletter-signup-light .newsletter-form-head h2{color:#20442e}
+.newsletter-signup-light .newsletter-submit{background:#173f2c;color:#fff}
+.newsletter-signup-light .newsletter-submit:hover{background:#30674a}
+.newsletter-tourney-card .eyebrow{font-size:10px}
+.newsletter-tourney-card>small{display:block;margin-top:12px;color:#6b806e;font-size:11px}
+@media(max-width:1000px){
+  .newsletter-home-grid,.newsletter-page-grid{grid-template-columns:1fr}
+  .newsletter-home-copy{max-width:700px}
+  .newsletter-signup{width:min(100%,640px)}
+  .newsletter-page-copy{padding-top:0}
+}
+@media(max-width:650px){
+  .newsletter-section{padding:59px 0 65px}
+  .newsletter-page-content{padding:52px 0 75px}
+  .newsletter-signup{padding:25px 22px;border-radius:18px}
+  .newsletter-home-copy h2{font-size:46px}
+  .newsletter-home-copy>p{font-size:15px}
+  .newsletter-page-copy>h2{font-size:41px}
+  .newsletter-benefit{gap:14px}
+}
