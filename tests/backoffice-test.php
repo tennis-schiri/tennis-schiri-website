@@ -170,6 +170,8 @@ $testTournament=['id'=>'test-prefilled-2027','title'=>'Bad Saarow Turniertest','
 $demoId=boCreateKnownCampaign($db,$testTournament,boTemplates()['info'],'info','bad-saarow','{}',time());
 $draft=boCampaign($db,$demoId);
 boAssert((int)$draft['defaults_review_required']===1 && empty($draft['defaults_reviewed_at']),'Created campaign skipped review flag');
+boAssert(!boCampaignDefaultsReviewed($draft),'Prefilled but unreviewed campaign is incorrectly sendable');
+boAssert(boCampaignDefaultsReviewed(['defaults_review_required'=>0]),'Legacy campaigns should not be unexpectedly blocked');
 boAssert(str_contains($draft['info_arrival'],'30 Minuten'),'Created SQLite campaign missing proposed arrival');
 boAssert(str_contains($draft['venue_data'],'Laykold'),'Created SQLite campaign missing proposed venue');
 boAssert(str_contains(boInfoEditor($draft),'checked'),'Checkboxes are not preset in admin');
@@ -188,6 +190,7 @@ $demoUpdate->execute([$approvedVenue,time(),$demoId]);
 $reviewed=boCampaign($db,$demoId);
 [,,$reviewedHtml]=boMailContent($reviewed,['name'=>'Max Muster'],false);
 boAssert(str_contains($reviewedHtml,'Parkplätze geprüft'),'Verified venue snapshot not included in real HTML');
+boAssert(boCampaignDefaultsReviewed($reviewed),'Reviewed campaign still blocked');
 $legacyDraft=['venue_id'=>'bad-saarow','venue_data'=>'{}','template_type'=>'info','info_arrival'=>'Meine schon gespeicherte Meldezeit','info_sections'=>'[]','guide_data'=>'{}'];
 $merged=boMergeKnownCampaign($legacyDraft,'bad-saarow');
 boAssert($merged['info_arrival']==='Meine schon gespeicherte Meldezeit','Existing draft custom data overwritten');
