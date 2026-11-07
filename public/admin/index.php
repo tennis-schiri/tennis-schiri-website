@@ -114,9 +114,21 @@ if($method==='POST'){
   $q->execute([$known['venue_data'],$known['info_sections'],$known['info_arrival']??'',$known['info_schedule']??'',$known['info_parking']??'',$known['info_fees']??'',$known['info_contact']??'',$known['turnigo_url']??'',$known['myscore_url']??'',$known['guide_data'],$now,$campaignId]);
   boGo('campaign',$campaignId,'Bekannte Informationen ergänzt. Eigene Texte wurden beibehalten. Bitte die Vorschläge prüfen und bestätigen.');
  }
+ if($action==='public_publish'||$action==='public_unpublish'){
+  if($action==='public_publish'){
+   if(boPost('confirm_public',30)!=='VEROEFFENTLICHEN')boError('Bitte die öffentliche Freigabe mit VEROEFFENTLICHEN bestätigen.');
+   try{boPublicInfoPublish($db,$campaign);}
+   catch(RuntimeException $ex){boError($ex->getMessage());}
+   boGo('campaign',$campaignId,'Öffentliche Turnierhinweise gespeichert. Nur allgemeine Informationsfelder sind sichtbar; keine Teilnehmerdaten.');
+  }
+  $q=$db->prepare('DELETE FROM bo_public_infos WHERE tournament_id=? AND campaign_id=?');
+  $q->execute([$campaign['tournament_id'],$campaignId]);
+  boGo('campaign',$campaignId,'Öffentliche Hinweise für diese Mail wurden zurückgenommen.');
+ }
  if($action==='campaign_save'){
   if($campaign['state']!=='draft')boError('Nur Entwürfe können geändert werden.');
   $subject=boPost('subject',160);
+  $weatherEnabled=boPost('weather_enabled',3)==='yes'?1:0;
   $body=boPost('body',15000);
   $notes=boPost('notes',3000);
   $confirmed=boPost('defaults_reviewed',3)==='yes';
@@ -136,8 +148,8 @@ if($method==='POST'){
   }
 
   if($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||$body===''||strlen($body)>15000||strlen($notes)>3000)boError('Bitte Betreff (max. 160 Zeichen) und Nachrichtentext (max. 15.000 Zeichen) prüfen.');
-  $q=$db->prepare("UPDATE bo_campaigns SET subject=?,body=?,notes=?,info_sections=?,info_arrival=?,info_schedule=?,info_parking=?,info_fees=?,turnigo_url=?,myscore_url=?,info_contact=?,guide_data=?,venue_data=?,defaults_reviewed_at=?,updated_at=? WHERE id=? AND state='draft'");
-  $q->execute([$subject,$body,$notes,$info['info_sections'],$info['info_arrival'],$info['info_schedule'],$info['info_parking'],$info['info_fees'],$info['turnigo_url'],$info['myscore_url'],$info['info_contact'],$guideJson,$venueJson,$confirmed?$now:null,$now,$campaignId]);
+  $q=$db->prepare("UPDATE bo_campaigns SET subject=?,body=?,notes=?,info_sections=?,info_arrival=?,info_schedule=?,info_parking=?,info_fees=?,turnigo_url=?,myscore_url=?,info_contact=?,guide_data=?,venue_data=?,defaults_reviewed_at=?,weather_enabled=?,updated_at=? WHERE id=? AND state='draft'");
+  $q->execute([$subject,$body,$notes,$info['info_sections'],$info['info_arrival'],$info['info_schedule'],$info['info_parking'],$info['info_fees'],$info['turnigo_url'],$info['myscore_url'],$info['info_contact'],$guideJson,$venueJson,$confirmed?$now:null,$weatherEnabled,$now,$campaignId]);
   boGo('campaign',$campaignId,'Entwurf gespeichert.');
  }
  if($action==='campaign_test'){
@@ -326,7 +338,7 @@ if($view==='campaign'&&$id){
   $reviewUi=(int)($c['defaults_review_required']??0)===1
    ?'<div class="panel" style="background:#f5f9ef;border-color:#afcea5"><label style="display:flex;align-items:flex-start;gap:12px;margin:0"><input type="checkbox" name="defaults_reviewed" value="yes" style="margin-top:5px;min-width:20px;height:20px"><span><strong>Ich habe alle vorausgefüllten Angaben für dieses Turnier geprüft.</strong><br><small>Insbesondere Termin, Meldezeit, Belag, Anfahrt, Gebühren, Einspielzeit und aktuelle Regeln. Du kannst den Entwurf auch ungeprüft speichern und später weiterbearbeiten. Erst zur Empfängerfreigabe ist die Bestätigung erforderlich.</small></span></label></div>'
    :'<p class="help"><label style="display:flex;align-items:center;gap:9px"><input type="checkbox" name="defaults_reviewed" value="yes"> Geänderte Standortangaben für diesen älteren Entwurf aktuell bestätigen (optional).</label></p>';
-  $html.='<section class="panel"><h2>Infomail-Entwurf mit vorausgefüllten Angaben bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea>'.boCampaignVenueEditor($c).boInfoEditor($c).boGuideEditor($c).$reviewUi.'<p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_link}} und {{zusatz}} werden beim Versand individuell ersetzt. {{zusatz}} übernimmt das Feld „Zusätzliche Hinweise“. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
+  $html.='<section class="panel"><h2>Infomail-Entwurf mit vorausgefüllten Angaben bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label style="display:flex;align-items:center;gap:10px"><input type="checkbox" name="weather_enabled" value="yes"'.((int)($c['weather_enabled']??1)===1?' checked':'').'> ☀️ Wetterprognose (7 Tage vorher) und Sonnenuntergang bei Outdoor-Turnieren ergänzen</label><p class="help">Bei Hallenturnieren wird kein Wetter eingefügt. Auch bei Outdoor-Turnieren werden fehlende Prognosen nicht erfunden.</p><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea>'.boCampaignVenueEditor($c).boInfoEditor($c).boGuideEditor($c).$reviewUi.'<p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_link}} und {{zusatz}} werden beim Versand individuell ersetzt. {{zusatz}} übernimmt das Feld „Zusätzliche Hinweise“. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
   $html.='<section class="panel"><h2>Vorschau und Testmail</h2><p>Vorschau mit „Alex Beispiel“ als Musterempfänger. Vor jeder Freigabe Änderungen bitte zuerst speichern.</p><div class="row"><a class="button button-secondary" href="'.boUrl('preview',$id).'" target="_blank" rel="noopener">HTML-Vorschau öffnen</a><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_test"><input type="hidden" name="campaign_id" value="'.$id.'"><button type="submit">Testmail an mw@tennis-schiri.de</button></form></div></section>';
   $html.='<section class="panel"><h2>Empfängerliste freigeben</h2><p><strong>'.$total.'</strong> Kontakte für dieses Turnier. Die Freigabe speichert genau diese Empfängerliste. Es werden dabei noch keine E-Mails verschickt.</p>';
   if($total===0)$html.='<p class="warning">Zuerst Teilnehmer unter <a href="'.boUrl('contacts').'&amp;tournament='.$e($c['tournament_id']).'">Teilnehmerverwaltung</a> ergänzen.</p>';
@@ -341,6 +353,19 @@ if($view==='campaign'&&$id){
   $html.='</div><p class="help">„Vom Mailserver angenommen“ ist kein Zustellnachweis. Ein unterbrochener Versand wird nicht automatisch erneut verschickt.</p>';
   if(in_array($c['state'],['approved','sending'],true)&&$pending>0){
    $html.='<form method="post" style="margin-top:18px">'.boCsrf().'<input type="hidden" name="action" value="campaign_send"><input type="hidden" name="campaign_id" value="'.$id.'"><button type="submit">Nächste bis zu 5 E-Mails senden</button></form>';
+  }
+  $pub=$db->prepare('SELECT campaign_id,published_at FROM bo_public_infos WHERE tournament_id=?');
+  $pub->execute([$c['tournament_id']]);$published=$pub->fetch();
+  $sent=$counts['sent']??0;
+  if($c['state']==='done'&&$sent>0){
+   $html.='<section class="panel"><h2>Informationen auf der Turnierseite veröffentlichen</h2><p>Eine öffentliche Zusammenfassung aus den bestätigten allgemeinen Angaben dieser Info-Mail – <strong>ohne</strong> Teilnehmernamen, Adressen, persönliche Anrede oder interne Notizen. Die Veröffentlichung ist freiwillig und wird nicht automatisch beim Mailversand vorgenommen.</p>';
+   if($published){
+    $html.='<p class="notice">Öffentliche Informationen sind verfügbar. <a href="/turnierinfos.php?turnier='.rawurlencode($c['tournament_id']).'" target="_blank" rel="noopener">Öffentliche Turnierinfos ansehen ↗</a></p>';
+    if((int)$published['campaign_id']===$id){
+      $html.='<form method="post">'.boCsrf().'<input type="hidden" name="action" value="public_unpublish"><input type="hidden" name="campaign_id" value="'.$id.'"><button class="button-secondary" type="submit">Öffentliche Hinweise entfernen</button></form>';
+    }
+   }
+   $html.='<form method="post">'.boCsrf().'<input type="hidden" name="action" value="public_publish"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Zur Veröffentlichung VEROEFFENTLICHEN eingeben</label><input type="text" name="confirm_public" maxlength="30" autocomplete="off" required placeholder="VEROEFFENTLICHEN"><button type="submit">Öffentliche Zusammenfassung veröffentlichen</button></form></section>';
   }
   $html.='</section>';
   $q=$db->prepare('SELECT name,email,state,attempted_at FROM bo_deliveries WHERE campaign_id=? ORDER BY contact_id LIMIT 500');$q->execute([$id]);
