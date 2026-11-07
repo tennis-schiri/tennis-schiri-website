@@ -110,6 +110,8 @@ jobs:
               "newsletter-admin.php", "newsletter-mail.php", "turnier-mails.php", "newsletter-template.php",
               "admin/index.php", "admin/lib.php", "admin/info-sections.php",
               "admin/venues.php", "admin/guide.php", "admin/defaults.php",
+              "admin/weather-mail.php", "admin/public-info.php",
+              "tournament-weather.php", "turnierinfos.php", "assets/tournament-calendar.js",
               "newsletter-events.php", "newsletter-partners.php",
               "google8cf6756d83169a32.html",
               "sitemap.xml",
@@ -137,6 +139,10 @@ jobs:
           php -l public/admin/venues.php
           php -l public/admin/guide.php
           php -l public/admin/defaults.php
+          php -l public/admin/weather-mail.php
+          php -l public/admin/public-info.php
+          php -l public/tournament-weather.php
+          php -l public/turnierinfos.php
           php -l tests/backoffice-test.php
           php tests/backoffice-test.php
           # Katalog vor jedem Upload frisch aus den Turnier-/Workshopseiten erzeugen.
@@ -153,6 +159,8 @@ jobs:
           php -l tests/newsletter-template-test.php
           php tests/newsletter-template-test.php
           php tests/newsletter-events-test.php
+          php -l tests/outdoor-weather-test.php
+          php tests/outdoor-weather-test.php
           php -l public/newsletter-partners.php
           php -l tests/newsletter-partners-test.php
           php tests/newsletter-partners-test.php
