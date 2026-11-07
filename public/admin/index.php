@@ -49,6 +49,8 @@ if($method==='POST'){
   if(!isset($workshops[$workshopId])||!in_array($kind,['confirmation','payment','reminder'],true)||!$registrationId)boError('Ungültige Workshop-Mail.');
   $q=$db->prepare('SELECT * FROM workshop_registrations WHERE id=? AND workshop_id=?');$q->execute([$registrationId,$workshopId]);$reg=$q->fetch();
   if(!$reg)boError('Workshop-Anmeldung nicht gefunden.',404);
+  if($reg['status']!=='registered')boError('An abgemeldete Personen werden keine Anmelde-Mails verschickt.');
+  $reg['cancel_url']=$reg['status']==='registered'?workshopCancelUrl($reg,(string)$cfg['key']):'';
   try{[$subject,$text,$html]=workshopMailContent($workshops[$workshopId],$reg,$kind,workshopSetting($db,'paypal_instructions'));}
   catch(InvalidArgumentException $ex){boError($ex->getMessage());}
   $sent=workshopSendMail((string)$reg['email'],$subject,$text,$html);
@@ -324,7 +326,7 @@ if($view==='workshops'){
  if($selected!==''){
   $ws=$workshops[$selected];
   $paypalInfo=workshopSetting($db,'paypal_instructions');
-  $html.='<section class="panel"><h2>PayPal-Zahlungsinformation</h2><p>Diese Information wird bei PayPal-Anmeldungen in die Bestätigung aufgenommen. Ist das Feld leer, wird nur angekündigt, dass die Zahlungsinfo separat folgt.</p><form method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_settings"><input type="hidden" name="workshop" value="'.$e($selected).'"><label>PayPal-Adresse, PayPal.Me-Link oder kurzer Zahlungshinweis</label><textarea name="paypal_instructions" maxlength="1000" rows="3">'.$e($paypalInfo).'</textarea><button type="submit">PayPal-Info speichern</button></form></section>';
+  $html.='<section class="panel"><h2>PayPal-Zahlungsinformation</h2><p>Der PayPal-Link für 15 € an paypal@tennis-schiri.de wird automatisch in die Bestätigung eingebaut. Hier kannst du optionale zusätzliche Hinweise hinterlegen.</p><form method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_settings"><input type="hidden" name="workshop" value="'.$e($selected).'"><label>Optionaler zusätzlicher PayPal-Hinweis</label><textarea name="paypal_instructions" maxlength="1000" rows="3">'.$e($paypalInfo).'</textarea><button type="submit">PayPal-Info speichern</button></form></section>';
   $q=$db->prepare("SELECT * FROM workshop_registrations WHERE workshop_id=? ORDER BY CASE status WHEN 'registered' THEN 0 ELSE 1 END,name,email");$q->execute([$selected]);$rows=$q->fetchAll();
   $registered=count(array_filter($rows,static fn($r)=>$r['status']==='registered'));
   $members=count(array_filter($rows,static fn($r)=>(int)$r['is_member']===1&&$r['status']==='registered'));
@@ -343,8 +345,8 @@ if($view==='workshops'){
     $html.='<td><form method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_update"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><label>Status</label><select name="status">'.$statusOptions.'</select><label>Zahlung</label><select name="payment_status">'.$payOptions.'</select><label>Interne Notiz</label><input type="text" name="notes" maxlength="1000" value="'.$e($r['notes']).'"><button type="submit">Speichern</button></form></td>';
     $html.='<td><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="confirmation"><button class="button-secondary" type="submit">Bestätigung erneut</button></form><br><br><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="reminder"><button class="button-secondary" type="submit">Erinnerung senden</button></form>';
     if($r['payment_method']==='paypal'&&(int)$r['fee_cents']>0){
-     if($paypalInfo!=='')$html.='<br><br><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="payment"><button type="submit">PayPal-Info senden</button></form>';
-     else $html.='<p class="help">PayPal-Info noch nicht hinterlegt.</p>';
+     if(true)$html.='<br><br><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="payment"><button type="submit">PayPal-Info senden</button></form>';
+
     }
     if(!empty($r['last_mail_at']))$html.='<p class="help">Letzte Mail: '.$e((string)$r['last_mail_type']).' · '.date('d.m.Y H:i',(int)$r['last_mail_at']).'</p>';
     $html.='</td></tr>';
