@@ -62,15 +62,16 @@ function boVenueList(PDO $db):array {
  $all=$db->query('SELECT * FROM bo_venues ORDER BY CASE id WHEN "general" THEN 0 WHEN "bad-saarow" THEN 1 WHEN "neuenhagen" THEN 2 WHEN "neuenhagen-halle" THEN 3 WHEN "neuenhagen-aussen" THEN 4 ELSE 5 END, name')->fetchAll();
  return array_column($all,null,'id');
 }
-function boVenueSelector(array $venues,string $current='general'):string {
+function boVenueSelector(array $venues,string $current='auto',bool $withAuto=true):string {
  $out='<select name="venue_id" required>';
+ if($withAuto)$out.='<option value="auto"'.($current==='auto'?' selected':'').'>Automatisch anhand von Turniername und Ort</option>';
  foreach($venues as $id=>$v)$out.='<option value="'.boEsc($id).'"'.($id===$current?' selected':'').'>'.boEsc($v['name']).'</option>';
  return $out.'</select>';
 }
 function boVenueEditor(array $profile):string {
- $data=boVenueData((string)($profile['data']??'{}'));
+ $data=boVenueDraftSuggestions((string)($profile['id']??'general'),(string)($profile['data']??'{}'));
  $verified=$data['_verified_at']??'';
- $out='<p class="help">Wiederverwendbare Standortangaben. Keine historischen Details werden automatisch als aktuelle Fakten übernommen. Änderungen wirken nur auf <strong>neu erstellte</strong> Infomails.</p>';
+ $out='<p class="help">Bereits bekannte Angaben aus bisherigen Infomails sind hier als <strong>bearbeitbare Vorschläge</strong> vorausgefüllt. Bitte anhand des aktuellen Turniers prüfen, korrigieren und erst dann unten bestätigen. Änderungen wirken nur auf neu erstellte Infomails.</p>';
  $out.='<p class="'.($verified?'notice':'warning').'">'.($verified?'Zuletzt geprüft am '.boEsc($verified):'Noch nicht als aktueller Stand bestätigt. Daten werden nicht in Teilnehmermails übernommen, bis du sie erneut speicherst und bestätigst.').'</p>';
  if(str_starts_with((string)($profile['id']??''),'neuenhagen'))$out.='<p class="help">Die früheren Neuenhagen-Mails wurden als <a href="https://github.com/tennis-schiri/tennis-schiri-website/blob/main/docs/standorte/neuenhagen-quellenprofil.md" target="_blank" rel="noopener">Quellenprofil</a> ausgewertet. Halle und Außenanlage bitte getrennt prüfen; alte Nenngelder, Beläge oder Zugangshinweise nicht ungeprüft übernehmen.</p>';
  foreach(boVenueDefinitions() as $key=>$def){
