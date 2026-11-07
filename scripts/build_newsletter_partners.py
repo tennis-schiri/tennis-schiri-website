@@ -49,8 +49,8 @@ def get_partners() -> list[dict]:
             "logo": "https://tennis-schiri.de/" + rel,
             "caption": "Partner von Tennis-Schiri",
         })
-    if len(results) != 7:
-        raise ValueError(f"Erwartet 7 Website-Partner, gefunden: {len(results)}")
+    if not results:
+        raise ValueError("Keine Partner auf der Website gefunden; Katalog wird nicht überschrieben.")
     return results
 
 def build() -> dict:
