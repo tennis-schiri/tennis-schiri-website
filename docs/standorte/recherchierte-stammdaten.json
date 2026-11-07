@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "researched_at": "2026-11-07",
+  "purpose": "Reviewable research data; do not publish automatically or overwrite live bo_venues.",
+  "locations": [
+    {
+      "id": "bad-saarow",
+      "name": "Sunball Tenniscenter Bad Saarow",
+      "address": "Am Golfplatz 1, 15526 Bad Saarow",
+      "website": "https://www.sunballtennisbsa.de/",
+      "phone": "033631 483549",
+      "email": null,
+      "sources": [
+        "https://www.sunballtennisbsa.de/"
+      ],
+      "areas": [
+        {
+          "id": "outdoor",
+          "label": "Außenanlage",
+          "court_count": 6,
+          "surface": "Rotsand",
+          "status": "operator_published"
+        },
+        {
+          "id": "indoor-hard",
+          "label": "Halle – Hartplatz",
+          "court_count": 3,
+          "surface": "Hartplatz; Laykold-Angabe aus früheren Teilnehmerinfos, erneut prüfen",
+          "status": "operator_published_with_historic_surface_detail"
+        },
+        {
+          "id": "indoor-carpet",
+          "label": "Halle – Teppich",
+          "court_count": 3,
+          "surface": "Teppich",
+          "status": "operator_published"
+        }
+      ],
+      "venue_notes": {
+        "parking": "Historische Turnierinfo: kostenlose Parkplätze mit Schranke, Ausfahrt-Ticket bei Turnierleitung/Gastronomie; vor Verwendung bestätigen.",
+        "checkin": "Historische Turnierinfo: Counter rechts am Eingang; turnierabhängig bestätigen.",
+        "catering": "Gastronomie/Verzehrbons historisch erwähnt; derzeitige Bedingungen offen.",
+        "facilities": "Umkleiden/Duschen und Barrierefreiheit im Detail offen."
+      },
+      "review_needed": [
+        "Aktuelle Park- und Schrankenregelung",
+        "Ausfahrt-Ticket",
+        "Spezifische Turnierleitungsposition",
+        "Umkleiden/Duschen",
+        "Barrierefreiheit und Gastronomie",
+        "Bezeichnung Laykold auf Hartplätzen"
+      ]
+    },
+    {
+      "id": "neuenhagen",
+      "name": "Neuenhagener Tennisclub 93 e.V.",
+      "address": "Hildesheimer Straße 11–13, 15366 Neuenhagen bei Berlin",
+      "website": "https://ntc93.com/",
+      "phone": "03342 424694",
+      "email": "info@ntc93.de",
+      "sources": [
+        "https://ntc93.com/impressum/",
+        "https://ntc93.com/",
+        "https://ntc93.com/unsere-neue-halle-wurde-eingeweiht/"
+      ],
+      "areas": [
+        {
+          "id": "outdoor",
+          "label": "Außenanlage",
+          "court_count": 7,
+          "surface": "Sand",
+          "status": "club_published"
+        },
+        {
+          "id": "indoor",
+          "label": "Tennishalle",
+          "court_count": 2,
+          "surface": "Advantage RedCourt (Kunstrasen mit Keramiksand)",
+          "status": "club_published"
+        }
+      ],
+      "venue_notes": {
+        "parking": "Historische Turnierinfos: Parkplätze am Club und an der Halle; vor der Halle parallel parken; nicht auf Grünstreifen.",
+        "transit": "Historische Turnierinfos: S-Bahnhof Neuenhagen (S5), ungefähr 15 Minuten Fußweg.",
+        "checkin": "Turnierabhängig: Halle im Vorraum, Außenanlage beim Clubhaus oder Zelt; nicht automatisch übernehmen.",
+        "facilities": "Umkleiden/Duschen/Toiletten in Halle und Clubhaus laut alten Turnierinfos.",
+        "catering": "Due Fratelli an der Anlage laut Vereinswebsite; aktuelle Öffnungszeiten und Zahlarten vor Turnier prüfen.",
+        "footwear": "Halle: saubere Sandplatzschuhe laut früheren Turnierinfos; aktuell bestätigen."
+      },
+      "review_needed": [
+        "Aktuelle Parkplatzregelung",
+        "Gastronomie: Öffnungszeiten und Bezahlung",
+        "Barrierefreiheit",
+        "Turnierleitungsstandort je Turnier",
+        "Konkreter Navigationslink je Anlagenteil",
+        "Schuhfreigabe Halle"
+      ]
+    }
+  ],
+  "rules": [
+    "Only copy independently confirmed public base facts into location master records.",
+    "Keep source URLs and last verified date.",
+    "Keep venue-level info separate from area-level properties and tournament-level fee/scoring/check-in.",
+    "Do not store access codes in GitHub or standard participant mail templates.",
+    "No automatic production DB writes; admin integration and review required."
+  ]
+}
