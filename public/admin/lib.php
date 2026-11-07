@@ -142,6 +142,7 @@ function boPage(string $title,string $content): never {
   'contacts'=>['Teilnehmer','users'],
   'compose'=>['Turnier-Infomails','mail'],
   'templates'=>['Vorlagen','files'],
+  'venues'=>['Standorte','map-pin'],
   'history'=>['Versandprotokoll','history']
  ];
  $nav='';
@@ -207,12 +208,12 @@ function boTournamentSelect(array $tournaments,string $selected=''): string {
 }
 function boTemplates(): array {
  return [
-  'info'=>['label'=>'Teilnehmerinformation vor dem Turnier','subject'=>'Wichtige Informationen: {{turnier}}',
-   'body'=>"Hallo {{name}},\n\nvielen Dank für deine Anmeldung zu {{turnier}}.\n\nTermin: {{datum}}\nVeranstaltungsort: {{ort}}\n\nHier findest du die Turnierinformationen und die Ausschreibung:\n{{turnier_link}}\n\n{{zusatz}}\n\nWir freuen uns auf einen schönen Turniertag!\n\nSportliche Grüße\nTennis-Schiri · Turnierorganisation"],
-  'reminder'=>['label'=>'Erinnerung vor dem Turnier','subject'=>'Erinnerung: {{turnier}}',
-   'body'=>"Hallo {{name}},\n\nin Kürze findet {{turnier}} statt.\n\nTermin: {{datum}}\nOrt: {{ort}}\n\nBitte beachte die Informationen und ggf. veröffentlichten Änderungen unter:\n{{turnier_link}}\n\n{{zusatz}}\n\nBis zum Turnier!\n\nSportliche Grüße\nTennis-Schiri · Turnierorganisation"],
-  'update'=>['label'=>'Aktuelle organisatorische Mitteilung','subject'=>'Aktuelle Informationen zu {{turnier}}',
-   'body'=>"Hallo {{name}},\n\nfür {{turnier}} gibt es eine wichtige organisatorische Mitteilung.\n\n{{zusatz}}\n\nTurnier: {{turnier}}\nTermin: {{datum}}\nOrt: {{ort}}\nWeitere Informationen: {{turnier_link}}\n\nSportliche Grüße\nTennis-Schiri · Turnierorganisation"],
+  'info'=>['label'=>'Ausführlicher Turnier-Guide nach Auslosung','subject'=>'Alle Informationen: {{turnier}}',
+   'body'=>"Hallo {{name}},\n\nwir freuen uns, dich bei {{turnier}} begrüßen zu dürfen. Im Folgenden findest du die wichtigsten Informationen rund um deine Teilnahme.\n\n{{zusatz}}\n\nSportliche Grüße\nMichael"],
+  'reminder'=>['label'=>'Kurze Erinnerung vor dem Turnier','subject'=>'Erinnerung: {{turnier}}',
+   'body'=>"Hallo {{name}},\n\nbald ist es soweit: {{turnier}} steht bevor. Bitte prüfe vor deiner Anreise die aktuellen Turnierinformationen und deine Spielansetzung.\n\n{{zusatz}}\n\nBis bald auf dem Tennisplatz!\nMichael"],
+  'update'=>['label'=>'Wichtige organisatorische Änderung','subject'=>'Wichtige Änderung: {{turnier}}',
+   'body'=>"Hallo {{name}},\n\nes gibt eine wichtige organisatorische Information zu {{turnier}}. Bitte beachte die nachfolgenden Hinweise.\n\n{{zusatz}}\n\nSportliche Grüße\nMichael"],
  ];
 }
 function boRenderTokens(string $raw,array $campaign,array $contact): string {
