@@ -7,6 +7,9 @@ on:
       - 'scripts/build_site_branding.py'
       - 'tests/site-branding-test.py'
       - 'public/assets/site.css'
+      - 'public/assets/tennilo-logo.png'
+      - 'public/assets/tennilo-icon.png'
+      - 'tests/tennilo-branding-test.py'
       - 'public/assets/privacy-consent.js'
       - 'public/assets/tournament-detail.js'
       - 'public/turniere/termin.html'
@@ -59,3 +62,4 @@ jobs:
           python tests/lk-guide-test.py
           node --check public/assets/privacy-consent.js
           node tests/privacy-consent-test.mjs
+          python tests/tennilo-branding-test.py
