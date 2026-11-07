@@ -30,7 +30,7 @@ if 'href="https://tennilo.de/"' not in homepage:
     raise SystemExit("TENNILO project must link to official domain")
 if 'data-instagram-account="tennilo"' not in homepage:
     raise SystemExit("TENNILO Instagram feed removed")
-if 'site.css?v=20261107-14' not in homepage:
+if 'site.css?v=20261108-1' not in homepage:
     raise SystemExit("Homepage needs fresh style version")
 if ".tennilo-brand-card" not in css or ".ig-tennilo-wordmark" not in css:
     raise SystemExit("TENNILO logo styling missing")
