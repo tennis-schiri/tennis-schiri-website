@@ -2544,3 +2544,51 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .tennis-quote-line{border:1px solid #d3e0cf;border-left:3px solid #a6c69a;border-radius:17px;background:#fff;padding:22px 26px;margin:18px 0;box-shadow:0 6px 22px rgba(32,66,38,.035)}
 @media(max-width:820px){.tennis-quote-line{padding:19px 20px}}
 @media(max-width:540px){.tennis-quote-line{padding:18px 16px}}
+
+/* Datenschutz-Auswahl: bewusst dezent, ohne Drittanbieter, mit gleichwertigem Ablehnen */
+.ts-pc-banner[hidden],.ts-pc-dialog [hidden]{display:none!important}
+.ts-pc-banner{position:fixed;z-index:9998;bottom:16px;left:16px;right:16px;max-width:1040px;margin:0 auto;border:1px solid #bcd0b5;border-radius:20px;background:#fff;box-shadow:0 20px 65px rgba(13,42,27,.22);color:#173d2d}
+.ts-pc-banner-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,270px);gap:25px;align-items:center;padding:24px 27px}
+.ts-pc-eyebrow{color:#4f7a56;letter-spacing:.12em;font-weight:900;font-size:10px;margin-bottom:9px}
+.ts-pc-banner h2,.ts-pc-dialog h2{font-size:22px;letter-spacing:-.025em;line-height:1.2;font-weight:850;color:#1d432e;margin:0 0 9px}
+.ts-pc-banner p,.ts-pc-dialog>p{font-size:12px;color:#526a58;line-height:1.65;margin:0}
+.ts-pc-banner a,.ts-pc-dialog a{color:#215d3e;font-weight:750;text-decoration:underline;text-underline-offset:3px}
+.ts-pc-banner-buttons{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+.ts-pc-action{appearance:none;display:inline-flex;justify-content:center;align-items:center;min-height:42px;padding:10px 13px;border-radius:999px;font:inherit;font-weight:850;font-size:12px;line-height:1.2;cursor:pointer;text-align:center;transition:background .15s ease,border-color .15s ease}
+.ts-pc-solid{background:#1d5137;border:1px solid #1d5137;color:#fff}
+.ts-pc-solid:hover{background:#286647;border-color:#286647}
+.ts-pc-border{background:#fff;border:1px solid #a9c2a5;color:#245539}
+.ts-pc-border:hover{background:#eef7e8}
+.ts-pc-banner-buttons .ts-pc-border{grid-column:1 / -1}
+.ts-pc-action:focus-visible,.ts-pc-footer:focus-visible,.ts-pc-close:focus-visible,.ts-pc-optional:focus-within{outline:3px solid #75ac54;outline-offset:3px}
+.ts-pc-dialog{box-sizing:border-box;width:min(650px,calc(100vw - 28px));max-height:min(680px,calc(100dvh - 28px));overflow-y:auto;padding:27px 29px;border-radius:20px;border:1px solid #bfceb7;background:#fff;color:#193e2c;box-shadow:0 26px 80px rgba(12,36,20,.28)}
+.ts-pc-dialog::backdrop{background:rgba(14,35,25,.58)}
+.ts-pc-modal-top{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:4px}
+.ts-pc-close{display:grid;place-items:center;width:33px;height:33px;border-radius:999px;border:1px solid #cddcc8;background:#fff;color:#365b42;cursor:pointer;font-size:22px;line-height:1}
+.ts-pc-dialog h2{font-size:27px}
+.ts-pc-dialog>p{margin:0 0 18px}
+.ts-pc-option{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:17px 0;border-top:1px solid #e1e9da}
+.ts-pc-option>div{max-width:420px;min-width:0}
+.ts-pc-option strong{display:block;font-size:13px;line-height:1.4;color:#254d34;margin-bottom:6px}
+.ts-pc-option small{display:block;font-size:11px;line-height:1.6;color:#647c69}
+.ts-pc-required{font-size:11px;font-weight:850;color:#52745b;white-space:nowrap}
+.ts-pc-optional{cursor:pointer}
+.ts-pc-optional input{width:22px;height:22px;flex:0 0 22px;accent-color:#2e7847;cursor:pointer}
+.ts-pc-small{font-size:11px!important;color:#6d8370!important;line-height:1.65!important;margin:10px 0 19px!important}
+.ts-pc-dialog-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:21px}
+.ts-pc-dialog-actions .ts-pc-action{flex:1 1 155px}
+.ts-pc-footer{font:inherit;font-size:12px;color:inherit;opacity:.8;padding:0;border:0;border-bottom:1px solid currentColor;background:none;cursor:pointer;white-space:normal}
+.ts-pc-footer:hover{opacity:1}
+@media(max-width:680px){
+ .ts-pc-banner{bottom:8px;left:8px;right:8px;border-radius:16px;max-height:calc(100dvh - 16px);overflow-y:auto}
+ .ts-pc-banner-inner{grid-template-columns:1fr;gap:17px;padding:18px}
+ .ts-pc-banner h2{font-size:19px}
+ .ts-pc-banner p{font-size:12px}
+ .ts-pc-banner-buttons{gap:7px}
+ .ts-pc-action{font-size:12px;min-height:44px}
+ .ts-pc-dialog{padding:22px 18px}
+ .ts-pc-dialog h2{font-size:24px}
+ .ts-pc-option{gap:12px;align-items:center}
+ .ts-pc-required{white-space:normal;text-align:right}
+}
+@media(prefers-reduced-motion:reduce){.ts-pc-action{transition:none}}
