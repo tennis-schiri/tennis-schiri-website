@@ -51,11 +51,11 @@
         "Bezeichnung Laykold auf Hartplätzen"
       ],
       "logo": {
-        "status": "multiple_archive_candidates_found_choice_pending",
+        "status": "primary_selected_by_site_owner_asset_not_yet_published",
         "source_page": "https://www.sunballtennisbsa.de/",
         "source_image_url": "https://storage.e.jimdo.com/cdn-cgi/image/quality%3D85%2Cfit%3Dscale-down%2Cformat%3Dauto%2Ctrim%3D0%3B0%3B0%3B0%2Cwidth%3D2560%2Cheight%3D634/image/447483050/bb28899d-74df-498b-a28e-6e7f972a94af.png",
         "alternative_logo_source": "https://www.precisehotels.com/en/bad-saarow/tennis",
-        "note": "Website-Betreiberlogo 'Sunball Tenniscenter Bad Saarow'; alternativ zeigt Precise ein anderes Tennis Center Bad Saarow-Schildlogo. Für offizielle Nutzung die gewünschte Variante bestätigen.",
+        "note": "BS03 ist das vom Betreiber der Tennis-Schiri-Seite ausgewählte Hauptlogo für den Turnierstandort Bad Saarow; BS01/BS02 nur Alternativen bzw. Sunball-Branding. Das Logo befindet sich noch als Quelldatei in Google Drive und wurde noch nicht in den Live-Webauftritt übernommen.",
         "archive_candidates": [
           {
             "label": "Sunball Tennis Bad Saarow – Schriftlogo mit Ortsnamen",
@@ -85,7 +85,15 @@
             "kind": "resort_logo",
             "checked_visually": false
           }
-        ]
+        ],
+        "primary": {
+          "code": "BS03",
+          "label": "Tennis Center Bad Saarow – Wappen",
+          "drive_file_id": "1RpcvYBcghDEUHoWLO7oBe6h5Ac0Dy4cy",
+          "file_name": "Tennis_Logo_Gray.jpg",
+          "alt": "Tennis Center Bad Saarow – Wappen mit gekreuzten Tennisschlägern",
+          "selection_date": "2026-11-07"
+        }
       }
     },
     {
