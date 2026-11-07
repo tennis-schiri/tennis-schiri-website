@@ -7,6 +7,8 @@ on:
       - 'public/newsletter-setup.php'
       - 'public/newsletter-admin.php'
       - 'public/newsletter-mail.php'
+      - 'public/newsletter-template.php'
+      - 'tests/newsletter-template-test.php'
       - 'public/newsletter/index.html'
       - 'public/assets/site.css'
       - '.github/workflows/newsletter-check.yml'
@@ -29,9 +31,11 @@ jobs:
         run: |
           set -euo pipefail
           php -v
-          for file in public/newsletter.php public/newsletter-setup.php public/newsletter-admin.php public/newsletter-mail.php; do
+          for file in public/newsletter.php public/newsletter-setup.php public/newsletter-admin.php public/newsletter-mail.php public/newsletter-template.php tests/newsletter-template-test.php; do
             php -l "$file"
           done
+      - name: HTML-Newsletter testen (kein Versand)
+        run: php tests/newsletter-template-test.php
       - name: Newsletter-Einbindung und private Datenablage prüfen
         shell: bash
         run: |
