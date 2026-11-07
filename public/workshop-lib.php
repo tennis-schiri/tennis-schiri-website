@@ -32,6 +32,7 @@ function workshopSchema(PDO $db): void {
   payment_method TEXT NOT NULL DEFAULT 'onsite',
   payment_status TEXT NOT NULL DEFAULT 'open',
   status TEXT NOT NULL DEFAULT 'registered',
+  cancel_version INTEGER NOT NULL DEFAULT 0,
   notes TEXT NOT NULL DEFAULT '',
   confirmation_sent_at INTEGER,
   last_mail_type TEXT NOT NULL DEFAULT '',
@@ -40,6 +41,8 @@ function workshopSchema(PDO $db): void {
   updated_at INTEGER NOT NULL,
   UNIQUE(workshop_id,email)
  )");
+ $columns=array_column($db->query('PRAGMA table_info(workshop_registrations)')->fetchAll(),'name');
+ if(!in_array('cancel_version',$columns,true))$db->exec("ALTER TABLE workshop_registrations ADD COLUMN cancel_version INTEGER NOT NULL DEFAULT 0");
  $db->exec("CREATE INDEX IF NOT EXISTS workshop_registrations_workshop ON workshop_registrations(workshop_id,status)");
  $db->exec("CREATE TABLE IF NOT EXISTS workshop_attempts (
   ip_hash TEXT NOT NULL,
@@ -76,6 +79,22 @@ function workshopPaymentStatusLabel(string $value): string {
  return ['open'=>'offen','paid'=>'bezahlt','waived'=>'entfällt'][$value]??$value;
 }
 
+function workshopCancelToken(array $registration,string $secret): string {
+ return hash_hmac('sha256','workshop-cancel-v1|'.($registration['workshop_id']??'').'|'.($registration['id']??'').'|'.strtolower((string)($registration['email']??'')).'|'.(int)($registration['cancel_version']??0),$secret);
+}
+function workshopCancelUrl(array $registration,string $secret): string {
+ return 'https://tennis-schiri.de/workshop.php?'.http_build_query([
+  'action'=>'cancel','workshop'=>(string)$registration['workshop_id'],
+  'id'=>(int)$registration['id'],'token'=>workshopCancelToken($registration,$secret)
+ ],'','&',PHP_QUERY_RFC3986);
+}
+function workshopPaypalLink(int $fee,string $workshopId): string {
+ return 'https://www.paypal.com/cgi-bin/webscr?'.http_build_query([
+  'cmd'=>'_xclick','business'=>'paypal@tennis-schiri.de',
+  'item_name'=>'Regelworkshop '.($workshopId==='regelworkshop-2027-03-04'?'04.03.2027':$workshopId),
+  'amount'=>number_format($fee/100,2,'.',''),'currency_code'=>'EUR','no_shipping'=>'1'
+ ],'','&',PHP_QUERY_RFC3986);
+}
 /** @return array{0:string,1:string,2:string} */
 function workshopMailContent(array $workshop,array $registration,string $kind='confirmation',string $paypalInstructions=''): array {
  $name=trim((string)($registration['name']??'')) ?: 'Tennisfreundin/Tennisfreund';
@@ -84,35 +103,46 @@ function workshopMailContent(array $workshop,array $registration,string $kind='c
  $isMember=(int)($registration['is_member']??0)===1;
  $event=$workshop['title'].' · '.$workshop['date'].' · '.$workshop['time'];
  $venue=$workshop['location'].', '.$workshop['address'];
+ $cancelUrl=(string)($registration['cancel_url']??'');
+ $paypalUrl=(!$isMember&&$fee>0&&$payment==='paypal')?workshopPaypalLink($fee,(string)$workshop['id']):'';
+ $paypalDetail=$paypalUrl!==''?"\\nJetzt 15 € per PayPal zahlen: ".$paypalUrl."\\nEmpfänger: paypal@tennis-schiri.de":'';
 
  if($isMember || $fee<=0){
   $paymentText='Als Mitglied des NTC 93 nimmst du kostenfrei teil.';
  }elseif($payment==='paypal'){
   $paymentText='Teilnahmebeitrag: '.workshopFeeLabel($fee).' · Zahlung per PayPal.';
-  $paymentText.=trim($paypalInstructions)!==''?"\nPayPal-Zahlungsinfo: ".trim($paypalInstructions):"\nDie konkreten PayPal-Zahlungsinformationen erhältst du separat nach der Anmeldung.";
+  $paymentText.=$paypalDetail;
+  if(trim($paypalInstructions)!=='')$paymentText.="\nZusätzliche Zahlungsinfo: ".trim($paypalInstructions);
  }else{
   $paymentText='Teilnahmebeitrag: '.workshopFeeLabel($fee).' · zahlbar vor Ort.';
  }
 
  if($kind==='payment'){
   if($isMember || $fee<=0) throw new InvalidArgumentException('Für diese Anmeldung ist keine Zahlung erforderlich.');
-  if(trim($paypalInstructions)==='') throw new InvalidArgumentException('Die PayPal-Zahlungsinformation ist im Backoffice noch nicht hinterlegt.');
+  if($payment!=='paypal') throw new InvalidArgumentException('Für diese Anmeldung wurde nicht PayPal gewählt.');
   $subject='💳 PayPal-Info: '.$workshop['title'];
-  $text="Hallo ".$name.",\n\nfür deine Anmeldung zu ".$event." hast du PayPal gewählt.\n\nTeilnahmebeitrag: ".workshopFeeLabel($fee)."\nPayPal-Zahlungsinfo: ".trim($paypalInstructions)."\n\nBitte gib bei der Zahlung deinen Namen und das Workshopdatum an.\n\nSportliche Grüße\nMichael";
+  $text="Hallo ".$name.",\n\nfür deine Anmeldung zu ".$event." hast du PayPal gewählt.\n\nTeilnahmebeitrag: ".workshopFeeLabel($fee)."\n".$paypalDetail."\n".(trim($paypalInstructions)!==''?trim($paypalInstructions)."\n":'')."\nBitte prüfe bei PayPal den Empfänger und den Betrag, bevor du zahlst.\n\nSportliche Grüße\nMichael";
+ }elseif($kind==='cancelled'){
+  $subject='✅ Abmeldung bestätigt: '.$workshop['title'];
+  $text="Hallo ".$name.",\n\ndeine Abmeldung vom Regelworkshop wurde bestätigt.\n\n".$event."\n".$venue."\n\nDein Platz ist freigegeben. Falls du bereits bezahlt hast, melde dich bitte wegen einer möglichen Erstattung unter turniere@tennis-schiri.de.\n\nSportliche Grüße\nMichael";
  }elseif($kind==='reminder'){
   $subject='⏰ Erinnerung: '.$workshop['title'].' am 4. März';
-  $text="Hallo ".$name.",\n\nkurze Erinnerung an deine Anmeldung:\n\n".$event."\n".$venue."\n\n".$paymentText."\n\nFalls du doch nicht teilnehmen kannst, antworte bitte kurz auf diese E-Mail.\n\nBis bald!\nMichael";
+  $text="Hallo ".$name.",\n\nkurze Erinnerung an deine Anmeldung:\n\n".$event."\n".$venue."\n\n".$paymentText."\n\nFalls du doch nicht teilnehmen kannst, kannst du dich direkt über den Abmeldelink am Ende dieser Nachricht abmelden.\n\nBis bald!\nMichael";
  }else{
   $subject='🎾 Anmeldung bestätigt: '.$workshop['title'];
-  $text="Hallo ".$name.",\n\nvielen Dank für deine Anmeldung. Dein Platz für den Regelworkshop ist vorgemerkt.\n\n".$event."\n".$venue."\n\n".$paymentText."\n\nFalls du doch nicht teilnehmen kannst, antworte bitte kurz auf diese E-Mail.\n\nSportliche Grüße\nMichael";
+  $text="Hallo ".$name.",\n\nvielen Dank für deine Anmeldung. Dein Platz für den Regelworkshop ist vorgemerkt.\n\n".$event."\n".$venue."\n\n".$paymentText."\n\nFalls du doch nicht teilnehmen kannst, kannst du dich direkt über den Abmeldelink am Ende dieser Nachricht abmelden.\n\nSportliche Grüße\nMichael";
  }
 
+ if($cancelUrl!==''&&$kind!=='cancelled')$text.="\n\nDirekt vom Workshop abmelden:\n".$cancelUrl."\n(Der Link öffnet zunächst eine Bestätigungsseite.)";
  $esc=static fn(mixed $v):string=>htmlspecialchars((string)$v,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
  $paragraphs='';
  foreach(preg_split('/\R{2,}/u',trim($text))?:[] as $part){
   $paragraphs.='<p style="margin:0 0 18px;font:15px/1.7 Arial,Helvetica,sans-serif;color:#365447">'.nl2br($esc(trim($part)),false).'</p>';
  }
- $html='<!doctype html><html lang="de"><meta charset="utf-8"><body style="margin:0;background:#eef3e8;padding:28px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#fff;border-radius:16px;overflow:hidden"><tr><td style="background:#143b2c;padding:27px 34px"><img src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3" width="240" alt="Tennis-Schiri" style="display:block;max-width:100%;height:auto"></td></tr><tr><td style="height:5px;background:#c8f16d"></td></tr><tr><td style="padding:34px">'.$paragraphs.'<p style="margin:26px 0 0;font:12px/1.6 Arial,Helvetica,sans-serif;color:#738579">Tennis-Schiri · Regelworkshop · <a href="https://tennis-schiri.de/leistungen/#'.$esc($workshop['id']).'" style="color:#2a6844">Workshopseite</a></p></td></tr></table></td></tr></table></body></html>';
+ $actions='';
+ if($paypalUrl!==''&&$kind!=='cancelled')$actions.='<p style="margin:12px 0 22px"><a href="'.$esc($paypalUrl).'" style="display:inline-block;background:#c8f16d;color:#173d2d;padding:13px 19px;border-radius:8px;text-decoration:none;font-weight:bold">15 € mit PayPal bezahlen</a></p><p style="font-size:12px;color:#5c705e">Empfänger: paypal@tennis-schiri.de · Zahlung wird manuell geprüft.</p>';
+ if($cancelUrl!==''&&$kind!=='cancelled')$actions.='<p style="margin:20px 0 4px;border-top:1px solid #dbe7d5;padding-top:20px;font-size:13px"><a href="'.$esc($cancelUrl).'" style="color:#276744;font-weight:bold">Vom Regelworkshop abmelden</a><br><span style="color:#657b69">Die Abmeldung wird erst nach deiner Bestätigung auf der Website wirksam.</span></p>';
+ $html='<!doctype html><html lang="de"><meta charset="utf-8"><body style="margin:0;background:#eef3e8;padding:28px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#fff;border-radius:16px;overflow:hidden"><tr><td style="background:#143b2c;padding:27px 34px"><img src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3" width="240" alt="Tennis-Schiri" style="display:block;max-width:100%;height:auto"></td></tr><tr><td style="height:5px;background:#c8f16d"></td></tr><tr><td style="padding:34px">'.$paragraphs.$actions.'<p style="margin:26px 0 0;font:12px/1.6 Arial,Helvetica,sans-serif;color:#738579">Tennis-Schiri · Regelworkshop · <a href="https://tennis-schiri.de/leistungen/#'.$esc($workshop['id']).'" style="color:#2a6844">Workshopseite</a></p></td></tr></table></td></tr></table></body></html>';
  return [$subject,$text,$html];
 }
 
@@ -133,6 +163,13 @@ function workshopAdminNotification(array $workshop,array $registration): array {
  return [$subject,$text,$html];
 }
 
+/** @return array{0:string,1:string,2:string} */
+function workshopAdminCancellationNotification(array $workshop,array $registration): array {
+ $subject='❌ Workshop-Abmeldung: '.$workshop['title'];
+ $text="Workshop-Abmeldung\n\nName: ".($registration['name']??'')."\nE-Mail: ".($registration['email']??'')."\nTermin: ".$workshop['date']." · ".$workshop['time']."\nBezahlstatus: ".workshopPaymentStatusLabel((string)($registration['payment_status']??''))."\n\nBackend: https://tennis-schiri.de/admin/?view=workshops";
+ $esc=static fn(mixed $v):string=>htmlspecialchars((string)$v,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
+ return [$subject,$text,'<!doctype html><html lang="de"><meta charset="utf-8"><body style="font:15px/1.7 Arial,sans-serif;color:#193d2d"><h2>'.$esc($subject).'</h2><p>'.nl2br($esc($text),false).'</p></body></html>'];
+}
 function workshopSendMail(string $to,string $subject,string $text,string $html): bool {
  if(!workshopSafeEmail($to)||$subject===''||strlen($subject)>240||preg_match('/[\r\n]/',$subject))return false;
  $boundary='ws_'.bin2hex(random_bytes(14));
