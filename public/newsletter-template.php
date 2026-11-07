@@ -7,7 +7,7 @@ if (!defined('TS_NEWSLETTER_TEMPLATE')) { http_response_code(404); exit; }
  * Tabellenbasiertes, responsives HTML für gängige E-Mail-Clients.
  * Alle redaktionellen Inhalte werden als Text escaped. Keine Trackingpixel oder externen Assets.
  */
-function newsletterTemplate(array $campaign, string $unsubscribeUrl): string {
+function newsletterTemplate(array $campaign, string $unsubscribeUrl, bool $isPreview=false): string {
     $esc=static fn(mixed $s): string => htmlspecialchars((string)$s,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
     $subjects=['turniere'=>'TURNIERE & FREIE PLÄTZE','regeln'=>'REGELWISSEN & TIPPS','workshops'=>'WORKSHOPS & VERANSTALTUNGEN'];
     $category=$esc($subjects[(string)($campaign['topic']??'')]??'TENNIS-SCHIRI NEWSLETTER');
@@ -35,6 +35,26 @@ function newsletterTemplate(array $campaign, string $unsubscribeUrl): string {
         </td></tr></table>
 HTML;
     }
+    $eventTitle=trim((string)($campaign['event_title']??''));
+    $eventDate=trim((string)($campaign['event_date']??''));
+    $eventPlace=trim((string)($campaign['event_location']??''));
+    $event='';
+    if ($eventTitle!=='') {
+        $name=$esc($eventTitle);
+        $date=$eventDate!==''?'<p style="margin:9px 0 2px;color:#305c43;font-size:13px;font-weight:700;">&#128197; '.$esc($eventDate).'</p>':'';
+        $place=$eventPlace!==''?'<p style="margin:4px 0 0;color:#5f7868;font-size:13px;">&#9679; '.$esc($eventPlace).'</p>':'';
+        $event=<<<HTML
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f1f7e9;border:1px solid #d9e8c9;border-radius:12px;margin:4px 0 27px">
+          <tr><td style="padding:24px 25px;">
+            <p style="margin:0 0 9px;font-size:10px;letter-spacing:1.7px;font-weight:800;color:#577f45;">IM FOKUS</p>
+            <p style="margin:0;color:#17402c;font-size:23px;line-height:1.25;font-weight:800;">$name</p>
+            $date
+            $place
+          </td></tr>
+        </table>
+HTML;
+    }
+    $previewBanner=$isPreview?'<tr><td style="background:#f9e5ac;color:#513d19;text-align:center;font-size:12px;font-weight:bold;padding:12px 20px;font-family:Arial,Helvetica,sans-serif">TEST / VORSCHAU – noch nicht an Abonnenten verschickt</td></tr>':'';
     $unsub=$esc($unsubscribeUrl);
     return <<<HTML
 <!DOCTYPE html>
@@ -65,11 +85,13 @@ HTML;
    </tr></table>
   </td></tr>
   <tr><td height="5" bgcolor="#c2ee7b" style="font-size:1px;line-height:1px;background:#c2ee7b;height:5px;">&nbsp;</td></tr>
+  $previewBanner
   <tr><td class="padded" style="padding:43px 43px 34px;">
    <p style="color:#45845c;font-size:11px;font-weight:700;letter-spacing:2px;line-height:1.4;margin:0 0 15px;">$category</p>
    <h1 class="headline" style="font-family:Arial,Helvetica,sans-serif;font-size:43px;line-height:1.08;letter-spacing:-1.7px;color:#163b2b;margin:0 0 24px;font-weight:800;">$heading</h1>
    <div style="height:1px;background:#dfebd7;margin:0 0 30px"></div>
    $paragraphs
+   $event
    $cta
   </td></tr>
   <tr><td class="padded" style="background:#f5f9f0;padding:25px 43px;border-top:1px solid #e3eddb">
@@ -100,6 +122,14 @@ function newsletterPlainText(array $campaign,string $unsubscribeUrl): string {
     $title=trim((string)($campaign['headline']??'')) ?: trim((string)($campaign['subject']??''));
     $body=trim((string)($campaign['body']??''));
     $text="TENNIS-SCHIRI NEWSLETTER\n\n".$title."\n\n".$body;
+    $eventTitle=trim((string)($campaign['event_title']??''));
+    if($eventTitle!==''){
+        $text.="\n\nIM FOKUS: ".$eventTitle;
+        foreach (['event_date'=>'Termin','event_location'=>'Ort'] as $field=>$label){
+            $value=trim((string)($campaign[$field]??''));
+            if($value!=='')$text.="\n".$label.": ".$value;
+        }
+    }
     $buttonText=trim((string)($campaign['button_label']??''));
     $buttonUrl=trim((string)($campaign['button_url']??''));
     if($buttonText!=='' && preg_match('~^https://[a-z0-9.-]+(?::443)?(?:[/?#][^\s<>"\x00-\x1f]*)?$~iD',$buttonUrl)){
