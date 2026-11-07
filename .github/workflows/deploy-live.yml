@@ -151,6 +151,8 @@ jobs:
           python tests/rules-library-test.py
           node --check public/assets/rules-reference.js
           node tests/rules-reference-test.mjs
+          node --check public/assets/lk-guide.js
+          python tests/lk-guide-test.py
           php -l public/turnierinfos.php
           php -l public/workshop-lib.php
           php -l public/workshop.php
