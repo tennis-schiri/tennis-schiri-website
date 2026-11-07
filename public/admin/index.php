@@ -100,10 +100,8 @@ if($method==='POST'){
   $venueId=boPost('venue_id',80);
   if($venueId==='auto')$venueId=boVenueBestGuess($t);
   if(!isset($venues[$venueId]))boError('Bitte eine gültige Standortvorlage wählen.');
-  $defaults=boKnownCampaignDefaults($venueId,(string)$venues[$venueId]['data'],$type);
-  $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,notes,venue_id,venue_data,guide_data,info_sections,info_arrival,info_contact,defaults_review_required,defaults_reviewed_at,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
-  $q->execute([$t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],'',$venueId,$defaults['venue_data'],$defaults['guide_data'],$defaults['info_sections'],$defaults['info_arrival']??'',$defaults['info_contact']??'',1,null,$now,$now]);
-  boGo('campaign',(int)$db->lastInsertId(),'Entwurf mit bekannten Vorschlägen angelegt. Bitte alle übernommenen Infos prüfen und im Entwurf bestätigen.');
+  $newId=boCreateKnownCampaign($db,$t,$template,$type,$venueId,(string)$venues[$venueId]['data'],$now);
+  boGo('campaign',$newId,'Entwurf mit bekannten Vorschlägen angelegt. Bitte alle übernommenen Infos prüfen und im Entwurf bestätigen.');
  }
  $campaignId=filter_var($_POST['campaign_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
  $campaign=$campaignId>0?boCampaign($db,$campaignId):null;
