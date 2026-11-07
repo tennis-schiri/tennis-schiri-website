@@ -137,7 +137,6 @@
    $('event-name').textContent=title;
    $('event-subtitle').textContent=aria+' · '+venue;
    $('event-type').textContent=workshop?'REGELWORKSHOP · EVENT':'TURNIER · TERMINE';
-   $('event-title').textContent=title;
    $('event-date').textContent=aria+(time?' · Beginn '+time+' Uhr':'');
    for(const item of meta)$('event-chips').appendChild(newEl('span',item));
    row('Termin',aria);
@@ -152,8 +151,7 @@
    if(img){
     const image=document.createElement('img');image.src=img.src;image.alt=img.alt;image.loading='lazy';
     $('event-logo').replaceChildren(image);
-   }else{
-    $('event-logo-caption').textContent='Logo derzeit nicht verfügbar';
+    $('event-logo').hidden=false;
    }
    const registration=card.querySelector('.tournament-cta');
    if(registration){
