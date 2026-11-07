@@ -230,7 +230,7 @@ if($view==='contacts'){
 if($view==='templates'){
  $html='<section class="panel"><h2>Vorlagen für organisatorische Turniermails</h2><p>Die Texte dienen als Ausgangspunkt. Betreff und Nachricht kannst du in jedem Entwurf individuell bearbeiten. Platzhalter werden beim Versand mit dem Turnier und dem jeweiligen Teilnehmer ausgefüllt.</p><p><code>{{name}}</code> · <code>{{turnier}}</code> · <code>{{datum}}</code> · <code>{{ort}}</code> · <code>{{turnier_link}}</code> · <code>{{zusatz}}</code></p></section><div class="grid">';
  foreach($templates as $type=>$t){
-  $html.='<div class="tile"><h3>'.$e($t['label']).'</h3><p><strong>Betreff:</strong> '.$e($t['subject']).'</p><p class="help">'.nl2br($e(substr($t['body'],0,245))).'…</p><a href="'.boUrl('compose').'">Mit dieser Vorlage starten ↗</a></div>';
+  $html.='<div class="tile"><h3>'.$e($t['label']).'</h3><p><strong>Betreff:</strong> '.$e($t['subject']).'</p><p class="help">'.nl2br($e(substr($t['body'],0,245))).'…</p><a href="'.boUrl('compose').'&amp;template='.$e($type).'">Mit dieser Vorlage starten ↗</a></div>';
  }
  $html.='</div><p class="help">Die Vorlagen enthalten bewusst keine Werbung. Newsletter und Turnierorganisation bleiben rechtlich und technisch getrennt.</p>';
  boPage('E-Mail-Vorlagen',$html);
