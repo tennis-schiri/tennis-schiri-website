@@ -7,6 +7,7 @@ require_once __DIR__.'/info-sections.php';
 require_once __DIR__.'/venues.php';
 require_once __DIR__.'/guide.php';
 require_once __DIR__.'/defaults.php';
+require_once __DIR__.'/weather-mail.php';
 
 function boEsc(mixed $value): string {
  return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -96,6 +97,7 @@ function boSchema(PDO $db): void {
   'guide_data'=>"TEXT NOT NULL DEFAULT '{}'",
   'defaults_review_required'=>'INTEGER NOT NULL DEFAULT 0',
   'defaults_reviewed_at'=>'INTEGER',
+  'weather_enabled'=>'INTEGER NOT NULL DEFAULT 1',
  ] as $column=>$definition){
   if(!in_array($column,$campaignColumns,true))$db->exec('ALTER TABLE bo_campaigns ADD COLUMN '.$column.' '.$definition);
  }
@@ -211,11 +213,11 @@ function boTournamentSelect(array $tournaments,string $selected=''): string {
 }
 function boTemplates(): array {
  return [
-  'info'=>['label'=>'Ausführlicher Turnier-Guide nach Auslosung','subject'=>'Alle Informationen: {{turnier}}',
+  'info'=>['label'=>'Ausführlicher Turnier-Guide nach Auslosung','subject'=>'🎾 Alle Informationen: {{turnier}}',
    'body'=>"Hallo {{name}},\n\nwir freuen uns, dich bei {{turnier}} begrüßen zu dürfen. Im Folgenden findest du die wichtigsten Informationen rund um deine Teilnahme.\n\n{{zusatz}}\n\nSportliche Grüße\nMichael"],
-  'reminder'=>['label'=>'Kurze Erinnerung vor dem Turnier','subject'=>'Erinnerung: {{turnier}}',
+  'reminder'=>['label'=>'Kurze Erinnerung vor dem Turnier','subject'=>'⏰ Erinnerung: {{turnier}}',
    'body'=>"Hallo {{name}},\n\nbald ist es soweit: {{turnier}} steht bevor. Bitte prüfe vor deiner Anreise die aktuellen Turnierinformationen und deine Spielansetzung.\n\n{{zusatz}}\n\nBis bald auf dem Tennisplatz!\nMichael"],
-  'update'=>['label'=>'Wichtige organisatorische Änderung','subject'=>'Wichtige Änderung: {{turnier}}',
+  'update'=>['label'=>'Wichtige organisatorische Änderung','subject'=>'📣 Wichtige Änderung: {{turnier}}',
    'body'=>"Hallo {{name}},\n\nes gibt eine wichtige organisatorische Information zu {{turnier}}. Bitte beachte die nachfolgenden Hinweise.\n\n{{zusatz}}\n\nSportliche Grüße\nMichael"],
  ];
 }
@@ -246,9 +248,10 @@ function boMailContent(array $campaign,array $contact,bool $preview=false): arra
  [$infoHtml,$infoPlain]=boInfoMailBlocks($campaign);
  [$venueHtml,$venuePlain]=boVenueMailBlocks($campaign,$preview);
  [$guideHtml,$guidePlain]=boGuideMailBlocks($campaign);
+ [$weatherHtml,$weatherPlain]=boWeatherMailBlocks($campaign);
  $warning=$preview?'<tr><td bgcolor="#fff0ce" style="padding:12px 18px;text-align:center;font-weight:bold;color:#5f4822">TEST / VORSCHAU – kein Versand an Teilnehmer</td></tr>':'';
- $html='<!doctype html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.$esc($subject).'</title></head><body style="margin:0;background:#f0f4ec;font-family:Arial,Helvetica,sans-serif;color:#183d2c"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f0f4ec;padding:28px 10px"><tr><td align="center"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:100%;max-width:600px;background:#fff;border-radius:15px"><tr><td bgcolor="#15392b" style="background:#15392b;padding:24px 30px"><img src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri" width="240" style="display:block;width:240px;height:auto;max-width:100%;border:0;"></td></tr><tr><td bgcolor="#c8ef79" height="5" style="background:#c8ef79;font-size:1px;line-height:5px">&nbsp;</td></tr>'.$warning.'<tr><td style="padding:35px 32px 25px"><p style="margin:0 0 12px;font-size:11px;font-weight:800;letter-spacing:1.3px;color:#4b8a5e;">TURNIERINFORMATION</p><h1 style="margin:0 0 24px;color:#173b29;font-size:30px;line-height:1.15;">'.$esc($campaign['tournament_name']).'</h1><table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background:#f1f7e8;border:1px solid #daebd1;margin:0 0 25px"><tr><td style="padding:15px;vertical-align:top"><p style="font-size:10px;letter-spacing:1px;font-weight:800;color:#4c8258;margin:0 0 5px">TERMIN</p><p style="margin:0;font-size:15px;font-weight:800;color:#1c4830">'.$esc($campaign['tournament_date']).'</p></td><td style="padding:15px;vertical-align:top"><p style="font-size:10px;letter-spacing:1px;font-weight:800;color:#4c8258;margin:0 0 5px">SPIELORT</p><p style="margin:0;font-size:15px;font-weight:800;color:#1c4830">'.$esc($campaign['tournament_location']).'</p></td></tr></table>'.$htmlBody.$venueHtml.$guideHtml.$infoHtml.$button.'</td></tr><tr><td style="padding:23px 31px;background:#f5f9f0;border-top:1px solid #dfe8d9"><p style="margin:0;color:#5d735f;font-size:12px;line-height:1.8">Organisatorische Nachricht zu deiner Turnierteilnahme – kein Werbe-Newsletter.<br>Tennis-Schiri · Michael Wiedeck · Neuenhagen bei Berlin<br>Antworten: <a style="color:#2c6c44" href="mailto:turniere@tennis-schiri.de">turniere@tennis-schiri.de</a><br><a style="color:#2c6c44" href="https://tennis-schiri.de/impressum/">Impressum</a> · <a style="color:#2c6c44" href="https://tennis-schiri.de/datenschutz/">Datenschutz</a></p></td></tr></table></td></tr></table></body></html>';
- $text=$subject."\n\n".$body.$venuePlain.$guidePlain.$infoPlain."\n\n---\nOrganisatorische Nachricht zu deiner Turnierteilnahme – kein Werbe-Newsletter.\nTennis-Schiri · turniere@tennis-schiri.de\nImpressum: https://tennis-schiri.de/impressum/\nDatenschutz: https://tennis-schiri.de/datenschutz/\n";
+ $html='<!doctype html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.$esc($subject).'</title></head><body style="margin:0;background:#f0f4ec;font-family:Arial,Helvetica,sans-serif;color:#183d2c"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f0f4ec;padding:28px 10px"><tr><td align="center"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:100%;max-width:600px;background:#fff;border-radius:15px"><tr><td bgcolor="#15392b" style="background:#15392b;padding:24px 30px"><img src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri" width="240" style="display:block;width:240px;height:auto;max-width:100%;border:0;"></td></tr><tr><td bgcolor="#c8ef79" height="5" style="background:#c8ef79;font-size:1px;line-height:5px">&nbsp;</td></tr>'.$warning.'<tr><td style="padding:35px 32px 25px"><p style="margin:0 0 12px;font-size:11px;font-weight:800;letter-spacing:1.3px;color:#4b8a5e;">TURNIERINFORMATION</p><h1 style="margin:0 0 24px;color:#173b29;font-size:30px;line-height:1.15;">'.$esc($campaign['tournament_name']).'</h1><table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background:#f1f7e8;border:1px solid #daebd1;margin:0 0 25px"><tr><td style="padding:15px;vertical-align:top"><p style="font-size:10px;letter-spacing:1px;font-weight:800;color:#4c8258;margin:0 0 5px">TERMIN</p><p style="margin:0;font-size:15px;font-weight:800;color:#1c4830">'.$esc($campaign['tournament_date']).'</p></td><td style="padding:15px;vertical-align:top"><p style="font-size:10px;letter-spacing:1px;font-weight:800;color:#4c8258;margin:0 0 5px">SPIELORT</p><p style="margin:0;font-size:15px;font-weight:800;color:#1c4830">'.$esc($campaign['tournament_location']).'</p></td></tr></table>'.$htmlBody.$venueHtml.$guideHtml.$infoHtml.$weatherHtml.$button.'</td></tr><tr><td style="padding:23px 31px;background:#f5f9f0;border-top:1px solid #dfe8d9"><p style="margin:0;color:#5d735f;font-size:12px;line-height:1.8">Organisatorische Nachricht zu deiner Turnierteilnahme – kein Werbe-Newsletter.<br>Tennis-Schiri · Michael Wiedeck · Neuenhagen bei Berlin<br>Antworten: <a style="color:#2c6c44" href="mailto:turniere@tennis-schiri.de">turniere@tennis-schiri.de</a><br><a style="color:#2c6c44" href="https://tennis-schiri.de/impressum/">Impressum</a> · <a style="color:#2c6c44" href="https://tennis-schiri.de/datenschutz/">Datenschutz</a></p></td></tr></table></td></tr></table></body></html>';
+ $text=$subject."\n\n".$body.$venuePlain.$guidePlain.$infoPlain.$weatherPlain."\n\n---\nOrganisatorische Nachricht zu deiner Turnierteilnahme – kein Werbe-Newsletter.\nTennis-Schiri · turniere@tennis-schiri.de\nImpressum: https://tennis-schiri.de/impressum/\nDatenschutz: https://tennis-schiri.de/datenschutz/\n";
  return [$subject,$text,$html];
 }
 function boSafeEmail(string $email): bool {
