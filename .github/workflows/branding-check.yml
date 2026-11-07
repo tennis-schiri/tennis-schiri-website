@@ -10,6 +10,9 @@ on:
       - 'public/regelwissen/index.html'
       - 'public/assets/rules-library.css'
       - 'public/assets/rules-library.js'
+      - 'public/assets/rules-reference.js'
+      - 'public/assets/rules-reference.css'
+      - 'tests/rules-reference-test.mjs'
       - 'tests/rules-library-test.py'
       - 'public/**/index.html'
       - 'public/index.html'
@@ -42,3 +45,5 @@ jobs:
         run: |
           node --check public/assets/rules-library.js
           python tests/rules-library-test.py
+          node --check public/assets/rules-reference.js
+          node tests/rules-reference-test.mjs
