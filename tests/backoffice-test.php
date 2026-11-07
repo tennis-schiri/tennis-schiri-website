@@ -197,4 +197,30 @@ boAssert($merged['info_arrival']==='Meine schon gespeicherte Meldezeit','Existin
 boAssert(str_contains($merged['venue_data'],'Laykold'),'Existing draft not enriched with known suggestions');
 boAssert(empty($merged['defaults_reviewed_at']),'Imported suggestions must reset review');
 
+
+/* Public summary is an opt-in, privacy-preserving snapshot after a real mail attempt. */
+$publicCandidate=boCampaign($db,(int)$row['id']);
+$publicCandidate['notes']='INTERNE GEHEIME NOTIZ 4711';
+$publicCandidate['body']='Hallo {{name}}, PRIVATE ANREDE 4711';
+$publicCandidate['info_contact']='Kontakt: private@example.com';
+$payload=boPublicInfoPayload($publicCandidate);
+$serialized=json_encode($payload,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
+boAssert(!str_contains($serialized,'PRIVATE ANREDE 4711'),'Personalized mail body leaks into public summary');
+boAssert(!str_contains($serialized,'GEHEIME NOTIZ'),'Internal notes leak into public summary');
+boAssert(!str_contains($serialized,'private@example.com'),'Organizer contact leaks into public summary');
+boAssert(!str_contains($serialized,'max@example.com'),'Recipient leaks into public summary');
+try{
+ boPublicInfoPublish($db,$publicCandidate);
+ boAssert(false,'Draft was published before sending');
+}catch(RuntimeException $expected){}
+$db->prepare("UPDATE bo_campaigns SET state='done' WHERE id=?")->execute([$row['id']]);
+try{
+ boPublicInfoPublish($db,boCampaign($db,(int)$row['id']));
+ boAssert(false,'Unsent campaign was published');
+}catch(RuntimeException $expected){}
+$db->prepare("UPDATE bo_deliveries SET state='sent' WHERE campaign_id=?")->execute([$row['id']]);
+boPublicInfoPublish($db,boCampaign($db,(int)$row['id']));
+$publicRow=$db->query('SELECT * FROM bo_public_infos LIMIT 1')->fetch();
+boAssert(is_array($publicRow) && $publicRow['tournament_id']==='turnier1','Public summary not stored');
+boAssert(!str_contains($publicRow['payload'],'max@example.com'),'Recipient present in public database');
 fwrite(STDOUT,"Tennis-Schiri Backoffice: SQLite, Templates, escape, mail preview, tracking safety and separate contacts verified.\n");
