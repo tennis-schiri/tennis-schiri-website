@@ -7,7 +7,7 @@ header('Cache-Control: no-store');
 header('Content-Security-Policy: default-src \'none\'; style-src \'unsafe-inline\'; form-action \'self\'; base-uri \'none\'; frame-ancestors \'none\'');
 function page(string $title,string $body,int $code=200): never {
  http_response_code($code);header('Content-Type: text/html; charset=UTF-8');
- echo '<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.htmlspecialchars($title,ENT_QUOTES). ' | Tennis-Schiri</title><style>body{font:16px/1.65 system-ui;background:#f6f8f4;color:#092b36;margin:0}.wrap{max-width:620px;margin:9vh auto;padding:36px;background:white;border-radius:18px}a{color:#087a82}button{background:#092b36;color:white;border:0;padding:12px 20px;border-radius:8px;cursor:pointer}</style><main class="wrap"><h1>'.htmlspecialchars($title,ENT_QUOTES).'</h1>'.$body.'<p><a href="/">Zur Tennis-Schiri-Startseite</a></p></main></html>';exit;
+ echo '<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'.htmlspecialchars($title,ENT_QUOTES). ' | Tennis-Schiri</title><style>body{font:16px/1.65 system-ui;background:#eff4e8;color:#173d2d;margin:0}.wrap{max-width:620px;margin:9vh auto;padding:36px;background:white;border-radius:18px}a{color:#2a6844}button{background:#173d2d;color:white;border:0;padding:12px 20px;border-radius:8px;cursor:pointer}</style><main class="wrap"><h1>'.htmlspecialchars($title,ENT_QUOTES).'</h1>'.$body.'<p><a href="/">Zur Tennis-Schiri-Startseite</a></p></main></html>';exit;
 }
 function config(): array {
  $path=dirname(__DIR__).'/tennis-schiri-newsletter-config.php';
@@ -59,7 +59,7 @@ if($action==='join' && $method==='POST'){
  $q=$db->prepare('INSERT INTO subscribers(email,role,interests,consent_version,created_at,confirmed_at,confirm_hash,unsubscribe_hash,expires_at) VALUES(?,?,?,?,?,NULL,?,?,?) ON CONFLICT(email) DO UPDATE SET role=excluded.role,interests=excluded.interests,consent_version=excluded.consent_version,created_at=excluded.created_at,confirm_hash=excluded.confirm_hash,unsubscribe_hash=excluded.unsubscribe_hash,expires_at=excluded.expires_at');
  $q->execute([$email,$role,json_encode($interest,JSON_THROW_ON_ERROR), 'ts-newsletter-2026-11', $now,hashed($confirm),hashed($unsubscribe),$now+14*86400]);
  $link='https://tennis-schiri.de/newsletter.php?action=confirm&token='.$confirm;
- $body="Bitte bestätige deine Anmeldung zur Tennis-Schiri Newsletter:\n\n".$link."\n\nFalls du dich nicht angemeldet hast, ignoriere diese Nachricht. Der Link verfällt nach 14 Tagen.\nKontakt: mw@tennis-schiri.de";
+ $body="Bitte bestätige deine Anmeldung zum Tennis-Schiri-Newsletter:\n\n".$link."\n\nFalls du dich nicht angemeldet hast, ignoriere diese Nachricht. Der Link verfällt nach 14 Tagen.\nKontakt: mw@tennis-schiri.de";
  if(!mailLink($cfg,$email,'Tennis-Schiri Newsletter: Anmeldung bestaetigen',$body)){error_log('Tennis-Schiri Newsletter: mail() failed');page('Versand derzeit nicht möglich','<p>Die Bestätigungsmail konnte nicht versendet werden. Bitte versuche es später erneut.</p>',503);}
  page('Bitte E-Mail bestätigen','<p>Wir haben dir einen Bestätigungslink geschickt. Schau bei Bedarf auch in den Spamordner.</p>');
 }
@@ -68,11 +68,11 @@ if($action==='confirm' && $method==='GET'){
  $q=$db->prepare('SELECT id,email,unsubscribe_hash FROM subscribers WHERE confirm_hash=? AND confirmed_at IS NULL AND expires_at>=?');$q->execute([hashed($t),$now]);$r=$q->fetch();
  if(!$r)page('Link abgelaufen','<p>Dieser Link ist ungültig oder bereits verwendet.</p>',400);
  $db->prepare('UPDATE subscribers SET confirmed_at=?,confirm_hash=NULL,expires_at=? WHERE id=?')->execute([$now,2147483647,$r['id']]);
- $notification="Neue bestätigte Anmeldung auf der Tennis-Schiri Newsletter.\n\nE-Mail: ".$r['email']."\n\nÖffne die Newsletter-Verwaltung: https://tennis-schiri.de/newsletter-admin.php\n\nDiese Benachrichtigung wird erst nach erfolgreichem Double-Opt-in versendet.";
+ $notification="Neue bestätigte Anmeldung zum Tennis-Schiri-Newsletter.\n\nE-Mail: ".$r['email']."\n\nÖffne die Newsletter-Verwaltung: https://tennis-schiri.de/newsletter-admin.php\n\nDiese Benachrichtigung wird erst nach erfolgreichem Double-Opt-in versendet.";
  if(!mailLink($cfg,'mw@tennis-schiri.de','Tennis-Schiri Newsletter: Neue bestaetigte Anmeldung',$notification)) {
   error_log('Tennis-Schiri Newsletter: admin signup notification not accepted by mail()');
  }
- page('Anmeldung bestätigt','<p>Du stehst jetzt auf der Tennis-Schiri Newsletter. Du erhältst nur Informationen zu den ausgewählten Interessen.</p><p>Du kannst dich jederzeit <a href="/newsletter.php?action=unsubscribe-request">online abmelden</a> oder eine E-Mail an mw@tennis-schiri.de schreiben.</p>');
+ page('Anmeldung bestätigt','<p>Deine Anmeldung zum Tennis-Schiri-Newsletter ist bestätigt. Du erhältst nur Informationen zu deinen ausgewählten Themen.</p><p>Du kannst dich jederzeit <a href="/newsletter.php?action=unsubscribe-request">online abmelden</a> oder eine E-Mail an mw@tennis-schiri.de schreiben.</p>');
 }
 if($action==='unsubscribe-signed' && ($method==='GET'||$method==='POST')){
  $id=filter_var(($method==='POST'?$_POST['id']:$_GET['id'])??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
@@ -83,7 +83,7 @@ if($action==='unsubscribe-signed' && ($method==='GET'||$method==='POST')){
  if(!$subscriber || !hash_equals(hash_hmac('sha256',$id.'|'.$subscriber['email'],$cfg['key']),$sig))
   page('Link ungültig','<p>Der Abmeldelink ist ungültig oder nicht mehr aktuell.</p>',400);
  if($method==='GET'){
-  page('Von der Newsletter abmelden','<p>Du kannst deine Tennis-Schiri Newsletter-Anmeldung hier vollständig löschen.</p><form method="post" action="/newsletter.php"><input type="hidden" name="action" value="unsubscribe-signed"><input type="hidden" name="id" value="'.$id.'"><input type="hidden" name="sig" value="'.htmlspecialchars($sig,ENT_QUOTES).'"><button type="submit">Anmeldung endgültig löschen</button></form>');
+  page('Vom Newsletter abmelden','<p>Du kannst deine Tennis-Schiri Newsletter-Anmeldung hier vollständig löschen.</p><form method="post" action="/newsletter.php"><input type="hidden" name="action" value="unsubscribe-signed"><input type="hidden" name="id" value="'.$id.'"><input type="hidden" name="sig" value="'.htmlspecialchars($sig,ENT_QUOTES).'"><button type="submit">Anmeldung endgültig löschen</button></form>');
  }
  $db->prepare('DELETE FROM subscribers WHERE id=? AND email=?')->execute([$id,$subscriber['email']]);
  page('Abgemeldet','<p>Deine Anmeldung wurde gelöscht. Du erhältst keine weiteren Newsletter-E-Mails.</p>');
@@ -113,11 +113,11 @@ if($action==='unsubscribe' && $method==='GET'){
  $t=(string)($_GET['token']??'');if(!preg_match('/^[a-f0-9]{64}$/',$t))page('Link ungültig','<p>Der Link ist ungültig.</p>',400);
  $q=$db->prepare('SELECT id FROM subscribers WHERE unsubscribe_hash=? AND confirmed_at IS NOT NULL AND expires_at>=?');$q->execute([hashed($t),$now]);
  if(!$q->fetch())page('Link ungültig','<p>Dieser Abmeldelink ist nicht gültig.</p>',400);
- page('Von der Newsletter abmelden','<form method="post" action="/newsletter.php"><input type="hidden" name="action" value="unsubscribe"><input type="hidden" name="token" value="'.htmlspecialchars($t,ENT_QUOTES).'"><p>Möchtest du deine Anmeldung löschen?</p><button type="submit">Jetzt abmelden</button></form>');
+ page('Vom Newsletter abmelden','<form method="post" action="/newsletter.php"><input type="hidden" name="action" value="unsubscribe"><input type="hidden" name="token" value="'.htmlspecialchars($t,ENT_QUOTES).'"><p>Möchtest du deine Anmeldung löschen?</p><button type="submit">Jetzt abmelden</button></form>');
 }
 if($action==='unsubscribe' && $method==='POST'){
  $t=(string)($_POST['token']??'');if(!preg_match('/^[a-f0-9]{64}$/',$t))page('Link ungültig','<p>Der Link ist ungültig.</p>',400);
  $db->prepare('DELETE FROM subscribers WHERE unsubscribe_hash=? AND confirmed_at IS NOT NULL AND expires_at>=?')->execute([hashed($t),$now]);
  page('Abgemeldet','<p>Dein Newsletterneintrag wurde gelöscht.</p>');
 }
-page('Tennis-Schiri Newsletter','<p>Bitte nutze das Anmeldeformular auf unserer Startseite.</p>',404);
+page('Tennis-Schiri Newsletter','<p>Bitte nutze das Anmeldeformular auf der <a href="/newsletter/">Newsletter-Seite</a>.</p>',404);
