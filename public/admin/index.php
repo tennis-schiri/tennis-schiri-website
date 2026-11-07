@@ -24,8 +24,17 @@ if($method==='POST'){
  }
  if($action==='contact_delete'){
   $contactId=filter_var($_POST['contact_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
-  $q=$db->prepare('DELETE FROM bo_contacts WHERE id=? AND tournament_id=?');$q->execute([$contactId,$tournament]);
-  boGoContacts($tournament,'Teilnehmerkontakt entfernt. In bereits freigegebenen Sendungen wird er vor dem Versand erneut geprüft.');
+  $check=$db->prepare('SELECT id FROM bo_contacts WHERE id=? AND tournament_id=?');$check->execute([$contactId,$tournament]);
+  if(!$check->fetch())boError('Teilnehmerkontakt für dieses Turnier nicht gefunden.',404);
+  $db->beginTransaction();
+  try{
+   // Widerruf / Löschung: keine neuen Mails mehr; personenbezogene Kopien in Versandprotokollen anonymisieren.
+   $q=$db->prepare("UPDATE bo_deliveries SET name='',email='',state=CASE WHEN state='pending' THEN 'skipped' ELSE state END WHERE contact_id=?");
+   $q->execute([$contactId]);
+   $q=$db->prepare('DELETE FROM bo_contacts WHERE id=? AND tournament_id=?');$q->execute([$contactId,$tournament]);
+   $db->commit();
+  }catch(Throwable $ex){if($db->inTransaction())$db->rollBack();boError('Teilnehmer konnte nicht entfernt werden.',503);}
+  boGoContacts($tournament,'Teilnehmerkontakt entfernt. Vorhandene Protokolle wurden anonymisiert und offene Sendungen übersprungen.');
  }
  if($action==='contact_import'){
   if(!isset($tournaments[$tournament]))boError('Bitte zuerst ein Turnier auswählen.');
@@ -232,7 +241,7 @@ if($view==='compose'){
  if(!$tournaments)$html.='<p class="warning">Der Terminimport muss zuerst durch den Live-Upload bereitgestellt werden.</p>';
  else{
   $html.='<form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_create"><label>Turnier</label>'.boTournamentSelect($tournaments).'<label>E-Mail-Vorlage</label><select name="template_type">';
-  foreach($templates as $type=>$t)$html.='<option value="'.$e($type).'">'.$e($t['label']).'</option>';
+  foreach($templates as $type=>$t)$html.='<option value="'.$e($type).'"'.(($_GET['template']??'')===$type?' selected':'').'>'.$e($t['label']).'</option>';
   $html.='</select><button type="submit">Entwurf anlegen</button></form>';
  }
  $html.='</section><section class="panel"><h2>Alle Entwürfe und Aussendungen</h2>';
@@ -262,7 +271,7 @@ if($view==='campaign'&&$id){
   $html.='<section class="panel"><h2>Betreff und Text bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea><p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_link}} und {{zusatz}} werden beim Versand individuell ersetzt. {{zusatz}} übernimmt das Feld „Zusätzliche Hinweise“. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
   $html.='<section class="panel"><h2>Vorschau und Testmail</h2><p>Vorschau mit „Alex Beispiel“ als Musterempfänger. Vor jeder Freigabe Änderungen bitte zuerst speichern.</p><div class="row"><a class="button button-secondary" href="'.boUrl('preview',$id).'" target="_blank" rel="noopener">HTML-Vorschau öffnen</a><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_test"><input type="hidden" name="campaign_id" value="'.$id.'"><button type="submit">Testmail an mw@tennis-schiri.de</button></form></div></section>';
   $html.='<section class="panel"><h2>Empfängerliste freigeben</h2><p><strong>'.$total.'</strong> Kontakte für dieses Turnier. Die Freigabe speichert genau diese Empfängerliste. Es werden dabei noch keine E-Mails verschickt.</p>';
-  if($total===0)$html.='<p class="warning">Zuerst Teilnehmer unter <a href="'.boUrl('contacts').'">Teilnehmerverwaltung</a> ergänzen.</p>';
+  if($total===0)$html.='<p class="warning">Zuerst Teilnehmer unter <a href="'.boUrl('contacts').'&amp;tournament='.$e($c['tournament_id']).'">Teilnehmerverwaltung</a> ergänzen.</p>';
   else $html.='<form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_approve"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Zur Freigabe SENDEN eingeben</label><input type="text" name="confirm" maxlength="20" placeholder="SENDEN" autocomplete="off" required><button type="submit">Empfängerliste freigeben</button></form>';
   $html.='</section>';
  }else{
