@@ -116,7 +116,6 @@ function weatherAggregateDwd(array $rows,string $target): ?array {
   'retrieved_at'=>gmdate('Y-m-d\TH:i:s\Z'),
  ];
 }
-}
 if(!defined('TS_WEATHER_LIBRARY')){
  $id=$_GET['id']??'';
  if(!is_string($id)||!preg_match('/^turnier-[a-z0-9-]{4,110}$/D',$id))weatherReply(['available'=>false],400);
