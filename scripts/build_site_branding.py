@@ -6,6 +6,7 @@ All logo images are copied byte-for-byte, without recreating the approved typogr
 """
 import argparse
 import hashlib
+import base64
 import struct
 import sys
 import zipfile
@@ -42,6 +43,18 @@ def export(target:Path) -> None:
                 raise SystemExit(f"Logo hat unerwartete Bildabmessungen: {original}")
             (target/exported).write_bytes(data)
             print(f"{exported}: {width}x{height} · {len(data):,} Bytes · SHA256 {hashlib.sha256(data).hexdigest()[:12]}")
+        # Legacy /favicon.svg should display the same original TS-09c symbol,
+        # never the older hand-drawn icon. Embedded PNG avoids outside resources.
+        icon=archive.read("06_favicon.png")
+        encoded=base64.b64encode(icon).decode("ascii")
+        legacy=ROOT/"public"/"favicon.svg"
+        legacy.write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="155" height="140" viewBox="0 0 155 140" role="img" aria-label="Tennis-Schiri">'
+            '<image href="data:image/png;base64,'+encoded+'" width="155" height="140"/>'
+            '</svg>\n',encoding="utf-8"
+        )
+        print("Legacy favicon.svg auf Original-TS-09c-Grafik aktualisiert")
+
 
 def main():
     p=argparse.ArgumentParser()
