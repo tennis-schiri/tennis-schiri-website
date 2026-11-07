@@ -84,9 +84,10 @@ function boVenueEditor(array $profile):string {
  $out.='<p class="help">Die Bestätigung gilt nur für diese gespeicherte Version. Bei jeder Änderung ist sie erneut erforderlich. Ohne Bestätigung werden diese Angaben im Mail-Layout nicht angezeigt.</p>';
  return $out;
 }
-function boVenueMailBlocks(array $campaign):array {
+function boVenueMailBlocks(array $campaign,bool $preview=false):array {
  $data=boVenueData((string)($campaign['venue_data']??'{}'));
- if(empty($data['_verified_at']))return ['',''];
+ $unverified=empty($data['_verified_at']);
+ if($unverified&&!$preview)return ['',''];
  $html='';$text='';
  $labels=boVenueDefinitions();
  foreach($data as $key=>$value){
@@ -100,8 +101,9 @@ function boVenueMailBlocks(array $campaign):array {
   $text.="\n".$label.": ".$value;
  }
  if($html==='')return ['',''];
+ $flag=$unverified?'<tr><td style="padding:10px 16px;background:#fff1d5;font-size:12px;font-weight:800;color:#86521c">NOCH NICHT GEPRÜFTE STANDORTVORSCHLÄGE – NUR TEST/VORSCHAU</td></tr>':'';
  return [
- '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f4f8ef;margin:25px 0;border:1px solid #d9e8d1"><tr><td style="padding:18px 18px 8px;font-size:11px;letter-spacing:1.4px;font-weight:800;color:#336747">ANREISE & ANLAGE</td></tr>'.$html.'</table>',
- "\n\nANREISE & ANLAGE".$text."\n"
+ '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f4f8ef;margin:25px 0;border:1px solid #d9e8d1"><tr><td style="padding:18px 18px 8px;font-size:11px;letter-spacing:1.4px;font-weight:800;color:#336747">ANREISE & ANLAGE</td></tr>'.$flag.$html.'</table>',
+ "\n\nANREISE & ANLAGE".($unverified?" (UNGEPRÜFTE VORSCHLÄGE – NUR VORSCHAU)":"").$text."\n"
  ];
 }
