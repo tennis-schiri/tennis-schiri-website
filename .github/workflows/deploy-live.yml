@@ -113,9 +113,16 @@ jobs:
           php -l public/newsletter-setup.php
           php -l public/newsletter-admin.php
           php -l public/newsletter-mail.php
+          # Katalog vor jedem Upload frisch aus den Turnier-/Workshopseiten erzeugen.
+          python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
+          cp public/data/newsletter-events.json _live_upload/data/newsletter-events.json
+          test -s _live_upload/data/newsletter-events.json
+          php -l public/newsletter-events.php
+          php -l tests/newsletter-events-test.php
           php -l public/newsletter-template.php
           php -l tests/newsletter-template-test.php
           php tests/newsletter-template-test.php
+          php tests/newsletter-events-test.php
           test -s public/newsletter/index.html
           # Private Konfiguration und personenbezogene Datensaetze gehoeren nicht ins Repository.
           test ! -e public/tennis-schiri-newsletter-config.php
