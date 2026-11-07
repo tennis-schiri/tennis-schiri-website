@@ -51,11 +51,41 @@
         "Bezeichnung Laykold auf Hartplätzen"
       ],
       "logo": {
-        "status": "official_source_found_asset_not_imported",
+        "status": "multiple_archive_candidates_found_choice_pending",
         "source_page": "https://www.sunballtennisbsa.de/",
         "source_image_url": "https://storage.e.jimdo.com/cdn-cgi/image/quality%3D85%2Cfit%3Dscale-down%2Cformat%3Dauto%2Ctrim%3D0%3B0%3B0%3B0%2Cwidth%3D2560%2Cheight%3D634/image/447483050/bb28899d-74df-498b-a28e-6e7f972a94af.png",
         "alternative_logo_source": "https://www.precisehotels.com/en/bad-saarow/tennis",
-        "note": "Website-Betreiberlogo 'Sunball Tenniscenter Bad Saarow'; alternativ zeigt Precise ein anderes Tennis Center Bad Saarow-Schildlogo. Für offizielle Nutzung die gewünschte Variante bestätigen."
+        "note": "Website-Betreiberlogo 'Sunball Tenniscenter Bad Saarow'; alternativ zeigt Precise ein anderes Tennis Center Bad Saarow-Schildlogo. Für offizielle Nutzung die gewünschte Variante bestätigen.",
+        "archive_candidates": [
+          {
+            "label": "Sunball Tennis Bad Saarow – Schriftlogo mit Ortsnamen",
+            "drive_file_id": "1Ywviij3yuDrIueuhDazC0upegDHHrJ42",
+            "file_name": "Screenshot-2024-04-25-at-12-34-48-Home-Sunball-Tenniscenter-Bad-Saarow.png",
+            "kind": "website-screenshot",
+            "checked_visually": true
+          },
+          {
+            "label": "Sunball Tennis – Schriftlogo ohne Ortsnamen",
+            "drive_file_id": "1ixkWYk4v6AgnSqljMdFC39YrE5Dcx3I0",
+            "file_name": "Sunball-Tennis-2019.jpg",
+            "kind": "raster-logo",
+            "checked_visually": true
+          },
+          {
+            "label": "Tennis Center Bad Saarow – Wappen",
+            "drive_file_id": "1RpcvYBcghDEUHoWLO7oBe6h5Ac0Dy4cy",
+            "file_name": "Tennis_Logo_Gray.jpg",
+            "kind": "raster-logo",
+            "checked_visually": true
+          },
+          {
+            "label": "Precise Resort – separates Resort-Logo, nicht identisch mit Tenniscenter",
+            "drive_file_id": "1ORW9qhzf6hwWyB8r-TSE95OYQp-sAquo",
+            "file_name": "Logo_Precise-Resort-Bad-Saarow-am-Scharmuetzelsee-JPG-002.jpg",
+            "kind": "resort_logo",
+            "checked_visually": false
+          }
+        ]
       }
     },
     {
@@ -103,11 +133,27 @@
         "Schuhfreigabe Halle"
       ],
       "logo": {
-        "status": "official_source_found_asset_not_imported",
+        "status": "embedded_archive_logo_found_original_still_missing",
         "source_page": "https://ntc93.com/",
         "source_document": "https://ntc93.com/wp-content/uploads/2025/04/Werbeangebote_NTC_25.pdf",
         "source_image_url": null,
-        "note": "Rundes Vereinslogo 'Neuenhagener Tennisclub 93 e.V.' im offiziellen Werbe-PDF gefunden. Original-Bilddatei bzw. freigegebene SVG/PNG noch beschaffen, PDF nicht als Mail-Logo verwenden."
+        "note": "Rundes Vereinslogo 'Neuenhagener Tennisclub 93 e.V.' im offiziellen Werbe-PDF gefunden. Original-Bilddatei bzw. freigegebene SVG/PNG noch beschaffen, PDF nicht als Mail-Logo verwenden.",
+        "archive_candidates": [
+          {
+            "label": "NTC93-Vereinswappen sichtbar auf Turnierausschreibung, nicht als Einzelgrafik",
+            "drive_file_id": "1-D7iH5IG7yCdBhfr9zz6LY2_gZVfu4pz",
+            "file_name": "NTC-LK-Turniere_2024-pdf.jpg",
+            "kind": "embedded_in_poster",
+            "checked_visually": true
+          },
+          {
+            "label": "NTC93-Vereinswappen sichtbar auf Sommertunier-Ausschreibung",
+            "drive_file_id": "11xb8bK15nF5P2SBT7-EdqH-m6hSNUiZN",
+            "file_name": "NTC-SUMMER-LK-Turniere_2024-pdf.jpg",
+            "kind": "embedded_in_poster",
+            "checked_visually": true
+          }
+        ]
       }
     }
   ],
@@ -118,5 +164,10 @@
     "Do not store access codes in GitHub or standard participant mail templates.",
     "No automatic production DB writes; admin integration and review required.",
     "Store venue logo in full-size original plus email-friendly PNG and optional square variant, with attribution/source, usage approval, alt text and review status; keep logos optional in published output."
-  ]
+  ],
+  "asset_archive": {
+    "folder_url": "https://drive.google.com/drive/folders/1qb2t4FA0OltLxgQqpdosn1t5s8EnwGEp",
+    "nested_folder": "download 2 / year / month",
+    "note": "Source Drive file IDs document findability, not automatic public hotlinks. Download/copy approved high-resolution assets into managed image storage before publishing. Avoid deriving logos from low-resolution posters."
+  }
 }
