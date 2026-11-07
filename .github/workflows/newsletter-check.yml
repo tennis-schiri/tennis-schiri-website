@@ -14,6 +14,8 @@ on:
       - 'tests/newsletter-partners-test.php'
       - 'public/partner/index.html'
       - 'scripts/build_newsletter_events.py'
+      - 'public/tournament-weather.php'
+      - 'tests/outdoor-weather-test.php'
       - 'tests/newsletter-events-test.php'
       - 'public/turniere/index.html'
       - 'public/leistungen/index.html'
@@ -51,6 +53,9 @@ jobs:
         run: |
           php tests/newsletter-template-test.php
           php tests/newsletter-events-test.php
+          php -l public/tournament-weather.php
+          php -l tests/outdoor-weather-test.php
+          php tests/outdoor-weather-test.php
           php tests/newsletter-partners-test.php
       - name: Newsletter-Einbindung und private Datenablage prüfen
         shell: bash
