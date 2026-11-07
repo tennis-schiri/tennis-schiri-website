@@ -8,9 +8,11 @@ css=(ROOT/"assets"/"site.css").read_text(encoding="utf-8")
 matches=list(re.finditer(r"\.site-head\s*\{([^{}]*)\}",css))
 if not matches:
     raise SystemExit("Keine Menüleiste in der CSS-Datei definiert")
-last=matches[-1].group(1)
+fixed_rules=[m.group(1) for m in matches if "position:fixed" in m.group(1)]
+if not fixed_rules:
+    raise SystemExit("Menüleiste ist nicht fixiert")
 for prop in ["position:fixed","top:0","z-index:800","background:rgba"]:
-    if prop not in last:
+    if not any(prop in rule for rule in fixed_rules):
         raise SystemExit("Fixierte Menüleiste fehlerhaft: "+prop)
 if "scroll-padding-top:112px" not in css or "scroll-padding-top:93px" not in css:
     raise SystemExit("Sprungmarken könnten hinter der fixierten Menüleiste verschwinden")
