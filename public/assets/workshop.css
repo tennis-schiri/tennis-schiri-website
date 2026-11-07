@@ -23,3 +23,14 @@
 #regelworkshop-anmeldung{scroll-margin-top:95px}
 @media(max-width:980px){.workshop-feature-inner{flex-wrap:wrap}.workshop-feature-cta{margin-left:111px}}
 @media(max-width:620px){.workshop-feature{padding-top:13px}.workshop-feature-inner{gap:14px;padding:19px}.workshop-feature-date{flex-basis:65px;min-height:85px}.workshop-feature-date strong{font-size:36px}.workshop-feature-content{flex-basis:calc(100% - 85px)}.workshop-feature-content h2{font-size:23px}.workshop-feature-cta{margin:0;width:100%;box-sizing:border-box}.workshop-feature-fees{gap:5px}.workshop-feature-fees span{font-size:10px}}
+
+/* Workshop appears as a distinct event type in tournament and event lists */
+.workshop-event{background:#edf0ff!important;border:1px solid #aebcf2!important;border-left:5px solid #5668bd!important;box-shadow:0 8px 28px rgba(53,69,141,.08)}
+.workshop-event .datebox{background:#263c91!important;color:#fff!important;border-color:#263c91!important}
+.workshop-event .datebox .weekday,.workshop-event .datebox .day,.workshop-event .datebox .month{color:#fff!important}
+.workshop-event .workshop-event-label{display:inline-block;margin:0 0 9px;color:#344caa;font-size:11px;font-weight:900;letter-spacing:.11em}
+.workshop-event .event-title,.workshop-event h3{color:#1f316d}
+.workshop-event .workshop-event-description{margin:12px 0 0;color:#44547e;font-size:13px;line-height:1.6}
+.workshop-event .tournament-cta{background:#354eae!important;color:#fff!important;border-color:#354eae!important}
+.workshop-event .tournament-cta:hover{background:#273d91!important}
+.workshop-event .meta-chip{background:#fff;color:#35478f;border-color:#bfcbf7}
