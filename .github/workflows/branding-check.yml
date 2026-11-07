@@ -7,6 +7,10 @@ on:
       - 'scripts/build_site_branding.py'
       - 'tests/site-branding-test.py'
       - 'public/assets/site.css'
+      - 'public/regelwissen/index.html'
+      - 'public/assets/rules-library.css'
+      - 'public/assets/rules-library.js'
+      - 'tests/rules-library-test.py'
       - 'public/**/index.html'
       - 'public/index.html'
       - 'public/newsletter-template.php'
@@ -34,3 +38,7 @@ jobs:
         run: python scripts/build_site_branding.py --output public/assets/branding
       - name: Marken-Integration prüfen
         run: python tests/site-branding-test.py
+      - name: Regelwissen und Startseiten-Regelfrage prüfen
+        run: |
+          node --check public/assets/rules-library.js
+          python tests/rules-library-test.py
