@@ -1,0 +1,42 @@
+/* Tennis-Schiri: single event detail view */
+.tourney-detail-hero{padding-bottom:47px}
+.tourney-detail-section{background:#f6f8f3}
+.tourney-detail-top{display:flex;justify-content:space-between;gap:25px;align-items:center;margin-bottom:27px}
+.tourney-detail-heading{min-width:0;max-width:850px}
+.tourney-detail-heading h2{font-size:clamp(31px,4vw,48px);line-height:1.1;letter-spacing:-.04em;margin:10px 0 13px;color:#173e2d}
+.tourney-detail-date{font-size:18px;font-weight:750;color:#415f48;line-height:1.5;margin:0 0 14px}
+.tourney-detail-chips{display:flex;gap:7px;flex-wrap:wrap}
+.tourney-detail-chips span{border:1px solid #cadfc1;background:#eaf4e2;color:#2b5b3b;font-size:11px;font-weight:850;padding:7px 11px;border-radius:999px}
+.tourney-detail-logo{width:160px;min-height:130px;flex:0 0 160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:9px;background:#fff;border:1px solid #dee6d8;border-radius:17px;padding:16px;text-align:center}
+.tourney-detail-logo img{display:block;max-width:100%;max-height:110px;object-fit:contain}
+.tourney-detail-logo>span{font-size:36px}
+.tourney-detail-logo small{font-size:11px;font-weight:800;color:#64816b}
+.tourney-detail-columns{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(270px,.9fr);gap:23px;align-items:start}
+.tourney-detail-primary,.tourney-detail-side{display:grid;gap:22px;min-width:0}
+.tourney-detail-panel{padding:28px;background:#fff;border:1px solid #dbe6d6;border-radius:19px;box-shadow:0 8px 24px #153d2c08}
+.tourney-detail-panel h2{font-size:23px;letter-spacing:-.03em;margin:0 0 18px;color:#193e2c}
+.tourney-detail-panel h3{font-size:18px;line-height:1.4;color:#254c34;margin:0 0 6px}
+.tourney-detail-facts{display:grid;gap:0;margin:0}
+.tourney-detail-facts>div{display:grid;grid-template-columns:minmax(115px,.48fr) minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid #edf0e9}
+.tourney-detail-facts dt{font-size:12px;font-weight:900;color:#68806d}
+.tourney-detail-facts dd{margin:0;font-size:14px;line-height:1.6;color:#294b35}
+.tourney-detail-desc{margin:20px 0 0;line-height:1.7;color:#506d56}
+.tourney-detail-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.tourney-detail-cta a{display:inline-flex;align-items:center;justify-content:center;padding:12px 18px;background:#173e2d;color:#fff;border-radius:999px;font-size:13px;font-weight:850;text-decoration:none}
+.tourney-detail-cta a:hover{background:#296444}
+.tourney-detail-cta a.tourney-detail-cta-light{background:#e9f5df;color:#214f33}
+.tourney-detail-cta a.tourney-detail-cta-light:hover{background:#d8ebc9}
+.tourney-detail-cta .tournament-soon{background:#e8eee6;color:#5d765f;border-radius:999px;padding:11px 16px;font-size:12px}
+.tourney-detail-panel address{font-style:normal;font-size:15px;color:#4b6853;line-height:1.65}
+.tourney-detail-map{margin-top:22px;border:1px solid #dbe4d5;border-radius:14px;overflow:hidden;background:#edf3e8;min-height:220px}
+.tourney-map-gate{padding:32px;min-height:220px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.tourney-map-gate p{max-width:460px;color:#5c765f;font-size:13px;line-height:1.6}
+.tourney-detail-map iframe{border:0;width:100%;height:310px;display:block}
+.tourney-detail-calendar{background:#eff7e7;border-color:#cfdfc2}
+.tourney-detail-calendar>p,.tourney-detail-help p{font-size:13px;color:#527159;line-height:1.75;margin:0 0 17px}
+.tourney-detail-calendar-button{cursor:pointer;border:0;font:inherit;width:100%;font-size:13px}
+.tourney-detail-secondary{display:inline-block;color:#225d3e;font-size:13px;font-weight:850;margin-top:15px;text-decoration:underline;text-underline-offset:3px}
+.tourney-detail-calendar small{display:block;color:#79917b;font-size:11px;line-height:1.5;margin-top:13px}
+#event-error{margin:12px 0 50px}
+@media(max-width:940px){.tourney-detail-columns{grid-template-columns:1fr}.tourney-detail-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.tourney-detail-top{align-items:flex-start;flex-direction:column}.tourney-detail-logo{min-height:85px;width:140px;flex-basis:auto}.tourney-detail-columns,.tourney-detail-side{grid-template-columns:1fr}.tourney-detail-panel{padding:21px}.tourney-detail-facts>div{grid-template-columns:1fr;gap:3px}}
