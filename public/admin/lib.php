@@ -8,6 +8,7 @@ require_once __DIR__.'/venues.php';
 require_once __DIR__.'/guide.php';
 require_once __DIR__.'/defaults.php';
 require_once __DIR__.'/weather-mail.php';
+require_once __DIR__.'/public-info.php';
 
 function boEsc(mixed $value): string {
  return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -113,6 +114,7 @@ function boSchema(PDO $db): void {
  )");
  $db->exec("CREATE INDEX IF NOT EXISTS bo_deliveries_campaign ON bo_deliveries(campaign_id,state)");
  boVenueSchema($db);
+ boPublicInfoSchema($db);
 }
 function boCsrf(): string {
  return '<input type="hidden" name="csrf" value="'.boEsc($_SESSION['csrf']??'').'">';
