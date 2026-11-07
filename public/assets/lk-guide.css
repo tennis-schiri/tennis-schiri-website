@@ -1,0 +1,64 @@
+/* Tennis-Schiri · Mein erstes LK-Turnier – eigenständiger Einsteigerleitfaden */
+.lk-hero{padding-bottom:55px}
+.lk-hero h1{max-width:900px}
+.lk-hero-facts{display:flex;flex-wrap:wrap;gap:9px;margin-top:23px}
+.lk-hero-facts span{font-size:12px;font-weight:800;border:1px solid #7f9f7e;border-radius:999px;padding:8px 13px;color:#e2f4d7;background:#ffffff0d}
+.lk-guide{background:#f5f8f1}
+.lk-layout{display:grid;grid-template-columns:minmax(0,1.68fr) minmax(258px,.72fr);align-items:start;gap:35px}
+.lk-guide-intro{margin:0 0 27px}
+.lk-guide-intro h2{font-size:clamp(30px,3.7vw,43px);line-height:1.12;letter-spacing:-.04em;color:#183e2b;margin:12px 0 14px}
+.lk-guide-intro p{max-width:710px;line-height:1.7;color:#59715d;font-size:15px}
+.lk-steps{list-style:none;counter-reset:lk;margin:0;padding:0;display:grid;gap:14px}
+.lk-step{min-width:0;position:relative;background:#fff;border:1px solid #dae7d4;border-radius:21px;padding:25px 27px;box-shadow:0 10px 30px #173a2609;scroll-margin-top:95px}
+.lk-step.is-complete{border-color:#b4d4a4;background:linear-gradient(130deg,#f8fdf4,#fff)}
+.lk-step-head{display:flex;align-items:start;gap:16px}
+.lk-step-num{display:grid;place-items:center;flex:0 0 46px;width:46px;height:46px;border-radius:14px;background:#eaf3df;color:#2d6646;font-size:18px;font-weight:950;letter-spacing:-.035em}
+.lk-step.is-complete .lk-step-num{background:#d2ecc0;color:#265d3a}
+.lk-step-tag{display:inline-block;color:#5c875e;font-size:10px;font-weight:900;letter-spacing:.1em;margin:1px 0 7px}
+.lk-step h3{font-size:clamp(19px,2.1vw,24px);font-weight:850;line-height:1.22;letter-spacing:-.025em;color:#1b422e;margin:0}
+.lk-step>p{font-size:14px;color:#425e49;line-height:1.72;margin:17px 0}
+.lk-step-tip{font-size:12px;line-height:1.62;color:#486a50;background:#f3f8ee;border-left:3px solid #bad99d;padding:12px 15px;border-radius:0 11px 11px 0}
+.lk-step-tip strong{color:#2e5738}
+.lk-step-footer{display:flex;justify-content:space-between;align-items:center;gap:13px;flex-wrap:wrap;margin-top:19px}
+.lk-step-footer>a{color:#256543;text-decoration:underline;text-underline-offset:4px;font-size:12px;font-weight:850}
+.lk-step-check{display:inline-flex;align-items:center;gap:9px;border:1px solid #c7dcc0;border-radius:999px;padding:8px 13px;font-size:12px;font-weight:800;color:#24563a;cursor:pointer;background:#f7fbf4;user-select:none}
+.lk-step-check:hover{background:#eaf5e4}
+.lk-step-check input{accent-color:#278447;width:17px;height:17px;cursor:pointer;margin:0}
+.lk-step-check:focus-within{outline:2px solid #77ae5e;outline-offset:3px}
+.lk-step.is-complete .lk-step-check{background:#e2f5d8;border-color:#a4d496}
+.lk-sidebar{display:grid;gap:16px;position:sticky;top:25px}
+.lk-sidebar-card{background:#fff;border:1px solid #d9e6d3;border-radius:20px;padding:24px}
+.lk-sidebar-card h2{color:#1b4731;font-size:24px;letter-spacing:-.035em;margin:10px 0 20px}
+.lk-sidebar-card h3{font-size:21px;letter-spacing:-.02em;color:#1d4931;margin:10px 0}
+.lk-progress-value{display:flex;flex-direction:column;gap:3px;margin:8px 0}
+.lk-progress-value strong{font-size:33px;font-weight:900;letter-spacing:-.05em;color:#245c3f;line-height:1.1}
+.lk-progress-value span{font-size:12px;color:#6a806d}
+.lk-sidebar-card progress{width:100%;height:11px;border:0;border-radius:999px;overflow:hidden;background:#e1ecd9;appearance:none;margin:14px 0 6px}
+.lk-sidebar-card progress::-webkit-progress-bar{background:#e1ecd9;border-radius:999px}
+.lk-sidebar-card progress::-webkit-progress-value{background:#71ae48;border-radius:999px}
+.lk-sidebar-card progress::-moz-progress-bar{background:#71ae48;border-radius:999px}
+#lk-progress-status{font-size:13px;color:#4e7055;line-height:1.6;margin:8px 0 17px}
+.lk-reset{background:transparent;border:1px solid #c5d9be;border-radius:999px;padding:10px 14px;cursor:pointer;font:inherit;font-size:12px;font-weight:800;color:#2a6142}
+.lk-reset:hover{background:#f0f7eb}
+.lk-sidebar-card small{display:block;font-size:11px;color:#708572;line-height:1.6;margin-top:16px}
+.lk-sidebar-more{background:#ecf4e7}
+.lk-sidebar-more p{font-size:13px;color:#54715c;line-height:1.7;margin:10px 0 21px}
+.lk-sidebar-more .btn{font-size:12px;width:100%;box-sizing:border-box;white-space:normal;text-align:center}
+.lk-after{margin:36px 0 24px;padding:27px;background:#e9f4e3;border:1px solid #cee1c3;border-radius:20px}
+.lk-after h2,.lk-faq h2{color:#214b35;font-size:27px;line-height:1.2;letter-spacing:-.03em;margin:10px 0 13px}
+.lk-after p{font-size:14px;line-height:1.75;color:#44634c;margin:0 0 13px}
+.lk-text-link{font-size:13px;font-weight:850;color:#266343;text-decoration:underline;text-underline-offset:4px}
+.lk-faq{margin:38px 0 25px}
+.lk-faq details{background:#fff;border:1px solid #dbe5d5;border-radius:14px;margin:10px 0;overflow:hidden}
+.lk-faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:16px 19px;font-weight:800;color:#264e36;font-size:14px;line-height:1.5}
+.lk-faq summary::-webkit-details-marker{display:none}
+.lk-faq summary:after{content:"+";flex:0 0 auto;display:grid;place-items:center;border:1px solid #c7dbbe;border-radius:50%;font-size:20px;width:25px;height:25px;font-weight:400}
+.lk-faq details[open] summary:after{content:"−"}
+.lk-faq details p{padding:0 19px 18px;color:#546c5a;font-size:13px;line-height:1.75;margin:0}
+.lk-source-note{margin:27px 0 0;border-top:1px solid #d6e1d0;padding-top:19px;color:#5c745e}
+.lk-source-note strong{font-size:12px;color:#32533e}
+.lk-source-note p{font-size:11px;line-height:1.8;margin:5px 0}
+.lk-source-note a{color:#296744;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:930px){.lk-layout{grid-template-columns:1fr}.lk-sidebar{position:static;grid-row:1;grid-template-columns:1fr 1fr}.lk-sidebar-card h2{margin-bottom:12px}}
+@media(max-width:610px){.lk-sidebar{grid-template-columns:1fr}.lk-step{padding:21px 19px}.lk-step-head{gap:12px}.lk-step-num{width:39px;height:39px;flex-basis:39px;font-size:16px}.lk-step-footer{align-items:flex-start}.lk-step-check{margin-left:auto}.lk-hero-facts span{font-size:10px}}
+@media print{.site-head,.mobile-toggle,.lk-sidebar,.footer-social,.footer-links,.lk-reset,.lk-step-footer>a,.lk-after,.lk-faq,.lk-source-note,.back-to-top{display:none!important}.interior-hero{padding:15px 0 8px!important;background:#fff!important;color:#000!important}.interior-hero h1,.interior-hero p{color:#000!important}.lk-layout{display:block}.lk-guide{background:#fff!important}.lk-step{break-inside:avoid;box-shadow:none;border:1px solid #777;padding:10px;margin-bottom:8px}.lk-step>p{font-size:11px}.lk-step-tip{font-size:10px}.lk-steps{gap:0}.lk-step-footer{margin-top:8px}.lk-step-check{border:0}.lk-guide-intro{margin-bottom:10px}.lk-guide-intro h2{font-size:20px}.lk-guide-intro p{font-size:11px}}
