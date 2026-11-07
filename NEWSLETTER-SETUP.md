@@ -34,7 +34,11 @@ Dieser Speicher ist unabhängig von TENNILO Founders. Bestehende TENNILO-Interes
 
 ## Nachrichten versenden
 
-Unter `newsletter-mail.php` einen Entwurf mit Betreff, Text und genau einem Thema anlegen. Erst eine **Testmail** prüfen. Durch Eingabe von **SENDEN** wird die Empfängerliste der bestätigten Kontakte zum gewählten Thema eingefroren. Das ist **noch kein Versand**. Danach wird der Versand manuell in Paketen mit bis zu fünf E-Mails pro Klick ausgelöst. Vor jedem Versandversuch werden Abmeldestatus und Themeninteressen erneut geprüft.
+Unter `newsletter-mail.php` einen Entwurf mit Betreff, Haupttext und genau einem Thema anlegen. Optional lassen sich eine andere Überschrift, ein Vorschautext für den Posteingang sowie ein Aktionsbutton mit Beschriftung und HTTPS-Link ergänzen. Den Entwurf speichern und über **HTML-Vorschau öffnen** kontrollieren. Danach eine **Testmail an mw@tennis-schiri.de** schicken und in verschiedenen E-Mail-Programmen ansehen. Erst nach dieser Kontrolle durch Eingabe von **SENDEN** die Empfängerliste der bestätigten Kontakte zum gewählten Thema freigeben. Das ist **noch kein Versand**. Danach wird der Versand manuell in Paketen mit bis zu fünf E-Mails pro Klick ausgelöst. Vor jedem Versandversuch werden Abmeldestatus und Themeninteressen erneut geprüft.
+
+Das Newsletter-Layout wird serverseitig aus `public/newsletter-template.php` erzeugt. Es nutzt die Tennis-Schiri-Farben (dunkles Grün, helles Grün), ein tabellenbasiertes Design für E-Mail-Clients und einen festen Footer. Es bindet **keine externen Bilder, Skripte oder Tracking-Pixel** ein. Redaktioneller Text wird vor HTML-Ausgabe escaped; zusätzliche HTML-Codes müssen nicht eingegeben werden. Jede E-Mail wird als **multipart/alternative** verschickt: gestaltete HTML-Version und reine Textfassung. Bestehende Kampagnen werden nicht gelöscht; fehlende zusätzliche Spalten ergänzt die Verwaltung beim nächsten Aufruf der Kampagnenseite automatisch. **Abgeschlossene und freigegebene Kampagnen bleiben unveränderbar.**
+
+Die Vorlagenfunktion wird in GitHub vor dem Live-Upload durch `php tests/newsletter-template-test.php` geprüft. Die Testmail verwendet den allgemeinen Abmeldungsaufruf; **echte Rundmails** erhalten ausschließlich individuelle, signierte Abmeldelinks.
 
 E-Mails enthalten einen signierten Abmeldelink. Es werden keine Öffnungs- oder Klicktracker eingesetzt. Ein vom Mailserver akzeptierter Versand ist noch keine bestätigte Zustellung. Bei unklarer Zustellung werden Empfänger aus Gründen der Doppelversandvermeidung nicht blind erneut verschickt.
 
