@@ -13,13 +13,13 @@ if len(pages)!=13:
 for html in pages:
     data=html.read_text(encoding="utf-8")
     prefix="" if html==PUB/"index.html" else "../"
-    expected=f'<img src="{prefix}assets/branding/ts-logo-dunkel.png"'
+    expected=f'<img src="{prefix}assets/branding/ts-logo-dunkel.png?v=20261107-3"'
     if data.count(expected)!=2:
         raise SystemExit(f"Header/Footer ohne freigegebenes Logo: {html}")
     for required in [
         '<link rel="icon" type="image/png" href="/assets/branding/ts-favicon.png">',
         '<meta property="og:image" content="https://tennis-schiri.de/assets/branding/ts-logo-ball.png">',
-        f'site.css?v=20261107-2',
+        f'site.css?v=20261107-3',
     ]:
         if required not in data:
             raise SystemExit(f"Veralteter Browser-/Social-Branding-Verweis: {html} -> {required}")
@@ -27,7 +27,7 @@ for html in pages:
         raise SystemExit(f"Veraltetes CSS-Logo noch vorhanden: {html}")
 
 for name in [
-    "ts-logo-hell.png","ts-logo-dunkel.png","ts-logo-ball.png",
+    "ts-logo-hell.png","ts-logo-dunkel.png?v=20261107-3","ts-logo-ball.png",
     "ts-logo-claim.png","ts-kurzlogo.png","ts-favicon.png",
     "ts-tennisball.png","ts-wortmarke.png",
 ]:
@@ -47,7 +47,7 @@ if 'data:image/png;base64,' not in svg:
     raise SystemExit("Legacy-Favicon verweist noch auf die alte Zeichenlogo-Version")
 
 email=(PUB/"newsletter-template.php").read_text(encoding="utf-8")
-if 'https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png' not in email:
+if 'https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3' not in email:
     raise SystemExit("HTML-Newsletter benutzt noch altes Textlogo")
 for name in ["newsletter-admin.php","newsletter-mail.php","newsletter.php","newsletter-setup.php"]:
     if "/assets/branding/ts-logo-" not in (PUB/name).read_text(encoding="utf-8"):
