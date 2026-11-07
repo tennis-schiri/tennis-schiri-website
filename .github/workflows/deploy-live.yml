@@ -142,6 +142,7 @@ jobs:
           php -l public/admin/weather-mail.php
           php -l public/admin/public-info.php
           php -l public/tournament-weather.php
+          node --check public/assets/tournament-calendar.js
           php -l public/turnierinfos.php
           php -l tests/backoffice-test.php
           php tests/backoffice-test.php
