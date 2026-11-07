@@ -107,7 +107,7 @@ jobs:
               "data/instagram.json", "data/statistics.json",
               "assets/statistics.js", "statistiken/index.html",
               "newsletter/index.html", "newsletter.php", "newsletter-setup.php",
-              "newsletter-admin.php", "newsletter-mail.php", "newsletter-template.php",
+              "newsletter-admin.php", "newsletter-mail.php", "turnier-mails.php", "newsletter-template.php",
               "newsletter-events.php", "newsletter-partners.php",
               "google8cf6756d83169a32.html",
               "sitemap.xml",
@@ -128,6 +128,7 @@ jobs:
           php -l public/newsletter-setup.php
           php -l public/newsletter-admin.php
           php -l public/newsletter-mail.php
+          php -l public/turnier-mails.php
           # Katalog vor jedem Upload frisch aus den Turnier-/Workshopseiten erzeugen.
           python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
           cp public/data/newsletter-events.json _live_upload/data/newsletter-events.json
