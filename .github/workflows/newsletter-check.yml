@@ -1,0 +1,46 @@
+name: Newsletter-Code prüfen (kein Upload)
+
+on:
+  push:
+    paths:
+      - 'public/newsletter.php'
+      - 'public/newsletter-setup.php'
+      - 'public/newsletter-admin.php'
+      - 'public/newsletter-mail.php'
+      - 'public/newsletter/index.html'
+      - 'public/assets/site.css'
+      - '.github/workflows/newsletter-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: PHP-Syntax und Website-Anbindung
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: PHP linten
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -v
+          for file in public/newsletter.php public/newsletter-setup.php public/newsletter-admin.php public/newsletter-mail.php; do
+            php -l "$file"
+          done
+      - name: Newsletter-Einbindung und private Datenablage prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s public/newsletter/index.html
+          grep -Fq 'action="/newsletter.php"' public/newsletter/index.html
+          grep -Fq 'action="/newsletter.php"' public/index.html
+          grep -Fq 'newsletter-datenschutz' public/datenschutz/index.html
+          test ! -e public/tennis-schiri-newsletter-config.php
+          test ! -e public/tennis-schiri-newsletter-data
+          grep -Fq 'if len(pages) != 13:' .github/workflows/deploy-live.yml
+          echo "Newsletter-Prüfung bestanden; kein Live-Upload."
