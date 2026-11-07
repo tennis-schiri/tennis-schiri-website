@@ -42,6 +42,21 @@ Die Vorlagenfunktion wird in GitHub vor dem Live-Upload durch `php tests/newslet
 
 E-Mails enthalten einen signierten Abmeldelink. Es werden keine Öffnungs- oder Klicktracker eingesetzt. Ein vom Mailserver akzeptierter Versand ist noch keine bestätigte Zustellung. Bei unklarer Zustellung werden Empfänger aus Gründen der Doppelversandvermeidung nicht blind erneut verschickt.
 
+## Turniere und Veranstaltungen automatisch übernehmen
+
+Die Newsletter-Verwaltung lädt zukünftige Turniere und datierte Workshops direkt aus dem **veröffentlichten Website-Katalog** `/data/newsletter-events.json`.
+
+- Quelle sind die aktuellen Turnierkarten von `public/turniere/index.html` und datierte Workshops von `public/leistungen/index.html`.
+- Beim **manuellen GitHub-Live-Upload** wird die Liste automatisch durch `scripts/build_newsletter_events.py` neu erzeugt. Du pflegst Termine, Orte und Links weiterhin nur auf der Website.
+- Im Newsletter-Entwurf findest du unter **„Turniere & Veranstaltungen übernehmen“** die Termine mit Kontrollkästchen und einem Link zur Quelle. Du kannst beliebig mehrere (maximal 25) auswählen.
+- Ein Klick auf **„Entwurf speichern“** speichert die ausgewählten Inhalte als Momentaufnahme. Die HTML-Vorlage ergänzt die passenden Karten mit Datum, Ort und dem direkten Link. Die reine Textfassung erhält dieselben Links.
+- Wo tennis.de noch keinen Anmeldelink veröffentlicht hat, wird die entsprechende Turnierdetailseite auf tennis-schiri.de verlinkt. Für Workshops gibt es einen Link direkt zur konkreten Workshop-Sektion.
+- Ändern sich Website-Termine später, wird die **Auswahl neuer Entwürfe** beim nächsten Live-Upload automatisch aktualisiert. Bestehende, insbesondere bereits freigegebene Rundmails ändern sich nicht heimlich. Entwürfe können bewusst erneut gespeichert werden.
+- Vergangene Termine verschwinden aus der Liste neuer Entwürfe; bereits gespeicherte Auswahlen bleiben in vorhandenen Entwürfen sichtbar, damit du sie überprüfen und entfernen kannst.
+- Der Empfängerkreis richtet sich weiterhin nach dem gewählten Interessengebiet (Turniere, Regeln oder Workshops); das Ankreuzen von Terminen verändert **nicht** die Newsletter-Einwilligungen.
+
+**Wichtig:** Die Liste wird nicht live von tennis.de ausgelesen. Sie spiegelt die Termine und Links auf unserer eigenen Website wider. Ein Newsletter wird niemals allein durch einen neuen Termin automatisch verschickt.
+
 ## Betriebshinweise
 
 - Die Funktion erfordert PHP 8.1+, PDO_SQLITE, HTTPS und die PHP-Mailfunktion. Alle Newsletter-Nachrichten werden mit **news@tennis-schiri.de** als Absender und Reply-To verschickt. Das Absenderpostfach sollte aktiv sein, SPF/DKIM/DMARC sind zu prüfen.
