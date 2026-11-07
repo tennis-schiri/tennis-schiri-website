@@ -125,7 +125,7 @@
    const date=parseDate(aria);
    if(!title||!date)throw new Error('Datumsangaben fehlen');
    const workshop=card.classList.contains('workshop-event');
-   const venueCard=Array.from(doc.querySelectorAll('.venue-card')).find(v=>Array.from(v.querySelectorAll('.venue-event-list a[href^="#"]')).some(a=>a.getAttribute('href')==='#'+id));
+   const venueCard=Array.from(doc.querySelectorAll('.venue-card')).find(v=>Array.from(v.querySelectorAll('.venue-event-list a')).some(a=>{const href=a.getAttribute('href')||'';return href==='#'+id||href==='termin.html?id='+id;}));
    const venue=venueCard?VALUE(venueCard.querySelector('h3')):place;
    const address=venueCard?VALUE(venueCard.querySelector('address')):'';
    const meta=Array.from(card.querySelectorAll('.meta-chip')).map(VALUE);
