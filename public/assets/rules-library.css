@@ -47,3 +47,8 @@
 .rules-home-answer a{display:inline-block;font-size:12px;font-weight:850;color:#d0f3a1;text-decoration:underline;text-underline-offset:3px}
 @media(max-width:960px){.rules-case-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){.rules-library-intro{grid-template-columns:1fr}.rules-case-grid,.rules-further{grid-template-columns:1fr}.rules-case>summary{min-height:auto;padding:22px}.rules-case-answer{padding:18px 22px}.rules-controls{align-items:stretch}.rules-search{width:100%}}
+
+/* Startseiten-Regelfrage bleibt vor der dekorativen Tennisball-Linie klickbar */
+.rules-art .rules-home-answer{position:relative;z-index:3;margin-bottom:20px}
+.rules-art .rules-question-active{font-size:clamp(33px,3.7vw,52px);line-height:1.01}
+.rules-art .rules-home-answer summary:focus-visible,.rules-art .rules-home-answer a:focus-visible{outline:3px solid #c8f16d;outline-offset:4px}
