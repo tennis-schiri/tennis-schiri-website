@@ -255,71 +255,7 @@
  document.querySelectorAll('.filter').forEach(button=>button.addEventListener('click',function(){document.querySelectorAll('.filter').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false')});button.classList.add('active');button.setAttribute('aria-pressed','true');const type=button.dataset.filter;window.refreshHomepageTournaments?.()}));
 })();
 
-(function(){
-  // Naechstes Turnier nach Berliner Ortsdatum automatisch hervorheben.
-  const rows=Array.from(document.querySelectorAll('#event-list .tournament-row')).sort((a,b)=>a.dataset.start.localeCompare(b.dataset.start));
-  const featured=document.querySelector('.featured-tournament');
-  if(!featured || !rows.length) return;
-  const germanDay=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Berlin'}).format(new Date());
-  const next=rows.find(row=>row.dataset.start >= germanDay);
-  rows.forEach(row=>{row.classList.toggle('featured-hidden',row===next);row.classList.toggle('event-past',row.dataset.start<germanDay);});
-  // Auf der Startseite maximal vier weitere, noch bevorstehende Turniere zeigen.
-  // Der aktive Turnierfilter gilt auch fuer diese Vierer-Auswahl.
-  function refreshHomepageTournaments(){
-    const filter=document.querySelector('.filter.active')?.dataset.filter || 'alle';
-    let visible=0;
-    rows.forEach(row=>{
-      const eligible=row!==next && row.dataset.start>=germanDay &&
-        (filter==='alle' || row.dataset.type===filter);
-      const show=eligible && visible<4;
-      row.classList.toggle('home-excess',!show);
-      if(show) visible++;
-    });
-    const summary=document.getElementById('home-tourney-summary');
-    if(summary) summary.textContent=visible===0 ? 'Keine weiteren passenden Turniere angekündigt' :
-      visible===1 ? '1 weiteres Turnier' : visible+' weitere Turniere';
-  }
-  window.refreshHomepageTournaments=refreshHomepageTournaments;
-  refreshHomepageTournaments();
-  if(!next){
-    featured.hidden=true;
-    const plate=document.querySelector('.hero-plate');
-    if(plate) plate.hidden=true;
-    return;
-  }
-  const date=next.querySelector('.datebox');
-  const day=date.querySelector('.day').textContent;
-  const endDay=date.querySelector('.day-end')?.textContent;
-  const month=date.querySelector('.month').textContent;
-  const year=date.querySelector('.year')?.textContent;
-  const monthLabel=year ? month+' '+year : month;
-  const dateLabel=endDay ? day+'.–'+endDay+'.' : day+'.';
-  const title=next.querySelector('.event-title').textContent;
-  const place=next.querySelector('.event-where').textContent;
-  const meta=next.querySelector('.tournament-meta').innerHTML;
-  const details=next.querySelector('.tournament-details').innerHTML;
-  const action=next.querySelector('.event-actions').innerHTML;
-  featured.dataset.start=next.dataset.start;
-  featured.querySelector('.featured-kicker').textContent='NÄCHSTES TURNIER · '+date.querySelector('.weekday').textContent+' · '+dateLabel+' '+monthLabel;
-  featured.querySelector('h3').textContent=title;
-  featured.querySelector('.featured-location').textContent=place;
-  featured.querySelector('.tournament-meta').innerHTML=meta;
-  featured.querySelector('.tournament-details').innerHTML=details;
-  featured.querySelector('.tournament-cta, .tournament-soon')?.remove();
-  const actionBox=document.createElement('div');
-  actionBox.innerHTML=action;
-  if(actionBox.firstElementChild) featured.querySelector('.featured-location').parentNode.appendChild(actionBox.firstElementChild);
-  const featuredDate=featured.querySelector('.featured-date');
-  featuredDate.innerHTML=date.innerHTML;
-  featuredDate.classList.toggle('datebox-range',date.classList.contains('datebox-range'));
-  featuredDate.setAttribute('aria-label',date.getAttribute('aria-label')||'');
-  const plate=document.querySelector('.hero-plate');
-  if(plate){
-    plate.querySelector('.date').textContent=date.querySelector('.weekday').textContent+' · '+dateLabel+' '+monthLabel;
-    plate.querySelector('.hero-plate-title').textContent=title;
-    plate.querySelector('.hero-plate-place').textContent=place;
-  }
-})();
 </script>
+<script src="assets/tournament-calendar.js?v=1" defer></script>
 </body>
 </html>
