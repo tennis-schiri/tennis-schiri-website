@@ -32,7 +32,7 @@ function hashed(string $s): string {return hash('sha256',$s);}
 function mailLink(array $cfg,string $email,string $subject,string $body): bool {
  if (!filter_var($email,FILTER_VALIDATE_EMAIL) || strlen($email)>254 || preg_match('/[\r\n]/',$email)) return false;
  $subject='=?UTF-8?B?'.base64_encode($subject).'?=';
- $sender='mw@tennis-schiri.de';
+ $sender='news@tennis-schiri.de';
  $headers=['From: Tennis-Schiri Newsletter <'.$sender.'>','Reply-To: '.$sender,'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','X-Auto-Response-Suppress: All'];
  return mail($email,$subject,$body,implode("\r\n",$headers),'-f'.$sender);
 }
@@ -59,7 +59,7 @@ if($action==='join' && $method==='POST'){
  $q=$db->prepare('INSERT INTO subscribers(email,role,interests,consent_version,created_at,confirmed_at,confirm_hash,unsubscribe_hash,expires_at) VALUES(?,?,?,?,?,NULL,?,?,?) ON CONFLICT(email) DO UPDATE SET role=excluded.role,interests=excluded.interests,consent_version=excluded.consent_version,created_at=excluded.created_at,confirm_hash=excluded.confirm_hash,unsubscribe_hash=excluded.unsubscribe_hash,expires_at=excluded.expires_at');
  $q->execute([$email,$role,json_encode($interest,JSON_THROW_ON_ERROR), 'ts-newsletter-2026-11', $now,hashed($confirm),hashed($unsubscribe),$now+14*86400]);
  $link='https://tennis-schiri.de/newsletter.php?action=confirm&token='.$confirm;
- $body="Bitte bestätige deine Anmeldung zum Tennis-Schiri-Newsletter:\n\n".$link."\n\nFalls du dich nicht angemeldet hast, ignoriere diese Nachricht. Der Link verfällt nach 14 Tagen.\nKontakt: mw@tennis-schiri.de";
+ $body="Bitte bestätige deine Anmeldung zum Tennis-Schiri-Newsletter:\n\n".$link."\n\nFalls du dich nicht angemeldet hast, ignoriere diese Nachricht. Der Link verfällt nach 14 Tagen.\nKontakt: news@tennis-schiri.de";
  if(!mailLink($cfg,$email,'Tennis-Schiri Newsletter: Anmeldung bestaetigen',$body)){error_log('Tennis-Schiri Newsletter: mail() failed');page('Versand derzeit nicht möglich','<p>Die Bestätigungsmail konnte nicht versendet werden. Bitte versuche es später erneut.</p>',503);}
  page('Bitte E-Mail bestätigen','<p>Wir haben dir einen Bestätigungslink geschickt. Schau bei Bedarf auch in den Spamordner.</p>');
 }
@@ -72,7 +72,7 @@ if($action==='confirm' && $method==='GET'){
  if(!mailLink($cfg,'mw@tennis-schiri.de','Tennis-Schiri Newsletter: Neue bestaetigte Anmeldung',$notification)) {
   error_log('Tennis-Schiri Newsletter: admin signup notification not accepted by mail()');
  }
- page('Anmeldung bestätigt','<p>Deine Anmeldung zum Tennis-Schiri-Newsletter ist bestätigt. Du erhältst nur Informationen zu deinen ausgewählten Themen.</p><p>Du kannst dich jederzeit <a href="/newsletter.php?action=unsubscribe-request">online abmelden</a> oder eine E-Mail an mw@tennis-schiri.de schreiben.</p>');
+ page('Anmeldung bestätigt','<p>Deine Anmeldung zum Tennis-Schiri-Newsletter ist bestätigt. Du erhältst nur Informationen zu deinen ausgewählten Themen.</p><p>Du kannst dich jederzeit <a href="/newsletter.php?action=unsubscribe-request">online abmelden</a> oder eine E-Mail an news@tennis-schiri.de schreiben.</p>');
 }
 if($action==='unsubscribe-signed' && ($method==='GET'||$method==='POST')){
  $id=filter_var(($method==='POST'?$_POST['id']:$_GET['id'])??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
@@ -96,7 +96,7 @@ if($action==='unsubscribe-request' && $method==='POST'){
  if(!filter_var($email,FILTER_VALIDATE_EMAIL)||strlen($email)>254)page('Abmeldung','<p>Falls deine Adresse registriert ist, erhältst du eine E-Mail mit dem Abmeldelink.</p>');
  $ip=hashed($cfg['key'].'|'.($_SERVER['REMOTE_ADDR']??'unknown'));
  $q=$db->prepare('SELECT COUNT(*) FROM attempts WHERE ip_hash=? AND created_at>?');$q->execute([$ip,$now-3600]);
- if((int)$q->fetchColumn()>=6)page('Zu viele Anfragen','<p>Bitte versuche es später erneut oder schreibe an mw@tennis-schiri.de.</p>',429);
+ if((int)$q->fetchColumn()>=6)page('Zu viele Anfragen','<p>Bitte versuche es später erneut oder schreibe an news@tennis-schiri.de.</p>',429);
  $db->prepare('INSERT INTO attempts(ip_hash,created_at) VALUES(?,?)')->execute([$ip,$now]);
  $q=$db->prepare('SELECT id FROM subscribers WHERE email=? AND confirmed_at IS NOT NULL');$q->execute([$email]);
  $r=$q->fetch();
@@ -104,7 +104,7 @@ if($action==='unsubscribe-request' && $method==='POST'){
   $t=token();
   $db->prepare('UPDATE subscribers SET unsubscribe_hash=?, expires_at=? WHERE id=?')->execute([hashed($t),$now+2*86400,$r['id']]);
   $link='https://tennis-schiri.de/newsletter.php?action=unsubscribe&token='.$t;
-  $body="Hier kannst du deine Tennis-Schiri Newsletter-Anmeldung loeschen:\n\n".$link."\n\nDieser Link ist 48 Stunden gueltig. Falls du die Abmeldung nicht angefordert hast, ignoriere diese Nachricht.\nKontakt: mw@tennis-schiri.de";
+  $body="Hier kannst du deine Tennis-Schiri Newsletter-Anmeldung loeschen:\n\n".$link."\n\nDieser Link ist 48 Stunden gueltig. Falls du die Abmeldung nicht angefordert hast, ignoriere diese Nachricht.\nKontakt: news@tennis-schiri.de";
   if(!mailLink($cfg,$email,'Tennis-Schiri Newsletter: Abmeldung bestaetigen',$body))error_log('Tennis-Schiri Newsletter unsubscribe mail() failed');
  }
  page('E-Mail prüfen','<p>Falls deine Adresse registriert ist, erhältst du einen Abmeldelink per E-Mail. Prüfe gegebenenfalls auch den Spamordner.</p>');
