@@ -43,4 +43,47 @@ boAssert(!str_contains($realHtml,'Newsletter abbestellen'),'Organizational mails
 $st=$db->prepare("INSERT INTO bo_deliveries(campaign_id,contact_id,email,name,state) VALUES(?,?,?,?, 'pending')");
 $st->execute([$row['id'],1,'max@example.com','Max Beispiel']);
 boAssert((int)$db->query("SELECT COUNT(*) FROM bo_deliveries WHERE state='pending'")->fetchColumn()===1,'Pending delivery missing');
+
+$selectedInput=[
+ 'info_sections'=>['arrival','parking','fees','turnigo','myscore'],
+ 'info_arrival'=>'Bitte bis 09:30 Uhr anmelden.',
+ 'info_parking'=>'Parkplatz hinter der Tennishalle.',
+ 'info_fees'=>'25 Euro bar bezahlen.',
+ 'turnigo_url'=>'https://www.turnigo.de/turnier/123',
+ 'myscore_url'=>'https://myscore.live/turnier/123',
+];
+$info=boInfoFromPost($selectedInput);
+boAssert(count(boInfoSelected($info))===5,'Checklist selection not preserved');
+boAssert(boInfoValidHttps('https://www.turnigo.de/turnier/123','turnigo'),'Turnigo HTTPS URL rejected');
+boAssert(boInfoValidHttps('https://myscore.live/turnier/123','myscore'),'MyScore HTTPS URL rejected');
+boAssert(!boInfoValidHttps('https://turnigo.de.evil.example/id','turnigo'),'Spoofed Turnigo host accepted');
+boAssert(!boInfoValidHttps('http://myscore.live/turnier/1','myscore'),'Insecure MyScore URL accepted');
+boAssert(!boInfoValidHttps('https://user:pass@turnigo.de/abc','turnigo'),'URL with credentials accepted');
+try{
+ boInfoFromPost(['info_sections'=>['myscore'],'myscore_url'=>'https://not-myscore.live/abc']);
+ boAssert(false,'Unexpected domain accepted');
+}catch(InvalidArgumentException $expected){}
+try{
+ boInfoFromPost(['info_sections'=>['turnigo'],'turnigo_url'=>'']);
+ boAssert(false,'Missing checked Turnigo URL accepted');
+}catch(InvalidArgumentException $expected){}
+$update=$db->prepare('UPDATE bo_campaigns SET info_sections=?,info_arrival=?,info_parking=?,info_fees=?,turnigo_url=?,myscore_url=? WHERE id=?');
+$update->execute([$info['info_sections'],$info['info_arrival'],$info['info_parking'],$info['info_fees'],$info['turnigo_url'],$info['myscore_url'],$row['id']]);
+$stored=$db->query('SELECT * FROM bo_campaigns WHERE id=1')->fetch();
+boAssert(is_array($stored),'Updated campaign not found');
+boAssert(count(boInfoSelected($stored))===5,'Persisted checklist missing');
+boAssert(str_contains(boInfoEditor($stored),'checked'),'Saved checkbox not selected in editor');
+[$blocks,$plainBlocks]=boInfoMailBlocks($stored);
+boAssert(str_contains($blocks,'Turnigo')&&str_contains($blocks,'MyScore.live'),'Selected service links missing in HTML');
+boAssert(str_contains($blocks,'https://www.turnigo.de/turnier/123'),'Turnigo destination missing');
+boAssert(str_contains($plainBlocks,'https://myscore.live/turnier/123'),'MyScore URL missing in plain-text');
+[, $mailPlain, $mailHtml]=boMailContent($stored,['name'=>'Max Beispiel'],false);
+boAssert(str_contains($mailPlain,'Parkplatz hinter der Tennishalle'),'Plain-text parking info missing');
+boAssert(str_contains($mailHtml,'25 Euro bar bezahlen.'),'HTML fees info missing');
+boAssert(!str_contains($mailHtml,'TEST / VORSCHAU'),'Test banner must not appear in live mail');
+$malicious=$stored;
+$malicious['info_arrival']='<script>alert("test")</script>';
+[$safeHtml,]=boInfoMailBlocks($malicious);
+boAssert(!str_contains($safeHtml,'<script>')&&str_contains($safeHtml,'&lt;script&gt;'),'Checklist HTML not escaped');
+
 fwrite(STDOUT,"Tennis-Schiri Backoffice: SQLite, Templates, escape, mail preview, tracking safety and separate contacts verified.\n");
