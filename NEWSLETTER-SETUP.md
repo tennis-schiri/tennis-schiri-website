@@ -71,6 +71,16 @@ Unter **„Partner & TENNILO einblenden“** kannst du unabhängig von der Termi
 
 **Datenschutz:** Beim Anzeigen der extern geladenen Logos entsteht ein technischer Bildabruf. Die Partnerlogos werden von tennis-schiri.de bereitgestellt, das TENNILO-Logo von tennilo.de; es sind keine Trackingpixel eingebaut.
 
+## Einheitliches Tennis-Schiri-Logo
+
+Das finale freigegebene Logo **TS-09c** liegt als unverändertes Original-Set im Repository unter `branding/tennis-schiri-ts09c-logo-set.zip` (Quelle: Google Drive, Ordner „Logo Tennis-Schiri – TS-09c“).
+
+Beim Live-Upload entpackt `scripts/build_site_branding.py` die Original-PNG-Dateien in `public/assets/branding/` und kopiert sie auf den Webspace. Alle Website-Seiten verwenden die dunkle Wortmarke im Header und Footer; das neue TS-Favicon ersetzt die alte CSS-Variante. Social-Previews verlinken die Original-Logo-Variante mit Tennisball. Der Newsletter-Kopf zeigt ebenfalls das Original-Logo. Die Verwaltungs- und Bestätigungsseiten tragen dieselbe Marke.
+
+Für E-Mail-Clients wird die Headergrafik unter `https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png` abgerufen. Damit bleibt die E-Mail kompakt; falls Bilder im Postfach blockiert sind, wird der Alternativtext „Tennis-Schiri“ angezeigt. Trackingpixel sind nicht enthalten.
+
+Die Prüfung `python tests/site-branding-test.py` ist in den Live-Upload integriert. Zusätzlich kontrolliert die GitHub-Action `branding-check.yml` die Originalbilder und alle 13 Website-Seiten.
+
 ## Betriebshinweise
 
 - Die Funktion erfordert PHP 8.1+, PDO_SQLITE, HTTPS und die PHP-Mailfunktion. Alle Newsletter-Nachrichten werden mit **news@tennis-schiri.de** als Absender und Reply-To verschickt. Das Absenderpostfach sollte aktiv sein, SPF/DKIM/DMARC sind zu prüfen.
