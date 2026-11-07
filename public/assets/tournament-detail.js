@@ -120,19 +120,19 @@
    const card=Array.from(doc.querySelectorAll('#tourney-grid > .tourney-card')).find(c=>c.id===id);
    if(!card)throw new Error('Veranstaltung unbekannt');
    const title=VALUE(card.querySelector('h3'));
-   const location=VALUE(card.querySelector('.where'));
+   const place=VALUE(card.querySelector('.where'));
    const aria=card.querySelector('.datebox')?.getAttribute('aria-label')||'';
    const date=parseDate(aria);
    if(!title||!date)throw new Error('Datumsangaben fehlen');
    const workshop=card.classList.contains('workshop-event');
    const venueCard=Array.from(doc.querySelectorAll('.venue-card')).find(v=>Array.from(v.querySelectorAll('.venue-event-list a[href^="#"]')).some(a=>a.getAttribute('href')==='#'+id));
-   const venue=venueCard?VALUE(venueCard.querySelector('h3')):location;
+   const venue=venueCard?VALUE(venueCard.querySelector('h3')):place;
    const address=venueCard?VALUE(venueCard.querySelector('address')):'';
    const meta=Array.from(card.querySelectorAll('.meta-chip')).map(VALUE);
    const details=Array.from(card.querySelectorAll('.tournament-detail')).map(n=>[VALUE(n.querySelector('dt')),VALUE(n.querySelector('dd'))]).filter(pair=>pair[0]&&pair[1]);
    const description=VALUE(card.querySelector('.workshop-event-description'));
-   const time=workshop?(location.match(/(\d{1,2}:\d{2})\s*Uhr/)||[])[1]||'':'';
-   const event={id,title,location,date,venue,address,meta,details,type:workshop?'workshop':'turnier',time};
+   const time=workshop?(place.match(/(\d{1,2}:\d{2})\s*Uhr/)||[])[1]||'':'';
+   const event={id,title,location:place,date,venue,address,meta,details,type:workshop?'workshop':'turnier',time};
    document.title=title+' | Termine | Tennis-Schiri';
    $('event-name').textContent=title;
    $('event-subtitle').textContent=aria+' · '+venue;
@@ -148,7 +148,7 @@
    if(description){$('event-description').textContent=description;$('event-description').hidden=false;}
    $('event-venue').textContent=venue;
    $('event-address').textContent=address||'Anschrift noch nicht veröffentlicht';
-   const img=officialLogo(venue,location);
+   const img=officialLogo(venue,place);
    if(img){
     const image=document.createElement('img');image.src=img.src;image.alt=img.alt;image.loading='lazy';
     $('event-logo').replaceChildren(image);
