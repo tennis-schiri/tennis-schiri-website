@@ -2392,3 +2392,26 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   .newsletter-page-copy>h2{font-size:41px}
   .newsletter-benefit{gap:14px}
 }
+
+
+/* Laufendes Turnier, freigegebene Infos, Outdoor-Wetter und Turnierarchiv */
+.tourney-card[hidden],.tourney-pages[hidden],.tourney-archive[hidden],.featured-tournament[hidden]{display:none!important}
+.tourney-weather{margin:14px 0 3px;padding:12px 15px;border-radius:11px;background:#eff7e7;border:1px solid #d3e6c6;color:#28533b;font-size:13px;line-height:1.55}
+.tourney-weather p{margin:0 0 4px;font-weight:800;letter-spacing:0}
+.tourney-weather small{display:block;font-size:11px;color:#627a61}
+.tourney-weather small a{font-weight:700;color:#2e7245}
+.public-info-link{font-size:13px;font-weight:800;color:#1f6640;text-decoration:underline;text-underline-offset:3px}
+.featured-tournament .public-info-link{display:inline-flex;margin:12px 0 0 14px}
+.tourney-archive{border-top:1px solid #d4dfd1;margin:40px 0 55px;padding:24px 0}
+.tourney-archive summary{font-weight:900;font-size:20px;cursor:pointer;color:#224e32;list-style-position:inside;padding:10px 0}
+.tourney-archive[open] summary{margin-bottom:20px}
+.tourney-archive .tourney-grid{margin-top:15px}
+.archived-tourney{background:#f3f5f0;border-color:#e0e5d9;box-shadow:none;opacity:.82}
+.archived-tourney h3{color:#5b6d61}
+.archived-tourney .tourney-actions>.tournament-cta{background:#edf1e8;color:#56705c}
+.current-tourney-label{color:#247345}
+.public-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:25px 0 30px}
+.public-info-card{padding:22px;background:#fff;border:1px solid #dce7d5;border-radius:13px;box-shadow:0 4px 16px #193b2808}
+.public-info-card h2{font-size:17px;margin:0 0 12px;color:#1c5436}
+.public-info-card p{font-size:14px;line-height:1.7;margin:0;overflow-wrap:anywhere}
+@media(max-width:620px){.public-info-grid{grid-template-columns:1fr}.tourney-archive summary{font-size:17px}.tourney-weather{font-size:12px;padding:11px}}
