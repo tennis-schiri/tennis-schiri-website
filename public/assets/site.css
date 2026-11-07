@@ -2632,3 +2632,14 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .lk-home-teaser-cta{white-space:nowrap;font-size:12px;padding:13px 17px}
 @media(max-width:960px){.lk-home-teaser{grid-template-columns:48px minmax(0,1fr)}.lk-home-teaser-icon{width:48px;height:48px;font-size:19px}.lk-home-teaser-cta{grid-column:2;justify-self:start}}
 @media(max-width:590px){.lk-home-teaser{grid-template-columns:1fr;gap:11px;padding:19px}.lk-home-teaser-icon{width:40px;height:40px;font-size:16px}.lk-home-teaser-cta{grid-column:1;justify-self:stretch;white-space:normal;text-align:center}}
+
+/* Mein Turniertag: auf Startseite und Kalender klarer Einstieg */
+.mt-home-promo{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:20px 24px;margin:-9px 0 28px;border:1px solid #d2e2d0;border-radius:17px;background:#fff}
+.mt-home-promo h3{font-size:23px;color:#1b4a31;margin:7px 0;letter-spacing:-.025em}
+.mt-home-promo p{font-size:13px;line-height:1.65;color:#5c765e;max-width:600px;margin:0}
+.mt-home-promo .eyebrow{font-size:10px;color:#5d8c5a}
+.mt-home-promo a{white-space:nowrap;font-size:12px}
+.mt-calendar-links{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 20px}
+.mt-calendar-links a{display:inline-flex;align-items:center;padding:10px 14px;border:1px solid #bdd3b8;border-radius:999px;text-decoration:none;color:#20563a;background:#f1f7ea;font-weight:850;font-size:12px;line-height:1.5}
+.mt-calendar-links a:hover{background:#e3f0d9;border-color:#94bd88}
+@media(max-width:740px){.mt-home-promo{flex-direction:column;align-items:flex-start;gap:15px}.mt-home-promo a{white-space:normal}}
