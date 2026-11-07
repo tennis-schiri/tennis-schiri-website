@@ -13,7 +13,10 @@ $campaign=[
  'preheader'=>'Melde dich jetzt für neue Turniere an.',
  'body'=>"Am Samstag spielen wir Tennis.\n\nDie Anmeldung ist geöffnet.\nWeitere Details folgen.",
  'button_label'=>'Zur Turnierübersicht',
- 'button_url'=>'https://tennis-schiri.de/turniere/'
+ 'button_url'=>'https://tennis-schiri.de/turniere/',
+ 'event_title'=>'Hallen-LK-Turnier Bad Saarow',
+ 'event_date'=>'21.11.2026 · ab 10 Uhr',
+ 'event_location'=>'Bad Saarow · Tennishalle'
 ];
 $url='https://tennis-schiri.de/newsletter.php?action=unsubscribe-signed&id=123&sig='.str_repeat('a',64);
 $html=newsletterTemplate($campaign,$url);
@@ -21,6 +24,11 @@ $text=newsletterPlainText($campaign,$url);
 ensure(str_contains($html,'<html lang="de">'),'HTML-Root fehlt');
 ensure(str_contains($html,'Neue LK-Turniere &amp; freie Plätze'),'HTML-Überschrift wurde nicht escaped');
 ensure(str_contains($html,'Zur Turnierübersicht'),'CTA nicht dargestellt');
+ensure(str_contains($html,'Hallen-LK-Turnier Bad Saarow'),'Eventkarte fehlt');
+ensure(str_contains($html,'Bad Saarow · Tennishalle'),'Ort auf Eventkarte fehlt');
+ensure(str_contains($text,'Termin: 21.11.2026'),'Textalternative ohne Termin');
+ensure(str_contains(newsletterTemplate($campaign,$url,true),'TEST / VORSCHAU'),'Vorschaubanner fehlt');
+ensure(!str_contains($html,'TEST / VORSCHAU'),'Echte Nachricht enthält Testbanner');
 ensure(str_contains($html,'href="https://tennis-schiri.de/turniere/"'),'CTA nicht erreichbar');
 ensure(str_contains($html,'id=123&amp;sig='),'Abmeldelink fehlt oder ungeescaped');
 ensure(str_contains($html,'text-align:center'),'Tabellenlayout nicht geladen');
