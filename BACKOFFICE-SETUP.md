@@ -43,6 +43,18 @@ Die Checkliste hat eigene Datenbankfelder, die beim ersten Aufruf automatisch er
 
 Die Infomails sind für organisatorische Mitteilungen an bereits angemeldete Turnierteilnehmer gedacht, **nicht für Werbung**. Ein Versandstatus „vom Mailserver angenommen“ bestätigt keine erfolgreiche Zustellung. Nach einem Absturz wird ein begonnener Versand nicht automatisch wiederholt, um Doppelversand zu vermeiden.
 
+### Turnier-Guide 2.2 und Standortvorlagen
+
+Die abgestimmte [Produktspezifikation](docs/turnier-mail-konfigurator-spec.md) aus dem anderen Entwicklungs-Chat ist mit dem Backoffice abgeglichen:
+
+- In der Navigation unter **Standorte** findest du die wiederverwendbaren Vorlagen **Tennis Center Bad Saarow**, **Neuenhagen** und **Allgemein**. Anschrift, Navigationslink, Belag, Turnierleitung, Park-/Anreisehinweise, Gastronomie, Umkleiden und Kontakt kannst du selbst pflegen. Es werden bewusst keine alten Preise oder unbestätigten Angaben vorausgefüllt.
+- Bei der Erstellung einer neuen Infomail wählst du die Standortvorlage. Ihre Daten werden als **Momentaufnahme** gespeichert, sodass eine spätere Änderung der Stammvorlage keine bereits angelegten E-Mails verändert.
+- Beim Bearbeiten des Entwurfs bietet der **Turnier-Guide 2.2** zusätzliche eingeklappte Gruppen für aktuelle Änderungen, Auslosung, Anreise, Spielbetrieb, Nenngeld/Service und Regelungen. Jedes Modul wird nur nach Aktivierung mit ausgefüllten Angaben in die E-Mail aufgenommen.
+- Die neue E-Mail-Gestaltung enthält einen deutlich hervorgehobenen Termin-/Ortsbereich und sortierte Informationskarten, auch in der Textalternative. Die bisherige kurze Checkliste bleibt weiterhin nutzbar.
+- Offizielle Auslosungs-/Spielplan-URLs und Navigation akzeptieren ausschließlich gültige HTTPS-Links. Die Turnigo- und MyScore-Module prüfen zusätzlich die Domain.
+
+**Noch offen:** eigene Betragstabellen statt mehrzeiliger Texte, nebeneinander angeordnete Digitalservice-Karten sowie getrennte Desktop-/Handy-Vorschau. Die bisherigen technischen Versand- und Freigabesicherungen bleiben bestehen. Alle neuen Bereiche werden vor dem Upload im Backoffice-CI getestet.
+
 ### Vorlagen und Versandprotokoll
 
 Standardvorlagen sind im Backoffice sichtbar. Sie werden bei Erstellung einer neuen Infomail übernommen und können dann vollständig bearbeitet werden. Freigegebene Entwürfe und ihre Empfängerlisten werden nicht nachträglich geändert. Das Protokoll zeigt getrennt wartende, angenommene, fehlgeschlagene und übersprungene E-Mails.
