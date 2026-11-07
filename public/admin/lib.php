@@ -105,6 +105,9 @@ function boUrl(string $view='dashboard',int $id=0,string $info=''): string {
 function boGo(string $view='dashboard',int $id=0,string $info=''): never {
  header('Location: '.boUrl($view,$id,$info),true,303);exit;
 }
+function boGoContacts(string $tournament,string $info): never {
+ header('Location: '.boUrl('contacts',0,$info).'&tournament='.rawurlencode($tournament),true,303);exit;
+}
 function boError(string $msg,int $code=422): never {
  http_response_code($code);
  boPage('Eingabe prüfen','<section class="panel"><p>'.boEsc($msg).'</p><p><a href="/admin/">Zum Backoffice</a></p></section>');
