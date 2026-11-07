@@ -10,7 +10,7 @@
 | Drei Mailtypen, personalisierte Vorlagen, TS09c-HTML plus Textalternative | **Umgesetzt** |
 | Grundcheckliste: Meldung, Ablauf, Parken, Gebühren, Turnigo, MyScore, Kontakt | **Umgesetzt** |
 | Detailcheckliste: Auslosung, wichtige Änderungen, Verspätung, Schuhe, Modus, Einspielen, Ergebnisse, Pausen, Bälle, Konkurrenzgebühren, Zahlungen, Gastronomie, Umkleiden, Änderungen und Rücktritt | **Umgesetzt, optional** |
-| Bad Saarow, Neuenhagen, allgemeine Vorlage, editierbare Standortdaten und Snapshot pro Entwurf | **Umgesetzt**; Standortdaten zunächst bewusst leer, keine Übernahme unbestätigter historischer Angaben |
+| Bad Saarow, Neuenhagen übergreifend/Halle/Außenanlage, allgemeine Vorlage, editierbare Standortdaten und Snapshot pro Entwurf | **Umgesetzt**; Standortdaten bleiben leer, bis historische Quellen aktuell bestätigt wurden. Ein Prüfdatum und interner Quellenhinweis werden je Profil gespeichert. |
 | E-Mail-Hero mit Turniername, Datum-/Ort-Karte und gegliederten Informationsblöcken | **Umgesetzt, Basislayout** |
 | Offizielle Auslosung/Spielplan, Turnigo und MyScore als getrennt prüfbare URLs | **Umgesetzt** |
 | Kartenartige Preisübersicht nach Konkurrenzen statt Freitext; visuelle Doppelkarte für die zwei Digitalservices | **Noch offen** |
@@ -18,6 +18,8 @@
 | Zustellbarkeit/SMTP-Konfiguration und juristische Prüfung einzelner Regelhinweise | **Vor echtem Serienversand gesondert prüfen** |
 
 Neue PHP-Module sind \`public/admin/venues.php\` und \`public/admin/guide.php\`; die ursprünglichen Basis-Checkboxen bleiben in \`public/admin/info-sections.php\` kompatibel erhalten. SQLite-Spalten werden beim ersten Aufruf ergänzt; bereits angelegte Entwürfe bleiben erhalten. Nach Freigabe dürfen die in der Kampagne gespeicherten Einstellungen nicht von geänderten Standortvorlagen beeinflusst werden. CI-Lint und Regressionstests sind in \`.github/workflows/backoffice-check.yml\` und dem manuellen Live-Upload integriert.
+
+Das zusätzlich im GitHub-Repository eingetroffene [Neuenhagen-Quellenprofil](standorte/neuenhagen-quellenprofil.md) wurde berücksichtigt. Die historisch widersprüchlichen Hallen-/Außenanlageninformationen bleiben getrennt; weder Preise, Spielregeln, Telefonnummern noch technische Zugangshinweise werden automatisch als gültige Fakten vorausgefüllt. Eine vom Admin aktuell bestätigte Standortvorlage wird bei Erstellung der Infomail kopiert und später nicht mehr stillschweigend verändert.
 
 **Wichtig:** Dieser Status bezieht sich auf GitHub. Die produktive Darstellung und der reale Versand müssen nach dem manuellen Live-Upload mit Testadressen geprüft werden.
 
