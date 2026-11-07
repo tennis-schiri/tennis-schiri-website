@@ -149,6 +149,8 @@ jobs:
           python tests/tournament-detail-test.py
           node --check public/assets/rules-library.js
           python tests/rules-library-test.py
+          node --check public/assets/rules-reference.js
+          node tests/rules-reference-test.mjs
           php -l public/turnierinfos.php
           php -l public/workshop-lib.php
           php -l public/workshop.php
