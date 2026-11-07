@@ -33,7 +33,9 @@ try {
   PRIMARY KEY (campaign_id,subscriber_id))");
  $columns=array_column($db->query('PRAGMA table_info(newsletter_campaigns)')->fetchAll(),'name');
  foreach (['headline'=>'TEXT NOT NULL DEFAULT \'\'','preheader'=>'TEXT NOT NULL DEFAULT \'\'',
-           'button_label'=>'TEXT NOT NULL DEFAULT \'\'','button_url'=>'TEXT NOT NULL DEFAULT \'\''] as $column=>$definition) {
+           'button_label'=>'TEXT NOT NULL DEFAULT \'\'','button_url'=>'TEXT NOT NULL DEFAULT \'\'',
+           'event_title'=>'TEXT NOT NULL DEFAULT \'\'','event_date'=>'TEXT NOT NULL DEFAULT \'\'',
+           'event_location'=>'TEXT NOT NULL DEFAULT \'\''] as $column=>$definition) {
   if (!in_array($column,$columns,true)) $db->exec('ALTER TABLE newsletter_campaigns ADD COLUMN '.$column.' '.$definition);
  }
 } catch(Throwable $e) { error_log('Newsletter campaigns setup failed: '.$e->getMessage()); http_response_code(503); exit('Datenbank vorübergehend nicht verfügbar.'); }
@@ -53,6 +55,10 @@ function extraFields(array $campaign=[]): string {
  $out.='<label>Button-Beschriftung (optional)</label><input type="text" name="button_label" maxlength="70" value="'.h($campaign['button_label']??'').'" placeholder="Zum Turnier anmelden">';
  $out.='<label>Button-Ziel (HTTPS-Link)</label><input type="url" name="button_url" maxlength="500" value="'.h($campaign['button_url']??'').'" placeholder="https://tennis-schiri.de/turniere/">';
  $out.='<p class="muted">Beide Button-Felder entweder ausfüllen oder leer lassen. Nur HTTPS-Links. Der Nachrichtentext wird sicher als Absätze formatiert, ohne HTML-Code eingeben zu müssen.</p>';
+ $out.='<div class="event-editor"><strong>Optional: Veranstaltungskarte</strong><p class="muted">Für ein besonders wichtiges Turnier oder einen Workshop. Ohne Titel wird keine Karte angezeigt.</p>';
+ $out.='<label>Turnier-/Workshop-Name</label><input type="text" name="event_title" maxlength="120" value="'.h($campaign['event_title']??'').'" placeholder="z. B. Hallen-LK-Turnier in Bad Saarow">';
+ $out.='<label>Termin</label><input type="text" name="event_date" maxlength="80" value="'.h($campaign['event_date']??'').'" placeholder="z. B. 21. November 2026 · ab 10:00 Uhr">';
+ $out.='<label>Veranstaltungsort</label><input type="text" name="event_location" maxlength="140" value="'.h($campaign['event_location']??'').'" placeholder="z. B. Bad Saarow · Sandplatzhalle"></div>';
  return $out;
 }
 
@@ -61,7 +67,7 @@ function finish(string $message,int $id=0): never {
 }
 function page(string $contents): never {
  echo '<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Tennis-Schiri Newsletter · E-Mail-Verwaltung</title><style>
- :root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#eef3ef;color:#092b36;font:15px/1.55 system-ui}main{max-width:1050px;margin:36px auto;padding:0 17px}.panel{background:white;border:1px solid #d9e5df;border-radius:14px;padding:24px;margin-bottom:17px}h1{font-size:29px}h2{font-size:21px;margin:0 0 15px}p{margin:8px 0 16px}a{color:#007b7c}label{display:block;font-weight:700;margin:13px 0 6px}input[type=text],input[type=url],textarea,select{font:inherit;border:1px solid #b5c9c3;border-radius:8px;padding:11px;width:100%;background:white;color:#092b36}textarea{min-height:180px}button{background:#092b36;color:#fff;border:0;border-radius:8px;padding:11px 16px;font:inherit;cursor:pointer;margin:8px 8px 8px 0}button:hover{background:#19505b}.muted,small{color:#526e70}.warning{border-left:4px solid #eb8959;padding:10px 15px;background:#fff8f2}.success{background:#e8f5e7;padding:12px;border-radius:8px}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.topic{font-weight:700}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #d9e5df;padding:10px;text-align:left}code{font-size:12px} .danger{color:#9c482b} @media(max-width:640px){.panel{padding:17px}table{font-size:12px}}
+ :root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#eef3ef;color:#092b36;font:15px/1.55 system-ui}main{max-width:1050px;margin:36px auto;padding:0 17px}.panel{background:white;border:1px solid #d9e5df;border-radius:14px;padding:24px;margin-bottom:17px}h1{font-size:29px}h2{font-size:21px;margin:0 0 15px}p{margin:8px 0 16px}a{color:#007b7c}label{display:block;font-weight:700;margin:13px 0 6px}input[type=text],input[type=url],textarea,select{font:inherit;border:1px solid #b5c9c3;border-radius:8px;padding:11px;width:100%;background:white;color:#092b36}textarea{min-height:180px}button{background:#092b36;color:#fff;border:0;border-radius:8px;padding:11px 16px;font:inherit;cursor:pointer;margin:8px 8px 8px 0}button:hover{background:#19505b}.muted,small{color:#526e70}.event-editor{margin:23px 0;padding:20px;border:1px solid #c6dbbb;background:#f4f8ee;border-radius:12px}.event-editor>strong{display:block;color:#245039;font-size:17px}.event-editor .muted{margin:6px 0 18px}.warning{border-left:4px solid #eb8959;padding:10px 15px;background:#fff8f2}.success{background:#e8f5e7;padding:12px;border-radius:8px}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.row>*{flex:1}.topic{font-weight:700}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #d9e5df;padding:10px;text-align:left}code{font-size:12px} .danger{color:#9c482b} @media(max-width:640px){.panel{padding:17px}table{font-size:12px}}
  </style><main><p><a href="/newsletter-admin.php">← Zur Newsletter-Verwaltung</a></p><h1>Newsletter · E-Mail-Verwaltung</h1>'.$contents.'</main></html>'; exit;
 }
 function csrf(): string { return '<input type="hidden" name="csrf" value="'.h($_SESSION['csrf']).'">'; }
@@ -117,19 +123,24 @@ if($method==='POST'){
   $preheader=trim((string)($_POST['preheader']??''));
   $buttonLabel=trim((string)($_POST['button_label']??''));
   $buttonUrl=trim((string)($_POST['button_url']??''));
+  $eventTitle=trim((string)($_POST['event_title']??''));
+  $eventDate=trim((string)($_POST['event_date']??''));
+  $eventLocation=trim((string)($_POST['event_location']??''));
   if ($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||
       $body===''||strlen($body)>10000||!array_key_exists($topic,$topics)||
       strlen($headline)>120||strlen($preheader)>160||strlen($buttonLabel)>70||
-      !validButtonUrl($buttonUrl)||(($buttonLabel==='')!==($buttonUrl===''))) {
+      !validButtonUrl($buttonUrl)||(($buttonLabel==='')!==($buttonUrl===''))||
+      strlen($eventTitle)>120||strlen($eventDate)>80||strlen($eventLocation)>140||
+      ($eventTitle==='' && ($eventDate!=='' || $eventLocation!==''))) {
     page('<section class="panel warning">Bitte Betreff, Text, Überschrift, Vorschautext und Button prüfen. Ein Button braucht sowohl Text als auch eine gültige HTTPS-Adresse.</section>');
   }
   if($action==='create'){
-   $q=$db->prepare("INSERT INTO newsletter_campaigns(subject,body,topic,headline,preheader,button_label,button_url,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,'draft',?,?)");
-   $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$now,$now]);
+   $q=$db->prepare("INSERT INTO newsletter_campaigns(subject,body,topic,headline,preheader,button_label,button_url,event_title,event_date,event_location,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
+   $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$eventTitle,$eventDate,$eventLocation,$now,$now]);
    finish('Entwurf gespeichert.',(int)$db->lastInsertId());
   }
-  $q=$db->prepare("UPDATE newsletter_campaigns SET subject=?,body=?,topic=?,headline=?,preheader=?,button_label=?,button_url=?,updated_at=? WHERE id=? AND state='draft'");
-  $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$now,$id]);
+  $q=$db->prepare("UPDATE newsletter_campaigns SET subject=?,body=?,topic=?,headline=?,preheader=?,button_label=?,button_url=?,event_title=?,event_date=?,event_location=?,updated_at=? WHERE id=? AND state='draft'");
+  $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$eventTitle,$eventDate,$eventLocation,$now,$id]);
   finish($q->rowCount()?'Änderungen gespeichert.':'Nur unveröffentlichte Entwürfe können bearbeitet werden.',$id);
  }
  if(!$id)finish('Ungültige Kampagne.');
@@ -140,7 +151,7 @@ if($method==='POST'){
   $unsubPreview='https://tennis-schiri.de/newsletter.php?action=unsubscribe-request';
   $subject='[TEST] '.$campaign['subject'];
   $text="TESTNACHRICHT – kein Versand an Abonnenten.\n\n".newsletterPlainText($campaign,$unsubPreview);
-  $html=newsletterTemplate($campaign,$unsubPreview);
+  $html=newsletterTemplate($campaign,$unsubPreview,true);
   $ok=sendMail('mw@tennis-schiri.de',$subject,$text,$html);
   finish($ok?'Testmail an mw@tennis-schiri.de vom Server angenommen.':'Testmail wurde vom Server abgelehnt.',$id);
  }
@@ -197,7 +208,7 @@ if($id){
  if(($_GET['preview']??'')==='1'){
   header('Content-Type: text/html; charset=UTF-8');
   header('Content-Disposition: inline; filename="tennis-schiri-newsletter-vorschau.html"');
-  echo newsletterTemplate($c,'https://tennis-schiri.de/newsletter.php?action=unsubscribe-request');
+  echo newsletterTemplate($c,'https://tennis-schiri.de/newsletter.php?action=unsubscribe-request',true);
   exit;
  }
 
