@@ -142,4 +142,56 @@ $db->prepare('UPDATE bo_venues SET data=? WHERE id=?')->execute(['{}','bad-saaro
 $after=$db->query('SELECT venue_data FROM bo_campaigns WHERE id=1')->fetchColumn();
 boAssert($before===$after,'Änderungen an Standorten verändern vorhandene Mail-Snapshots');
 
+
+/* Pre-filled info mails: actual SQLite inserts, snapshots, preview and review gate. */
+boAssert(boVenueBestGuess(['location'=>'Tennis Center Bad Saarow','title'=>'Winter-LK'])==='bad-saarow','Auto-recognition Bad Saarow broken');
+boAssert(boVenueBestGuess(['location'=>'Neuenhagen bei Berlin','title'=>'Indoor-MIXED-Turnier'])==='neuenhagen-halle','Auto-recognition Neuenhagen Indoor broken');
+boAssert(boVenueBestGuess(['location'=>'Neuenhagener Tennisclub 93','title'=>'LK-Turnier'])==='neuenhagen','Neuenhagen unknown indoor/outdoor should stay general');
+boAssert(boVenueBestGuess(['location'=>'TC Rotation Friedrichsfelde','title'=>'ROHA Open'])==='general','Unknown location must use general template');
+$seed=boKnownCampaignDefaults('bad-saarow','{}','info');
+boAssert((int)$seed['defaults_review_required']===1 && $seed['defaults_reviewed_at']===null,'Prefilled draft must require review');
+boAssert(str_contains($seed['info_arrival'],'30 Minuten'),'Known arrival guidance not prefilled');
+boAssert(in_array('arrival',boInfoSelected($seed),true),'Arrival checkbox missing');
+boAssert(in_array('contact',boInfoSelected($seed),true),'Contact checkbox missing');
+$venueSeed=boVenueData($seed['venue_data']);
+boAssert(str_contains($venueSeed['surface']??'','Laykold'),'Known Bad Saarow court surface proposal missing');
+boAssert(empty($venueSeed['_verified_at']),'Historical location incorrectly marked verified');
+$draftGuide=boGuideDecoded($seed);
+boAssert(in_array('warmup',$draftGuide['selected'],true),'Known warmup not preselected');
+boAssert(str_contains($draftGuide['values']['fees_detail'],'45 €'),'Historical price proposal missing');
+boAssert(!in_array('fees_detail',$draftGuide['selected'],true),'Unverified prices must not be preselected');
+$neuenhagen=boKnownCampaignDefaults('neuenhagen-halle','{}','info');
+boAssert(str_contains($neuenhagen['venue_data'],'Advantage Red Court'),'Historic Neuenhagen indoor surface not offered for review');
+boAssert(!in_array('scoring',boGuideDecoded($neuenhagen)['selected'],true),'Unverified match format selected without review');
+$namedProfile=boKnownCampaignDefaults('bad-saarow',json_encode(['parking'=>'Eigene verifizierte Parkregel','_verified_at'=>'2026-11-07']),'info');
+boAssert(boVenueData($namedProfile['venue_data'])['parking']==='Eigene verifizierte Parkregel','Verified user master was overwritten by history');
+
+$testTournament=['id'=>'test-prefilled-2027','title'=>'Bad Saarow Turniertest','date'=>'24.01.2027','location'=>'Tennis Center Bad Saarow','url'=>'https://tennis-schiri.de/turniere/#turnier-bad-saarow-2027'];
+$demoId=boCreateKnownCampaign($db,$testTournament,boTemplates()['info'],'info','bad-saarow','{}',time());
+$draft=boCampaign($db,$demoId);
+boAssert((int)$draft['defaults_review_required']===1 && empty($draft['defaults_reviewed_at']),'Created campaign skipped review flag');
+boAssert(str_contains($draft['info_arrival'],'30 Minuten'),'Created SQLite campaign missing proposed arrival');
+boAssert(str_contains($draft['venue_data'],'Laykold'),'Created SQLite campaign missing proposed venue');
+boAssert(str_contains(boInfoEditor($draft),'checked'),'Checkboxes are not preset in admin');
+boAssert(str_contains(boCampaignVenueEditor($draft),'Laykold'),'Editable venue proposal missing');
+[,,$notReviewedHtml]=boMailContent($draft,['name'=>'Max Muster'],false);
+boAssert(!str_contains($notReviewedHtml,'Laykold'),'Unconfirmed venue details leaked into actual mail');
+[,,$previewWithHistory]=boMailContent($draft,['name'=>'Max Muster'],true);
+boAssert(str_contains($previewWithHistory,'Laykold') && str_contains($previewWithHistory,'NOCH NICHT GEPRÜFTE'),'Preview must explicitly show unverified proposals');
+$updateInput=['campaign_venue_surface'=>'Hartplatz/Laykold','campaign_venue_parking'=>'Parkplätze geprüft','campaign_venue_checkin'=>'Counter','campaign_venue_catering'=>'Gastronomie'];
+$approvedVenue=boCampaignVenueFromPost($updateInput,$draft,true);
+boAssert(!empty(boVenueData($approvedVenue)['_verified_at']),'Explicit review did not mark this campaign venue as checked');
+$before=boVenueData($approvedVenue)['_source']??'';
+boAssert(str_contains($before,'Bad-Saarow'),'Historical source was lost during editing');
+$demoUpdate=$db->prepare('UPDATE bo_campaigns SET venue_data=?,defaults_reviewed_at=? WHERE id=?');
+$demoUpdate->execute([$approvedVenue,time(),$demoId]);
+$reviewed=boCampaign($db,$demoId);
+[,,$reviewedHtml]=boMailContent($reviewed,['name'=>'Max Muster'],false);
+boAssert(str_contains($reviewedHtml,'Parkplätze geprüft'),'Verified venue snapshot not included in real HTML');
+$legacyDraft=['venue_id'=>'bad-saarow','venue_data'=>'{}','template_type'=>'info','info_arrival'=>'Meine schon gespeicherte Meldezeit','info_sections'=>'[]','guide_data'=>'{}'];
+$merged=boMergeKnownCampaign($legacyDraft,'bad-saarow');
+boAssert($merged['info_arrival']==='Meine schon gespeicherte Meldezeit','Existing draft custom data overwritten');
+boAssert(str_contains($merged['venue_data'],'Laykold'),'Existing draft not enriched with known suggestions');
+boAssert(empty($merged['defaults_reviewed_at']),'Imported suggestions must reset review');
+
 fwrite(STDOUT,"Tennis-Schiri Backoffice: SQLite, Templates, escape, mail preview, tracking safety and separate contacts verified.\n");
