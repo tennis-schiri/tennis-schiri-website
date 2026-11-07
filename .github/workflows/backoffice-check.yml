@@ -33,6 +33,7 @@ jobs:
           php -v
           php -r 'if (!extension_loaded("pdo_sqlite")) exit(1);'
           php -l public/admin/lib.php
+          php -l public/admin/info-sections.php
           php -l public/admin/index.php
           php -l public/newsletter-admin.php
           php -l public/newsletter-mail.php
@@ -46,6 +47,8 @@ jobs:
           grep -Fq "session_name('ts_newsletter_admin')" public/admin/lib.php
           grep -Fq "if (!defined('TS_BACKOFFICE'))" public/admin/lib.php
           grep -Fq "boCheckPost();" public/admin/index.php
+          grep -Fq "boInfoFromPost" public/admin/index.php
+          grep -Fq "boInfoMailBlocks" public/admin/lib.php
           grep -Fq "boSend(" public/admin/index.php
           grep -Fq "for(\$i=0;\$i<5;\$i++)" public/admin/index.php
           grep -Fq "turniere@tennis-schiri.de" public/admin/lib.php
