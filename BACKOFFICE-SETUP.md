@@ -45,9 +45,9 @@ Die Infomails sind für organisatorische Mitteilungen an bereits angemeldete Tur
 
 ### Turnier-Guide 2.2 und Standortvorlagen
 
-Die abgestimmte [Produktspezifikation](docs/turnier-mail-konfigurator-spec.md) aus dem anderen Entwicklungs-Chat ist mit dem Backoffice abgeglichen:
+Die abgestimmte [Produktspezifikation](docs/turnier-mail-konfigurator-spec.md) und das ergänzte [Neuenhagen-Quellenprofil](docs/standorte/neuenhagen-quellenprofil.md) aus dem anderen Entwicklungs-Chat sind mit dem Backoffice abgeglichen:
 
-- In der Navigation unter **Standorte** findest du die wiederverwendbaren Vorlagen **Tennis Center Bad Saarow**, **Neuenhagen** und **Allgemein**. Anschrift, Navigationslink, Belag, Turnierleitung, Park-/Anreisehinweise, Gastronomie, Umkleiden und Kontakt kannst du selbst pflegen. Es werden bewusst keine alten Preise oder unbestätigten Angaben vorausgefüllt.
+- In der Navigation unter **Standorte** findest du die wiederverwendbaren Vorlagen **Tennis Center Bad Saarow**, **Neuenhagen (übergreifend)**, **Neuenhagen Halle**, **Neuenhagen Außenanlage** und **Allgemein**. Anschrift, Navigationslink, Belag, Turnierleitung, Park-/Anreisehinweise, Gastronomie, Umkleiden und Kontakt kannst du selbst pflegen. Es werden bewusst keine alten Preise oder unbestätigten Angaben vorausgefüllt. Die Datensätze für Neuenhagen Halle und Außenanlage bleiben leer, bis die historischen Quellen geprüft sind. Eine aktuelle Bestätigung mit Prüfdatum und interner Quelle ist nötig, bevor ein Standortdatenblock in eine Turniermail übernommen wird.
 - Bei der Erstellung einer neuen Infomail wählst du die Standortvorlage. Ihre Daten werden als **Momentaufnahme** gespeichert, sodass eine spätere Änderung der Stammvorlage keine bereits angelegten E-Mails verändert.
 - Beim Bearbeiten des Entwurfs bietet der **Turnier-Guide 2.2** zusätzliche eingeklappte Gruppen für aktuelle Änderungen, Auslosung, Anreise, Spielbetrieb, Nenngeld/Service und Regelungen. Jedes Modul wird nur nach Aktivierung mit ausgefüllten Angaben in die E-Mail aufgenommen.
 - Die neue E-Mail-Gestaltung enthält einen deutlich hervorgehobenen Termin-/Ortsbereich und sortierte Informationskarten, auch in der Textalternative. Die bisherige kurze Checkliste bleibt weiterhin nutzbar.
