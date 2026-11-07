@@ -3,6 +3,7 @@ declare(strict_types=1);
 define('TS_BACKOFFICE',true);
 require_once __DIR__.'/lib.php';
 [$cfg,$db]=boStart();
+$venues=boVenueList($db);
 $tournaments=boTournaments();
 $templates=boTemplates();
 $method=$_SERVER['REQUEST_METHOD']??'GET';
@@ -14,6 +15,15 @@ if($method==='POST'){
  $action=boPost('action',50);
  $tournament=boPost('tournament',100);
  $now=time();
+ if($action==='venue_save'){
+  $venueId=boPost('venue_id',80);
+  if(!isset($venues[$venueId]))boError('Unbekannte Standortvorlage.');
+  try{$data=boVenueValidate($_POST);}
+  catch(InvalidArgumentException $ex){boError($ex->getMessage());}
+  $q=$db->prepare('UPDATE bo_venues SET data=?,updated_at=? WHERE id=?');
+  $q->execute([json_encode($data,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR),$now,$venueId]);
+  header('Location: /admin/?view=venues&venue='.rawurlencode($venueId).'&info='.rawurlencode('Standortvorlage gespeichert. Bestehende E-Mail-Entwürfe wurden nicht verändert.'),true,303);exit;
+ }
  if($action==='contact_add'){
   if(!isset($tournaments[$tournament]))boError('Bitte ein verfügbares Turnier auswählen.');
   $email=strtolower(boPost('email',254));$name=boPost('name',160);
@@ -87,8 +97,10 @@ if($method==='POST'){
   $type=boPost('template_type',30);
   if(!isset($templates[$type])||!isset($tournaments[$tournament]))boError('Bitte eine gültige Vorlage und ein Turnier auswählen.');
   $t=$tournaments[$tournament];$template=$templates[$type];
-  $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,notes,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,'draft',?,?)");
-  $q->execute([$t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],'',$now,$now]);
+  $venueId=boPost('venue_id',80);
+  if(!isset($venues[$venueId]))boError('Bitte eine gültige Standortvorlage wählen.');
+  $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,notes,venue_id,venue_data,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
+  $q->execute([$t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],'',$venueId,$venues[$venueId]['data'],$now,$now]);
   boGo('campaign',(int)$db->lastInsertId(),'Entwurf erstellt. Bitte Text prüfen und bei Bedarf anpassen.');
  }
  $campaignId=filter_var($_POST['campaign_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
@@ -230,6 +242,17 @@ if($view==='contacts'){
  boPage('Teilnehmerverwaltung',$html);
 }
 
+if($view==='venues'){
+ $chosen=(string)($_GET['venue']??($_GET['venue_id']??'general'));
+ if(!isset($venues[$chosen]))$chosen='general';
+ $profile=$venues[$chosen];
+ $html='<section class="panel"><h2>Wiederverwendbare Standortvorlagen</h2><p>Hier hinterlegst du Anschrift, Belag, Anreise, Gastronomie und Turnierleitung <strong>einmal je Standort</strong>. Bitte nur aktuell bestätigte Angaben speichern. Alte Preise und Ausstattungsmerkmale werden nicht ungefragt vorausgefüllt.</p><form method="get"><input type="hidden" name="view" value="venues"><label>Standort auswählen</label>'.boVenueSelector($venues,$chosen).'<button type="submit" class="button-secondary">Vorlage öffnen</button></form></section>';
+ // The selector above posts the name venue_id; accept this as well as bookmarked ?venue=.
+ $html.='<section class="panel"><h2>'.boEsc($profile['name']).'</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="venue_save"><input type="hidden" name="venue_id" value="'.boEsc($chosen).'">'.boVenueEditor($profile).'<p><button type="submit">Standortvorlage speichern</button></p></form></section>';
+ $html.='<p class="help">Jede neu erstellte Infomail übernimmt einen <strong>Snapshot</strong>. Selbst wenn die Standortvorlage nachträglich geändert wird, bleiben ältere Entwürfe und bereits freigegebene Mails unverändert.</p>';
+ boPage('Standortvorlagen',$html);
+}
+
 if($view==='templates'){
  $html='<section class="panel"><h2>Vorlagen für organisatorische Turniermails</h2><p>Die Texte dienen als Ausgangspunkt. Betreff und Nachricht kannst du in jedem Entwurf individuell bearbeiten. Platzhalter werden beim Versand mit dem Turnier und dem jeweiligen Teilnehmer ausgefüllt.</p><p><code>{{name}}</code> · <code>{{turnier}}</code> · <code>{{datum}}</code> · <code>{{ort}}</code> · <code>{{turnier_link}}</code> · <code>{{zusatz}}</code></p></section><div class="grid">';
  foreach($templates as $type=>$t){
@@ -245,7 +268,7 @@ if($view==='compose'){
  else{
   $html.='<form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_create"><label>Turnier</label>'.boTournamentSelect($tournaments).'<label>E-Mail-Vorlage</label><select name="template_type">';
   foreach($templates as $type=>$t)$html.='<option value="'.$e($type).'"'.(($_GET['template']??'')===$type?' selected':'').'>'.$e($t['label']).'</option>';
-  $html.='</select><button type="submit">Entwurf anlegen</button></form>';
+  $html.='</select><label>Standortvorlage</label>'.boVenueSelector($venues).'<p class="help">Wiederverwendbare Anschrift, Navigation und Hinweise. Die Angaben werden bei Erstellung im Entwurf gespeichert und später nicht unbemerkt aktualisiert. <a href="'.boUrl('venues').'">Vorlagen bearbeiten</a></p><button type="submit">Entwurf anlegen</button></form>';
  }
  $html.='</section><section class="panel"><h2>Alle Entwürfe und Aussendungen</h2>';
  $rows=$db->query('SELECT * FROM bo_campaigns ORDER BY created_at DESC LIMIT 100')->fetchAll();
@@ -269,7 +292,7 @@ if($view==='campaign'&&$id){
  foreach($q->fetchAll() as $rec)$counts[$rec['state']]=(int)$rec['total'];
  $q=$db->prepare('SELECT COUNT(*) FROM bo_contacts WHERE tournament_id=?');$q->execute([$c['tournament_id']]);
  $total=(int)$q->fetchColumn();
- $html='<section class="panel"><div class="row row-between"><div><h2>'.$e($c['tournament_name']).'</h2><p>'.$e($c['tournament_date']).' · '.$e($c['tournament_location']).'</p><a href="'.$e($c['tournament_url']).'" target="_blank" rel="noopener noreferrer">Turnierseite öffnen ↗</a></div><span class="badge '.($labels[$c['state']]??'').'">'.$e(boStatus($c['state'])).'</span></div></section>';
+ $html='<section class="panel"><div class="row row-between"><div><p class="help">Standortvorlage: '.$e($venues[$c['venue_id']??'general']['name']??'Allgemein').'</p><h2>'.$e($c['tournament_name']).'</h2><p>'.$e($c['tournament_date']).' · '.$e($c['tournament_location']).'</p><a href="'.$e($c['tournament_url']).'" target="_blank" rel="noopener noreferrer">Turnierseite öffnen ↗</a></div><span class="badge '.($labels[$c['state']]??'').'">'.$e(boStatus($c['state'])).'</span></div></section>';
  if($c['state']==='draft'){
   $html.='<section class="panel"><h2>Betreff und Text bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea>'.boInfoEditor($c).'<p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_link}} und {{zusatz}} werden beim Versand individuell ersetzt. {{zusatz}} übernimmt das Feld „Zusätzliche Hinweise“. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
   $html.='<section class="panel"><h2>Vorschau und Testmail</h2><p>Vorschau mit „Alex Beispiel“ als Musterempfänger. Vor jeder Freigabe Änderungen bitte zuerst speichern.</p><div class="row"><a class="button button-secondary" href="'.boUrl('preview',$id).'" target="_blank" rel="noopener">HTML-Vorschau öffnen</a><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_test"><input type="hidden" name="campaign_id" value="'.$id.'"><button type="submit">Testmail an mw@tennis-schiri.de</button></form></div></section>';
