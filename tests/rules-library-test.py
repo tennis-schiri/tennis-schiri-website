@@ -24,6 +24,6 @@ if 'class="rules-home-answer"' not in home or 'href="regelwissen/#linienball"' n
     raise SystemExit("Regelwissen: Startseitenfrage fehlt")
 if "Coming soon" in page or "Regelwissen.<br>Coming soon." in home:
     raise SystemExit("Regelwissen: Vorschautexte nicht vollständig entfernt")
-if ".rules-case-answer" not in css or "data.category" not in js:
+if ".rules-case-answer" not in css or "card.dataset.category" not in js:
     raise SystemExit("Regelwissen: Interaktivität unvollständig")
 print(f"Regelwissen: {len(cases)} Regelfälle und Startseitenfrage geprüft.")
