@@ -95,7 +95,7 @@ function boGuideMailBlocks(array $campaign):array {
   $alert=$group==='Aktuelle Hinweise';
   $bg=$alert?'#fff5e8':'#f3f8ee';
   $fg=$alert?'#8d572a':'#326443';
-  $html.='<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:17px 0 21px;background:'.$bg.';border:1px solid '.($alert?'#f0d2aa':'#dce8d2').'"><tr><td style="padding:18px 18px 12px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.4px;color:'.$fg.'">'.boEsc(mb_strtoupper($group,'UTF-8')).'</td></tr>';
+  $html.='<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:17px 0 21px;background:'.$bg.';border:1px solid '.($alert?'#f0d2aa':'#dce8d2').'"><tr><td style="padding:18px 18px 12px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.4px;color:'.$fg.'">'.boEsc($group).'</td></tr>';
   $plain.="\n".$group."\n";
   foreach($items as $item){
    $value=$item['kind']==='url'?'<a href="'.boEsc($item['value']).'" style="font-weight:800;color:#22623d;text-decoration:underline">Spielplan/Details öffnen &#8599;</a>':nl2br(boEsc($item['value']),false);
