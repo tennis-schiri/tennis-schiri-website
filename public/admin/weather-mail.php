@@ -41,7 +41,7 @@ function boWeatherMailBlocks(array $campaign):array {
  }
  $html='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;background:#edf7e9;border:1px solid #d4e6d0"><tr><td style="padding:18px 20px;font-family:Arial,sans-serif"><p style="margin:0 0 9px;font-weight:800;letter-spacing:1px;color:#2e6543;font-size:11px">☀️ WETTER &amp; TAGESLICHT · '.$date.'</p>';
  foreach($lines as $line)$html.='<p style="margin:5px 0;color:#244934;font-size:14px;line-height:1.6">'.$line.'</p>';
- $html.='<p style="margin:10px 0 0;color:#738778;font-size:11px">Unverbindliche Prognose für '.$loc.' (Umgebung, nicht direkt am Platz). Quelle: <a href="https://open-meteo.com/en/docs" style="color:#27664b">Open-Meteo</a>. Änderungen möglich.</p></td></tr></table>';
- $plain.="Unverbindliche Vorhersage für die Umgebung. Quelle: https://open-meteo.com/en/docs\n";
+ $html.='<p style="margin:10px 0 0;color:#738778;font-size:11px">Unverbindliche Prognose für '.$loc.' (Umgebung, nicht direkt am Platz). Quelle: <a href="https://brightsky.dev/" style="color:#27664b">DWD / Bright Sky</a>. Änderungen möglich.</p></td></tr></table>';
+ $plain.="Unverbindliche Vorhersage für die Umgebung. Quelle: https://brightsky.dev/\n";
  return [$html,$plain];
 }
