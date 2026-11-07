@@ -50,13 +50,13 @@ function subjectHeader(string $subject): string {
 function sendMail(string $to,string $subject,string $message,?string $unsubscribeUrl=null): bool {
  if (!safeEmail($to)) return false;
  $headers=[
-  'From: Tennis-Schiri Newsletter <mw@tennis-schiri.de>',
-  'Reply-To: mw@tennis-schiri.de',
+  'From: Tennis-Schiri Newsletter <news@tennis-schiri.de>',
+  'Reply-To: news@tennis-schiri.de',
   'MIME-Version: 1.0',
   'Content-Type: text/plain; charset=UTF-8'
  ];
  if ($unsubscribeUrl!==null) $headers[]='List-Unsubscribe: <'.$unsubscribeUrl.'>';
- return mail($to,subjectHeader($subject),$message,implode("\r\n",$headers),'-fmw@tennis-schiri.de');
+ return mail($to,subjectHeader($subject),$message,implode("\r\n",$headers),'-fnews@tennis-schiri.de');
 }
 function opted(string $encoded,string $topic): bool {
  $topics=json_decode($encoded,true);
@@ -69,7 +69,7 @@ function recipients(PDO $db,string $topic): array {
 function footer(string $body,int $id,string $email,string $key): array {
  $sig=hash_hmac('sha256',$id.'|'.$email,$key);
  $url='https://tennis-schiri.de/newsletter.php?action=unsubscribe-signed&id='.$id.'&sig='.$sig;
- $text=rtrim($body)."\n\n---\nTennis-Schiri Newsletter · Ein Projekt von Tennis-Schiri\nDu erhaeltst diese Nachricht, weil du entsprechende Informationen angefordert hast.\nAbmelden: ".$url."\nKontakt: mw@tennis-schiri.de";
+ $text=rtrim($body)."\n\n---\nTennis-Schiri Newsletter · Ein Projekt von Tennis-Schiri\nDu erhaeltst diese Nachricht, weil du entsprechende Informationen angefordert hast.\nAbmelden: ".$url."\nKontakt: news@tennis-schiri.de";
  return [$text,$url];
 }
 $topics=['turniere'=>'Turniere & freie Plätze','regeln'=>'Regelwissen & Tipps','workshops'=>'Regelworkshops & Veranstaltungen'];
