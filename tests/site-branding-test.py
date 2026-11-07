@@ -27,7 +27,7 @@ for html in pages:
         raise SystemExit(f"Veraltetes CSS-Logo noch vorhanden: {html}")
 
 for name in [
-    "ts-logo-hell.png","ts-logo-dunkel.png?v=20261107-3","ts-logo-ball.png",
+    "ts-logo-hell.png","ts-logo-dunkel.png","ts-logo-ball.png",
     "ts-logo-claim.png","ts-kurzlogo.png","ts-favicon.png",
     "ts-tennisball.png","ts-wortmarke.png",
 ]:
