@@ -20,12 +20,12 @@ if($method==='POST'){
   if(!boSafeEmail($email)||strlen($name)>160)boError('Bitte eine gültige E-Mail-Adresse und einen Namen mit maximal 160 Zeichen angeben.');
   $q=$db->prepare('INSERT INTO bo_contacts(tournament_id,name,email,created_at,updated_at) VALUES(?,?,?,?,?) ON CONFLICT(tournament_id,email) DO UPDATE SET name=excluded.name,updated_at=excluded.updated_at');
   $q->execute([$tournament,$name,$email,$now,$now]);
-  boGo('contacts',0,'Teilnehmerkontakt gespeichert.');
+  boGoContacts($tournament,'Teilnehmerkontakt gespeichert.');
  }
  if($action==='contact_delete'){
   $contactId=filter_var($_POST['contact_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
   $q=$db->prepare('DELETE FROM bo_contacts WHERE id=? AND tournament_id=?');$q->execute([$contactId,$tournament]);
-  boGo('contacts',0,'Teilnehmerkontakt entfernt. In bereits freigegebenen Sendungen wird er vor dem Versand erneut geprüft.');
+  boGoContacts($tournament,'Teilnehmerkontakt entfernt. In bereits freigegebenen Sendungen wird er vor dem Versand erneut geprüft.');
  }
  if($action==='contact_import'){
   if(!isset($tournaments[$tournament]))boError('Bitte zuerst ein Turnier auswählen.');
@@ -72,7 +72,7 @@ if($method==='POST'){
    foreach($import as $p)$q->execute([$tournament,$p['name'],$p['email'],$now,$now]);
    $db->commit();
   }catch(Throwable $e){if($db->inTransaction())$db->rollBack();error_log('BO import: '.$e->getMessage());boError('Der CSV-Import konnte nicht gespeichert werden.',503);}
-  boGo('contacts',0,count($import).' Teilnehmeradressen übernommen. '.$invalid.' ungültige Zeilen übersprungen. Kein Versand ausgelöst.');
+  boGoContacts($tournament,count($import).' Teilnehmeradressen übernommen. '.$invalid.' ungültige Zeilen übersprungen. Kein Versand ausgelöst.');
  }
  if($action==='campaign_create'){
   $type=boPost('template_type',30);
@@ -180,7 +180,7 @@ if($view==='dashboard'){
  ];
  $html='<div class="grid">';
  foreach($stats as $stat)$html.='<div class="tile"><div class="stat">'.$stat[1].'</div><h3>'.$e($stat[0]).'</h3><a href="'.$e($stat[2]).'">Öffnen ↗</a></div>';
- $html.='</div><div class="split" style="margin-top:18px"><section class="panel"><h2>Newsletter</h2><p>Bewährte Newsletter-Verwaltung mit Double-Opt-in, Themenauswahl, Turnieren und Partnerbannern.</p><p><a class="button" href="/newsletter-mail.php">Newsletter erstellen</a></p><a href="/newsletter-admin.php">Abonnenten ansehen</a></section><section class="panel"><h2>Turnier-Infomails</h2><p>Turnier wählen, Teilnehmer importieren, E-Mail-Vorlage bearbeiten und nach Testlauf manuell versenden.</p><p><a class="button" href="'.boUrl('compose').'">Infomail vorbereiten</a></p><a href="'.boUrl('contacts').'">Teilnehmer verwalten</a></section></div>';
+ $html.='</div><div class="split" style="margin-top:18px"><section class="panel"><h2>Newsletter</h2><p>Bewährte Newsletter-Verwaltung mit Double-Opt-in, Themenauswahl, Turnieren und Partnerbannern.</p><p><a class="button" href="/newsletter-mail.php">Newsletter erstellen</a></p><a href="/newsletter-admin.php">Abonnenten ansehen</a></section><section class="panel"><h2>Turnier-Infomails</h2><p>Turnier wählen, Teilnehmer importieren, E-Mail-Vorlage bearbeiten und nach Testlauf manuell versenden.</p><p><a class="button" href="'.boUrl('compose').'">Infomail vorbereiten</a></p><a href="'.boUrl('contacts').'">Teilnehmer verwalten</a><p class="help">Bisherige Turnier-Mail-Entwürfe aus dem älteren System bleiben unter <a href="/turnier-mails.php">Turnier-Mails (bisherige Verwaltung)</a> erreichbar. Sie werden nicht ungefragt verschoben.</p></section></div>';
  $html.='<section class="panel"><h2>Zuletzt bearbeitete Infomails</h2>';
  $recent=$db->query('SELECT * FROM bo_campaigns ORDER BY updated_at DESC LIMIT 6')->fetchAll();
  if(!$recent)$html.='<p class="muted">Noch keine Infomails angelegt.</p>';
@@ -219,7 +219,7 @@ if($view==='contacts'){
 }
 
 if($view==='templates'){
- $html='<section class="panel"><h2>Vorlagen für organisatorische Turniermails</h2><p>Die Texte dienen als Ausgangspunkt. Betreff und Nachricht kannst du in jedem Entwurf individuell bearbeiten. Platzhalter werden beim Versand mit dem Turnier und dem jeweiligen Teilnehmer ausgefüllt.</p><p><code>{{name}}</code> · <code>{{turnier}}</code> · <code>{{datum}}</code> · <code>{{ort}}</code> · <code>{{turnier_link}}</code></p></section><div class="grid">';
+ $html='<section class="panel"><h2>Vorlagen für organisatorische Turniermails</h2><p>Die Texte dienen als Ausgangspunkt. Betreff und Nachricht kannst du in jedem Entwurf individuell bearbeiten. Platzhalter werden beim Versand mit dem Turnier und dem jeweiligen Teilnehmer ausgefüllt.</p><p><code>{{name}}</code> · <code>{{turnier}}</code> · <code>{{datum}}</code> · <code>{{ort}}</code> · <code>{{turnier_link}}</code> · <code>{{zusatz}}</code></p></section><div class="grid">';
  foreach($templates as $type=>$t){
   $html.='<div class="tile"><h3>'.$e($t['label']).'</h3><p><strong>Betreff:</strong> '.$e($t['subject']).'</p><p class="help">'.nl2br($e(substr($t['body'],0,245))).'…</p><a href="'.boUrl('compose').'">Mit dieser Vorlage starten ↗</a></div>';
  }
@@ -259,7 +259,7 @@ if($view==='campaign'&&$id){
  $total=(int)$q->fetchColumn();
  $html='<section class="panel"><div class="row row-between"><div><h2>'.$e($c['tournament_name']).'</h2><p>'.$e($c['tournament_date']).' · '.$e($c['tournament_location']).'</p><a href="'.$e($c['tournament_url']).'" target="_blank" rel="noopener noreferrer">Turnierseite öffnen ↗</a></div><span class="badge '.($labels[$c['state']]??'').'">'.$e(boStatus($c['state'])).'</span></div></section>';
  if($c['state']==='draft'){
-  $html.='<section class="panel"><h2>Betreff und Text bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea><p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}} und {{turnier_link}} werden beim Versand individuell ersetzt. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
+  $html.='<section class="panel"><h2>Betreff und Text bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea><p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_link}} und {{zusatz}} werden beim Versand individuell ersetzt. {{zusatz}} übernimmt das Feld „Zusätzliche Hinweise“. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
   $html.='<section class="panel"><h2>Vorschau und Testmail</h2><p>Vorschau mit „Alex Beispiel“ als Musterempfänger. Vor jeder Freigabe Änderungen bitte zuerst speichern.</p><div class="row"><a class="button button-secondary" href="'.boUrl('preview',$id).'" target="_blank" rel="noopener">HTML-Vorschau öffnen</a><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_test"><input type="hidden" name="campaign_id" value="'.$id.'"><button type="submit">Testmail an mw@tennis-schiri.de</button></form></div></section>';
   $html.='<section class="panel"><h2>Empfängerliste freigeben</h2><p><strong>'.$total.'</strong> Kontakte für dieses Turnier. Die Freigabe speichert genau diese Empfängerliste. Es werden dabei noch keine E-Mails verschickt.</p>';
   if($total===0)$html.='<p class="warning">Zuerst Teilnehmer unter <a href="'.boUrl('contacts').'">Teilnehmerverwaltung</a> ergänzen.</p>';
