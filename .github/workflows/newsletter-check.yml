@@ -9,6 +9,10 @@ on:
       - 'public/newsletter-mail.php'
       - 'public/newsletter-template.php'
       - 'public/newsletter-events.php'
+      - 'public/newsletter-partners.php'
+      - 'scripts/build_newsletter_partners.py'
+      - 'tests/newsletter-partners-test.php'
+      - 'public/partner/index.html'
       - 'scripts/build_newsletter_events.py'
       - 'tests/newsletter-events-test.php'
       - 'public/turniere/index.html'
@@ -36,15 +40,18 @@ jobs:
         run: |
           set -euo pipefail
           php -v
-          for file in public/newsletter.php public/newsletter-setup.php public/newsletter-admin.php public/newsletter-mail.php public/newsletter-template.php public/newsletter-events.php tests/newsletter-template-test.php tests/newsletter-events-test.php; do
+          for file in public/newsletter.php public/newsletter-setup.php public/newsletter-admin.php public/newsletter-mail.php public/newsletter-template.php public/newsletter-events.php public/newsletter-partners.php tests/newsletter-template-test.php tests/newsletter-events-test.php tests/newsletter-partners-test.php; do
             php -l "$file"
           done
       - name: Aktuelle Termine aus den Website-Seiten extrahieren
-        run: python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
+        run: |
+          python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
+          python scripts/build_newsletter_partners.py --output public/data/newsletter-partners.json
       - name: HTML-Newsletter testen (kein Versand)
         run: |
           php tests/newsletter-template-test.php
           php tests/newsletter-events-test.php
+          php tests/newsletter-partners-test.php
       - name: Newsletter-Einbindung und private Datenablage prüfen
         shell: bash
         run: |
