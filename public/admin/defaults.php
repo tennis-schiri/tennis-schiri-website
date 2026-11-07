@@ -117,6 +117,18 @@ function boKnownCampaignDefaults(string $venueId,string $currentVenueJson='{}',s
   boKnownInfoDefaults($venueId,$type)
  );
 }
+/** Create a real SQLite draft with the prefilled proposals. Testable without login or mail. */
+function boCreateKnownCampaign(PDO $db,array $t,array $template,string $type,string $venueId,string $venueJson,int $now):int {
+ $defaults=boKnownCampaignDefaults($venueId,$venueJson,$type);
+ $q=$db->prepare("INSERT INTO bo_campaigns(tournament_id,tournament_name,tournament_date,tournament_location,tournament_url,template_type,subject,body,notes,venue_id,venue_data,guide_data,info_sections,info_arrival,info_contact,defaults_review_required,defaults_reviewed_at,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'draft',?,?)");
+ $q->execute([
+  $t['id'],$t['title'],$t['date'],$t['location'],$t['url'],$type,$template['subject'],$template['body'],'',
+  $venueId,$defaults['venue_data'],$defaults['guide_data'],$defaults['info_sections'],
+  $defaults['info_arrival']??'',$defaults['info_contact']??'',1,null,$now,$now
+ ]);
+ return (int)$db->lastInsertId();
+}
+
 /** Fill only absent values; never overwrite a user's existing draft text or custom selections. */
 function boMergeKnownCampaign(array $existing,string $venueId):array {
  $defaults=boKnownCampaignDefaults($venueId,(string)($existing['venue_data']??'{}'),(string)($existing['template_type']??'info'));
