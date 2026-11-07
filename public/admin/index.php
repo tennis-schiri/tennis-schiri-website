@@ -122,6 +122,18 @@ if($method==='POST'){
   $confirmed=boPost('defaults_reviewed',3)==='yes';
   try{$info=boInfoFromPost($_POST);$guideJson=boGuideFromPost($_POST);$venueJson=boCampaignVenueFromPost($_POST,$campaign,$confirmed);}
   catch(InvalidArgumentException $ex){boError($ex->getMessage());}
+  // Existing (pre-prefill) drafts remain compatible: retain an unchanged, previously
+  // verified location snapshot. If the user edits it, re-verification is required.
+  if((int)($campaign['defaults_review_required']??0)===0&&!$confirmed){
+    $before=boVenueData((string)($campaign['venue_data']??'{}'));
+    $after=boVenueData($venueJson);
+    $priorVerified=$before['_verified_at']??'';
+    unset($before['_verified_at'],$after['_verified_at']);
+    $visible=static function(array $d):array {
+      return array_filter($d,static fn($value):bool=>trim((string)$value)!=='');
+    };
+    if($priorVerified!==''&&$visible($before)===$visible($after))$venueJson=(string)$campaign['venue_data'];
+  }
 
   if($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||$body===''||strlen($body)>15000||strlen($notes)>3000)boError('Bitte Betreff (max. 160 Zeichen) und Nachrichtentext (max. 15.000 Zeichen) prüfen.');
   $q=$db->prepare("UPDATE bo_campaigns SET subject=?,body=?,notes=?,info_sections=?,info_arrival=?,info_schedule=?,info_parking=?,info_fees=?,turnigo_url=?,myscore_url=?,info_contact=?,guide_data=?,venue_data=?,defaults_reviewed_at=?,updated_at=? WHERE id=? AND state='draft'");
@@ -311,7 +323,9 @@ if($view==='campaign'&&$id){
    $html.='<section class="panel"><h3>Bekannte Informationen fehlen in diesem älteren Entwurf?</h3><p>Bereits gespeicherte eigene Angaben bleiben erhalten. Du kannst die bekannten Standort- und Ablaufvorschläge zusätzlich übernehmen.</p><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_prefill"><input type="hidden" name="campaign_id" value="'.$id.'"><button class="button-secondary" type="submit">Bekannte Angaben als Vorschläge ergänzen</button></form></section>';
   }
   if(empty($snapshot['_verified_at']))$html.='<p class="warning">Standortvorschläge sind noch nicht für diese Ausgabe bestätigt. Bearbeite sie direkt im Formular unten und bestätige die Angaben vor der Freigabe.</p>';
-  $reviewUi=(int)($c['defaults_review_required']??0)===1?'<div class="panel" style="background:#f5f9ef;border-color:#afcea5"><label style="display:flex;align-items:flex-start;gap:12px;margin:0"><input type="checkbox" name="defaults_reviewed" value="yes" required style="margin-top:5px;min-width:20px;height:20px"><span><strong>Ich habe alle vorausgefüllten Angaben für dieses Turnier geprüft.</strong><br><small>Insbesondere Termin, Meldezeit, Belag, Anfahrt, Gebühren, Einspielzeit und aktuelle Regeln. Diese Bestätigung wird beim Speichern erfasst. Ohne sie ist eine Freigabe der Empfängerliste nicht möglich.</small></span></label></div>':'';
+  $reviewUi=(int)($c['defaults_review_required']??0)===1
+   ?'<div class="panel" style="background:#f5f9ef;border-color:#afcea5"><label style="display:flex;align-items:flex-start;gap:12px;margin:0"><input type="checkbox" name="defaults_reviewed" value="yes" required style="margin-top:5px;min-width:20px;height:20px"><span><strong>Ich habe alle vorausgefüllten Angaben für dieses Turnier geprüft.</strong><br><small>Insbesondere Termin, Meldezeit, Belag, Anfahrt, Gebühren, Einspielzeit und aktuelle Regeln. Diese Bestätigung wird beim Speichern erfasst. Ohne sie ist eine Freigabe der Empfängerliste nicht möglich.</small></span></label></div>'
+   :'<p class="help"><label style="display:flex;align-items:center;gap:9px"><input type="checkbox" name="defaults_reviewed" value="yes"> Geänderte Standortangaben für diesen älteren Entwurf aktuell bestätigen (optional).</label></p>';
   $html.='<section class="panel"><h2>Infomail-Entwurf mit vorausgefüllten Angaben bearbeiten</h2><form method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_save"><input type="hidden" name="campaign_id" value="'.$id.'"><label>Betreff</label><input type="text" name="subject" maxlength="160" required value="'.$e($c['subject']).'"><label>Nachricht</label><textarea name="body" maxlength="15000" rows="15" required>'.$e($c['body']).'</textarea><label>Zusätzliche Hinweise (optional)</label><textarea name="notes" maxlength="3000" rows="5" placeholder="Treffpunkt, Meldezeit, Parkmöglichkeiten, Hinweise für den Turniertag">'.$e($c['notes']??'').'</textarea>'.boCampaignVenueEditor($c).boInfoEditor($c).boGuideEditor($c).$reviewUi.'<p class="help">Die Platzhalter {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_link}} und {{zusatz}} werden beim Versand individuell ersetzt. {{zusatz}} übernimmt das Feld „Zusätzliche Hinweise“. Für Besonderheiten kannst du den Text direkt ändern.</p><button type="submit">Entwurf speichern</button></form></section>';
   $html.='<section class="panel"><h2>Vorschau und Testmail</h2><p>Vorschau mit „Alex Beispiel“ als Musterempfänger. Vor jeder Freigabe Änderungen bitte zuerst speichern.</p><div class="row"><a class="button button-secondary" href="'.boUrl('preview',$id).'" target="_blank" rel="noopener">HTML-Vorschau öffnen</a><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="campaign_test"><input type="hidden" name="campaign_id" value="'.$id.'"><button type="submit">Testmail an mw@tennis-schiri.de</button></form></div></section>';
   $html.='<section class="panel"><h2>Empfängerliste freigeben</h2><p><strong>'.$total.'</strong> Kontakte für dieses Turnier. Die Freigabe speichert genau diese Empfängerliste. Es werden dabei noch keine E-Mails verschickt.</p>';
