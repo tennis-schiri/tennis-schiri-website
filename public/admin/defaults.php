@@ -40,7 +40,7 @@ function boKnownVenueSource(string $venueId):string {
  };
 }
 function boVenueBestGuess(array $tournament):string {
- $haystack=mb_strtolower((string)($tournament['location']??'').' '.(string)($tournament['title']??''),'UTF-8');
+ $haystack=strtolower((string)($tournament['location']??'').' '.(string)($tournament['title']??''));
  if(str_contains($haystack,'saarow'))return 'bad-saarow';
  if(str_contains($haystack,'neuenhagen')||str_contains($haystack,'ntc')){
   if(str_contains($haystack,'halle')||str_contains($haystack,'hallen')||str_contains($haystack,'winter'))return 'neuenhagen-halle';
