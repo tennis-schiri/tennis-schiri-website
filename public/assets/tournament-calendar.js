@@ -8,7 +8,8 @@
  async function getJson(path){const r=await fetch(path,{credentials:'omit'});if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}
  const text=(el,selector)=>el.querySelector(selector)?.textContent?.trim()||'';
  function dataForCard(card,events) {
-  if(card.id)return events.find(e=>e.id===card.id);
+  const uid=card.dataset.eventId||card.id;
+  if(uid)return events.find(e=>e.id===uid);
   const name=text(card,'.event-title');
   const place=text(card,'.event-where');
   return events.find(e=>e.type==='turnier'&&e.date_start===card.dataset.start&&e.title===name&&e.location===place);
@@ -82,7 +83,7 @@
   const today=dayBerlin(),clock=clockBerlin();
   const items=raw.map(node=>{
     const event=dataForCard(node,events);
-    return {node,event,id:event?.id||'',start:node.dataset.start,end:event?.date_end||node.dataset.start,type:node.dataset.type};
+    return {node,event,id:event?.id||node.dataset.eventId||'',start:node.dataset.start,end:event?.date_end||node.dataset.start,type:node.dataset.type};
   }).sort((a,b)=>a.start.localeCompare(b.start));
   const eligible=items.filter(i=>i.end>=today);
   const tournaments=eligible.filter(i=>i.type!=='workshop');
@@ -119,18 +120,23 @@
   featured.dataset.start=nearest.start;
   featured.setAttribute('aria-label',current?'Aktuelles Turnier':'Nächstes Turnier');
   featured.querySelector('.featured-kicker').textContent=prefix+' · '+text(date,'.weekday')+' · '+fullDate;
-  featured.querySelector('h3').textContent=text(node,'.event-title');
+  const detailUrl=nearest.id?'/turniere/termin.html?id='+encodeURIComponent(nearest.id):'';
+  const featuredTitle=featured.querySelector('h3');
+  if(detailUrl){featuredTitle.replaceChildren(actionLink(detailUrl,text(node,'.event-title'),'tourney-featured-title-link'));}
+  else featuredTitle.textContent=text(node,'.event-title');
   featured.querySelector('.featured-location').textContent=text(node,'.event-where');
   featured.querySelector('.tournament-meta').innerHTML=node.querySelector('.tournament-meta')?.innerHTML||'';
   featured.querySelector('.tournament-details').innerHTML=node.querySelector('.tournament-details')?.innerHTML||'';
   featured.querySelector('.tournament-cta,.tournament-soon')?.remove();
   const action=node.querySelector('.event-actions')?.firstElementChild?.cloneNode(true);
   if(action)featured.querySelector('.featured-location').parentElement.appendChild(action);
+  if(detailUrl)featured.querySelector('.featured-location').parentElement.appendChild(actionLink(detailUrl,'Alle Termindetails ↗','tourney-featured-detail-link'));
   const box=featured.querySelector('.featured-date');box.innerHTML=date.innerHTML;
   box.classList.toggle('datebox-range',date.classList.contains('datebox-range'));
   box.setAttribute('aria-label',date.getAttribute('aria-label')||'');
   const plate=document.querySelector('.hero-plate');
   if(plate){
+   if(detailUrl)plate.href=detailUrl;
    const small=plate.querySelector('.small');
    if(small){
     Array.from(small.childNodes).filter(n=>n.nodeType===3).forEach(n=>n.textContent='');
