@@ -34,7 +34,7 @@ ensure(str_contains($html,'id=123&amp;sig='),'Abmeldelink fehlt oder ungeescaped
 ensure(str_contains($html,'text-align:center'),'Tabellenlayout nicht geladen');
 ensure(str_contains($text,'Abmelden: '.$url),'Textvariante ohne persönlichen Abmeldelink');
 ensure(str_contains($text,'Zur Turnierübersicht: https://tennis-schiri.de/turniere/'),'Textvariante ohne CTA');
-ensure(str_contains($html,'src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png"'),'Freigegebenes TS-09c-Logo im E-Mail-Kopf fehlt');
+ensure(str_contains($html,'src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3"'),'Freigegebenes TS-09c-Logo im E-Mail-Kopf fehlt');
 ensure(substr_count($html,'<img ')===1,'Bei einer Ausgabe ohne Partner nur das TS-Logo ausgeben – keine Trackingpixel');
 $injection=$campaign;
 $injection['headline']='<script>alert("x")</script>';
