@@ -35,11 +35,11 @@ function newsletterPartnersCatalog(): array {
   $category=(string)($row['category']??'');
   if(!preg_match('/^[a-z0-9-]{1,95}$/D',$id) ||
      !in_array($category,['partner','projekt'],true) ||
-     $name==='' || strlen($name)>180 ||
+     $name==='' || strlen($name)>180 || strlen((string)($row['caption']??''))>220 ||
      !newsletterPartnerUrl($url) || !newsletterPartnerLogo($logo))continue;
   $partners[$id]=[
    'id'=>$id,'category'=>$category,'name'=>$name,'url'=>$url,
-   'logo'=>$logo,'caption'=>mb_strcut((string)($row['caption']??''),0,180,'UTF-8'),
+   'logo'=>$logo,'caption'=>(string)($row['caption']??''),
   ];
  }
  return array_values($partners);
