@@ -55,7 +55,7 @@
   const distance=Math.round((startMid-todayMid)/86400000);
   if(end<today||distance>7)return;
   const slot=document.createElement('div');slot.className='tourney-weather';slot.setAttribute('aria-live','polite');
-  actions.after(slot);
+  if(actions===node)node.appendChild(slot);else actions.after(slot);
   try{
    const data=await getJson('/tournament-weather.php?id='+encodeURIComponent(event.id));
    if(!data.available)return;
@@ -171,15 +171,23 @@
   });
   const upcoming=enriched.filter(x=>x.end>=today).sort((a,b)=>a.start.localeCompare(b.start));
   const past=enriched.filter(x=>x.end<today).sort((a,b)=>b.end.localeCompare(a.end));
-  for(const e of upcoming){
-   if(isCurrent(e,today,clock)){
-    const kicker=e.node.querySelector('.eyebrow.kicker');
-    if(kicker)kicker.textContent='AKTUELLES TURNIER';
-    else{
-     const b=document.createElement('div');b.className='eyebrow kicker current-tourney-label';b.textContent='AKTUELLES TURNIER';
-     e.node.querySelector('h3')?.before(b);
-    }
-   }
+  // An older hardcoded "NÄCHSTES TURNIER" label must never survive in the archive.
+  for(const e of enriched){
+   const kicker=e.node.querySelector('.eyebrow.kicker');
+   if(kicker&&/NÄCHSTES TURNIER|AKTUELLES TURNIER/.test(kicker.textContent||''))kicker.remove();
+  }
+  const current=upcoming.find(e=>isCurrent(e,today,clock));
+  const lead=current||upcoming[0];
+  if(lead){
+   const b=document.createElement('div');b.className='eyebrow kicker current-tourney-label';
+   b.textContent=current&&lead===current?'AKTUELLES TURNIER':'NÄCHSTES TURNIER';
+   lead.node.querySelector('h3')?.before(b);
+  }
+  for(const e of past){
+   const cta=e.node.querySelector('.tournament-cta');
+   if(cta)cta.textContent='Vergangenes Turnier ansehen ↗';
+   const soon=e.node.querySelector('.tournament-soon');
+   if(soon)soon.textContent='Abgeschlossen';
   }
   // Archive stays visible in the DOM and under its original stable anchor.
   const archive=document.createElement('details');archive.id='turnier-archiv';archive.className='tourney-archive';
