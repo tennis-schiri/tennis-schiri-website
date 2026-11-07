@@ -153,6 +153,8 @@ jobs:
           node tests/rules-reference-test.mjs
           node --check public/assets/lk-guide.js
           python tests/lk-guide-test.py
+          node --check public/assets/privacy-consent.js
+          node tests/privacy-consent-test.mjs
           php -l public/turnierinfos.php
           php -l public/workshop-lib.php
           php -l public/workshop.php
