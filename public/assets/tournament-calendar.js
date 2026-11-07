@@ -85,8 +85,9 @@
     return {node,event,id:event?.id||'',start:node.dataset.start,end:event?.date_end||node.dataset.start,type:node.dataset.type};
   }).sort((a,b)=>a.start.localeCompare(b.start));
   const eligible=items.filter(i=>i.end>=today);
-  const active=eligible.find(i=>isCurrent(i,today,clock));
-  const nearest=active||eligible[0];
+  const tournaments=eligible.filter(i=>i.type!=='workshop');
+  const active=tournaments.find(i=>isCurrent(i,today,clock));
+  const nearest=active||tournaments[0];
   for(const item of items){
    item.node.classList.toggle('featured-hidden',item===nearest);
    item.node.classList.toggle('event-past',item.end<today);
@@ -100,7 +101,7 @@
     if(show)shown++;
    }
    const summary=document.getElementById('home-tourney-summary');
-   if(summary)summary.textContent=shown===0?'Keine weiteren passenden Turniere angekündigt':shown===1?'1 weiteres Turnier':shown+' weitere Turniere';
+   if(summary)summary.textContent=shown===0?'Keine weiteren passenden Termine angekündigt':shown===1?'1 weiterer Termin':shown+' weitere Termine';
   }
   window.refreshHomepageTournaments=refresh;
   refresh();
@@ -167,7 +168,7 @@
   const today=dayBerlin(),clock=clockBerlin();
   const enriched=all.map(node=>{
    const event=events.find(e=>e.id===node.id);
-   return {node,id:node.id,event,start:event?.date_start||'9999-12-31',end:event?.date_end||event?.date_start||'9999-12-31'};
+   return {node,id:node.id,event,start:event?.date_start||node.dataset.start||'9999-12-31',end:event?.date_end||event?.date_start||node.dataset.start||'9999-12-31',type:node.dataset.type||'turnier'};
   });
   const upcoming=enriched.filter(x=>x.end>=today).sort((a,b)=>a.start.localeCompare(b.start));
   const past=enriched.filter(x=>x.end<today).sort((a,b)=>b.end.localeCompare(a.end));
@@ -176,8 +177,9 @@
    const kicker=e.node.querySelector('.eyebrow.kicker');
    if(kicker&&/NÄCHSTES TURNIER|AKTUELLES TURNIER/.test(kicker.textContent||''))kicker.remove();
   }
-  const activeEvent=upcoming.find(e=>isCurrent(e,today,clock));
-  const lead=activeEvent||upcoming[0];
+  const upcomingTournaments=upcoming.filter(e=>e.type!=='workshop');
+  const activeEvent=upcomingTournaments.find(e=>isCurrent(e,today,clock));
+  const lead=activeEvent||upcomingTournaments[0];
   if(lead){
    const b=document.createElement('div');b.className='eyebrow kicker current-tourney-label';
    b.textContent=activeEvent&&lead===activeEvent?'AKTUELLES TURNIER':'NÄCHSTES TURNIER';
@@ -185,7 +187,7 @@
   }
   for(const e of past){
    const cta=e.node.querySelector('.tournament-cta');
-   if(cta)cta.textContent='Vergangenes Turnier ansehen ↗';
+   if(cta)cta.textContent=e.type==='workshop'?'Vergangenen Workshop ansehen ↗':'Vergangenes Turnier ansehen ↗';
    const soon=e.node.querySelector('.tournament-soon');
    if(soon)soon.textContent='Abgeschlossen';
   }
