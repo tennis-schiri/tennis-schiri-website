@@ -7,8 +7,8 @@ import struct
 ROOT=Path(__file__).resolve().parents[1]
 PUB=ROOT/"public"
 pages=sorted(PUB.rglob("index.html"))
-if len(pages)!=14:
-    raise SystemExit(f"Erwartet 14 Inhaltsseiten, gefunden: {len(pages)}")
+if len(pages)!=15:
+    raise SystemExit(f"Erwartet 15 Inhaltsseiten, gefunden: {len(pages)}")
 
 for html in pages:
     data=html.read_text(encoding="utf-8")
@@ -55,4 +55,4 @@ for name in ["newsletter-admin.php","newsletter-mail.php","newsletter.php","news
     if "/assets/branding/ts-logo-" not in (PUB/name).read_text(encoding="utf-8"):
         raise SystemExit(f"Newsletter-Oberfläche ohne neues Logo: {name}")
 
-print("TS-09c-Logo in 14 Seiten, Newsletter, Browser und Social-Vorschau geprüft.")
+print("TS-09c-Logo in 15 Seiten, Newsletter, Browser und Social-Vorschau geprüft.")
