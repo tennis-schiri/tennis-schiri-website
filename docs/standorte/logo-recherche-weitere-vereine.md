@@ -18,3 +18,16 @@ Google Drive „Bilder alte TS-Seite“: bei titelbasierter Suche bislang keine 
 4. Erst dann im zentralen Standortdatensatz als `logo.primary` setzen und in Website/Turnier-Guide verwenden.
 
 Keine Produktionsdatenbank oder Adminbereiche durch diese Recherche ändern.
+
+## Update 07.11.2026: Ahlbeck-Original gefunden
+
+**Bestätigt:** Das eigenständige blaue Vereinswappen „TC Blau-Weiß Seebad Ahlbeck“ wurde in einer weiteren Google-Drive-Ablage gefunden und als PNG visuell geprüft.
+
+- Datei: `logo_tc_bal_weiss_ahlbeck-1.png`
+- Google-Drive-Datei-ID: `1mmXfs3LStOIQVcx4pNIk7qWAhrSoMaxy`
+- Link: https://drive.google.com/file/d/1mmXfs3LStOIQVcx4pNIk7qWAhrSoMaxy/view
+- Größe: 103415 Bytes
+- Bild: rundes blaues Vereinswappen mit Tennisracket, gelbem Tennisball, Clubhaus und Schriftzug „TC Blau-Weiß Seebad Ahlbeck“.
+- Empfehlung: **als Hauptlogo-Kandidat** für Ahlbeck verwenden; vor Veröffentlichung in die verwaltete TS-Asset-Ablage übernehmen. Es wurde noch nicht in die Live-Website eingebaut.
+
+Die ältere Tabellenzeile „eigenständiges Logo-Original noch nicht verifiziert“ ist damit überholt.
