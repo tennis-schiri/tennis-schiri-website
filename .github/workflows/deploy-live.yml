@@ -145,6 +145,8 @@ jobs:
           php -l public/admin/public-info.php
           php -l public/tournament-weather.php
           node --check public/assets/tournament-calendar.js
+          node --check public/assets/tournament-detail.js
+          python tests/tournament-detail-test.py
           php -l public/turnierinfos.php
           php -l public/workshop-lib.php
           php -l public/workshop.php
