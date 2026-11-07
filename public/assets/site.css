@@ -25,7 +25,7 @@ a:hover .arrow{transform:translate(3px,-2px)}
 .brand em{font-style:normal;color:var(--lime)}
 /* Finales Tennis-Schiri-Logo TS-09c: Originalgrafik statt CSS-Initial. */
 .brand-logo{display:inline-flex;align-items:center;line-height:1;flex:none;max-width:100%}
-.brand-logo img{display:block;width:250px;max-width:100%;height:auto;aspect-ratio:670/167;object-fit:contain;border-radius:6px}
+.brand-logo img{display:block;width:250px;max-width:100%;height:auto;object-fit:contain;background:transparent;border:0;border-radius:0;box-shadow:none}
 footer .brand-logo img{width:243px}
 .site-head .brand-logo:focus-visible,footer .brand-logo:focus-visible{outline:2px solid var(--lime);outline-offset:5px;border-radius:5px}
 @media(max-width:1100px){.site-head .brand-logo img{width:217px}}
