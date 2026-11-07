@@ -51,20 +51,31 @@
  }
  function renderMap(address){
   const gate=$('event-map-gate');
+  const area=$('event-map');
   if(!address){
    gate.replaceChildren(newEl('p','Für diesen Termin liegt noch keine genaue Anschrift vor. Die Karte wird ergänzt, sobald der Veranstaltungsort bestätigt ist.'));
    return;
   }
   addAction($('event-directions'),mapsUrl(address),'Anfahrt mit Google Maps ↗',true,true);
-  $('event-load-map').addEventListener('click',()=>{
+  const loadMap=()=>{
+   if(area.querySelector('iframe'))return;
    const iframe=document.createElement('iframe');
    iframe.title='Google-Maps-Karte: '+address;
    iframe.loading='lazy';
    iframe.referrerPolicy='no-referrer-when-downgrade';
    iframe.src='https://maps.google.com/maps?output=embed&q='+encodeURIComponent(address);
    iframe.setAttribute('allowfullscreen','');
-   gate.replaceWith(iframe);
-  },{once:true});
+   area.replaceChildren(iframe);
+  };
+  $('event-load-map').addEventListener('click',()=>{
+   // Ohne Einwilligung ist ein explizites Einmal-Opt-in erforderlich.
+   if(window.TSPrivacy?.requestMap)window.TSPrivacy.requestMap(loadMap);
+   else gate.append(newEl('p','Datenschutzeinstellungen nicht geladen. Bitte die Seite aktualisieren.'));
+  });
+  window.addEventListener('ts:privacy-change',event=>{
+   // Bei Widerruf eine bereits geladene externe Karte aus dem DOM entfernen.
+   if(event.detail?.maps===false&&area.querySelector('iframe'))area.replaceChildren(gate);
+  });
  }
  function installCalendar(event){
   const info=[event.date.label,event.venue,event.address,event.meta.join(' · '),...event.details.map(d=>d[0]+': '+d[1])].filter(Boolean).join('\n');
