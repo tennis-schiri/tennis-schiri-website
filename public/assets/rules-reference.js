@@ -125,10 +125,13 @@ function matchAnswer(query){
   const related=qs.filter(q=>[...keys].some(k=>k.length>4&&q.length>4&&(k.startsWith(q)||q.startsWith(k)))).length;
   return {a,score:direct*4+related,matched:direct+related};
  }).sort((a,b)=>b.score-a.score);
- // No answer for too weak or ambiguous matches.
+ // Unknown or ambiguous questions must not receive an invented rule decision.
  if(!ranked[0]||ranked[0].score<4)return null;
- if(ranked[0].score===ranked[1]?.score && ranked[0].matched<2)return null;
- return ranked[0].a;
+ const best=ranked[0],runner=ranked[1];
+ if(qs.length>1&&best.matched<2)return null;
+ if(qs.length===1&&qs[0].length<6)return null;
+ if(runner&&best.score-runner.score<3)return null;
+ return best.a;
 }
 function ask(value){
  const result=document.getElementById('rules-ask-result');
@@ -138,7 +141,12 @@ function ask(value){
  const a=matchAnswer(value);
  if(!a){
   result.append(node('div','rules-answer-kicker','KEINE SICHERE KURZANTWORT'));
-  result.append(node('p','rules-answer-warning','Für diese Frage liegt noch keine redaktionell geprüfte Kurzantwort vor. Nutze die passenden Regelstellen aus der Suche oder öffne die offiziellen Dokumente. Eine Antwort wird hier nicht geraten.'));
+  result.append(node('p','rules-answer-warning','Für diese Frage liegt noch keine eindeutig passende redaktionell geprüfte Kurzantwort vor. Hier sind passende Fundstellen, die du im offiziellen Dokument nachlesen kannst:'));
+  const candidates=topics.map(t=>({t,score:rank(value,[t.title,t.section,t.extra,docMap.get(t.doc)?.name||''].join(' '))})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,4);
+  const refs=node('div','rules-answer-sources');
+  for(const {t} of candidates){const d=docMap.get(t.doc);if(d)addLink(refs,d.name+' · '+t.section+': '+t.title+' ↗',d.url,'rules-answer-source');}
+  if(!candidates.length)addLink(refs,'Offizielle DTB-Dokumente öffnen ↗',docMap.get('dtb-hub').url,'rules-answer-source');
+  result.append(refs);
   drawTopics(value);return;
  }
  result.append(node('div','rules-answer-kicker','KURZANTWORT AUS DER GEPRÜFTEN SAMMLUNG'));
