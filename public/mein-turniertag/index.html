@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142b29">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Mein Turniertag: Tennis-Schiri-Turnier auswählen, persönliche Checkliste abhaken, Ankunftszeit und Notizen festhalten. Ohne Anmeldung.">
+<title>Mein Turniertag – persönliche Tennis-Checkliste | Tennis-Schiri</title>
+<link rel="icon" type="image/png" href="/assets/branding/ts-favicon.png">
+<link rel="apple-touch-icon" href="/assets/branding/ts-favicon.png">
+<meta property="og:site_name" content="Tennis-Schiri">
+<meta property="og:image" content="https://tennis-schiri.de/assets/branding/ts-logo-ball.png">
+<meta property="og:image:alt" content="Tennis-Schiri – offizielles Logo">
+<link rel="stylesheet" href="../assets/site.css?v=20261107-14">
+<link rel="stylesheet" href="../assets/mein-turniertag.css?v=1">
+<script src="../assets/privacy-consent.js?v=1" defer></script>
+<script src="../assets/back-to-top.js?v=2" defer></script>
+<script src="../assets/mein-turniertag.js?v=1" defer></script>
+</head>
+<body>
+<header class="site-head"><div class="container header-inner">
+<a class="brand brand-logo" href="../" aria-label="Zur Startseite"><img src="../assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri" width="268" height="67" decoding="async"></a>
+<nav class="nav" id="site-nav" aria-label="Hauptnavigation"><a href="../turniere/">Turniere</a><a href="../regelwissen/">Regelwissen</a><a href="../leistungen/">Leistungen</a><a href="../ueber-mich/">Über mich</a><a href="../referenzen/">Referenzen</a><a href="../partner/">Partner</a><a href="../statistiken/">Statistiken</a></nav>
+<a class="header-action" href="../kontakt/">Kontakt aufnehmen ↗</a>
+<button class="mobile-toggle" type="button" id="menu-toggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="site-nav">☰</button></div></header>
+<main>
+<section class="interior-hero mt-hero"><div class="container">
+  <div class="breadcrumb"><a href="../">Startseite</a><span>›</span><a href="../turniere/">Turniere</a><span>›</span><span>Mein Turniertag</span></div>
+  <div class="eyebrow" style="margin-top:30px">GUT VORBEREITET AUF DEN PLATZ</div>
+  <h1>Mein<br>Turniertag.</h1>
+  <p>Dein persönlicher Begleiter – vom Packen der Tennistasche bis zum letzten Match. Wähle ein Turnier aus, hake deine Aufgaben ab und notiere, wann du vor Ort sein möchtest.</p>
+</div></section>
+<section class="inner-section mt-main"><div class="container">
+ <div class="mt-intro"><div class="eyebrow kicker">MEIN TURNIER</div><h2>Welches Turnier steht an?</h2><p>Die bekannten Angaben kommen direkt aus dem Tennis-Schiri-Turnierkalender. Ansetzungen, Startzeiten und Platznummern bitte immer in der offiziellen Ausschreibung beziehungsweise beim Veranstalter prüfen.</p></div>
+ <div class="mt-picker">
+   <label for="mt-select">Turnier auswählen</label>
+   <div class="mt-picker-row"><select id="mt-select" aria-describedby="mt-data-help"><option value="">Kein Turnier ausgewählt – allgemeine Checkliste</option></select><a class="mt-picker-link" href="../turniere/">Alle Turniere ↗</a></div>
+   <p id="mt-data-help" class="mt-muted">Du kannst die Checkliste auch ohne Turnierauswahl verwenden.</p>
+   <div id="mt-event" class="mt-event" hidden><div><span class="mt-mini-label">DEIN AUSGEWÄHLTES TURNIER</span><h3 id="mt-event-name"></h3><p id="mt-event-date"></p><p id="mt-event-venue"></p><address id="mt-event-address"></address></div><div class="mt-event-actions"><a id="mt-event-detail" href="../turniere/">Alle Turnierinfos ↗</a><a id="mt-event-route" href="#" target="_blank" rel="noopener noreferrer" hidden>Anfahrt öffnen ↗</a></div></div>
+   <p id="mt-data-status" class="mt-muted" role="status"></p>
+ </div>
+ <div class="mt-layout">
+  <div class="mt-left">
+   <section class="mt-plan" aria-labelledby="mt-plan-heading">
+     <div class="eyebrow kicker">MEIN PERSÖNLICHER ABLAUF</div>
+     <h2 id="mt-plan-heading">Meine Zeiten &amp; Notizen</h2>
+     <p>Die Uhrzeiten trägst du selbst ein. Sie werden nicht aus einer Auslosung übernommen.</p>
+     <div class="mt-plan-grid">
+       <label for="mt-arrival">Geplante Ankunft <input id="mt-arrival" class="mt-field" type="time"></label>
+       <label for="mt-match">Meine erste Ansetzung <input id="mt-match" class="mt-field" type="time"></label>
+     </div>
+     <label class="mt-note-label" for="mt-notes">Meine Notizen <textarea id="mt-notes" class="mt-field" rows="3" maxlength="1000" placeholder="z. B. Treffpunkt, Ansprechpartner, Besonderheiten …"></textarea></label>
+     <p class="mt-muted">Nur du trägst Zeiten und Notizen ein. Es gibt keine automatische Bestätigung oder Benachrichtigung.</p>
+   </section>
+   <section class="mt-checklist" aria-labelledby="mt-checklist-title"><div class="eyebrow kicker">DIE CHECKLISTE</div><h2 id="mt-checklist-title">Alles im Blick.</h2>
+     <section class="mt-check-section" aria-labelledby="mt-step-1">
+  <div class="mt-section-head"><span class="mt-step-no">01</span><div><h3 id="mt-step-1">Am Vorabend</h3><p>Alles klären, bevor der Wecker klingelt.</p></div></div>
+  <div class="mt-check-items"><label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="ansetzung"><span>Auslosung, Spieltermin und eventuelle Änderungen geprüft</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="ausschreibung"><span>Ausschreibung und Turnierbestimmungen noch einmal gelesen</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="weg"><span>Adresse, Anfahrt und benötigte Fahrzeit geprüft</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="schlaeger"><span>Schläger, Griffbänder, passende Schuhe und Kleidung eingepackt</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="getraenke"><span>Getränke, Snacks und ggf. persönliche Medikamente vorbereitet</span></label></div>
+ </section>
+<section class="mt-check-section" aria-labelledby="mt-step-2">
+  <div class="mt-section-head"><span class="mt-step-no">02</span><div><h3 id="mt-step-2">Vor der ersten Partie</h3><p>Entspannt ankommen und startklar sein.</p></div></div>
+  <div class="mt-check-items"><label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="meldung"><span>Bei Turnierleitung/Sign-in gemeldet, soweit vorgeschrieben</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="anlage"><span>Platzanlage, Toiletten und Aushänge gefunden</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="infos"><span>Ansetzung, Platz und mögliche Änderungen bestätigt</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="warmup"><span>Genügend Zeit zum Aufwärmen eingeplant</span></label></div>
+ </section>
+<section class="mt-check-section" aria-labelledby="mt-step-3">
+  <div class="mt-section-head"><span class="mt-step-no">03</span><div><h3 id="mt-step-3">Während des Turniers</h3><p>Auch zwischen den Matches den Überblick behalten.</p></div></div>
+  <div class="mt-check-items"><label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="stand"><span>Spielstand, Turnierleitung und Spielplan im Blick behalten</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="pausen"><span>Trinken, kleine Pausen und Verpflegung eingeplant</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="weiter"><span>Nach Matchende die nächsten Ansetzungen geprüft</span></label></div>
+ </section>
+<section class="mt-check-section" aria-labelledby="mt-step-4">
+  <div class="mt-section-head"><span class="mt-step-no">04</span><div><h3 id="mt-step-4">Nach dem letzten Match</h3><p>Alles erledigt – und gut nach Hause.</p></div></div>
+  <div class="mt-check-items"><label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="ergebnis"><span>Ergebnis bei der Turnierleitung bestätigt, falls erforderlich</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="sachen"><span>Persönliche Sachen und Ausstattung vollständig eingesammelt</span></label>
+<label class="mt-check-item"><input class="mt-check" type="checkbox" data-id="feedback"><span>Offene Fragen oder Auffälligkeiten mit der Turnierleitung geklärt</span></label></div>
+ </section>
+   </section>
+   <section class="mt-after"><h2>Noch neu bei LK-Turnieren?</h2><p>Der Einstieg erklärt Voraussetzungen, DTB-ID, Lizenz und Anmeldung Schritt für Schritt.</p><a href="../lk-turnier/" class="btn btn-dark">Mein erstes LK-Turnier ↗</a></section>
+  </div>
+  <aside class="mt-right" aria-labelledby="mt-progress-heading">
+   <div class="mt-progress-panel"><div class="eyebrow kicker">MEIN FORTSCHRITT</div><h2 id="mt-progress-heading">Bereit fürs Match?</h2>
+     <p class="mt-progress-number"><strong id="mt-count">0 von 15</strong><span>Aufgaben erledigt</span></p>
+     <progress id="mt-progress" max="15" value="0"></progress><p id="mt-status" aria-live="polite">Los geht’s mit der Vorbereitung.</p>
+     <div class="mt-sidebar-actions"><button type="button" id="mt-print">Checkliste drucken</button><button type="button" id="mt-reset">Alles zurücksetzen</button></div>
+     <small>Deine Auswahl, Zeiten und Notizen bleiben nur in diesem Browser gespeichert. Es erfolgt keine Übertragung an Tennis-Schiri. Beim Zurücksetzen werden die Daten gelöscht.</small>
+   </div>
+   <div class="mt-important"><h3>Wichtig am Spieltag</h3><p>Verbindlich sind die aktuelle Ausschreibung, die offiziellen Ansetzungen und die Hinweise der Turnierleitung. Diese persönliche Übersicht ersetzt keinen offiziellen Spielplan.</p><a href="../regelwissen/">Regeln &amp; Regelfälle ↗</a></div>
+  </aside>
+ </div>
+</div></section></main>
+<footer><div class="container"><div class="footer-top">
+<div><a class="brand brand-logo" href="../"><img src="../assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri" width="268" height="67" decoding="async"></a><p>Turniere, Tennisregeln und professionelle Turnierorganisation – mit Leidenschaft für den Sport.</p></div>
+<div class="footer-links"><div><strong>Entdecken</strong><a href="../turniere/">Turniere</a><a href="../regelwissen/">Regelwissen</a><a href="../leistungen/">Leistungen</a><a href="../aktuelles/">Aktuelles</a><a href="../partner/">Partner</a><a href="../statistiken/">Statistiken</a><a href="../newsletter/">Newsletter</a></div><div><strong>Information</strong><a href="../ueber-mich/">Über mich</a><a href="../referenzen/">Referenzen</a><a href="../kontakt/">Kontakt</a><a href="../impressum/">Impressum</a><a href="../datenschutz/">Datenschutz</a><a href="../admin/" target="_blank" rel="noopener noreferrer">Backend</a></div></div></div>
+<div class="footer-social" aria-label="Instagram-Profile"><div class="footer-social-title">Folge uns auf Instagram</div><div class="footer-social-links"><a class="footer-social-link" href="https://www.instagram.com/tennis.schiri/" target="_blank" rel="noopener noreferrer" aria-label="Tennis-Schiri auf Instagram öffnen"><svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span><strong>Tennis-Schiri</strong><small>@tennis.schiri</small></span></a><a class="footer-social-link" href="https://www.instagram.com/tennilo.app/" target="_blank" rel="noopener noreferrer" aria-label="TENNILO auf Instagram öffnen"><svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span><strong>TENNILO</strong><small>@tennilo.app</small></span></a><a class="footer-social-link" href="https://www.instagram.com/michaelwiedeck/" target="_blank" rel="noopener noreferrer" aria-label="Michael Wiedeck auf Instagram öffnen"><svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span><strong>Michael Wiedeck</strong><small>@michaelwiedeck</small></span></a></div></div>
+<div class="footer-bottom"><span>© 2026 tennis-schiri.de</span><span>Tennis-Schiri · Michael Wiedeck</span></div></div></footer>
+<script>(function(){const b=document.getElementById("menu-toggle"),n=document.getElementById("site-nav");b.addEventListener("click",()=>{const o=n.classList.toggle("open");b.setAttribute("aria-expanded",String(o));b.textContent=o?"×":"☰"});n.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{n.classList.remove("open");b.setAttribute("aria-expanded","false");b.textContent="☰"}))})();</script>
+</body></html>
