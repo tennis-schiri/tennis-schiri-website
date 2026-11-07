@@ -19,7 +19,7 @@ for html in pages:
     for required in [
         '<link rel="icon" type="image/png" href="/assets/branding/ts-favicon.png">',
         '<meta property="og:image" content="https://tennis-schiri.de/assets/branding/ts-logo-ball.png">',
-        f'site.css?v=20261107-3',
+        f'site.css?v=20261107-4',
     ]:
         if required not in data:
             raise SystemExit(f"Veralteter Browser-/Social-Branding-Verweis: {html} -> {required}")
