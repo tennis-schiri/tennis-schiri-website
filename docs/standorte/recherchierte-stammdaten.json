@@ -141,11 +141,11 @@
         "Schuhfreigabe Halle"
       ],
       "logo": {
-        "status": "embedded_archive_logo_found_original_still_missing",
+        "status": "primary_original_found_in_drive_not_yet_published",
         "source_page": "https://ntc93.com/",
         "source_document": "https://ntc93.com/wp-content/uploads/2025/04/Werbeangebote_NTC_25.pdf",
         "source_image_url": null,
-        "note": "Rundes Vereinslogo 'Neuenhagener Tennisclub 93 e.V.' im offiziellen Werbe-PDF gefunden. Original-Bilddatei bzw. freigegebene SVG/PNG noch beschaffen, PDF nicht als Mail-Logo verwenden.",
+        "note": "Eigenständige Originaldatei aus TS-Altarchiv gefunden und visuell mit dem Wappen auf den alten Turnierausschreibungen abgeglichen; muss für öffentlichen Gebrauch noch in die verwaltete Asset-Ablage importiert werden.",
         "archive_candidates": [
           {
             "label": "NTC93-Vereinswappen sichtbar auf Turnierausschreibung, nicht als Einzelgrafik",
@@ -161,7 +161,16 @@
             "kind": "embedded_in_poster",
             "checked_visually": true
           }
-        ]
+        ],
+        "primary": {
+          "label": "Neuenhagener Tennisclub 93 e.V. – rundes grün-gelbes Wappen",
+          "drive_file_id": "1fGEKb9ot-u3fmpvLf8vr3Yop6vabDb96",
+          "drive_url": "https://drive.google.com/file/d/1fGEKb9ot-u3fmpvLf8vr3Yop6vabDb96/view",
+          "file_name": "Logo2021_final_1_ebene.jpg",
+          "archive_path": "Bilder alte TS-Seite/download 2/2021/04",
+          "alt": "Neuenhagener Tennisclub 93 e. V. – Vereinswappen",
+          "visually_verified": true
+        }
       }
     }
   ],
