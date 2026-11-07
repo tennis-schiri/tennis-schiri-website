@@ -27,7 +27,7 @@ def first(pattern: str, markup: str, flags: int = re.S) -> str:
         return ""
     return clean(match.group(1))
 
-def date_from_aria(aria: str) -> tuple[str, str]:
+def date_from_aria(aria: str) -> tuple[str, str, str]:
     """German date aria e.g. 'Dienstag, 15. Juni bis Sonntag, 20. Juni 2027'."""
     parts = re.findall(r"(\d{1,2})\.\s+([A-Za-zÄäÖöÜüß]+)", aria)
     year_match = re.search(r"\b(20\d{2})\b", aria)
@@ -49,7 +49,21 @@ def date_from_aria(aria: str) -> tuple[str, str]:
         date_label = f"{start.day:02d}.–{end.strftime('%d.%m.%Y')}"
     else:
         date_label = f"{start.strftime('%d.%m.')}–{end.strftime('%d.%m.%Y')}"
-    return start.isoformat(), date_label
+    return start.isoformat(), end.isoformat(), date_label
+
+# Approximate locality coordinates, not a precise tennis-court geocode.
+# Unknown venues deliberately get no automatic outdoor forecast.
+def weather_region(location: str) -> dict | None:
+    value=location.casefold()
+    if "neuenhagen" in value:
+        return {"label":"Neuenhagen bei Berlin","lat":52.53,"lon":13.69}
+    if "friedrichsfelde" in value:
+        return {"label":"Berlin-Friedrichsfelde","lat":52.50,"lon":13.52}
+    if "ahlbeck" in value:
+        return {"label":"Seebad Ahlbeck","lat":53.94,"lon":14.19}
+    if "saarow" in value:
+        return {"label":"Bad Saarow","lat":52.28,"lon":14.06}
+    return None
 
 def tournament_rows(markup: str) -> list[dict]:
     rows = []
@@ -60,7 +74,7 @@ def tournament_rows(markup: str) -> list[dict]:
     for match in cards:
         uid, block = match.groups()
         aria = first(r'<div class="datebox[^"]*"\s+aria-label="([^"]+)"', block)
-        day, label = date_from_aria(aria)
+        day, last_day, label = date_from_aria(aria)
         title = first(r"<h3[^>]*>(.*?)</h3>", block)
         location = first(r'<div class="where">(.*?)</div>', block)
         button_match = re.search(r'<a\s+class="tournament-cta"\s+href="([^"]+)"', block)
@@ -68,11 +82,17 @@ def tournament_rows(markup: str) -> list[dict]:
         external = bool(link and link.startswith("https://"))
         if not external:
             link = f"https://tennis-schiri.de/turniere/#{uid}"
+        # The court category is sourced from the existing on-page metadata,
+        # not inferred from the time of year.
+        kind_meta=first(r'<div class="tournament-meta"[^>]*>(.*?)</div>',block)
+        outdoor="Outdoor" in kind_meta
+        region=weather_region(location) if outdoor else None
         if not uid or not title or not location:
             raise ValueError(f"Turnierdatensatz unvollständig: {uid}")
         rows.append({
             "id": uid, "type": "turnier", "title": title,
-            "date_start": day, "date": label, "location": location,
+            "date_start": day, "date_end":last_day, "date": label, "location": location,
+            "outdoor":outdoor, "weather_region":region,
             "url": link, "link_label": "Jetzt anmelden" if external else "Turnierdetails ansehen",
         })
     return rows
@@ -86,7 +106,7 @@ def workshop_rows(markup: str) -> list[dict]:
     for match in sections:
         uid, block = match.groups()
         aria = first(r'<div class="workshop-upcoming-date"\s+aria-label="([^"]+)"', block)
-        date_start, date_label = date_from_aria(aria)
+        date_start, date_end, date_label = date_from_aria(aria)
         title = first(r'<h2[^>]*>(.*?)</h2>', block)
         location = first(r'<p class="workshop-upcoming-location">(.*?)</p>', block)
         location = re.sub(r"^Veranstaltungsort:\s*", "", location)
@@ -94,7 +114,8 @@ def workshop_rows(markup: str) -> list[dict]:
             raise ValueError(f"Workshopdatensatz unvollständig: {uid}")
         rows.append({
             "id": uid, "type": "veranstaltung", "title": title,
-            "date_start": date_start, "date": date_label, "location": location,
+            "date_start": date_start, "date_end":date_end, "date": date_label, "location": location,
+            "outdoor":False, "weather_region":None,
             "url": f"https://tennis-schiri.de/leistungen/#{uid}",
             "link_label": "Workshopdetails ansehen",
         })
