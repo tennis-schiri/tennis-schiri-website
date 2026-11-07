@@ -18,7 +18,7 @@ for case,_ in cases:
 for marker in ['id="rules-grid"','id="rules-search"','id="rules-count"','id="regelwerk"','ITF Regel']:
     if marker not in page:
         raise SystemExit("Regelwissen: Element fehlt: "+marker)
-if "Tennisregeln%20der%20ITF.pdf.coredownload.pdf" not in page:
+if "Tennisregeln%20der%20ITF.pdf.coredownload.inline.pdf" not in page:
     raise SystemExit("Regelwissen: offizieller Regelverweis fehlt")
 if 'class="rules-home-answer"' not in home or 'href="regelwissen/#linienball"' not in home:
     raise SystemExit("Regelwissen: Startseitenfrage fehlt")
