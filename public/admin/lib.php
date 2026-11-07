@@ -69,11 +69,14 @@ function boSchema(PDO $db): void {
   template_type TEXT NOT NULL DEFAULT 'info',
   subject TEXT NOT NULL,
   body TEXT NOT NULL,
+  notes TEXT NOT NULL DEFAULT '',
   state TEXT NOT NULL DEFAULT 'draft',
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL,
   approved_at INTEGER
  )");
+ $campaignColumns=array_column($db->query('PRAGMA table_info(bo_campaigns)')->fetchAll(),'name');
+ if(!in_array('notes',$campaignColumns,true))$db->exec("ALTER TABLE bo_campaigns ADD COLUMN notes TEXT NOT NULL DEFAULT ''");
  $db->exec("CREATE TABLE IF NOT EXISTS bo_deliveries (
   campaign_id INTEGER NOT NULL,
   contact_id INTEGER NOT NULL,
@@ -104,7 +107,7 @@ function boGo(string $view='dashboard',int $id=0,string $info=''): never {
 }
 function boError(string $msg,int $code=422): never {
  http_response_code($code);
- boPage('Eingabe prüfen','<section class="panel"><p>'.boEsc($msg).'</p><p><a href="javascript:history.back()">Zurück</a> · <a href="/admin/">Backoffice</a></p></section>');
+ boPage('Eingabe prüfen','<section class="panel"><p>'.boEsc($msg).'</p><p><a href="/admin/">Zum Backoffice</a></p></section>');
 }
 function boPage(string $title,string $content): never {
  header('Content-Type: text/html; charset=UTF-8');
@@ -195,7 +198,7 @@ function boRenderTokens(string $raw,array $campaign,array $contact): string {
   '{{datum}}'=>(string)$campaign['tournament_date'],
   '{{ort}}'=>(string)$campaign['tournament_location'],
   '{{turnier_link}}'=>(string)$campaign['tournament_url'],
-  '{{zusatz}}'=>''
+  '{{zusatz}}'=>(string)($campaign['notes']??'')
  ];
  return strtr($raw,$map);
 }
