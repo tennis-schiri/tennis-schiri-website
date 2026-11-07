@@ -15,7 +15,7 @@
  }catch(_){}
  const known=new Set(checks.map(c=>c.dataset.id));
  for(const input of checks)input.checked=saved.includes(input.dataset.id);
- function sync(){
+ function sync(persist=false){
   const selected=checks.filter(c=>c.checked).map(c=>c.dataset.id).filter(x=>known.has(x));
   for(const input of checks){
    const item=input.closest('.lk-step');
@@ -25,9 +25,10 @@
   meter.max=total;meter.value=done;
   label.textContent=done+' von '+total;
   status.textContent=done===0?'Starte mit dem ersten Schritt.':done===total?'Geschafft! Deine Checkliste ist vollständig. Viel Erfolg beim ersten Turnier!':done===total-1?'Nur noch ein Schritt bis zum ersten Turnier!':'Weiter so! '+(total-done)+' Schritte sind noch offen.';
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(selected));}catch(_){}
+  // Erst nach einer bewussten Checkbox-Aktion speichern, nicht beim Seitenaufruf.
+  if(persist){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(selected));}catch(_){}}
  }
- for(const input of checks)input.addEventListener('change',sync);
- reset.addEventListener('click',()=>{for(const c of checks)c.checked=false;sync();checks[0]?.focus();});
+ for(const input of checks)input.addEventListener('change',()=>sync(true));
+ reset.addEventListener('click',()=>{for(const c of checks)c.checked=false;try{localStorage.removeItem(STORAGE_KEY);}catch(_){}sync();checks[0]?.focus();});
  sync();
 })();
