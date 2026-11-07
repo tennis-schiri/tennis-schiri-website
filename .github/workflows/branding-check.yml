@@ -25,6 +25,10 @@ on:
       - 'public/assets/lk-guide.css'
       - 'public/assets/lk-guide.js'
       - 'tests/lk-guide-test.py'
+      - 'public/mein-turniertag/index.html'
+      - 'public/assets/mein-turniertag.css'
+      - 'public/assets/mein-turniertag.js'
+      - 'tests/mein-turniertag-test.py'
       - 'public/**/index.html'
       - 'public/index.html'
       - 'public/newsletter-template.php'
@@ -60,6 +64,8 @@ jobs:
           node tests/rules-reference-test.mjs
           node --check public/assets/lk-guide.js
           python tests/lk-guide-test.py
+          node --check public/assets/mein-turniertag.js
+          python tests/mein-turniertag-test.py
           node --check public/assets/privacy-consent.js
           node tests/privacy-consent-test.mjs
           python tests/tennilo-branding-test.py
