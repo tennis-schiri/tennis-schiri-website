@@ -1,6 +1,29 @@
 # Tennis-Schiri – Turnier-Mail-Konfigurator und Turnier-Guide 2.2
 
-**Status:** abgestimmte Produktspezifikation, noch nicht implementiert  
+## Integrationsstand nach Abgleich der beiden Entwicklungs-Chats
+
+**Codebasis:** zentrale Verwaltung unter \`public/admin/\`, nicht der ältere eigenständige Prototyp \`public/turnier-mails.php\`. Änderungen an Newsletter-Bestand, privaten Konfigurationsdateien und bestehenden Infomail-Daten wurden vermieden. Die im anderen Chat erstellte Spezifikation ist als Referenz erhalten.
+
+| Bereich | GitHub-Stand |
+|---|---|
+| Admin-Login, Newsletter-Trennung, CSV-Teilnehmer, manuelle Freigabe/Chargenversand | **Umgesetzt** |
+| Drei Mailtypen, personalisierte Vorlagen, TS09c-HTML plus Textalternative | **Umgesetzt** |
+| Grundcheckliste: Meldung, Ablauf, Parken, Gebühren, Turnigo, MyScore, Kontakt | **Umgesetzt** |
+| Detailcheckliste: Auslosung, wichtige Änderungen, Verspätung, Schuhe, Modus, Einspielen, Ergebnisse, Pausen, Bälle, Konkurrenzgebühren, Zahlungen, Gastronomie, Umkleiden, Änderungen und Rücktritt | **Umgesetzt, optional** |
+| Bad Saarow, Neuenhagen, allgemeine Vorlage, editierbare Standortdaten und Snapshot pro Entwurf | **Umgesetzt**; Standortdaten zunächst bewusst leer, keine Übernahme unbestätigter historischer Angaben |
+| E-Mail-Hero mit Turniername, Datum-/Ort-Karte und gegliederten Informationsblöcken | **Umgesetzt, Basislayout** |
+| Offizielle Auslosung/Spielplan, Turnigo und MyScore als getrennt prüfbare URLs | **Umgesetzt** |
+| Kartenartige Preisübersicht nach Konkurrenzen statt Freitext; visuelle Doppelkarte für die zwei Digitalservices | **Noch offen** |
+| Sichtbare Desktop-/Mobil-Umschaltvorschau, Excel-Import (CSV funktioniert), weitere optionale Social-Module | **Noch offen** |
+| Zustellbarkeit/SMTP-Konfiguration und juristische Prüfung einzelner Regelhinweise | **Vor echtem Serienversand gesondert prüfen** |
+
+Neue PHP-Module sind \`public/admin/venues.php\` und \`public/admin/guide.php\`; die ursprünglichen Basis-Checkboxen bleiben in \`public/admin/info-sections.php\` kompatibel erhalten. SQLite-Spalten werden beim ersten Aufruf ergänzt; bereits angelegte Entwürfe bleiben erhalten. Nach Freigabe dürfen die in der Kampagne gespeicherten Einstellungen nicht von geänderten Standortvorlagen beeinflusst werden. CI-Lint und Regressionstests sind in \`.github/workflows/backoffice-check.yml\` und dem manuellen Live-Upload integriert.
+
+**Wichtig:** Dieser Status bezieht sich auf GitHub. Die produktive Darstellung und der reale Versand müssen nach dem manuellen Live-Upload mit Testadressen geprüft werden.
+
+
+
+**Status:** weitgehend im zentralen Backoffice umgesetzt; einzelne Design-/Komfortfunktionen noch offen  
 **Stand:** 07.11.2026  
 **Bereich:** zentraler Tennis-Schiri-Adminbereich → Turnier-Mails  
 **Absender / Reply-To:** `turniere@tennis-schiri.de`
