@@ -2,7 +2,6 @@
 """Regression check for clickable event cards and the shared event detail page."""
 from pathlib import Path
 import re
-from scripts.build_newsletter_events import tournament_rows
 
 root=Path(__file__).resolve().parents[1]
 public=root/"public"
@@ -11,12 +10,10 @@ home=(public/"index.html").read_text(encoding="utf-8")
 detail=(public/"turniere"/"termin.html").read_text(encoding="utf-8")
 script=(public/"assets"/"tournament-detail.js").read_text(encoding="utf-8")
 css=(public/"assets"/"site.css").read_text(encoding="utf-8")
-data=tournament_rows(calendar)
-ids=[row["id"] for row in data]
+ids=re.findall(r'<article class="tourney-card[^"]*" id="([^"]+)"[^>]*>',calendar)
 if len(ids)<11 or len(set(ids))!=len(ids):
     raise SystemExit(f"Erwartet mindestens 11 unterschiedliche Kalendertermine, gefunden: {len(ids)}")
-for item in data:
-    uid=item["id"]
+for uid in ids:
     if f'href="termin.html?id={uid}"' not in calendar:
         raise SystemExit("Verlinkung in der Turnierliste fehlt: "+uid)
     if f'data-event-id="{uid}"' not in home:
