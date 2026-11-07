@@ -105,7 +105,7 @@ jobs:
               "assets/branding/ts-logo-dunkel.png",
               "assets/branding/ts-logo-ball.png",
               "assets/branding/ts-favicon.png",
-              "assets/back-to-top.js",
+              "assets/back-to-top.js", "assets/privacy-consent.js",
               "data/instagram.json", "data/statistics.json",
               "assets/statistics.js", "statistiken/index.html",
               "newsletter/index.html", "newsletter.php", "newsletter-setup.php",
