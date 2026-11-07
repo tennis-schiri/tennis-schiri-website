@@ -5,6 +5,7 @@ require_once __DIR__.'/lib.php';
 [$cfg,$db]=boStart();
 $venues=boVenueList($db);
 $tournaments=boTournaments();
+$workshops=workshopCatalog();
 $templates=boTemplates();
 $method=$_SERVER['REQUEST_METHOD']??'GET';
 $view=(string)($_GET['view']??'dashboard');
@@ -23,6 +24,37 @@ if($method==='POST'){
   $q=$db->prepare('UPDATE bo_venues SET data=?,updated_at=? WHERE id=?');
   $q->execute([json_encode($data,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR),$now,$venueId]);
   header('Location: /admin/?view=venues&venue='.rawurlencode($venueId).'&info='.rawurlencode('Standortvorlage gespeichert. Bestehende E-Mail-Entwürfe wurden nicht verändert.'),true,303);exit;
+ }
+ if($action==='workshop_settings'){
+  $workshopId=boPost('workshop',100);
+  if(!isset($workshops[$workshopId]))boError('Workshop nicht gefunden.',404);
+  workshopSetSetting($db,'paypal_instructions',boPost('paypal_instructions',1000),$now);
+  header('Location: /admin/?'.http_build_query(['view'=>'workshops','workshop'=>$workshopId,'info'=>'PayPal-Zahlungsinformation gespeichert.'],'','&',PHP_QUERY_RFC3986),true,303);exit;
+ }
+ if($action==='workshop_update'){
+  $workshopId=boPost('workshop',100);
+  $registrationId=filter_var($_POST['registration_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
+  if(!isset($workshops[$workshopId])||!$registrationId)boError('Workshop-Anmeldung nicht gefunden.',404);
+  $status=boPost('status',20);$paymentStatus=boPost('payment_status',20);$notes=boPost('notes',1000);
+  if(!in_array($status,['registered','cancelled'],true)||!in_array($paymentStatus,['open','paid','waived'],true))boError('Bitte einen gültigen Anmelde- und Zahlungsstatus wählen.');
+  $q=$db->prepare('UPDATE workshop_registrations SET status=?,payment_status=?,notes=?,updated_at=? WHERE id=? AND workshop_id=?');
+  $q->execute([$status,$paymentStatus,$notes,$now,$registrationId,$workshopId]);
+  if($q->rowCount()!==1)boError('Workshop-Anmeldung nicht gefunden.',404);
+  header('Location: /admin/?'.http_build_query(['view'=>'workshops','workshop'=>$workshopId,'info'=>'Workshop-Anmeldung aktualisiert.'],'','&',PHP_QUERY_RFC3986),true,303);exit;
+ }
+ if($action==='workshop_mail'){
+  $workshopId=boPost('workshop',100);
+  $registrationId=filter_var($_POST['registration_id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
+  $kind=boPost('mail_kind',30);
+  if(!isset($workshops[$workshopId])||!in_array($kind,['confirmation','payment','reminder'],true)||!$registrationId)boError('Ungültige Workshop-Mail.');
+  $q=$db->prepare('SELECT * FROM workshop_registrations WHERE id=? AND workshop_id=?');$q->execute([$registrationId,$workshopId]);$reg=$q->fetch();
+  if(!$reg)boError('Workshop-Anmeldung nicht gefunden.',404);
+  try{[$subject,$text,$html]=workshopMailContent($workshops[$workshopId],$reg,$kind,workshopSetting($db,'paypal_instructions'));}
+  catch(InvalidArgumentException $ex){boError($ex->getMessage());}
+  $sent=workshopSendMail((string)$reg['email'],$subject,$text,$html);
+  if($sent)$db->prepare('UPDATE workshop_registrations SET last_mail_type=?,last_mail_at=?,updated_at=? WHERE id=?')->execute([$kind,$now,$now,$registrationId]);
+  $label=['confirmation'=>'Bestätigung','payment'=>'PayPal-Info','reminder'=>'Erinnerung'][$kind]??'E-Mail';
+  header('Location: /admin/?'.http_build_query(['view'=>'workshops','workshop'=>$workshopId,'info'=>($sent?$label.' vom Mailserver angenommen.':$label.' vom Mailserver nicht angenommen.')],'','&',PHP_QUERY_RFC3986),true,303);exit;
  }
  if($action==='contact_add'){
   if(!isset($tournaments[$tournament]))boError('Bitte ein verfügbares Turnier auswählen.');
@@ -228,11 +260,13 @@ $labels=['draft'=>'gray','approved'=>'orange','sending'=>'orange','done'=>''];
 if($view==='dashboard'){
  $newsletterConfirmed=(int)$db->query('SELECT COUNT(*) FROM subscribers WHERE confirmed_at IS NOT NULL')->fetchColumn();
  $contacts=(int)$db->query('SELECT COUNT(*) FROM bo_contacts')->fetchColumn();
+ $workshopRegs=(int)$db->query("SELECT COUNT(*) FROM workshop_registrations WHERE status='registered'")->fetchColumn();
  $drafts=(int)$db->query("SELECT COUNT(*) FROM bo_campaigns WHERE state='draft'")->fetchColumn();
  $pending=(int)$db->query("SELECT COUNT(*) FROM bo_deliveries WHERE state='pending'")->fetchColumn();
  $stats=[
   ['Newsletter-Abonnenten',$newsletterConfirmed,'/newsletter-admin.php'],
   ['Turnierkontakte',$contacts,boUrl('contacts')],
+  ['Workshop-Anmeldungen',$workshopRegs,boUrl('workshops')],
   ['Infomail-Entwürfe',$drafts,boUrl('compose')],
   ['Freigegebene, noch offene Mails',$pending,boUrl('history')],
  ];
@@ -274,6 +308,57 @@ if($view==='contacts'){
   $html.='</section>';
  }
  boPage('Teilnehmerverwaltung',$html);
+}
+
+if($view==='workshops'){
+ $selected=(string)($_GET['workshop']??'');
+ if(!isset($workshops[$selected]))$selected=array_key_first($workshops)??'';
+ $html='<section class="panel"><h2>Regelworkshops</h2><p>Online-Anmeldungen, Mitgliedsstatus, Teilnahmebeitrag und Zahlungsstatus werden hier verwaltet. Workshop-Anmeldungen sind ausdrücklich <strong>kein Newsletter-Verteiler</strong>.</p>';
+ if(!$workshops)$html.='<p class="warning">Noch keine Regelworkshops hinterlegt.</p>';
+ else{
+  $html.='<form method="get"><input type="hidden" name="view" value="workshops"><label>Workshop wählen</label><select name="workshop">';
+  foreach($workshops as $wsId=>$ws)$html.='<option value="'.$e($wsId).'"'.($wsId===$selected?' selected':'').'>'.$e($ws['date'].' · '.$ws['title']).'</option>';
+  $html.='</select><button class="button-secondary" type="submit">Anzeigen</button></form>';
+ }
+ $html.='</section>';
+ if($selected!==''){
+  $ws=$workshops[$selected];
+  $paypalInfo=workshopSetting($db,'paypal_instructions');
+  $html.='<section class="panel"><h2>PayPal-Zahlungsinformation</h2><p>Diese Information wird bei PayPal-Anmeldungen in die Bestätigung aufgenommen. Ist das Feld leer, wird nur angekündigt, dass die Zahlungsinfo separat folgt.</p><form method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_settings"><input type="hidden" name="workshop" value="'.$e($selected).'"><label>PayPal-Adresse, PayPal.Me-Link oder kurzer Zahlungshinweis</label><textarea name="paypal_instructions" maxlength="1000" rows="3">'.$e($paypalInfo).'</textarea><button type="submit">PayPal-Info speichern</button></form></section>';
+  $q=$db->prepare("SELECT * FROM workshop_registrations WHERE workshop_id=? ORDER BY CASE status WHEN 'registered' THEN 0 ELSE 1 END,name,email");$q->execute([$selected]);$rows=$q->fetchAll();
+  $registered=count(array_filter($rows,static fn($r)=>$r['status']==='registered'));
+  $members=count(array_filter($rows,static fn($r)=>(int)$r['is_member']===1&&$r['status']==='registered'));
+  $open=count(array_filter($rows,static fn($r)=>(int)$r['fee_cents']>0&&$r['payment_status']==='open'&&$r['status']==='registered'));
+  $paid=count(array_filter($rows,static fn($r)=>$r['payment_status']==='paid'&&$r['status']==='registered'));
+  $html.='<section class="panel"><div class="row row-between"><div><h2>'.$e($ws['title']).'</h2><p>'.$e($ws['date']).' · '.$e($ws['time']).'<br>'.$e($ws['location']).'</p></div><a class="button button-secondary" href="/leistungen/#'.$e($ws['id']).'" target="_blank" rel="noopener">Workshopseite ↗</a></div><div class="grid"><div class="tile"><div class="stat">'.$registered.'</div><h3>Angemeldet</h3></div><div class="tile"><div class="stat">'.$members.'</div><h3>NTC 93 · frei</h3></div><div class="tile"><div class="stat">'.$open.'</div><h3>15 € noch offen</h3></div><div class="tile"><div class="stat">'.$paid.'</div><h3>Bezahlt</h3></div></div></section>';
+  $html.='<section class="panel"><h2>Anmeldungen</h2>';
+  if(!$rows)$html.='<p class="muted">Noch keine Online-Anmeldungen.</p>';
+  else{
+   $html.='<div class="tablewrap"><table><thead><tr><th>Teilnehmer</th><th>Beitrag / Zahlung</th><th>Status / Notiz</th><th>Mails</th></tr></thead><tbody>';
+   foreach($rows as $r){
+    $statusOptions='';foreach(['registered'=>'angemeldet','cancelled'=>'abgemeldet'] as $v=>$label)$statusOptions.='<option value="'.$v.'"'.($r['status']===$v?' selected':'').'>'.$label.'</option>';
+    $payOptions='';foreach(['open'=>'offen','paid'=>'bezahlt','waived'=>'entfällt'] as $v=>$label)$payOptions.='<option value="'.$v.'"'.($r['payment_status']===$v?' selected':'').'>'.$label.'</option>';
+    $member=(int)$r['is_member']===1?'<span class="badge">NTC 93 · frei</span>':'<span class="badge gray">Gast</span>';
+    $html.='<tr><td><strong>'.$e($r['name']).'</strong><br><a href="mailto:'.$e($r['email']).'">'.$e($r['email']).'</a><br><small>'.$e($r['club']?:'kein Verein angegeben').'</small><br>'.$member.'<br><small>Anmeldung: '.date('d.m.Y H:i',(int)$r['created_at']).'</small></td><td><strong>'.$e(workshopFeeLabel((int)$r['fee_cents'])).'</strong><br>'.$e(workshopPaymentMethodLabel((string)$r['payment_method'])).'<br><small>'.$e(workshopPaymentStatusLabel((string)$r['payment_status'])).'</small></td>';
+    $html.='<td><form method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_update"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><label>Status</label><select name="status">'.$statusOptions.'</select><label>Zahlung</label><select name="payment_status">'.$payOptions.'</select><label>Interne Notiz</label><input type="text" name="notes" maxlength="1000" value="'.$e($r['notes']).'"><button type="submit">Speichern</button></form></td>';
+    $html.='<td><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="confirmation"><button class="button-secondary" type="submit">Bestätigung erneut</button></form><br><br><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="reminder"><button class="button-secondary" type="submit">Erinnerung senden</button></form>';
+    if($r['payment_method']==='paypal'&&(int)$r['fee_cents']>0){
+     if($paypalInfo!=='')$html.='<br><br><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="payment"><button type="submit">PayPal-Info senden</button></form>';
+     else $html.='<p class="help">PayPal-Info noch nicht hinterlegt.</p>';
+    }
+    if(!empty($r['last_mail_at']))$html.='<p class="help">Letzte Mail: '.$e((string)$r['last_mail_type']).' · '.date('d.m.Y H:i',(int)$r['last_mail_at']).'</p>';
+    $html.='</td></tr>';
+   }
+   $html.='</tbody></table></div>';
+  }
+  $html.='</section>';
+  $example=['name'=>'Alex Beispiel','email'=>'alex@example.com','club'=>'TC Beispiel','is_member'=>0,'fee_cents'=>(int)$ws['guest_fee_cents'],'payment_method'=>'paypal'];
+  $previewPaypal=$paypalInfo!==''?$paypalInfo:'[PayPal-Zahlungsinformation noch nicht hinterlegt]';
+  [$confirmSubject,$confirmText]=workshopMailContent($ws,$example,'confirmation',$previewPaypal);
+  [$reminderSubject,$reminderText]=workshopMailContent($ws,$example,'reminder',$previewPaypal);
+  $html.='<section class="panel"><h2>Vorbereitete Mails</h2><p>Die Anmeldebestätigung wird bei der Online-Anmeldung automatisch versendet. Erinnerung und PayPal-Info kannst du je Teilnehmer manuell auslösen.</p><h3>'.$e($confirmSubject).'</h3><pre style="white-space:pre-wrap;background:#f5f8f2;padding:14px;border-radius:9px">'.$e($confirmText).'</pre><h3>'.$e($reminderSubject).'</h3><pre style="white-space:pre-wrap;background:#f5f8f2;padding:14px;border-radius:9px">'.$e($reminderText).'</pre></section>';
+ }
+ boPage('Regelworkshops',$html);
 }
 
 if($view==='venues'){
