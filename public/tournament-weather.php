@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /* Public, read-only weather and astronomical sunset for known outdoor tennis events.
-   Forecast is fetched only within 7 days of play; it is never generated or guessed. */
+   DWD forecast via Bright Sky is fetched only within 7 days of play; never guessed. */
 header('Content-Type: application/json; charset=UTF-8');
 header('Cache-Control: public, max-age=900');
 header('X-Content-Type-Options: nosniff');
@@ -43,69 +43,79 @@ function weatherData(string $id,?DateTimeImmutable $now=null): array {
   'available'=>true,'id'=>$id,'outdoor'=>true,'date'=>$target->format('Y-m-d'),
   'location'=>(string)($place['label']??$event['location']),'sunset'=>$sunset,
   'forecast'=>null,'forecast_notice'=>$days>7?'Wettervorhersage ab 7 Tage vor dem Turnier verfügbar.':null,
-  'source'=>'Open-Meteo','source_url'=>'https://open-meteo.com/en/docs',
+  'source'=>'DWD / Bright Sky','source_url'=>'https://brightsky.dev/',
  ];
  if($days>7)return $response; // no model prediction beyond requested window
  $query=http_build_query([
-  'latitude'=>$latitude,'longitude'=>$longitude,'timezone'=>'Europe/Berlin',
-  'forecast_days'=>8,'daily'=>'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,sunset'
+  'lat'=>$latitude,'lon'=>$longitude,'date'=>$target->format('Y-m-d'),
+  'last_date'=>$target->modify('+1 day')->format('Y-m-d'),
+  'tz'=>'Europe/Berlin','units'=>'dwd',
  ],'','&',PHP_QUERY_RFC3986);
- $key=hash('sha256',$latitude.':'.$longitude.':'.$today->format('Y-m-d'));
- $file=sys_get_temp_dir().'/ts-weather-'.$key.'.json';
+ $key=hash('sha256',$latitude.':'.$longitude.':'.$target->format('Y-m-d'));
+ $file=sys_get_temp_dir().'/ts-dwd-weather-'.$key.'.json';
  $data=null;
- if(is_file($file)&&time()-(int)filemtime($file)<10800)$data=json_decode((string)file_get_contents($file),true);
+ if(is_file($file)&&time()-(int)filemtime($file)<10800)$data=json_decode((string)@file_get_contents($file),true);
  if(!is_array($data)){
-  $url='https://api.open-meteo.com/v1/forecast?'.$query;
+  $url='https://api.brightsky.dev/weather?'.$query;
   $raw=false;
   if(function_exists('curl_init')){
    $ch=curl_init($url);
    curl_setopt_array($ch,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>4,CURLOPT_CONNECTTIMEOUT=>2,
-       CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_FOLLOWLOCATION=>false,CURLOPT_USERAGENT=>'TennisSchiri-Website/1.0']);
+    CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_FOLLOWLOCATION=>false,CURLOPT_USERAGENT=>'TennisSchiri-Website/1.0']);
    $raw=curl_exec($ch);$http=(int)curl_getinfo($ch,CURLINFO_HTTP_CODE);curl_close($ch);
    if($http!==200)$raw=false;
   }elseif(filter_var(ini_get('allow_url_fopen'),FILTER_VALIDATE_BOOLEAN)){
-   $context=stream_context_create(['http'=>['timeout'=>4,'follow_location'=>0,'user_agent'=>'TennisSchiri-Website/1.0']]);
-   $raw=@file_get_contents($url,false,$context);
+   $ctx=stream_context_create(['http'=>['timeout'=>4,'follow_location'=>0,'user_agent'=>'TennisSchiri-Website/1.0']]);
+   $raw=@file_get_contents($url,false,$ctx);
   }
-  if(is_string($raw)&&strlen($raw)<150000)$data=json_decode($raw,true);
-  if(is_array($data)&&is_array($data['daily']['time']??null)){
-   @file_put_contents($file,json_encode($data),LOCK_EX);
-  }
+  if(is_string($raw)&&strlen($raw)<350000)$data=json_decode($raw,true);
+  if(is_array($data)&&is_array($data['weather']??null))
+    @file_put_contents($file,json_encode($data,JSON_INVALID_UTF8_SUBSTITUTE),LOCK_EX);
  }
- $daily=is_array($data)?($data['daily']??[]):[];
- $times=$daily['time']??[];
- $idx=is_array($times)?array_search($target->format('Y-m-d'),$times,true):false;
- if($idx===false)return $response;
- $val=static fn(string $field)=>is_array($daily[$field]??null)?($daily[$field][$idx]??null):null;
- $code=$val('weather_code');
- $max=$val('temperature_2m_max');$min=$val('temperature_2m_min');
- $chance=$val('precipitation_probability_max');$wind=$val('wind_speed_10m_max');
- if(!is_numeric($code)||!is_numeric($max)||!is_numeric($min))return $response;
- $response['forecast']=[
-   'description'=>weatherCode((int)$code),
-   'temperature_max'=>(int)round((float)$max),
-   'temperature_min'=>(int)round((float)$min),
-   'precipitation_probability'=>is_numeric($chance)?(int)round((float)$chance):null,
-   'wind_max'=>is_numeric($wind)?(int)round((float)$wind):null,
-   'retrieved_at'=>gmdate('Y-m-d\TH:i:s\Z'),
- ];
- $sun=$val('sunset');
- if(is_string($sun)&&preg_match('/T(\d{2}:\d{2})/',$sun,$matches))$response['sunset']=$matches[1];
- $response['forecast_notice']='Unverbindliche Wetterprognose; kurzfristige Änderungen möglich.';
+ $forecast=is_array($data)?weatherAggregateDwd((array)($data['weather']??[]),$target->format('Y-m-d')):null;
+ if($forecast===null)return $response;
+ $response['forecast']=$forecast;
+ $response['forecast_notice']='Unverbindliche DWD-Wetterprognose; kurzfristige Änderungen möglich.';
  return $response;
 }
-function weatherCode(int $code): string {
- return match(true){
-   $code===0=>'Sonnig',$code>=1&&$code<=3=>'Teilweise bewölkt',
-   $code===45||$code===48=>'Nebel',
-   $code>=51&&$code<=57=>'Nieselregen',
-   $code>=61&&$code<=67=>'Regen',
-   $code>=71&&$code<=77=>'Schnee',
-   $code>=80&&$code<=82=>'Regenschauer',
-   $code>=85&&$code<=86=>'Schneeschauer',
-   $code>=95=>'Gewitter',
-   default=>'Wechselhaft'
+/** Aggregate hourly Bright Sky DWD forecasts for one Europe/Berlin calendar day. */
+function weatherAggregateDwd(array $rows,string $target): ?array {
+ $temp=[];$rain=[];$wind=[];$icons=[];
+ $tz=new DateTimeZone('Europe/Berlin');
+ foreach($rows as $row){
+  if(!is_array($row)||empty($row['timestamp']))continue;
+  try{$day=(new DateTimeImmutable((string)$row['timestamp']))->setTimezone($tz)->format('Y-m-d');}
+  catch(Throwable $e){continue;}
+  if($day!==$target)continue;
+  if(is_numeric($row['temperature']??null))$temp[]=(float)$row['temperature'];
+  if(is_numeric($row['precipitation_probability']??null))$rain[]=(int)$row['precipitation_probability'];
+  if(is_numeric($row['wind_speed']??null))$wind[]=(float)$row['wind_speed'];
+  if(is_string($row['icon']??null))$icons[$row['icon']]=($icons[$row['icon']]??0)+1;
+ }
+ if(!$temp)return null;  // never invent a forecast
+ arsort($icons);
+ $icon=array_key_first($icons);
+ $word=match($icon){
+  'clear-day','clear-night'=>'Sonnig / klar',
+  'partly-cloudy-day','partly-cloudy-night'=>'Teils bewölkt',
+  'cloudy'=>'Bewölkt',
+  'fog'=>'Nebel',
+  'wind'=>'Windig',
+  'rain','sleet'=>'Regen / Schauer',
+  'snow'=>'Schnee',
+  'hail'=>'Hagel',
+  'thunderstorm'=>'Gewitter',
+  default=>'Wechselhaft'
  };
+ return [
+  'description'=>$word,
+  'temperature_max'=>(int)round(max($temp)),
+  'temperature_min'=>(int)round(min($temp)),
+  'precipitation_probability'=>$rain?max($rain):null,
+  'wind_max'=>$wind?(int)round(max($wind)):null,
+  'retrieved_at'=>gmdate('Y-m-d\TH:i:s\Z'),
+ ];
+}
 }
 if(!defined('TS_WEATHER_LIBRARY')){
  $id=$_GET['id']??'';
