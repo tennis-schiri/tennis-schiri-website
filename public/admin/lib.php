@@ -6,6 +6,7 @@ if (!defined('TS_BACKOFFICE')) { http_response_code(404); exit; }
 require_once __DIR__.'/info-sections.php';
 require_once __DIR__.'/venues.php';
 require_once __DIR__.'/guide.php';
+require_once __DIR__.'/defaults.php';
 
 function boEsc(mixed $value): string {
  return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -93,6 +94,8 @@ function boSchema(PDO $db): void {
   'venue_id'=>"TEXT NOT NULL DEFAULT 'general'",
   'venue_data'=>"TEXT NOT NULL DEFAULT '{}'",
   'guide_data'=>"TEXT NOT NULL DEFAULT '{}'",
+  'defaults_review_required'=>'INTEGER NOT NULL DEFAULT 0',
+  'defaults_reviewed_at'=>'INTEGER',
  ] as $column=>$definition){
   if(!in_array($column,$campaignColumns,true))$db->exec('ALTER TABLE bo_campaigns ADD COLUMN '.$column.' '.$definition);
  }
