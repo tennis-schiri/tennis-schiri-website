@@ -15,7 +15,10 @@ function boVenueDefinitions(): array {
 }
 function boVenueSchema(PDO $db): void {
  $db->exec("CREATE TABLE IF NOT EXISTS bo_venues (id TEXT PRIMARY KEY, name TEXT NOT NULL, data TEXT NOT NULL DEFAULT '{}', updated_at INTEGER NOT NULL DEFAULT 0)");
- foreach(['general'=>'Allgemeine Vorlage','bad-saarow'=>'Tennis Center Bad Saarow','neuenhagen'=>'Neuenhagen'] as $id=>$name){
+ foreach(['general'=>'Allgemeine Vorlage','bad-saarow'=>'Tennis Center Bad Saarow',
+          'neuenhagen'=>'Neuenhagen (übergreifend)',
+          'neuenhagen-halle'=>'Neuenhagen · Halle',
+          'neuenhagen-aussen'=>'Neuenhagen · Außenanlage'] as $id=>$name){
   $q=$db->prepare("INSERT OR IGNORE INTO bo_venues(id,name,data,updated_at) VALUES(?,?,'{}',0)");
   $q->execute([$id,$name]);
  }
@@ -28,6 +31,8 @@ function boVenueData(string $json):array {
   $v=$raw[$key]??'';
   if(is_string($v)&&strlen($v)<=1000)$out[$key]=$v;
  }
+ if(is_string($raw['_verified_at']??null)&&preg_match('/^20\d\d-\d\d-\d\d$/D',$raw['_verified_at']))$out['_verified_at']=$raw['_verified_at'];
+ if(is_string($raw['_source']??null))$out['_source']=substr($raw['_source'],0,500);
  return $out;
 }
 function boVenueValidate(array $post):array {
@@ -40,6 +45,11 @@ function boVenueValidate(array $post):array {
   if($spec['kind']==='url'&&$v!==''&&!boGuideSafeUrl($v))throw new InvalidArgumentException('Der Navigationslink muss eine gültige HTTPS-Adresse sein.');
   $out[$key]=$v;
  }
+ $source=$post['venue_source']??'';
+ if(!is_string($source)||strlen($source)>500||preg_match('/[\x00-\x1F]/',$source))throw new InvalidArgumentException('Bitte interne Quellenangabe prüfen.');
+ $out['_source']=trim($source);
+ $confirmed=($post['venue_verified']??'')==='yes';
+ $out['_verified_at']=$confirmed?gmdate('Y-m-d'):'';
  return $out;
 }
 function boGuideSafeUrl(string $url):bool {
@@ -49,7 +59,7 @@ function boGuideSafeUrl(string $url):bool {
    && isset($p['host'])&&!isset($p['user'])&&!isset($p['pass']);
 }
 function boVenueList(PDO $db):array {
- $all=$db->query('SELECT * FROM bo_venues ORDER BY CASE id WHEN "general" THEN 0 WHEN "bad-saarow" THEN 1 WHEN "neuenhagen" THEN 2 ELSE 3 END, name')->fetchAll();
+ $all=$db->query('SELECT * FROM bo_venues ORDER BY CASE id WHEN "general" THEN 0 WHEN "bad-saarow" THEN 1 WHEN "neuenhagen" THEN 2 WHEN "neuenhagen-halle" THEN 3 WHEN "neuenhagen-aussen" THEN 4 ELSE 5 END, name')->fetchAll();
  return array_column($all,null,'id');
 }
 function boVenueSelector(array $venues,string $current='general'):string {
@@ -59,19 +69,27 @@ function boVenueSelector(array $venues,string $current='general'):string {
 }
 function boVenueEditor(array $profile):string {
  $data=boVenueData((string)($profile['data']??'{}'));
+ $verified=$data['_verified_at']??'';
  $out='<p class="help">Wiederverwendbare Standortangaben. Keine historischen Details werden automatisch als aktuelle Fakten übernommen. Änderungen wirken nur auf <strong>neu erstellte</strong> Infomails.</p>';
+ $out.='<p class="'.($verified?'notice':'warning').'">'.($verified?'Zuletzt geprüft am '.boEsc($verified):'Noch nicht als aktueller Stand bestätigt. Daten werden nicht in Teilnehmermails übernommen, bis du sie erneut speicherst und bestätigst.').'</p>';
+ if(str_starts_with((string)($profile['id']??''),'neuenhagen'))$out.='<p class="help">Die früheren Neuenhagen-Mails wurden als <a href="https://github.com/tennis-schiri/tennis-schiri-website/blob/main/docs/standorte/neuenhagen-quellenprofil.md" target="_blank" rel="noopener">Quellenprofil</a> ausgewertet. Halle und Außenanlage bitte getrennt prüfen; alte Nenngelder, Beläge oder Zugangshinweise nicht ungeprüft übernehmen.</p>';
  foreach(boVenueDefinitions() as $key=>$def){
   $out.='<label>'.boEsc($def['label']).'</label>';
   if($def['kind']==='url')$out.='<input type="url" name="venue_'.$key.'" maxlength="500" value="'.boEsc($data[$key]??'').'" placeholder="'.boEsc($def['help']).'">';
   else $out.='<textarea name="venue_'.$key.'" rows="2" maxlength="1000" style="min-height:70px" placeholder="'.boEsc($def['help']).'">'.boEsc($data[$key]??'').'</textarea>';
  }
+ $out.='<label>Quellenhinweis (nur intern)</label><input type="text" name="venue_source" maxlength="500" value="'.boEsc($data['_source']??'').'" placeholder="z. B. telefonisch mit Anlage am … bestätigt">';
+ $out.='<label style="display:flex;align-items:center;gap:10px"><input type="checkbox" name="venue_verified" value="yes"> Ich habe die Angaben für kommende Turniermails aktuell geprüft.</label>';
+ $out.='<p class="help">Die Bestätigung gilt nur für diese gespeicherte Version. Bei jeder Änderung ist sie erneut erforderlich. Ohne Bestätigung werden diese Angaben im Mail-Layout nicht angezeigt.</p>';
  return $out;
 }
 function boVenueMailBlocks(array $campaign):array {
  $data=boVenueData((string)($campaign['venue_data']??'{}'));
+ if(empty($data['_verified_at']))return ['',''];
  $html='';$text='';
  $labels=boVenueDefinitions();
  foreach($data as $key=>$value){
+  if(!isset($labels[$key]))continue; // internal verification/source metadata never goes into messages
   $value=trim($value);
   if($value==='')continue;
   if($labels[$key]['kind']==='url'&&!boGuideSafeUrl($value))continue;
