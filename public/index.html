@@ -11,7 +11,7 @@
 <meta property="og:site_name" content="Tennis-Schiri">
 <meta property="og:image" content="https://tennis-schiri.de/assets/branding/ts-logo-ball.png">
 <meta property="og:image:alt" content="Tennis-Schiri – offizielles Logo">
-<link rel="stylesheet" href="assets/site.css?v=20261107-8">
+<link rel="stylesheet" href="assets/site.css?v=20261107-9">
 <link rel="stylesheet" href="assets/workshop.css?v=2">
 <script src="assets/back-to-top.js?v=2" defer></script>
 <meta name="robots" content="noindex, nofollow, noarchive">
@@ -58,6 +58,17 @@
   <a class="hero-plate" href="#turniere" aria-label="Zum nächsten Turnier springen"><span class="small"><span class="hero-plate-dot" aria-hidden="true"></span>Nächstes Turnier</span><strong class="date">SO · 27. DEZ 2026</strong><span class="hero-plate-title">SUNBALL TENNIS Winter-LK-Cup</span><span class="hero-plate-place">Tennis Center Bad Saarow</span><span class="hero-plate-cta">Turnier ansehen <span aria-hidden="true">↗</span></span></a>
   </div>
  </div>
+</section>
+
+<section class="tennis-quote-strip" aria-label="Zufälliges Tenniszitat">
+ <div class="container"><div class="tennis-quote-line">
+  <div class="tennis-quote-label"><span>GEDANKEN VOM COURT</span><small>Stimmen aus dem Tennis</small></div>
+  <figure class="tennis-quote-figure" aria-live="polite" aria-atomic="true">
+   <blockquote id="tennis-quote-text" lang="en">“Pressure is a privilege.”</blockquote>
+   <figcaption><span id="tennis-quote-author">Billie Jean King</span><span class="tennis-quote-translation">Frei übersetzt: <span id="tennis-quote-de" lang="de">Druck ist ein Privileg.</span></span></figcaption>
+  </figure>
+  <div class="tennis-quote-actions"><a id="tennis-quote-source" href="https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour" target="_blank" rel="noopener noreferrer" aria-label="Quelle für das aktuelle Tenniszitat öffnen">Quelle ↗</a><button type="button" id="tennis-quote-next" aria-label="Anderes Tenniszitat anzeigen">Anderes Zitat <span aria-hidden="true">↻</span></button></div>
+ </div></div>
 </section>
 
 <section class="quicknav" aria-label="Direkteinstieg"><div class="container"><div class="quicknav-inner">
@@ -224,17 +235,6 @@
 <section class="section rules" id="regelwissen"><div class="container"><div class="rules-layout">
 <div class="rules-copy"><div class="eyebrow kicker">02 / BALD FÜR EUCH DA</div><h2>Regelwissen.<br>Coming soon.</h2><p>Eine neue Wissensrubrik entsteht: verständliche Tennisregeln, Praxisbeispiele und nützliche Infos für Spieler und Vereine.</p><a class="btn btn-dark" href="regelwissen/">Zur Vorschauseite ↗</a></div>
 <div class="rules-art" style="min-height:355px;display:flex;flex-direction:column;justify-content:center"><div class="overline">REGELWISSEN / IN VORBEREITUNG</div><div class="rules-question" style="margin:22px 0 0">COMING<br>SOON.</div><div class="rules-sample">Neue Inhalte folgen</div></div></div></div></section>
-<section class="tennis-quote-section" aria-labelledby="tennis-quote-heading">
- <div class="container"><div class="tennis-quote-layout">
-  <div class="tennis-quote-intro"><div class="eyebrow kicker">STIMMEN AUS DEM TENNIS</div><h2 id="tennis-quote-heading">Ein Satz.<br>Viel Tennis.</h2><p>Gedanken von Spielerinnen und Spielern, die auf und neben dem Platz etwas bewegen.</p></div>
-  <figure class="tennis-quote-card">
-   <span class="tennis-quote-mark" aria-hidden="true">“</span>
-   <blockquote id="tennis-quote-text">„Druck ist ein Privileg.“</blockquote>
-   <figcaption><span id="tennis-quote-author">Billie Jean King</span><span class="tennis-quote-translation">Sinngemäß aus dem Englischen übertragen</span></figcaption>
-   <div class="tennis-quote-bottom"><a id="tennis-quote-source" href="https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour" target="_blank" rel="noopener noreferrer">Quelle ansehen ↗</a><button type="button" id="tennis-quote-next" aria-label="Anderes Tenniszitat anzeigen">Anderes Zitat <span aria-hidden="true">↻</span></button></div>
-  </figure>
- </div></div>
-</section>
 <section class="section services" id="leistungen"><div class="container"><div class="section-head"><div><div class="eyebrow kicker">03 / HINTER DEN KULISSEN</div><h2>Gute Turniere<br>sind kein Zufall.</h2></div><p class="small">Veranstalter und Vereine profitieren von Erfahrung, verlässlichen Abläufen und einem sicheren Umgang mit dem Regelwerk.</p></div>
  <div class="services-grid">
   <article class="service"><div class="service-number">01</div><h3>Turnierleitung</h3><p>Strukturierte Vorbereitung und Begleitung von Turnieren – vom Zeitplan bis zur Durchführung.</p><a href="kontakt/">Leistung anfragen ↗</a></article>
@@ -293,29 +293,120 @@
 <script>
 (function(){
  const quotes=[
-  {text:'Druck ist ein Privileg.',author:'Billie Jean King',source:'https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour'},
-  {text:'Du hast mich dazu gebracht, das Tennis noch mehr zu genießen.',author:'Roger Federer',source:'https://www.atptour.com/en/news/rafael-nadal-retirement-federer-tribute-letter'},
-  {text:'Genießt und schätzt jeden einzelnen Moment im Sport.',author:'Rafael Nadal',source:'https://www.atptour.com/en/news/nadal-laureus-2025-sporting-icon'},
-  {text:'Ich möchte rausgehen, frei spielen und diesen Moment genießen.',author:'Samantha Stosur',source:'https://www.wtatennis.com/news/2452085/stosur'},
-  {text:'Ich spiele Tennis, um die Menschen für das Spiel zu begeistern.',author:'Iga Świątek',source:'https://www.wtatennis.com/news/1440957/swiatek-ready-for-next-step-after-junior-wimbledon-win'},
-  {text:'Ich kämpfe um jeden Punkt, ganz egal, wie es steht.',author:'Coco Gauff',source:'https://www.wtatennis.com/news/3678744/follow-live-gauff-sabalenka-battle-it-out-for-us-open-title'}
- ];
- const quote=document.getElementById('tennis-quote-text');
- const name=document.getElementById('tennis-quote-author');
+  {
+    "en": "Pressure is a privilege.",
+    "de": "Druck ist ein Privileg.",
+    "author": "Billie Jean King",
+    "source": "https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour"
+  },
+  {
+    "en": "And you know what, Rafa, you made me enjoy the game even more.",
+    "de": "Rafa, durch dich hat mir das Tennis noch mehr Freude gemacht.",
+    "author": "Roger Federer",
+    "source": "https://www.atptour.com/en/news/rafael-nadal-retirement-federer-tribute-letter"
+  },
+  {
+    "en": "If, if. If doesn’t exist.",
+    "de": "Was wäre, wenn? Dieses Wenn gibt es nicht.",
+    "author": "Rafael Nadal",
+    "source": "https://longform.atptour.com/rafael-nadal-retirement-longform-tribute/"
+  },
+  {
+    "en": "You have to enjoy suffering.",
+    "de": "Man muss auch lernen, die Anstrengung zu genießen.",
+    "author": "Carlos Alcaraz",
+    "source": "https://www.atptour.com/en/news/alcaraz-sinner-roland-garros-2024-friday"
+  },
+  {
+    "en": "I know I can always produce better tennis.",
+    "de": "Ich weiß, dass ich immer noch besser Tennis spielen kann.",
+    "author": "Novak Djokovic",
+    "source": "https://www.atptour.com/en/news/djokovic-reaction-indian-wells-2024-saturday"
+  },
+  {
+    "en": "The work never stops.",
+    "de": "Die Arbeit hört nie auf.",
+    "author": "Jannik Sinner",
+    "source": "https://www.atptour.com/en/news/sinner-us-open-2024-final-reaction"
+  },
+  {
+    "en": "Just staying resilient, fighting for every point.",
+    "de": "Dranbleiben, widerstandsfähig bleiben und um jeden Punkt kämpfen.",
+    "author": "Coco Gauff",
+    "source": "https://www.wtatennis.com/news/4165822/gauff-overcomes-zheng-in-three-hour-clash-to-win-title-at-wta-finals-riyadh"
+  },
+  {
+    "en": "I'm just a fighter and never give up.",
+    "de": "Ich bin eine Kämpferin und gebe niemals auf.",
+    "author": "Serena Williams",
+    "source": "https://www.wtatennis.com/news/1447037/im-a-fighter-i-never-give-up-serena-quells-teen-juvan-at-wimbledon"
+  },
+  {
+    "en": "I love what I do. It's a privilege to still be good at it.",
+    "de": "Ich liebe, was ich tue. Es ist ein Privileg, darin noch immer gut zu sein.",
+    "author": "Venus Williams",
+    "source": "https://www.wtatennis.com/news/1674637/venus-at-40-evert-shriver-salute-her-grace-and-intensity"
+  },
+  {
+    "en": "You have to focus on every match specifically and do it step by step.",
+    "de": "Konzentriere dich auf jedes einzelne Match und gehe Schritt für Schritt vor.",
+    "author": "Iga Świątek",
+    "source": "https://www.wtatennis.com/news/4213467/iga-swiatek-targets-dohas-rare-four-peat-without-looking-back"
+  },
+  {
+    "en": "But that result doesn't define me as a person or my self-worth.",
+    "de": "Ein Ergebnis bestimmt nicht, wer ich bin oder was ich wert bin.",
+    "author": "Ashleigh Barty",
+    "source": "https://www.wtatennis.com/news/2187769/champions-corner-barty"
+  },
+  {
+    "en": "I just want to be happy.",
+    "de": "Ich möchte einfach glücklich sein.",
+    "author": "Naomi Osaka",
+    "source": "https://www.wtatennis.com/news/1437547/insider-podcast-naomi-osaka-continues-to-grow-under-the-spotlight"
+  },
+  {
+    "en": "I just believed in myself, I worked hard, and this is just the beginning of great things.",
+    "de": "Ich habe an mich geglaubt und hart gearbeitet. Das ist erst der Anfang.",
+    "author": "Ons Jabeur",
+    "source": "https://www.wtatennis.com/news/2289213/tunisias-jabeur-on-historic-top-10-debut-this-is-the-beginning"
+  },
+  {
+    "en": "All you're thinking about is the next point.",
+    "de": "Alles, woran du denkst, ist der nächste Punkt.",
+    "author": "Andre Agassi",
+    "source": "https://www.atptour.com/en/news/nadal-agassi-wimbledon-2006-feature"
+  },
+  {
+    "en": "I'm trying to bring my best tennis on court.",
+    "de": "Ich versuche, auf dem Platz mein bestes Tennis zu zeigen.",
+    "author": "Aryna Sabalenka",
+    "source": "https://www.wtatennis.com/news/4130164/jet-setting-and-goal-getting-sabalenka-balances-celebration-and-competition"
+  },
+  {
+    "en": "Some days it will go in your favor and some days it won't.",
+    "de": "An manchen Tagen läuft es für dich, an anderen nicht.",
+    "author": "Ashleigh Barty",
+    "source": "https://www.wtatennis.com/news/1452865/i-have-had-a-very-unique-journey-barty-credits-cricket-break-for-career-milestones-in-miami"
+  }
+];
+ const original=document.getElementById('tennis-quote-text');
+ const translation=document.getElementById('tennis-quote-de');
+ const author=document.getElementById('tennis-quote-author');
  const source=document.getElementById('tennis-quote-source');
  const next=document.getElementById('tennis-quote-next');
- if(!quote||!name||!source||!next)return;
+ if(!original||!translation||!author||!source||!next)return;
  let current=-1;
- function show(index){
-  current=index;
-  quote.textContent='„'+quotes[index].text+'“';
-  name.textContent=quotes[index].author;
-  source.href=quotes[index].source;
+ function show(i){
+  current=i;
+  original.textContent='“'+quotes[i].en+'”';
+  translation.textContent=quotes[i].de;
+  author.textContent=quotes[i].author;
+  source.href=quotes[i].source;
  }
  function randomNext(){
-  let index=Math.floor(Math.random()*quotes.length);
-  if(quotes.length>1&&index===current)index=(index+1+Math.floor(Math.random()*(quotes.length-1)))%quotes.length;
-  show(index);
+  const offset=1+Math.floor(Math.random()*(quotes.length-1));
+  show(current<0?Math.floor(Math.random()*quotes.length):(current+offset)%quotes.length);
  }
  next.addEventListener('click',randomNext);
  randomNext();
