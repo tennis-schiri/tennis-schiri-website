@@ -28,11 +28,16 @@ Die E-Mail-Adressen werden ausschließlich dem jeweils gewählten Turnier zugeor
 1. Turnier auswählen: Datum, Ort und der Turnierlink werden aus der Website übernommen.
 2. Vorlage wählen: Teilnehmerinformation, Erinnerung oder organisatorische Änderung.
 3. Betreff, Haupttext und optionale Zusatzinformationen (Meldezeit, Treffpunkt, Parken usw.) bearbeiten und speichern.
-4. Vorschau öffnen, dann eine **Testmail nur an mw@tennis-schiri.de** schicken.
-5. Empfängerliste prüfen. Mit der Eingabe **SENDEN** wird sie eingefroren. **Noch kein Versand.**
-6. Anschließend den Versand bewusst in Chargen von maximal fünf Nachrichten pro Klick auslösen und die Einzelprotokolle prüfen.
+4. Über die **Checkliste** zusätzlich auswählen, welche Infos als eigene Karten erscheinen sollen: Meldezeit/Treffpunkt, Spielbeginn/Ablauf, Parken/Anfahrt, Nenngeld/Zahlung, Kontakt, Turnigo und MyScore.live. Die ergänzenden Texte und URLs werden im Entwurf gespeichert.
+5. Vorschau öffnen, dann eine **Testmail nur an mw@tennis-schiri.de** schicken.
+6. Empfängerliste prüfen. Mit der Eingabe **SENDEN** wird sie eingefroren. **Noch kein Versand.**
+7. Anschließend den Versand bewusst in Chargen von maximal fünf Nachrichten pro Klick auslösen und die Einzelprotokolle prüfen.
 
 Verfügbare Platzhalter: {{name}}, {{turnier}}, {{datum}}, {{ort}}, {{turnier_link}}, {{zusatz}}. Der letzte Platzhalter übernimmt das Feld „Zusätzliche Hinweise“.
+
+Die optionalen Infoblöcke werden nur angezeigt, wenn das jeweilige Thema angehakt **und** sein Text oder Link hinterlegt ist. Für **Turnigo** wird ausschließlich eine HTTPS-Adresse auf turnigo.de oder einer passenden Subdomain akzeptiert. Für **MyScore.live** gilt dasselbe für myscore.live. Trage pro Turnier den tatsächlichen Link ein; es werden keine Anmelde- oder Ergebnislinks geraten. Die Auswahl ist nicht mit dem Newsletter-Opt-in verbunden und löst keinen automatischen Versand aus.
+
+Die Checkliste hat eigene Datenbankfelder, die beim ersten Aufruf automatisch ergänzt werden. Bereits bestehende Entwürfe bleiben unverändert; neue Infoblöcke sind zunächst nicht aktiviert.
 
 **Absender und Antwortadresse:** turniere@tennis-schiri.de. Der Newsletter nutzt weiterhin news@tennis-schiri.de.
 
