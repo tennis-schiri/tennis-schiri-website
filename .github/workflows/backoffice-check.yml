@@ -1,0 +1,54 @@
+name: Tennis-Schiri Backoffice prüfen (kein Live-Upload)
+
+on:
+  push:
+    paths:
+      - 'public/admin/**'
+      - 'public/newsletter-admin.php'
+      - 'public/newsletter-mail.php'
+      - 'public/turnier-mails.php'
+      - 'tests/backoffice-test.php'
+      - 'public/datenschutz/index.html'
+      - '.github/workflows/deploy-live.yml'
+      - '.github/workflows/backoffice-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backoffice:
+    name: PHP, SQLite und Mailvorlagen prüfen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Code herunterladen
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: PHP-Modultests
+        shell: bash
+        run: |
+          set -euo pipefail
+          php -v
+          php -r 'if (!extension_loaded("pdo_sqlite")) exit(1);'
+          php -l public/admin/lib.php
+          php -l public/admin/index.php
+          php -l public/newsletter-admin.php
+          php -l public/newsletter-mail.php
+          php -l public/turnier-mails.php
+          php -l tests/backoffice-test.php
+          php tests/backoffice-test.php
+      - name: Zugriffsschutz, Datenhaltung und Versandbremse prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -Fq "session_name('ts_newsletter_admin')" public/admin/lib.php
+          grep -Fq "if (!defined('TS_BACKOFFICE'))" public/admin/lib.php
+          grep -Fq "boCheckPost();" public/admin/index.php
+          grep -Fq "boSend(" public/admin/index.php
+          grep -Fq "for(\$i=0;\$i<5;\$i++)" public/admin/index.php
+          grep -Fq "turniere@tennis-schiri.de" public/admin/lib.php
+          test ! -e public/tennis-schiri-newsletter-config.php
+          test ! -e public/admin/tennis-schiri-newsletter-config.php
+          echo "Backoffice-Sicherheitsprüfungen bestanden. Kein automatischer Versand."
