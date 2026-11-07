@@ -36,7 +36,7 @@ Dieser Speicher ist unabhängig von TENNILO Founders. Bestehende TENNILO-Interes
 
 Unter `newsletter-mail.php` einen Entwurf mit Betreff, Haupttext und genau einem Thema anlegen. Optional lassen sich eine andere Überschrift, ein Vorschautext für den Posteingang, eine hervorgehobene **Turnier-/Veranstaltungskarte mit Termin und Ort** sowie ein Aktionsbutton mit Beschriftung und HTTPS-Link ergänzen. Den Entwurf speichern und über **HTML-Vorschau öffnen** kontrollieren. Danach eine **Testmail an mw@tennis-schiri.de** schicken und in verschiedenen E-Mail-Programmen ansehen. Erst nach dieser Kontrolle durch Eingabe von **SENDEN** die Empfängerliste der bestätigten Kontakte zum gewählten Thema freigeben. Das ist **noch kein Versand**. Danach wird der Versand manuell in Paketen mit bis zu fünf E-Mails pro Klick ausgelöst. Vor jedem Versandversuch werden Abmeldestatus und Themeninteressen erneut geprüft.
 
-Das Newsletter-Layout wird serverseitig aus `public/newsletter-template.php` erzeugt. Es nutzt die Tennis-Schiri-Farben (dunkles Grün, helles Grün), ein tabellenbasiertes Design für E-Mail-Clients und einen festen Footer. Es bindet **keine externen Bilder, Skripte oder Tracking-Pixel** ein. Redaktioneller Text wird vor HTML-Ausgabe escaped; zusätzliche HTML-Codes müssen nicht eingegeben werden. Jede E-Mail wird als **multipart/alternative** verschickt: gestaltete HTML-Version und reine Textfassung. Bestehende Kampagnen werden nicht gelöscht; fehlende zusätzliche Spalten ergänzt die Verwaltung beim nächsten Aufruf der Kampagnenseite automatisch. **Abgeschlossene und freigegebene Kampagnen bleiben unveränderbar.**
+Das Newsletter-Layout wird serverseitig aus `public/newsletter-template.php` erzeugt. Es nutzt die Tennis-Schiri-Farben (dunkles Grün, helles Grün), ein tabellenbasiertes Design für E-Mail-Clients und einen festen Footer. Es bindet **keine Skripte oder Tracking-Pixel** ein. Wenn du Partner oder TENNILO im Newsletter auswählst, werden deren Original-Logos als öffentlich gehostete Bilder eingebunden (Partnerlogos unter tennis-schiri.de, TENNILO-Logo unter tennilo.de). Manche Mailprogramme blockieren externe Bilder zunächst; Namen und Links bleiben auch dann sichtbar. Redaktioneller Text wird vor HTML-Ausgabe escaped; zusätzliche HTML-Codes müssen nicht eingegeben werden. Jede E-Mail wird als **multipart/alternative** verschickt: gestaltete HTML-Version und reine Textfassung. Bestehende Kampagnen werden nicht gelöscht; fehlende zusätzliche Spalten ergänzt die Verwaltung beim nächsten Aufruf der Kampagnenseite automatisch. **Abgeschlossene und freigegebene Kampagnen bleiben unveränderbar.**
 
 Die Vorlagenfunktion wird in GitHub vor dem Live-Upload durch `php tests/newsletter-template-test.php` geprüft. Die Testmail verwendet den allgemeinen Abmeldungsaufruf; **echte Rundmails** erhalten ausschließlich individuelle, signierte Abmeldelinks. **Testmail und Browser-Vorschau** tragen einen sichtbaren Testhinweis. Eine freigegebene Rundmail enthält keinen Testhinweis.
 
@@ -56,6 +56,20 @@ Die Newsletter-Verwaltung lädt zukünftige Turniere und datierte Workshops dire
 - Der Empfängerkreis richtet sich weiterhin nach dem gewählten Interessengebiet (Turniere, Regeln oder Workshops); das Ankreuzen von Terminen verändert **nicht** die Newsletter-Einwilligungen.
 
 **Wichtig:** Die Liste wird nicht live von tennis.de ausgelesen. Sie spiegelt die Termine und Links auf unserer eigenen Website wider. Ein Newsletter wird niemals allein durch einen neuen Termin automatisch verschickt.
+
+## Partner und TENNILO als kleine Banner
+
+Unter **„Partner & TENNILO einblenden“** kannst du unabhängig von der Terminauswahl einzelne Partner oder TENNILO anhaken. Nur die gewählten erscheinen im fertigen Newsletter.
+
+- **Alle sieben Partner** kommen mit ihren Original-Logos, Namen und offiziellen Zieladressen aus der öffentlichen Partnerseite (`public/partner/index.html`). Es wird keine zweite Liste manuell gepflegt.
+- **TENNILO** ist zusätzlich als eigenes Projekt auswählbar, mit dem Original-Logo von `https://tennilo.de/assets/tennilo-logo.png` und einem Link auf `https://tennilo.de/`.
+- Der automatische Katalog `/data/newsletter-partners.json` wird bei jedem GitHub-Live-Upload durch `scripts/build_newsletter_partners.py` neu erstellt. Die Einträge liegen öffentlich und enthalten keine Abonnentendaten.
+- Das Checkbox-Modul befindet sich in `public/newsletter-partners.php`. Beim **Speichern des Entwurfs** wird die Auswahl in der privaten SQLite-Datenbank eingefroren. Bereits freigegebene Newsletter verändern sich nicht nachträglich.
+- Die HTML-Vorlage erstellt kleine horizontale Logo-Banner. Bild und Partnername verlinken auf die jeweilige Website; die Textalternative enthält ebenfalls alle ausgewählten Partnerlinks.
+- Kein Partner und auch TENNILO werden automatisch in jede Ausgabe eingebaut. Die Auswahl ist freiwillig und beeinflusst nicht die Abonnentengruppen oder Versandfreigabe.
+- Vor dem Versand die Browser-Vorschau und eine Testmail prüfen. Im E-Mail-Programm mit deaktivierten Bildern bleiben die Partnernamen und Links erhalten.
+
+**Datenschutz:** Beim Anzeigen der extern geladenen Logos entsteht ein technischer Bildabruf. Die Partnerlogos werden von tennis-schiri.de bereitgestellt, das TENNILO-Logo von tennilo.de; es sind keine Trackingpixel eingebaut.
 
 ## Betriebshinweise
 
