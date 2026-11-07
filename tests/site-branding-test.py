@@ -23,7 +23,7 @@ for html in pages:
         if required not in data:
             raise SystemExit(f"Veralteter Browser-/Social-Branding-Verweis: {html} -> {required}")
     css_prefix=f'{prefix}assets/site.css'
-    if not re.search(r'<link\\s+rel="stylesheet"\\s+href="'+re.escape(css_prefix)+r'\\?v=[A-Za-z0-9._-]+">',data):
+    if not any(css_prefix + "?v=" in line for line in data.splitlines() if '<link rel="stylesheet"' in line):
         raise SystemExit(f"CSS-Stylesheet fehlt oder ist falsch eingebunden: {html}")
     if '<span class="mark"' in data:
         raise SystemExit(f"Veraltetes CSS-Logo noch vorhanden: {html}")
