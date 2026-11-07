@@ -49,7 +49,14 @@
         "Umkleiden/Duschen",
         "Barrierefreiheit und Gastronomie",
         "Bezeichnung Laykold auf Hartplätzen"
-      ]
+      ],
+      "logo": {
+        "status": "official_source_found_asset_not_imported",
+        "source_page": "https://www.sunballtennisbsa.de/",
+        "source_image_url": "https://storage.e.jimdo.com/cdn-cgi/image/quality%3D85%2Cfit%3Dscale-down%2Cformat%3Dauto%2Ctrim%3D0%3B0%3B0%3B0%2Cwidth%3D2560%2Cheight%3D634/image/447483050/bb28899d-74df-498b-a28e-6e7f972a94af.png",
+        "alternative_logo_source": "https://www.precisehotels.com/en/bad-saarow/tennis",
+        "note": "Website-Betreiberlogo 'Sunball Tenniscenter Bad Saarow'; alternativ zeigt Precise ein anderes Tennis Center Bad Saarow-Schildlogo. Für offizielle Nutzung die gewünschte Variante bestätigen."
+      }
     },
     {
       "id": "neuenhagen",
@@ -94,7 +101,14 @@
         "Turnierleitungsstandort je Turnier",
         "Konkreter Navigationslink je Anlagenteil",
         "Schuhfreigabe Halle"
-      ]
+      ],
+      "logo": {
+        "status": "official_source_found_asset_not_imported",
+        "source_page": "https://ntc93.com/",
+        "source_document": "https://ntc93.com/wp-content/uploads/2025/04/Werbeangebote_NTC_25.pdf",
+        "source_image_url": null,
+        "note": "Rundes Vereinslogo 'Neuenhagener Tennisclub 93 e.V.' im offiziellen Werbe-PDF gefunden. Original-Bilddatei bzw. freigegebene SVG/PNG noch beschaffen, PDF nicht als Mail-Logo verwenden."
+      }
     }
   ],
   "rules": [
@@ -102,6 +116,7 @@
     "Keep source URLs and last verified date.",
     "Keep venue-level info separate from area-level properties and tournament-level fee/scoring/check-in.",
     "Do not store access codes in GitHub or standard participant mail templates.",
-    "No automatic production DB writes; admin integration and review required."
+    "No automatic production DB writes; admin integration and review required.",
+    "Store venue logo in full-size original plus email-friendly PNG and optional square variant, with attribution/source, usage approval, alt text and review status; keep logos optional in published output."
   ]
 }
