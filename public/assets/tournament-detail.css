@@ -40,3 +40,6 @@
 #event-error{margin:12px 0 50px}
 @media(max-width:940px){.tourney-detail-columns{grid-template-columns:1fr}.tourney-detail-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.tourney-detail-top{align-items:flex-start;flex-direction:column}.tourney-detail-logo{min-height:85px;width:140px;flex-basis:auto}.tourney-detail-columns,.tourney-detail-side{grid-template-columns:1fr}.tourney-detail-panel{padding:21px}.tourney-detail-facts>div{grid-template-columns:1fr;gap:3px}}
+
+.tourney-detail-logo[hidden]{display:none}
+.tourney-detail-heading .tourney-detail-date{font-size:clamp(19px,2.7vw,27px);font-weight:800;margin:0 0 14px}
