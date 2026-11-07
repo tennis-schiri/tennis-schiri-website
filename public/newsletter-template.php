@@ -54,6 +54,42 @@ HTML;
         </table>
 HTML;
     }
+    $selectedCards='';
+    $selectedData=json_decode((string)($campaign['selected_events']??'[]'),true);
+    if(is_array($selectedData) && count($selectedData)>0){
+        $cards='';
+        foreach(array_slice($selectedData,0,25) as $selected){
+            if(!is_array($selected))continue;
+            $title=trim((string)($selected['title']??''));
+            $url=trim((string)($selected['url']??''));
+            if($title===''||!preg_match('~^https://[^[:space:]<>"]+$~iD',$url))continue;
+            $name=$esc($title);
+            $day=$esc((string)($selected['date']??''));
+            $place=$esc((string)($selected['location']??''));
+            $kind=$selected['type']==='veranstaltung'?'WORKSHOP / EVENT':'TENNISTURNIER';
+            $link=$esc($url);
+            $actionText=$esc((string)($selected['link_label']??'Details ansehen'));
+            $cards.=<<<HTML
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f2f7ed;border:1px solid #dce9d3;border-radius:12px;margin:0 0 14px">
+              <tr><td style="padding:22px 24px;font-family:Arial,Helvetica,sans-serif">
+                <p style="margin:0 0 8px;font-size:10px;letter-spacing:1.5px;font-weight:800;color:#5f8746;">$kind</p>
+                <p style="font-size:21px;line-height:1.25;color:#16412d;font-weight:800;margin:0 0 11px;">$name</p>
+                <p style="font-size:13px;line-height:1.55;color:#3d6248;font-weight:700;margin:0 0 5px;">$day</p>
+                <p style="font-size:12px;line-height:1.6;color:#6d8271;margin:0 0 14px;">$place</p>
+                <a href="$link" target="_blank" style="color:#1a5b36;font-size:13px;font-weight:800;text-decoration:underline;">$actionText &#8599;</a>
+              </td></tr>
+            </table>
+HTML;
+        }
+        if($cards!==''){
+            $selectedCards=<<<HTML
+            <div style="margin:28px 0 31px">
+              <p style="font-family:Arial,Helvetica,sans-serif;color:#2b6644;font-size:11px;font-weight:800;letter-spacing:1.6px;margin:0 0 16px;">TERMINE AUF EINEN BLICK</p>
+              $cards
+            </div>
+HTML;
+        }
+    }
     $previewBanner=$isPreview?'<tr><td style="background:#f9e5ac;color:#513d19;text-align:center;font-size:12px;font-weight:bold;padding:12px 20px;font-family:Arial,Helvetica,sans-serif">TEST / VORSCHAU – noch nicht an Abonnenten verschickt</td></tr>':'';
     $unsub=$esc($unsubscribeUrl);
     return <<<HTML
@@ -92,6 +128,7 @@ HTML;
    <div style="height:1px;background:#dfebd7;margin:0 0 30px"></div>
    $paragraphs
    $event
+   $selectedCards
    $cta
   </td></tr>
   <tr><td class="padded" style="background:#f5f9f0;padding:25px 43px;border-top:1px solid #e3eddb">
@@ -128,6 +165,17 @@ function newsletterPlainText(array $campaign,string $unsubscribeUrl): string {
         foreach (['event_date'=>'Termin','event_location'=>'Ort'] as $field=>$label){
             $value=trim((string)($campaign[$field]??''));
             if($value!=='')$text.="\n".$label.": ".$value;
+        }
+    }
+    $selectedData=json_decode((string)($campaign['selected_events']??'[]'),true);
+    if(is_array($selectedData) && $selectedData){
+        $text.="\n\nTERMINE AUF EINEN BLICK";
+        foreach(array_slice($selectedData,0,25) as $row){
+            if(!is_array($row) || empty($row['title']) || !preg_match('~^https://[^[:space:]<>"]+$~iD',(string)($row['url']??'')))continue;
+            $text.="\n\n".(string)$row['title'];
+            if(!empty($row['date']))$text.="\nTermin: ".(string)$row['date'];
+            if(!empty($row['location']))$text.="\nOrt: ".(string)$row['location'];
+            $text.="\n".(string)($row['link_label']??'Details ansehen').": ".(string)$row['url'];
         }
     }
     $buttonText=trim((string)($campaign['button_label']??''));
