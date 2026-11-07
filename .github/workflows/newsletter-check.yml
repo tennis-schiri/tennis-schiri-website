@@ -79,5 +79,5 @@ jobs:
           grep -Fq 'newsletter-datenschutz' public/datenschutz/index.html
           test ! -e public/tennis-schiri-newsletter-config.php
           test ! -e public/tennis-schiri-newsletter-data
-          grep -Fq 'if len(pages) != 13:' .github/workflows/deploy-live.yml
+          grep -Fq 'if len(pages) != 14:' .github/workflows/deploy-live.yml
           echo "Newsletter-Prüfung bestanden; kein Live-Upload."
