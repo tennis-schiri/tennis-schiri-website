@@ -66,7 +66,7 @@ HTML;
             $name=$esc($title);
             $day=$esc((string)($selected['date']??''));
             $place=$esc((string)($selected['location']??''));
-            $kind=$selected['type']==='veranstaltung'?'WORKSHOP / EVENT':'TENNISTURNIER';
+            $kind=($selected['type']??'')==='veranstaltung'?'WORKSHOP / EVENT':'TENNISTURNIER';
             $link=$esc($url);
             $actionText=$esc((string)($selected['link_label']??'Details ansehen'));
             $cards.=<<<HTML
