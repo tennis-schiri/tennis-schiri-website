@@ -21,6 +21,16 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Freigegebenes TS-09c-Logo-Set bereitstellen
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_site_branding.py --output public/assets/branding
+          test -s public/assets/branding/ts-logo-hell.png
+          test -s public/assets/branding/ts-logo-dunkel.png
+          test -s public/assets/branding/ts-logo-ball.png
+          test -s public/assets/branding/ts-favicon.png
+
       - name: Separate Zugangsdaten für den Live-Ordner prüfen
         shell: bash
         env:
@@ -57,7 +67,7 @@ jobs:
           for page in pages:
               raw = page.read_text(encoding="utf-8")
               rel = "assets" if page == out / "index.html" else "../assets"
-              expected_css = f'<link rel="stylesheet" href="{rel}/site.css?v=20261107-1">'
+              expected_css = f'<link rel="stylesheet" href="{rel}/site.css?v=20261107-2">'
               expected_script = f'<script src="{rel}/back-to-top.js?v=2" defer></script>'
               if expected_css not in raw or expected_script not in raw:
                   raise SystemExit(f"Stylesheet oder Nach-oben-Skript fehlerhaft eingebunden: {page}")
@@ -89,6 +99,10 @@ jobs:
           for required in [
               "index.html", "impressum/index.html", "datenschutz/index.html",
               "favicon.svg", "assets/site.css", "assets/instagram.js",
+              "assets/branding/ts-logo-hell.png",
+              "assets/branding/ts-logo-dunkel.png",
+              "assets/branding/ts-logo-ball.png",
+              "assets/branding/ts-favicon.png",
               "assets/back-to-top.js",
               "data/instagram.json", "data/statistics.json",
               "assets/statistics.js", "statistiken/index.html",
@@ -131,6 +145,7 @@ jobs:
           php -l public/newsletter-partners.php
           php -l tests/newsletter-partners-test.php
           php tests/newsletter-partners-test.php
+          python tests/site-branding-test.py
           test -s public/newsletter/index.html
           # Private Konfiguration und personenbezogene Datensaetze gehoeren nicht ins Repository.
           test ! -e public/tennis-schiri-newsletter-config.php
