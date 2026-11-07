@@ -1,0 +1,58 @@
+/* Offizielle Tennis-Regelwerke: Suchbibliothek und quellengebundene Fragefunktion */
+.rulebooks-section{margin:0 0 35px;padding:30px;background:#fff;border:1px solid #d7e5d1;border-radius:22px;box-shadow:0 12px 35px rgba(19,60,36,.035)}
+.rulebooks-intro{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;margin-bottom:23px}
+.rulebooks-intro h2{font-size:clamp(28px,3.6vw,40px);line-height:1.12;letter-spacing:-.04em;margin:10px 0 12px;color:#173e2c}
+.rulebooks-intro p{max-width:670px;font-size:14px;line-height:1.7;color:#5a735e;margin:0}
+.rulebooks-status{border-radius:999px;padding:8px 12px;border:1px solid #c4dfb9;color:#306448;white-space:nowrap;font-size:11px;font-weight:850}
+.rulebooks-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0 13px}
+.rulebooks-search{flex:2 1 260px;min-width:0;border:1px solid #bed3b5;border-radius:13px;background:#f8fbf5;padding:14px 16px;font:inherit;font-size:14px;color:#19442d}
+.rulebooks-filter{flex:1 1 175px;max-width:300px;border:1px solid #bed3b5;border-radius:13px;background:#f8fbf5;padding:14px 15px;font:inherit;font-size:13px;color:#19442d}
+.rulebooks-search:focus,.rulebooks-filter:focus{outline:2px solid #6ea24c;outline-offset:2px}
+.rulebooks-explain{font-size:12px;line-height:1.6;color:#6e866f;margin:0 0 14px}
+.rulebooks-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.rulebook-card{min-width:0;padding:21px;border:1px solid #dae6d5;border-radius:16px;background:#fdfefa;display:flex;flex-direction:column;gap:11px}
+.rulebook-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rulebook-issuer{display:inline-block;color:#20573a;font-size:10px;font-weight:900;letter-spacing:.07em;background:#e7f4db;padding:6px 9px;border-radius:999px}
+.rulebook-year{font-size:10px;line-height:1.45;color:#647867;max-width:155px;text-align:right}
+.rulebook-card h3{color:#1b452e;font-size:19px;line-height:1.2;letter-spacing:-.02em;margin:0}
+.rulebook-card p{font-size:12px;color:#637a67;line-height:1.7;margin:0 0 6px}
+.rulebook-open{color:#1f6740;text-decoration:none;font-size:12px;font-weight:900;margin-top:auto}
+.rulebook-open:hover,.rulebook-open:focus-visible{text-decoration:underline;text-underline-offset:4px}
+.rulebooks-count{margin:14px 0 0;font-size:12px;color:#738475}
+.rulebooks-empty{font-size:13px;color:#536d56}
+.rules-topics-results{margin:18px 0 0;padding:17px 19px;background:#f4f8ee;border:1px solid #dce9d2;border-radius:16px}
+.rules-topics-results[hidden]{display:none}
+.rules-topics-heading{font-size:15px;margin:0 0 12px;color:#234d34}
+.rules-topic-hit{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-top:1px solid #e1ebd9;text-decoration:none;color:#294c36}
+.rules-topic-hit strong{font-size:13px;font-weight:750}
+.rules-topic-hit small{font-size:11px;color:#527c58;text-align:right;flex:0 0 auto}
+.rules-topic-hit:hover strong{text-decoration:underline}
+.rules-topic-empty{font-size:12px;color:#5f7864}
+.rules-ask-section{margin:0 0 42px;background:linear-gradient(125deg,#173f2f,#245a40);border-radius:22px;padding:30px 34px;color:#fff}
+.rules-ask-top{display:flex;justify-content:space-between;align-items:start;gap:20px;flex-wrap:wrap}
+.rules-ask-section h2{color:#fff;font-size:clamp(27px,3.3vw,37px);line-height:1.12;letter-spacing:-.03em;margin:7px 0 11px}
+.rules-ask-section p{font-size:13px;color:#d4e6d4;line-height:1.65;margin:0 0 16px;max-width:670px}
+.rules-ask-top>span{font-size:10px;letter-spacing:.09em;color:#ddf8ab;border:1px solid #5c8b62;border-radius:999px;padding:8px 11px}
+.rules-ask-form{display:flex;align-items:stretch;gap:9px;margin:14px 0 12px}
+.rules-ask-input{flex:1;min-width:0;background:#fff;color:#173d2c;border-radius:13px;border:1px solid #c8e2bc;padding:15px 16px;font:inherit;font-size:14px}
+.rules-ask-button{background:#c8f16d;border:0;border-radius:999px;padding:11px 22px;font:inherit;font-weight:900;font-size:13px;color:#193e2a;cursor:pointer}
+.rules-ask-button:hover{background:#dfffac}
+.rules-ask-examples{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.rules-ask-examples>span{font-size:11px;color:#bbd2bc;margin-right:5px}
+.rules-ask-examples button{color:#e4f5d4;background:rgba(255,255,255,.07);border:1px solid #5f9470;border-radius:999px;padding:7px 11px;font:inherit;font-size:11px;cursor:pointer}
+.rules-ask-examples button:hover{background:#2c6547}
+.rules-ask-disclaimer{font-size:11px!important;color:#a8c6b1!important;margin:12px 0 0!important}
+.rules-ask-result{padding:21px 24px;margin-top:17px;border-radius:15px;background:#f9fcf5;color:#254732;scroll-margin-top:120px}
+.rules-ask-result[hidden]{display:none}
+.rules-answer-kicker{font-size:10px;letter-spacing:.08em;font-weight:900;color:#537447;margin-bottom:10px}
+.rules-ask-result h3{font-size:21px;line-height:1.25;letter-spacing:-.02em;color:#17412c;margin:0 0 11px}
+.rules-ask-result p{color:#375641;font-size:14px;line-height:1.75;margin:0 0 17px;max-width:none}
+.rules-ask-result .rules-answer-warning{color:#7c5133}
+.rules-answer-sources{display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid #dfe9d9;padding-top:14px}
+.rules-answer-sources>strong{font-size:12px;color:#38573c}
+.rules-answer-source{font-size:11px;font-weight:800;text-decoration:underline;text-underline-offset:3px;color:#286644}
+.rules-info-divider{display:flex;justify-content:space-between;align-items:center;gap:17px;margin:8px 0 20px}
+.rules-info-divider h2{font-size:27px;margin:0;color:#173e2d}
+.rules-info-divider p{font-size:12px;color:#5d785e;margin:4px 0 0}
+@media(max-width:950px){.rulebooks-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.rulebooks-section{padding:22px 18px}.rulebooks-intro{flex-direction:column;gap:12px}.rulebooks-grid{grid-template-columns:1fr}.rulebooks-filter{max-width:none}.rules-ask-section{padding:25px 20px}.rules-ask-form{flex-direction:column}.rules-ask-button{width:100%;padding:13px}.rules-topic-hit{align-items:start;flex-direction:column;gap:4px}.rules-topic-hit small{text-align:left}.rules-info-divider{flex-direction:column;align-items:flex-start}}
