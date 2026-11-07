@@ -89,18 +89,29 @@ boAssert(!str_contains($safeHtml,'<script>')&&str_contains($safeHtml,'&lt;script
 
 /* Integration with Turnier-Guide 2.2 and venue snapshots. */
 $profiles=boVenueList($db);
-boAssert(count($profiles)>=3,'Bad Saarow, Neuenhagen und allgemeine Standortvorlage fehlen');
-boAssert(isset($profiles['bad-saarow'])&&isset($profiles['neuenhagen'])&&isset($profiles['general']),'Standortvorlagen-Schlüssel fehlen');
+boAssert(count($profiles)>=5,'Bad Saarow, Neuenhagen Halle/Außen und allgemeine Standortvorlagen fehlen');
+boAssert(isset($profiles['bad-saarow'])&&isset($profiles['neuenhagen'])&&isset($profiles['neuenhagen-halle'])&&isset($profiles['neuenhagen-aussen'])&&isset($profiles['general']),'Standortvorlagen-Schlüssel fehlen');
 $profile=boVenueValidate([
  'venue_address'=>'Musterstraße 10, 12345 Beispielstadt',
  'venue_navigation'=>'https://maps.google.com/?q=example',
  'venue_surface'=>'Hartplatz (vor dem Turnier prüfen)',
- 'venue_checkin'=>'Infotheke im Eingangsbereich'
+ 'venue_checkin'=>'Infotheke im Eingangsbereich',
+ 'venue_source'=>'Testquelle – aktuelle Bestätigung',
+ 'venue_verified'=>'yes'
 ]);
 $profileJson=json_encode($profile,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
 $q=$db->prepare('UPDATE bo_venues SET data=? WHERE id=?');
 $q->execute([$profileJson,'bad-saarow']);
 boAssert(boVenueData($profileJson)['address']==='Musterstraße 10, 12345 Beispielstadt','Stammdaten werden nicht gespeichert');
+boAssert(!empty(boVenueData($profileJson)['_verified_at']),'Verifizierungsdatum fehlt');
+$unverified=$profile;
+$unverified['_verified_at']='';
+$rawUnverified=json_encode($unverified,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
+[$notSent,]=boVenueMailBlocks(['venue_data'=>$rawUnverified]);
+boAssert($notSent==='','Unbestätigte historische Standortdaten wurden automatisch in E-Mail eingefügt');
+[$confirmedHtml,]=boVenueMailBlocks(['venue_data'=>$profileJson]);
+boAssert(str_contains($confirmedHtml,'Musterstraße'),'Bestätigte Standortdaten nicht nutzbar');
+boAssert(!str_contains($confirmedHtml,'Testquelle – aktuelle Bestätigung'),'Interne Quelle wurde in E-Mail angezeigt');
 try{boVenueValidate(['venue_navigation'=>'javascript:alert(1)']);boAssert(false,'Unsichere Navigation akzeptiert');}
 catch(InvalidArgumentException $expected){}
 $guideInput=[
