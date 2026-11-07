@@ -133,10 +133,12 @@ function workshopMailContent(array $workshop,array $registration,string $kind='c
   $text="Hallo ".$name.",\n\nvielen Dank für deine Anmeldung. Dein Platz für den Regelworkshop ist vorgemerkt.\n\n".$event."\n".$venue."\n\n".$paymentText."\n\nFalls du doch nicht teilnehmen kannst, kannst du dich direkt über den Abmeldelink am Ende dieser Nachricht abmelden.\n\nSportliche Grüße\nMichael";
  }
 
+ // Plain-text mails retain actionable URLs. HTML mails show concise links/buttons instead.
+ $htmlText=$paypalDetail!==''?str_replace($paypalDetail,'',$text):$text;
  if($cancelUrl!==''&&$kind!=='cancelled')$text.="\n\nDirekt vom Workshop abmelden:\n".$cancelUrl."\n(Der Link öffnet zunächst eine Bestätigungsseite.)";
  $esc=static fn(mixed $v):string=>htmlspecialchars((string)$v,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
  $paragraphs='';
- foreach(preg_split('/\R{2,}/u',trim($text))?:[] as $part){
+ foreach(preg_split('/\R{2,}/u',trim($htmlText))?:[] as $part){
   $paragraphs.='<p style="margin:0 0 18px;font:15px/1.7 Arial,Helvetica,sans-serif;color:#365447">'.nl2br($esc(trim($part)),false).'</p>';
  }
  $actions='';
