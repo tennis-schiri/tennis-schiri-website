@@ -11,7 +11,7 @@
 <meta property="og:site_name" content="Tennis-Schiri">
 <meta property="og:image" content="https://tennis-schiri.de/assets/branding/ts-logo-ball.png">
 <meta property="og:image:alt" content="Tennis-Schiri – offizielles Logo">
-<link rel="stylesheet" href="assets/site.css?v=20261107-6">
+<link rel="stylesheet" href="assets/site.css?v=20261107-8">
 <link rel="stylesheet" href="assets/workshop.css?v=2">
 <script src="assets/back-to-top.js?v=2" defer></script>
 <meta name="robots" content="noindex, nofollow, noarchive">
@@ -224,6 +224,17 @@
 <section class="section rules" id="regelwissen"><div class="container"><div class="rules-layout">
 <div class="rules-copy"><div class="eyebrow kicker">02 / BALD FÜR EUCH DA</div><h2>Regelwissen.<br>Coming soon.</h2><p>Eine neue Wissensrubrik entsteht: verständliche Tennisregeln, Praxisbeispiele und nützliche Infos für Spieler und Vereine.</p><a class="btn btn-dark" href="regelwissen/">Zur Vorschauseite ↗</a></div>
 <div class="rules-art" style="min-height:355px;display:flex;flex-direction:column;justify-content:center"><div class="overline">REGELWISSEN / IN VORBEREITUNG</div><div class="rules-question" style="margin:22px 0 0">COMING<br>SOON.</div><div class="rules-sample">Neue Inhalte folgen</div></div></div></div></section>
+<section class="tennis-quote-section" aria-labelledby="tennis-quote-heading">
+ <div class="container"><div class="tennis-quote-layout">
+  <div class="tennis-quote-intro"><div class="eyebrow kicker">STIMMEN AUS DEM TENNIS</div><h2 id="tennis-quote-heading">Ein Satz.<br>Viel Tennis.</h2><p>Gedanken von Spielerinnen und Spielern, die auf und neben dem Platz etwas bewegen.</p></div>
+  <figure class="tennis-quote-card">
+   <span class="tennis-quote-mark" aria-hidden="true">“</span>
+   <blockquote id="tennis-quote-text">„Druck ist ein Privileg.“</blockquote>
+   <figcaption><span id="tennis-quote-author">Billie Jean King</span><span class="tennis-quote-translation">Sinngemäß aus dem Englischen übertragen</span></figcaption>
+   <div class="tennis-quote-bottom"><a id="tennis-quote-source" href="https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour" target="_blank" rel="noopener noreferrer">Quelle ansehen ↗</a><button type="button" id="tennis-quote-next" aria-label="Anderes Tenniszitat anzeigen">Anderes Zitat <span aria-hidden="true">↻</span></button></div>
+  </figure>
+ </div></div>
+</section>
 <section class="section services" id="leistungen"><div class="container"><div class="section-head"><div><div class="eyebrow kicker">03 / HINTER DEN KULISSEN</div><h2>Gute Turniere<br>sind kein Zufall.</h2></div><p class="small">Veranstalter und Vereine profitieren von Erfahrung, verlässlichen Abläufen und einem sicheren Umgang mit dem Regelwerk.</p></div>
  <div class="services-grid">
   <article class="service"><div class="service-number">01</div><h3>Turnierleitung</h3><p>Strukturierte Vorbereitung und Begleitung von Turnieren – vom Zeitplan bis zur Durchführung.</p><a href="kontakt/">Leistung anfragen ↗</a></article>
@@ -278,6 +289,37 @@
  document.querySelectorAll('.filter').forEach(button=>button.addEventListener('click',function(){document.querySelectorAll('.filter').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false')});button.classList.add('active');button.setAttribute('aria-pressed','true');const type=button.dataset.filter;window.refreshHomepageTournaments?.()}));
 })();
 
+</script>
+<script>
+(function(){
+ const quotes=[
+  {text:'Druck ist ein Privileg.',author:'Billie Jean King',source:'https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour'},
+  {text:'Du hast mich dazu gebracht, das Tennis noch mehr zu genießen.',author:'Roger Federer',source:'https://www.atptour.com/en/news/rafael-nadal-retirement-federer-tribute-letter'},
+  {text:'Genießt und schätzt jeden einzelnen Moment im Sport.',author:'Rafael Nadal',source:'https://www.atptour.com/en/news/nadal-laureus-2025-sporting-icon'},
+  {text:'Ich möchte rausgehen, frei spielen und diesen Moment genießen.',author:'Samantha Stosur',source:'https://www.wtatennis.com/news/2452085/stosur'},
+  {text:'Ich spiele Tennis, um die Menschen für das Spiel zu begeistern.',author:'Iga Świątek',source:'https://www.wtatennis.com/news/1440957/swiatek-ready-for-next-step-after-junior-wimbledon-win'},
+  {text:'Ich kämpfe um jeden Punkt, ganz egal, wie es steht.',author:'Coco Gauff',source:'https://www.wtatennis.com/news/3678744/follow-live-gauff-sabalenka-battle-it-out-for-us-open-title'}
+ ];
+ const quote=document.getElementById('tennis-quote-text');
+ const name=document.getElementById('tennis-quote-author');
+ const source=document.getElementById('tennis-quote-source');
+ const next=document.getElementById('tennis-quote-next');
+ if(!quote||!name||!source||!next)return;
+ let current=-1;
+ function show(index){
+  current=index;
+  quote.textContent='„'+quotes[index].text+'“';
+  name.textContent=quotes[index].author;
+  source.href=quotes[index].source;
+ }
+ function randomNext(){
+  let index=Math.floor(Math.random()*quotes.length);
+  if(quotes.length>1&&index===current)index=(index+1+Math.floor(Math.random()*(quotes.length-1)))%quotes.length;
+  show(index);
+ }
+ next.addEventListener('click',randomNext);
+ randomNext();
+})();
 </script>
 <script src="assets/tournament-calendar.js?v=2" defer></script>
 </body>
