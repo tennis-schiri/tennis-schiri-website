@@ -1,0 +1,36 @@
+name: Tennis-Schiri Logo-Branding prüfen (kein Upload)
+
+on:
+  push:
+    paths:
+      - 'branding/tennis-schiri-ts09c-logo-set.zip'
+      - 'scripts/build_site_branding.py'
+      - 'tests/site-branding-test.py'
+      - 'public/assets/site.css'
+      - 'public/**/index.html'
+      - 'public/index.html'
+      - 'public/newsletter-template.php'
+      - 'public/newsletter-mail.php'
+      - 'public/newsletter-admin.php'
+      - 'public/newsletter-setup.php'
+      - 'public/newsletter.php'
+      - '.github/workflows/branding-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  brand-check:
+    name: Originaldateien und Verweise prüfen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Repository holen
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Freigegebenes TS-09c-Set extrahieren
+        run: python scripts/build_site_branding.py --output public/assets/branding
+      - name: Marken-Integration prüfen
+        run: python tests/site-branding-test.py
