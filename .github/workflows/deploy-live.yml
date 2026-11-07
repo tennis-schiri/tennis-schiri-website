@@ -94,7 +94,7 @@ jobs:
               "assets/statistics.js", "statistiken/index.html",
               "newsletter/index.html", "newsletter.php", "newsletter-setup.php",
               "newsletter-admin.php", "newsletter-mail.php", "newsletter-template.php",
-              "newsletter-events.php",
+              "newsletter-events.php", "newsletter-partners.php",
               "google8cf6756d83169a32.html",
               "sitemap.xml",
           ]:
@@ -118,12 +118,19 @@ jobs:
           python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
           cp public/data/newsletter-events.json _live_upload/data/newsletter-events.json
           test -s _live_upload/data/newsletter-events.json
+          # Partnerschaftslogos und TENNILO: aus der Partnerseite, kein manuelles Nachpflegen.
+          python scripts/build_newsletter_partners.py --output public/data/newsletter-partners.json
+          cp public/data/newsletter-partners.json _live_upload/data/newsletter-partners.json
+          test -s _live_upload/data/newsletter-partners.json
           php -l public/newsletter-events.php
           php -l tests/newsletter-events-test.php
           php -l public/newsletter-template.php
           php -l tests/newsletter-template-test.php
           php tests/newsletter-template-test.php
           php tests/newsletter-events-test.php
+          php -l public/newsletter-partners.php
+          php -l tests/newsletter-partners-test.php
+          php tests/newsletter-partners-test.php
           test -s public/newsletter/index.html
           # Private Konfiguration und personenbezogene Datensaetze gehoeren nicht ins Repository.
           test ! -e public/tennis-schiri-newsletter-config.php
