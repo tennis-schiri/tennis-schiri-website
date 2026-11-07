@@ -1,0 +1,68 @@
+/* Mein Turniertag – responsive Checkliste im Tennis-Schiri-Design */
+.mt-hero h1{max-width:780px}
+.mt-main{background:#f4f8ef}
+.mt-intro{max-width:890px;margin-bottom:22px}
+.mt-intro h2{font-size:clamp(29px,3.5vw,42px);letter-spacing:-.04em;line-height:1.15;color:#1c4832;margin:10px 0}
+.mt-intro p{font-size:14px;line-height:1.7;color:#58715c;max-width:770px}
+.mt-picker,.mt-plan,.mt-check-section,.mt-progress-panel,.mt-important,.mt-after{background:#fff;border:1px solid #dbe8d4;border-radius:20px;padding:25px}
+.mt-picker{margin-bottom:26px}
+.mt-picker>label{font-weight:850;font-size:13px;color:#2c5439;display:block;margin-bottom:9px}
+.mt-picker-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.mt-picker-row select{flex:1 1 300px;min-width:0;padding:14px 15px;border:1px solid #bdcfb6;background:#f8fbf5;border-radius:12px;font:inherit;color:#1c4b31}
+.mt-picker-link{white-space:nowrap;font-weight:800;font-size:12px;color:#286b43;text-decoration:underline;text-underline-offset:4px}
+.mt-muted{font-size:11px;line-height:1.6;color:#6c856e;margin:10px 0 0}
+.mt-event{margin-top:18px;display:flex;justify-content:space-between;gap:20px;align-items:center;background:#e9f3e2;border:1px solid #cde2c1;border-radius:16px;padding:20px}
+.mt-event[hidden]{display:none}
+.mt-mini-label{font-size:10px;letter-spacing:.1em;color:#59815b;font-weight:900}
+.mt-event h3{margin:7px 0 9px;color:#1f4a32;font-size:20px}
+.mt-event p,.mt-event address{color:#4c694f;font-size:13px;line-height:1.5;margin:3px 0;font-style:normal}
+.mt-event-actions{display:flex;flex-direction:column;align-items:flex-start;gap:12px;flex:none}
+.mt-event-actions a{font-size:12px;font-weight:850;color:#225b3e;text-decoration:underline;text-underline-offset:3px}
+.mt-layout{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(245px,.7fr);align-items:start;gap:26px}
+.mt-left{display:grid;gap:23px;min-width:0}
+.mt-right{position:sticky;top:24px;display:grid;gap:15px}
+.mt-plan h2,.mt-checklist>h2,.mt-after h2{font-size:27px;letter-spacing:-.03em;color:#204931;margin:9px 0}
+.mt-plan>p{font-size:13px;color:#57715d;line-height:1.65;margin:8px 0 18px}
+.mt-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mt-plan-grid label,.mt-note-label{display:block;font-size:12px;font-weight:850;color:#29523a}
+.mt-field{box-sizing:border-box;display:block;width:100%;border:1px solid #c4d6bc;background:#f8fbf5;border-radius:10px;color:#244c35;font:inherit;font-weight:450;font-size:14px;margin-top:8px;padding:12px}
+.mt-note-label{margin-top:17px}
+.mt-note-label textarea{resize:vertical;line-height:1.55}
+.mt-checklist{display:grid;gap:12px}
+.mt-checklist>h2{margin:0 0 3px}
+.mt-check-section{padding:23px}
+.mt-section-head{display:flex;align-items:flex-start;gap:13px;margin-bottom:15px}
+.mt-step-no{width:42px;height:42px;flex:none;display:grid;place-items:center;background:#ebf3e3;color:#30633e;font-weight:900;border-radius:12px}
+.mt-section-head h3{font-size:19px;margin:0 0 4px;color:#214732}
+.mt-section-head p{font-size:12px;color:#6b816d;line-height:1.55;margin:0}
+.mt-check-items{display:grid;gap:7px}
+.mt-check-item{display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;border:1px solid #e1eadb;background:#fcfdfa;border-radius:11px;font-size:13px;color:#345541;line-height:1.5}
+.mt-check-item:hover{border-color:#b6d4a8;background:#f4faef}
+.mt-check-item input{flex:none;width:18px;height:18px;accent-color:#337e4a;margin:2px 0 0}
+.mt-check-item.is-done{background:#eaf7e3;border-color:#c4dfb7}
+.mt-check-item.is-done span{text-decoration:line-through;color:#63816b}
+.mt-check-item:focus-within{outline:2px solid #79b45a;outline-offset:2px}
+.mt-progress-panel{padding:23px}
+.mt-progress-panel h2{font-size:24px;letter-spacing:-.035em;color:#1b4830;margin:10px 0 17px}
+.mt-progress-number{display:flex;flex-direction:column;gap:4px}
+.mt-progress-number strong{font-size:32px;font-weight:900;line-height:1;color:#235a3c}
+.mt-progress-number span{font-size:12px;color:#698070}
+.mt-progress-panel progress{width:100%;height:10px;margin:12px 0;border:0;background:#e0edd8;accent-color:#75ad52;border-radius:999px}
+.mt-progress-panel progress::-webkit-progress-bar{background:#e0edd8;border-radius:999px}
+.mt-progress-panel progress::-webkit-progress-value{background:#70ab49;border-radius:999px}
+.mt-progress-panel progress::-moz-progress-bar{background:#70ab49;border-radius:999px}
+#mt-status{font-size:12px;color:#507056;line-height:1.6}
+.mt-sidebar-actions{display:grid;gap:8px;margin-top:19px}
+.mt-sidebar-actions button{border:1px solid #bed5b4;background:#f2f8ed;border-radius:999px;padding:11px 13px;font:inherit;font-size:12px;font-weight:850;color:#2b6040;cursor:pointer}
+.mt-sidebar-actions button:first-child{background:#204d34;border-color:#204d34;color:#fff}
+.mt-sidebar-actions button:hover{filter:brightness(.95)}
+.mt-progress-panel small{display:block;color:#748675;font-size:11px;line-height:1.65;margin-top:16px}
+.mt-important{background:#eef5e7}
+.mt-important h3{font-size:18px;color:#235039;margin:0 0 12px}
+.mt-important p{font-size:12px;line-height:1.7;color:#4d6d51}
+.mt-important a{font-size:12px;font-weight:850;text-decoration:underline;color:#2a6b43}
+.mt-after{background:#ebf4e5}
+.mt-after p{font-size:13px;line-height:1.7;color:#506b55;margin-bottom:17px}
+@media(max-width:900px){.mt-layout{grid-template-columns:1fr}.mt-right{position:static;grid-row:1;grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.mt-right{grid-template-columns:1fr}.mt-plan-grid{grid-template-columns:1fr}.mt-picker,.mt-plan,.mt-check-section,.mt-progress-panel,.mt-important,.mt-after{padding:19px}.mt-event{flex-direction:column;align-items:flex-start}.mt-event-actions{flex-direction:row;flex-wrap:wrap}.mt-picker-row select{flex-basis:100%}}
+@media print{.site-head,footer,.mt-hero .breadcrumb,.mt-picker-row,.mt-picker-link,.mt-right,.mt-after,.mt-muted,.back-to-top{display:none!important}.interior-hero{background:#fff!important;color:#000!important;padding:10px 0}.interior-hero h1,.interior-hero p{color:#000!important}.mt-main{background:#fff}.mt-layout{display:block}.mt-plan,.mt-check-section,.mt-picker{break-inside:avoid;box-shadow:none;border:1px solid #999;padding:10px}.mt-check-item{padding:5px 7px}.mt-check-item span{text-decoration:none!important;color:#000!important}.mt-checklist{gap:8px}.mt-check-section{margin-bottom:8px}.mt-intro{margin-bottom:10px}}
