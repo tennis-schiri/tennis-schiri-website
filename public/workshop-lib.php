@@ -105,7 +105,7 @@ function workshopMailContent(array $workshop,array $registration,string $kind='c
  $venue=$workshop['location'].', '.$workshop['address'];
  $cancelUrl=(string)($registration['cancel_url']??'');
  $paypalUrl=(!$isMember&&$fee>0&&$payment==='paypal')?workshopPaypalLink($fee,(string)$workshop['id']):'';
- $paypalDetail=$paypalUrl!==''?"\\nJetzt 15 € per PayPal zahlen: ".$paypalUrl."\\nEmpfänger: paypal@tennis-schiri.de":'';
+ $paypalDetail=$paypalUrl!==''?"\nJetzt 15 € per PayPal zahlen: ".$paypalUrl."\nEmpfänger: paypal@tennis-schiri.de":'';
 
  if($isMember || $fee<=0){
   $paymentText='Als Mitglied des NTC 93 nimmst du kostenfrei teil.';
@@ -121,7 +121,7 @@ function workshopMailContent(array $workshop,array $registration,string $kind='c
   if($isMember || $fee<=0) throw new InvalidArgumentException('Für diese Anmeldung ist keine Zahlung erforderlich.');
   if($payment!=='paypal') throw new InvalidArgumentException('Für diese Anmeldung wurde nicht PayPal gewählt.');
   $subject='💳 PayPal-Info: '.$workshop['title'];
-  $text="Hallo ".$name.",\n\nfür deine Anmeldung zu ".$event." hast du PayPal gewählt.\n\nTeilnahmebeitrag: ".workshopFeeLabel($fee)."\n".$paypalDetail."\n".(trim($paypalInstructions)!==''?trim($paypalInstructions)."\n":'')."\nBitte prüfe bei PayPal den Empfänger und den Betrag, bevor du zahlst.\n\nSportliche Grüße\nMichael";
+  $text="Hallo ".$name.",\n\nfür deine Anmeldung zu ".$event." hast du PayPal gewählt.\n\nTeilnahmebeitrag: ".workshopFeeLabel($fee)."\n".$paypalDetail."\n".(trim($paypalInstructions)!==''?trim($paypalInstructions)."\n":'')."\nBitte prüfe bei PayPal den Empfänger und den Betrag, bevor du zahlst. Gib bei der Zahlung bitte deinen Namen und das Workshopdatum an.\n\nSportliche Grüße\nMichael";
  }elseif($kind==='cancelled'){
   $subject='✅ Abmeldung bestätigt: '.$workshop['title'];
   $text="Hallo ".$name.",\n\ndeine Abmeldung vom Regelworkshop wurde bestätigt.\n\n".$event."\n".$venue."\n\nDein Platz ist freigegeben. Falls du bereits bezahlt hast, melde dich bitte wegen einer möglichen Erstattung unter turniere@tennis-schiri.de.\n\nSportliche Grüße\nMichael";
