@@ -2610,8 +2610,6 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 .ig-tennilo-wordmark{display:block;width:137px;max-width:100%;height:auto;object-fit:contain}
 .ig-account[data-instagram-account="tennilo"] .ig-account-identity h3{line-height:1;margin:0 0 5px}
 .ig-account[data-instagram-account="tennilo"] .ig-account-identity{gap:12px}
-.footer-social-link[href="https://www.instagram.com/tennilo.app/"] strong{display:flex;align-items:center;gap:6px}
-.footer-social-link[href="https://www.instagram.com/tennilo.app/"] strong:before{content:"";display:inline-block;width:17px;height:17px;flex:0 0 17px;background:url("tennilo-icon.png") center/cover no-repeat;border-radius:4px}
 @media(max-width:850px){
  .tennilo .tennilo-inner{grid-template-columns:1fr;gap:25px;padding-top:43px;padding-bottom:48px;min-height:0}
  .tennilo .tennilo-brand-card{max-width:380px;min-height:152px;padding:22px 25px;gap:14px;display:flex;margin:0}
