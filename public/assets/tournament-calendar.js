@@ -71,7 +71,7 @@
    slot.appendChild(line);
    const source=document.createElement('small');
    source.textContent='Unverbindliche '+(p?'Wetterprognose':'Sonnenuntergangszeit')+' für '+data.location+' · ';
-   const a=actionLink('https://open-meteo.com/en/docs','Open-Meteo','');a.target='_blank';
+   const a=actionLink('https://brightsky.dev/','DWD / Bright Sky','');a.target='_blank';
    source.appendChild(a);slot.appendChild(source);
   }catch(_){slot.remove();}
  }
