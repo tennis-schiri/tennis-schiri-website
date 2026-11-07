@@ -1,5 +1,10 @@
 # Tennis-Schiri – Turnier-Mail-Konfigurator und Turnier-Guide 2.2
 
+## Update: automatische Startwerte für neue Infomails
+
+**Umgesetzt im zentralen Backoffice:** Neue Entwürfe werden nicht mehr leer erzeugt. Aus dem Turnierkatalog werden Ort, Name und Termin übernommen, der Standort wird automatisch vorgeschlagen und aus bisherigen Infomails werden bekannte organisatorische Abläufe sowie historische Standortangaben in die bearbeitbaren Formularfelder eingesetzt. Der Modulstatus wird gespeichert; alte Entwürfe können nur auf bewusste Anforderung ergänzt werden.
+
+Die Vorbelegung ist **kein Tatsachen- oder Regelwerksnachweis**. Historische Gebühren/Zahlungsarten/Zählweisen werden als abgewählte Prüfvorschläge angezeigt. Ein Entwurf kann ohne Bestätigung gespeichert werden, aber die Empfängerfreigabe setzt eine ausdrücklich gespeicherte Prüfung voraus. Unbestätigte Standortangaben sind in der Vorschau als solche gekennzeichnet und im echten Versand gesperrt. Implementierung: `public/admin/defaults.php`, ergänzt durch zwei private SQLite-Spalten und Regressionstests.
 ## Integrationsstand nach Abgleich der beiden Entwicklungs-Chats
 
 **Codebasis:** zentrale Verwaltung unter \`public/admin/\`, nicht der ältere eigenständige Prototyp \`public/turnier-mails.php\`. Änderungen an Newsletter-Bestand, privaten Konfigurationsdateien und bestehenden Infomail-Daten wurden vermieden. Die im anderen Chat erstellte Spezifikation ist als Referenz erhalten.
@@ -10,7 +15,7 @@
 | Drei Mailtypen, personalisierte Vorlagen, TS09c-HTML plus Textalternative | **Umgesetzt** |
 | Grundcheckliste: Meldung, Ablauf, Parken, Gebühren, Turnigo, MyScore, Kontakt | **Umgesetzt** |
 | Detailcheckliste: Auslosung, wichtige Änderungen, Verspätung, Schuhe, Modus, Einspielen, Ergebnisse, Pausen, Bälle, Konkurrenzgebühren, Zahlungen, Gastronomie, Umkleiden, Änderungen und Rücktritt | **Umgesetzt, optional** |
-| Bad Saarow, Neuenhagen übergreifend/Halle/Außenanlage, allgemeine Vorlage, editierbare Standortdaten und Snapshot pro Entwurf | **Umgesetzt**; Standortdaten bleiben leer, bis historische Quellen aktuell bestätigt wurden. Ein Prüfdatum und interner Quellenhinweis werden je Profil gespeichert. |
+| Bad Saarow, Neuenhagen übergreifend/Halle/Außenanlage, allgemeine Vorlage, editierbare Standortdaten und Snapshot pro Entwurf | **Umgesetzt**; Die bekannten historischen Daten sind als editierbare Startwerte sichtbar, gelten jedoch erst nach aktueller Bestätigung für den Versand. Ein Prüfdatum und interner Quellenhinweis werden je Profil gespeichert. |
 | E-Mail-Hero mit Turniername, Datum-/Ort-Karte und gegliederten Informationsblöcken | **Umgesetzt, Basislayout** |
 | Offizielle Auslosung/Spielplan, Turnigo und MyScore als getrennt prüfbare URLs | **Umgesetzt** |
 | Kartenartige Preisübersicht nach Konkurrenzen statt Freitext; visuelle Doppelkarte für die zwei Digitalservices | **Noch offen** |
@@ -19,7 +24,7 @@
 
 Neue PHP-Module sind \`public/admin/venues.php\` und \`public/admin/guide.php\`; die ursprünglichen Basis-Checkboxen bleiben in \`public/admin/info-sections.php\` kompatibel erhalten. SQLite-Spalten werden beim ersten Aufruf ergänzt; bereits angelegte Entwürfe bleiben erhalten. Nach Freigabe dürfen die in der Kampagne gespeicherten Einstellungen nicht von geänderten Standortvorlagen beeinflusst werden. CI-Lint und Regressionstests sind in \`.github/workflows/backoffice-check.yml\` und dem manuellen Live-Upload integriert.
 
-Das zusätzlich im GitHub-Repository eingetroffene [Neuenhagen-Quellenprofil](standorte/neuenhagen-quellenprofil.md) wurde berücksichtigt. Die historisch widersprüchlichen Hallen-/Außenanlageninformationen bleiben getrennt; weder Preise, Spielregeln, Telefonnummern noch technische Zugangshinweise werden automatisch als gültige Fakten vorausgefüllt. Eine vom Admin aktuell bestätigte Standortvorlage wird bei Erstellung der Infomail kopiert und später nicht mehr stillschweigend verändert.
+Das zusätzlich im GitHub-Repository eingetroffene [Neuenhagen-Quellenprofil](standorte/neuenhagen-quellenprofil.md) wurde berücksichtigt. Die historisch widersprüchlichen Hallen-/Außenanlageninformationen bleiben getrennt; historische Preise und Zählweisen werden nur als nicht aktivierte Prüfvorschläge angezeigt; Telefonnummern und technische Zugangshinweise werden nicht unbestätigt übernommen. Eine vom Admin aktuell bestätigte Standortvorlage wird bei Erstellung der Infomail kopiert und später nicht mehr stillschweigend verändert.
 
 **Wichtig:** Dieser Status bezieht sich auf GitHub. Die produktive Darstellung und der reale Versand müssen nach dem manuellen Live-Upload mit Testadressen geprüft werden.
 
