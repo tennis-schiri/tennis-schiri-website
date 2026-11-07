@@ -31,8 +31,31 @@ try {
   campaign_id INTEGER NOT NULL, subscriber_id INTEGER NOT NULL, recipient_key TEXT NOT NULL,
   state TEXT NOT NULL DEFAULT 'pending', attempted_at INTEGER,
   PRIMARY KEY (campaign_id,subscriber_id))");
+ $columns=array_column($db->query('PRAGMA table_info(newsletter_campaigns)')->fetchAll(),'name');
+ foreach (['headline'=>'TEXT NOT NULL DEFAULT \'\'','preheader'=>'TEXT NOT NULL DEFAULT \'\'',
+           'button_label'=>'TEXT NOT NULL DEFAULT \'\'','button_url'=>'TEXT NOT NULL DEFAULT \'\''] as $column=>$definition) {
+  if (!in_array($column,$columns,true)) $db->exec('ALTER TABLE newsletter_campaigns ADD COLUMN '.$column.' '.$definition);
+ }
 } catch(Throwable $e) { error_log('Newsletter campaigns setup failed: '.$e->getMessage()); http_response_code(503); exit('Datenbank vorübergehend nicht verfügbar.'); }
 function h(mixed $value): string { return htmlspecialchars((string)$value,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8'); }
+define('TS_NEWSLETTER_TEMPLATE',true);
+require_once __DIR__.'/newsletter-template.php';
+function validButtonUrl(string $url): bool {
+ if ($url==='') return true;
+ if (strlen($url)>500 || preg_match('/[\\r\\n]/',$url) || !filter_var($url,FILTER_VALIDATE_URL)) return false;
+ $parts=parse_url($url);
+ return is_array($parts) && strtolower((string)($parts['scheme']??''))==='https'
+    && !empty($parts['host']) && !isset($parts['user']) && !isset($parts['pass']);
+}
+function extraFields(array $campaign=[]): string {
+ $out='<label>Überschrift im Newsletter (optional)</label><input type="text" name="headline" maxlength="120" value="'.h($campaign['headline']??'').'" placeholder="Wenn leer, wird der Betreff verwendet">';
+ $out.='<label>Vorschautext im Posteingang (optional)</label><input type="text" name="preheader" maxlength="160" value="'.h($campaign['preheader']??'').'" placeholder="Kurz und verständlich: Darum geht es in dieser Ausgabe">';
+ $out.='<label>Button-Beschriftung (optional)</label><input type="text" name="button_label" maxlength="70" value="'.h($campaign['button_label']??'').'" placeholder="Zum Turnier anmelden">';
+ $out.='<label>Button-Ziel (HTTPS-Link)</label><input type="url" name="button_url" maxlength="500" value="'.h($campaign['button_url']??'').'" placeholder="https://tennis-schiri.de/turniere/">';
+ $out.='<p class="muted">Beide Button-Felder entweder ausfüllen oder leer lassen. Nur HTTPS-Links. Der Nachrichtentext wird sicher als Absätze formatiert, ohne HTML-Code eingeben zu müssen.</p>';
+ return $out;
+}
+
 function finish(string $message,int $id=0): never {
  header('Location: /newsletter-mail.php?'.($id>0?'campaign='.$id.'&':'').'info='.rawurlencode($message),true,303); exit;
 }
@@ -47,15 +70,24 @@ function subjectHeader(string $subject): string {
  if (function_exists('mb_encode_mimeheader')) return mb_encode_mimeheader($subject,'UTF-8','B',"\r\n");
  return '=?UTF-8?B?'.base64_encode($subject).'?=';
 }
-function sendMail(string $to,string $subject,string $message,?string $unsubscribeUrl=null): bool {
- if (!safeEmail($to)) return false;
+function sendMail(string $to,string $subject,string $text,string $html,?string $unsubscribeUrl=null): bool {
+ if (!safeEmail($to) || preg_match('/[\r\n]/',$subject) || strlen($subject)>180) return false;
+ $boundary='tsn_'.bin2hex(random_bytes(16));
  $headers=[
   'From: Tennis-Schiri Newsletter <news@tennis-schiri.de>',
   'Reply-To: news@tennis-schiri.de',
   'MIME-Version: 1.0',
-  'Content-Type: text/plain; charset=UTF-8'
+  'Content-Type: multipart/alternative; boundary="'.$boundary.'"',
+  'X-Auto-Response-Suppress: All'
  ];
  if ($unsubscribeUrl!==null) $headers[]='List-Unsubscribe: <'.$unsubscribeUrl.'>';
+ $message="This is a multipart message in MIME format.\r\n";
+ foreach ([['text/plain',$text],['text/html',$html]] as [$mime,$value]) {
+  $message.="--".$boundary."\r\nContent-Type: ".$mime."; charset=UTF-8\r\n";
+  $message.="Content-Transfer-Encoding: base64\r\n\r\n";
+  $message.=chunk_split(base64_encode($value),76,"\r\n");
+ }
+ $message.="--".$boundary."--\r\n";
  return mail($to,subjectHeader($subject),$message,implode("\r\n",$headers),'-fnews@tennis-schiri.de');
 }
 function opted(string $encoded,string $topic): bool {
@@ -66,11 +98,9 @@ function recipients(PDO $db,string $topic): array {
  $rows=$db->query('SELECT id,email,interests FROM subscribers WHERE confirmed_at IS NOT NULL ORDER BY id')->fetchAll();
  return array_values(array_filter($rows,static fn($r)=>opted((string)$r['interests'],$topic)&&safeEmail((string)$r['email'])));
 }
-function footer(string $body,int $id,string $email,string $key): array {
+function unsubscribeUrl(int $id,string $email,string $key): string {
  $sig=hash_hmac('sha256',$id.'|'.$email,$key);
- $url='https://tennis-schiri.de/newsletter.php?action=unsubscribe-signed&id='.$id.'&sig='.$sig;
- $text=rtrim($body)."\n\n---\nTennis-Schiri Newsletter · Ein Projekt von Tennis-Schiri\nDu erhaeltst diese Nachricht, weil du entsprechende Informationen angefordert hast.\nAbmelden: ".$url."\nKontakt: news@tennis-schiri.de";
- return [$text,$url];
+ return 'https://tennis-schiri.de/newsletter.php?action=unsubscribe-signed&id='.$id.'&sig='.$sig;
 }
 $topics=['turniere'=>'Turniere & freie Plätze','regeln'=>'Regelwissen & Tipps','workshops'=>'Regelworkshops & Veranstaltungen'];
 $method=$_SERVER['REQUEST_METHOD']??'GET';
@@ -83,15 +113,23 @@ if($method==='POST'){
   $subject=trim((string)($_POST['subject']??''));
   $body=trim((string)($_POST['body']??''));
   $topic=(string)($_POST['topic']??'');
-  if($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||$body===''||strlen($body)>10000||!array_key_exists($topic,$topics))
-   page('<section class="panel warning">Bitte Betreff (maximal 160 Zeichen), Text (maximal 10.000 Zeichen) und gültiges Thema prüfen.</section>');
+  $headline=trim((string)($_POST['headline']??''));
+  $preheader=trim((string)($_POST['preheader']??''));
+  $buttonLabel=trim((string)($_POST['button_label']??''));
+  $buttonUrl=trim((string)($_POST['button_url']??''));
+  if ($subject===''||strlen($subject)>160||preg_match('/[\r\n]/',$subject)||
+      $body===''||strlen($body)>10000||!array_key_exists($topic,$topics)||
+      strlen($headline)>120||strlen($preheader)>160||strlen($buttonLabel)>70||
+      !validButtonUrl($buttonUrl)||(($buttonLabel==='')!==($buttonUrl===''))) {
+    page('<section class="panel warning">Bitte Betreff, Text, Überschrift, Vorschautext und Button prüfen. Ein Button braucht sowohl Text als auch eine gültige HTTPS-Adresse.</section>');
+  }
   if($action==='create'){
-   $q=$db->prepare("INSERT INTO newsletter_campaigns(subject,body,topic,state,created_at,updated_at) VALUES(?,?,?,'draft',?,?)");
-   $q->execute([$subject,$body,$topic,$now,$now]);
+   $q=$db->prepare("INSERT INTO newsletter_campaigns(subject,body,topic,headline,preheader,button_label,button_url,state,created_at,updated_at) VALUES(?,?,?,?,?,?,?,'draft',?,?)");
+   $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$now,$now]);
    finish('Entwurf gespeichert.',(int)$db->lastInsertId());
   }
-  $q=$db->prepare("UPDATE newsletter_campaigns SET subject=?,body=?,topic=?,updated_at=? WHERE id=? AND state='draft'");
-  $q->execute([$subject,$body,$topic,$now,$id]);
+  $q=$db->prepare("UPDATE newsletter_campaigns SET subject=?,body=?,topic=?,headline=?,preheader=?,button_label=?,button_url=?,updated_at=? WHERE id=? AND state='draft'");
+  $q->execute([$subject,$body,$topic,$headline,$preheader,$buttonLabel,$buttonUrl,$now,$id]);
   finish($q->rowCount()?'Änderungen gespeichert.':'Nur unveröffentlichte Entwürfe können bearbeitet werden.',$id);
  }
  if(!$id)finish('Ungültige Kampagne.');
@@ -99,8 +137,11 @@ if($method==='POST'){
  if(!$campaign)finish('Kampagne nicht gefunden.');
  if($action==='test'){
   if($campaign['state']!=='draft')finish('Testsendung nur vor Freigabe möglich.',$id);
-  $sample=$campaign['body']."\n\n---\nTESTNACHRICHT – noch keine Aussendung an Newsletter-Kontakte.\nIm echten Versand wird automatisch ein persönlicher Abmeldelink angehängt.";
-  $ok=sendMail('mw@tennis-schiri.de','[TEST] '.$campaign['subject'],$sample);
+  $unsubPreview='https://tennis-schiri.de/newsletter.php?action=unsubscribe-request';
+  $subject='[TEST] '.$campaign['subject'];
+  $text="TESTNACHRICHT – kein Versand an Abonnenten.\n\n".newsletterPlainText($campaign,$unsubPreview);
+  $html=newsletterTemplate($campaign,$unsubPreview);
+  $ok=sendMail('mw@tennis-schiri.de',$subject,$text,$html);
   finish($ok?'Testmail an mw@tennis-schiri.de vom Server angenommen.':'Testmail wurde vom Server abgelehnt.',$id);
  }
  if($action==='approve'){
@@ -134,8 +175,10 @@ if($method==='POST'){
     $db->prepare("UPDATE newsletter_deliveries SET state='skipped' WHERE campaign_id=? AND subscriber_id=?")->execute([$id,(int)$r['subscriber_id']]);
     $skipped++;continue;
    }
-   [$message,$url]=footer($campaign['body'],(int)$r['subscriber_id'],$r['email'],$cfg['key']);
-   $ok=sendMail($r['email'],$campaign['subject'],$message,$url);
+   $url=unsubscribeUrl((int)$r['subscriber_id'],$r['email'],$cfg['key']);
+   $text=newsletterPlainText($campaign,$url);
+   $html=newsletterTemplate($campaign,$url);
+   $ok=sendMail($r['email'],$campaign['subject'],$text,$html,$url);
    $db->prepare("UPDATE newsletter_deliveries SET state=? WHERE campaign_id=? AND subscriber_id=? AND state='sending'")->execute([$ok?'accepted':'failed',$id,(int)$r['subscriber_id']]);
    if($ok)$sent++;else $failed++;
   }
