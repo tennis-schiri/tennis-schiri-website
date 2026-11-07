@@ -176,11 +176,11 @@
    const kicker=e.node.querySelector('.eyebrow.kicker');
    if(kicker&&/NÄCHSTES TURNIER|AKTUELLES TURNIER/.test(kicker.textContent||''))kicker.remove();
   }
-  const current=upcoming.find(e=>isCurrent(e,today,clock));
-  const lead=current||upcoming[0];
+  const activeEvent=upcoming.find(e=>isCurrent(e,today,clock));
+  const lead=activeEvent||upcoming[0];
   if(lead){
    const b=document.createElement('div');b.className='eyebrow kicker current-tourney-label';
-   b.textContent=current&&lead===current?'AKTUELLES TURNIER':'NÄCHSTES TURNIER';
+   b.textContent=activeEvent&&lead===activeEvent?'AKTUELLES TURNIER':'NÄCHSTES TURNIER';
    lead.node.querySelector('h3')?.before(b);
   }
   for(const e of past){
