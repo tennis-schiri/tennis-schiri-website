@@ -93,7 +93,7 @@ jobs:
               "data/instagram.json", "data/statistics.json",
               "assets/statistics.js", "statistiken/index.html",
               "newsletter/index.html", "newsletter.php", "newsletter-setup.php",
-              "newsletter-admin.php", "newsletter-mail.php",
+              "newsletter-admin.php", "newsletter-mail.php", "newsletter-template.php",
               "google8cf6756d83169a32.html",
               "sitemap.xml",
           ]:
@@ -113,6 +113,9 @@ jobs:
           php -l public/newsletter-setup.php
           php -l public/newsletter-admin.php
           php -l public/newsletter-mail.php
+          php -l public/newsletter-template.php
+          php -l tests/newsletter-template-test.php
+          php tests/newsletter-template-test.php
           test -s public/newsletter/index.html
           # Private Konfiguration und personenbezogene Datensaetze gehoeren nicht ins Repository.
           test ! -e public/tennis-schiri-newsletter-config.php
