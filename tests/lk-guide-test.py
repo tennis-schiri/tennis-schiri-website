@@ -22,7 +22,7 @@ for part in ["<progress id=\"lk-progress\"","id=\"lk-reset\"","id=\"lk-progress-
         raise SystemExit("LK-Anleitung: fehlende Funktion/Quelle "+part)
 if "href=\"lk-turnier/\"" not in home or "href=\"../lk-turnier/\"" not in turniere:
     raise SystemExit("LK-Anleitung: Verlinkung aus Startseite oder Kalender fehlt")
-if 'class="lk-home-teaser"' not in home or 'Zum Einsteiger-Guide' not in home:
+if 'class="lk-home-teaser home-guide-card"' not in home or 'Zum Einsteiger-Guide' not in home:
     raise SystemExit("LK-Anleitung: auffälliger Einstieg auf der Startseite fehlt")
 if "localStorage" not in js or "try{" not in js or ".lk-step.is-complete" not in css:
     raise SystemExit("LK-Anleitung: Fortschrittsanzeige nicht vollständig")
