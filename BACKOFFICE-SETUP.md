@@ -84,6 +84,18 @@ Die abgestimmte [Produktspezifikation](docs/turnier-mail-konfigurator-spec.md) u
 
 Standardvorlagen sind im Backoffice sichtbar. Sie werden bei Erstellung einer neuen Infomail übernommen und können dann vollständig bearbeitet werden. Freigegebene Entwürfe und ihre Empfängerlisten werden nicht nachträglich geändert. Das Protokoll zeigt getrennt wartende, angenommene, fehlgeschlagene und übersprungene E-Mails.
 
+## Regelworkshop-Anmeldungen
+
+Der Bereich **Regelworkshops** verarbeitet direkte Website-Anmeldungen getrennt vom Newsletter. Für jede Anmeldung werden Name, E-Mail-Adresse, optionaler Verein, NTC-93-Mitgliedsstatus, Teilnahmebeitrag, Zahlungsart, Zahlungsstatus, Anmeldestatus und interne Notizen gespeichert.
+
+- Aktueller Termin: 04.03.2027, 19:00 Uhr beim NTC 93.
+- NTC-93-Mitglieder: kostenfrei; Gäste: 15 €.
+- Gäste wählen Zahlung vor Ort oder PayPal.
+- Die PayPal-Zahlungsinformation wird direkt im geschützten Backoffice gepflegt. Ist sie noch leer, kündigt die Bestätigung lediglich an, dass die Zahlungsinfo separat folgt.
+- Nach der Online-Anmeldung wird automatisch eine Bestätigung an den Teilnehmer und eine interne Benachrichtigung an das Tennis-Schiri-Postfach gesendet.
+- Bestätigung, Erinnerung und – nach Hinterlegung der Zahlungsinformation – PayPal-Info können je Teilnehmer manuell erneut gesendet werden.
+- Workshop-Anmeldungen werden niemals automatisch in den Newsletter übernommen.
+
 ## Bestehende Turnier-Mail-Verwaltung
 
 Die bisherige separate Seite https://tennis-schiri.de/turnier-mails.php bleibt bestehen. Ihr möglicherweise vorhandener Datenbestand wird weder gelöscht noch ungefragt übertragen. Ein Link ist im Dashboard vorhanden. Neue Vorgänge können im neuen Backoffice angelegt werden.

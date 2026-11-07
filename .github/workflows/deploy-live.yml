@@ -111,7 +111,7 @@ jobs:
               "admin/index.php", "admin/lib.php", "admin/info-sections.php",
               "admin/venues.php", "admin/guide.php", "admin/defaults.php",
               "admin/weather-mail.php", "admin/public-info.php",
-              "tournament-weather.php", "turnierinfos.php", "assets/tournament-calendar.js",
+              "tournament-weather.php", "turnierinfos.php", "workshop.php", "workshop-lib.php", "assets/workshop.css", "assets/tournament-calendar.js",
               "newsletter-events.php", "newsletter-partners.php",
               "google8cf6756d83169a32.html",
               "sitemap.xml",
@@ -144,8 +144,12 @@ jobs:
           php -l public/tournament-weather.php
           node --check public/assets/tournament-calendar.js
           php -l public/turnierinfos.php
+          php -l public/workshop-lib.php
+          php -l public/workshop.php
           php -l tests/backoffice-test.php
           php tests/backoffice-test.php
+          php -l tests/workshop-test.php
+          php tests/workshop-test.php
           # Katalog vor jedem Upload frisch aus den Turnier-/Workshopseiten erzeugen.
           python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
           cp public/data/newsletter-events.json _live_upload/data/newsletter-events.json

@@ -9,6 +9,8 @@ require_once __DIR__.'/guide.php';
 require_once __DIR__.'/defaults.php';
 require_once __DIR__.'/weather-mail.php';
 require_once __DIR__.'/public-info.php';
+if(!defined('TS_WORKSHOP'))define('TS_WORKSHOP',true);
+require_once dirname(__DIR__).'/workshop-lib.php';
 
 function boEsc(mixed $value): string {
  return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -115,6 +117,7 @@ function boSchema(PDO $db): void {
  $db->exec("CREATE INDEX IF NOT EXISTS bo_deliveries_campaign ON bo_deliveries(campaign_id,state)");
  boVenueSchema($db);
  boPublicInfoSchema($db);
+ workshopSchema($db);
 }
 function boCsrf(): string {
  return '<input type="hidden" name="csrf" value="'.boEsc($_SESSION['csrf']??'').'">';
@@ -147,6 +150,7 @@ function boPage(string $title,string $content): never {
  $tabs=[
   'dashboard'=>['Übersicht','layout-dashboard'],
   'contacts'=>['Teilnehmer','users'],
+  'workshops'=>['Regelworkshops','calendar'],
   'compose'=>['Turnier-Infomails','mail'],
   'templates'=>['Vorlagen','files'],
   'venues'=>['Standorte','map-pin'],
@@ -193,7 +197,7 @@ function boPage(string $title,string $content): never {
  footer{max-width:1200px;margin:0 auto;padding:0 18px 30px;color:#6b7f70;font-size:12px}
  @media(max-width:700px){.split{grid-template-columns:1fr}.panel{padding:16px}header{padding:18px}.head img{width:200px}table{font-size:12px}}
  </style></head><body><header><div class="head"><a href="/admin/" aria-label="Backoffice"><img src="/assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri"></a><small>BACKOFFICE · INTERNE VERWALTUNG</small></div><nav aria-label="Backoffice-Navigation">'.$nav.'</nav></header>
- <main><div class="row row-between"><div><h1>'.$e($title).'</h1><p class="intro">Organisation und Kommunikation für Tennis-Schiri</p></div><div class="row"><a href="/newsletter-admin.php">Newsletter-Abonnenten</a><a href="/newsletter-mail.php">Newsletter-Versand</a><form class="inline" action="/newsletter-admin.php" method="post">'.boCsrf().'<input type="hidden" name="action" value="logout"><button class="button-secondary" type="submit">Abmelden</button></form></div></div>'.$notice.$content.'</main><footer>Internes Backoffice · Empfänger für Turnier-Infomails werden getrennt von Newsletter-Abonnenten gespeichert. Kein automatischer Versand.</footer></body></html>';
+ <main><div class="row row-between"><div><h1>'.$e($title).'</h1><p class="intro">Organisation und Kommunikation für Tennis-Schiri</p></div><div class="row"><a href="/newsletter-admin.php">Newsletter-Abonnenten</a><a href="/newsletter-mail.php">Newsletter-Versand</a><form class="inline" action="/newsletter-admin.php" method="post">'.boCsrf().'<input type="hidden" name="action" value="logout"><button class="button-secondary" type="submit">Abmelden</button></form></div></div>'.$notice.$content.'</main><footer>Internes Backoffice · Turnier- und Workshopkontakte werden getrennt von Newsletter-Abonnenten gespeichert. Kein automatischer Massenversand.</footer></body></html>';
  exit;
 }
 function boTournaments(): array {

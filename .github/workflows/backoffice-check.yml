@@ -9,7 +9,10 @@ on:
       - 'public/turnier-mails.php'
       - 'public/tournament-weather.php'
       - 'public/turnierinfos.php'
+      - 'public/workshop.php'
+      - 'public/workshop-lib.php'
       - 'tests/backoffice-test.php'
+      - 'tests/workshop-test.php'
       - 'public/datenschutz/index.html'
       - '.github/workflows/deploy-live.yml'
       - '.github/workflows/backoffice-check.yml'
@@ -42,6 +45,8 @@ jobs:
           php -l public/admin/public-info.php
           php -l public/tournament-weather.php
           php -l public/turnierinfos.php
+          php -l public/workshop-lib.php
+          php -l public/workshop.php
           php -l public/admin/info-sections.php
           php -l public/admin/index.php
           php -l public/newsletter-admin.php
@@ -49,6 +54,8 @@ jobs:
           php -l public/turnier-mails.php
           php -l tests/backoffice-test.php
           php tests/backoffice-test.php
+          php -l tests/workshop-test.php
+          php tests/workshop-test.php
       - name: Zugriffsschutz, Datenhaltung und Versandbremse prüfen
         shell: bash
         run: |
@@ -63,6 +70,8 @@ jobs:
           grep -Fq "defaults_reviewed_at" public/admin/index.php
           grep -Fq "boVenueMailBlocks" public/admin/lib.php
           grep -Fq 'boPublicInfoPublish' public/admin/index.php
+          grep -Fq 'workshopSchema' public/admin/lib.php
+          grep -Fq "view==='workshops'" public/admin/index.php
           grep -Fq 'boWeatherMailBlocks' public/admin/lib.php
           grep -Fq "boSend(" public/admin/index.php
           grep -Fq "for(\$i=0;\$i<5;\$i++)" public/admin/index.php
