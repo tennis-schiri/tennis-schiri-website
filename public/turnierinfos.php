@@ -47,6 +47,21 @@ echo '<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="vie
 echo '<header class="site-head"><div class="container header-inner"><a class="brand brand-logo" href="/" aria-label="Tennis-Schiri Startseite"><img src="/assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri" width="250" style="height:auto"></a><nav class="nav"><a href="/turniere/">Turniere</a><a href="/">Startseite</a></nav></div></header>';
 echo '<main><section class="interior-hero"><div class="container"><div class="breadcrumb"><a href="/">Startseite</a> › <a href="/turniere/">Turniere</a> › Informationen</div><div class="eyebrow" style="margin-top:28px">FÜR DEINEN TURNIERTAG</div><h1>'.$title.'</h1><p>'.$date.' · '.$place.'</p></div></section>';
 echo '<section class="inner-section"><div class="container" style="max-width:960px"><p class="info-note">Diese öffentlichen Hinweise wurden nach dem Versand einer Teilnehmer-Infomail ausdrücklich freigegeben. Verbindlich bleiben die aktuelle Ausschreibung und die Hinweise der Turnierleitung. Zuletzt veröffentlicht: '.pubEscape($stamp).' Uhr.</p>';
+define('TS_WEATHER_LIBRARY',true);
+require_once __DIR__.'/tournament-weather.php';
+$weather=weatherData($id);
+if(($weather['available']??false)===true){
+ $bits=[];
+ if(is_array($weather['forecast']??null)){
+  $f=$weather['forecast'];
+  $bits[]='🌦️ '.pubEscape($f['description']).' · '.(int)$f['temperature_min'].'–'.(int)$f['temperature_max'].' °C';
+  if($f['precipitation_probability']!==null)$bits[]='Regenwahrscheinlichkeit: '.(int)$f['precipitation_probability'].' %';
+ }
+ if(!empty($weather['sunset']))$bits[]='🌇 Sonnenuntergang: '.pubEscape($weather['sunset']).' Uhr';
+ if($bits){
+  echo '<aside class="tourney-weather" aria-label="Wetter und Tageslicht"><strong>☀️ Outdoor-Wetter und Tageslicht</strong><p>'.implode(' · ',$bits).'</p><small>Unverbindlich für '.pubEscape($weather['location']).'. DWD-Daten über <a href="https://brightsky.dev/" target="_blank" rel="noopener noreferrer">Bright Sky</a>; Wetterprognose erst 7 Tage vor Turnierbeginn.</small></aside>';
+ }
+}
 echo '<div class="public-info-grid">';
 foreach(array_slice((array)($pub['sections']??[]),0,50) as $item){
  if(!is_array($item))continue;
