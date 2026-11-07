@@ -2592,3 +2592,34 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
  .ts-pc-required{white-space:normal;text-align:right}
 }
 @media(prefers-reduced-motion:reduce){.ts-pc-action{transition:none}}
+
+/* TENNILO cross-branding: nur originale Assets der aktiven tennilo.de-Website */
+.tennilo .tennilo-inner{display:grid;grid-template-columns:minmax(230px,.66fr) minmax(0,1.34fr);align-items:center;gap:clamp(28px,5vw,78px);min-height:340px;padding-top:42px;padding-bottom:42px}
+.tennilo .tennilo-inner:after{content:none;display:none}
+.tennilo .tennilo-brand-card{display:flex;flex-direction:column;gap:22px;justify-content:center;align-items:flex-start;box-sizing:border-box;min-width:0;min-height:208px;padding:29px 26px;border:1px solid #d7e6df;border-radius:23px;background:#f6f8f4;text-decoration:none;box-shadow:0 18px 40px rgba(0,0,0,.12);margin:0;transition:transform .2s,border-color .2s}
+.tennilo .tennilo-brand-card:hover{transform:translateY(-3px);border-color:#04bcb5}
+.tennilo .tennilo-brand-card:focus-visible{outline:3px solid #ef7146;outline-offset:4px}
+.tennilo-brand-card img{display:block;width:min(100%,265px);height:auto;object-fit:contain}
+.tennilo-brand-card span{font-size:10px;letter-spacing:.13em;font-weight:900;color:#456c71;line-height:1.6}
+.tennilo .tennilo-section-copy{position:relative;z-index:1;min-width:0}
+.tennilo .tennilo-section-copy h2{font-size:clamp(34px,4.1vw,58px);line-height:1.05;letter-spacing:-.045em;margin:15px 0}
+.tennilo .tennilo-section-copy p{max-width:590px;line-height:1.72}
+.tennilo .tennilo-visit{display:inline-flex;margin-top:23px}
+.ig-tennilo-symbol{padding:0;overflow:hidden;background:#eef6f2}
+.ig-tennilo-symbol img{display:block;width:100%;height:100%;object-fit:cover}
+.ig-tennilo-wordmark{display:block;width:137px;max-width:100%;height:auto;object-fit:contain}
+.ig-account[data-instagram-account="tennilo"] .ig-account-identity h3{line-height:1;margin:0 0 5px}
+.ig-account[data-instagram-account="tennilo"] .ig-account-identity{gap:12px}
+.footer-social-link[href="https://www.instagram.com/tennilo.app/"] strong{display:flex;align-items:center;gap:6px}
+.footer-social-link[href="https://www.instagram.com/tennilo.app/"] strong:before{content:"";display:inline-block;width:17px;height:17px;flex:0 0 17px;background:url("tennilo-icon.png") center/cover no-repeat;border-radius:4px}
+@media(max-width:850px){
+ .tennilo .tennilo-inner{grid-template-columns:1fr;gap:25px;padding-top:43px;padding-bottom:48px;min-height:0}
+ .tennilo .tennilo-brand-card{max-width:380px;min-height:152px;padding:22px 25px;gap:14px;display:flex;margin:0}
+ .tennilo .tennilo-visit{margin-top:22px}
+}
+@media(max-width:430px){
+ .tennilo .tennilo-brand-card{width:100%;min-height:130px}
+ .tennilo .tennilo-section-copy h2{font-size:34px}
+ .ig-tennilo-wordmark{width:115px}
+}
+@media(prefers-reduced-motion:reduce){.tennilo .tennilo-brand-card{transition:none}}
