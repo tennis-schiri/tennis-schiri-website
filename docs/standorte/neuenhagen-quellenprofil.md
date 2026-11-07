@@ -49,3 +49,35 @@ Vorhandene `boVenueDefinitions()` in `public/admin/venues.php`:
 ## Geplanter Zusatz für das Datenmodell
 
 Es wäre hilfreich, pro Standortfeld ein `verified_at` bzw. Quellen-/Prüfdatum sowie eine Unterscheidung „öffentlich in Mail“, „intern“ und „nur pro Turnier“ vorzusehen. Dadurch werden vorläufige Altangaben nicht ohne Prüfung in neu erstellte Turnier-Guides übernommen.
+
+
+## Zusatzquelle: Hallenturnier NTC93 vom 01.11.2025
+
+[Infos LK Halle NTC93](https://docs.google.com/document/d/1WOueQc-LnPHRrLST6X4y1ZfKvEnAdwzK8i3ENQlJ1KA/edit)
+
+Diese Quelle bestätigt die bereits beschriebenen Parkplatz-, S-Bahn- und Gastronomiehinweise. Sie liefert wichtige **hallenspezifische** Ergänzungen:
+
+| Feld | Historische Angabe / Zuordnung |
+| --- | --- |
+| Hallenturnierleitung | Vorraum der Halle – nicht als allgemeiner Standort der Turnierleitung verwenden |
+| Sanitärbereich | Umkleiden, Duschen und Toiletten sowohl in der Halle als auch im Clubhaus |
+| Hallenplätze | Zwei Plätze beim beschriebenen Hallenturnier; aktuelle Anzahl prüfen |
+| Hallenbelag | Advantage Red Court; saubere Sandplatzschuhe wurden zugelassen |
+| Halleneingang | Während des Turniers elektronisch entriegelt; technische Zugangsdetails nicht in öffentlichen oder GitHub-Standortprofilen hinterlegen |
+| Anfahrt | Wie in der vorherigen Quelle: Parkplätze an Anlage/Halle, parallel vor Hallenfront, Grünstreifen freihalten, S5 Neuenhagen ca. 15 Minuten Fußweg |
+| Gastronomie | Due Fratelli; damals Öffnung ab 12:00 Uhr, damals ausschließlich Barzahlung – **turnier- und zeitabhängig**, nicht als dauerhafte Garantie übernehmen |
+
+### Nur zum damaligen Doppel-LK-Turnier gehörende Angaben
+
+- Anwesenheit 30 Minuten vor Match, bei den ersten 10:00-Uhr-Spielen 15 Minuten.
+- Einspielen fünf Minuten; Ergebnis direkt melden.
+- Zwei Gewinnsätze, dritter Satz Match-Tiebreak und No-Ad-Regel.
+- Damaliges Nenngeld 60 € je Team, damalige Zahlungsoptionen bar/Karte/PayPal.
+- Hinweis, am Vorabend die Ansetzungen erneut zu kontrollieren.
+- Auslosung, mögliche Änderungen und Sanktionshinweise: vor jeder zukünftigen Mail neu prüfen.
+
+### Konsequenz für die Datenbank
+
+Die bestehende Standort-ID `neuenhagen` kann als übergeordneter Ort erhalten bleiben; sinnvoll sind darunter separate Anlagen-/Platzprofile **Halle** und **Außenanlage**. Damit werden wechselnde Angaben zu Belag, Platzanzahl, Anmeldung und Umkleiden nicht vermischt.
+
+**Sicherheitsgrenze:** Die historische Quelle enthält eine technische Zugangsinformation. Solche Zugangsdaten gehören weder in das öffentliche Website-Repository noch in automatisch wiederverwendete E-Mail-Vorlagen. Sie wurden bewusst nicht übernommen.
