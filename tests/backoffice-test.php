@@ -86,4 +86,49 @@ $malicious['info_arrival']='<script>alert("test")</script>';
 [$safeHtml,]=boInfoMailBlocks($malicious);
 boAssert(!str_contains($safeHtml,'<script>')&&str_contains($safeHtml,'&lt;script&gt;'),'Checklist HTML not escaped');
 
+
+/* Integration with Turnier-Guide 2.2 and venue snapshots. */
+$profiles=boVenueList($db);
+boAssert(count($profiles)>=3,'Bad Saarow, Neuenhagen und allgemeine Standortvorlage fehlen');
+boAssert(isset($profiles['bad-saarow'])&&isset($profiles['neuenhagen'])&&isset($profiles['general']),'Standortvorlagen-Schlüssel fehlen');
+$profile=boVenueValidate([
+ 'venue_address'=>'Musterstraße 10, 12345 Beispielstadt',
+ 'venue_navigation'=>'https://maps.google.com/?q=example',
+ 'venue_surface'=>'Hartplatz (vor dem Turnier prüfen)',
+ 'venue_checkin'=>'Infotheke im Eingangsbereich'
+]);
+$profileJson=json_encode($profile,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
+$q=$db->prepare('UPDATE bo_venues SET data=? WHERE id=?');
+$q->execute([$profileJson,'bad-saarow']);
+boAssert(boVenueData($profileJson)['address']==='Musterstraße 10, 12345 Beispielstadt','Stammdaten werden nicht gespeichert');
+try{boVenueValidate(['venue_navigation'=>'javascript:alert(1)']);boAssert(false,'Unsichere Navigation akzeptiert');}
+catch(InvalidArgumentException $expected){}
+$guideInput=[
+ 'guide_sections'=>['draw','warmup','payment','withdrawal'],
+ 'guide_draw'=>'https://www.tennis.de/turnier/123',
+ 'guide_warmup'=>'5 Minuten, nach aktueller Turnierausschreibung',
+ 'guide_payment'=>'Bar oder Karte nur nach Bestätigung',
+ 'guide_withdrawal'=>'Bitte aktuelle Ausschreibung beachten'
+];
+$guideJson=boGuideFromPost($guideInput);
+boAssert(count(boGuideDecoded(['guide_data'=>$guideJson])['selected'])===4,'Guide-Checkliste hat Häkchen verloren');
+boAssert(str_contains(boGuideEditor(['guide_data'=>$guideJson]),'guide_sections[]'),'Guide-Editor zeigt keine Kontrollkästchen');
+try{boGuideFromPost(['guide_sections'=>['warmup'],'guide_warmup'=>'']);boAssert(false,'Unvollständiges Pflichtfeld akzeptiert');}
+catch(InvalidArgumentException $expected){}
+try{boGuideFromPost(['guide_sections'=>['draw'],'guide_draw'=>'http://example.com']);boAssert(false,'HTTP-Planlink akzeptiert');}
+catch(InvalidArgumentException $expected){}
+$db->prepare('UPDATE bo_campaigns SET venue_id=?,venue_data=?,guide_data=? WHERE id=?')
+   ->execute(['bad-saarow',$profileJson,$guideJson,$row['id']]);
+$new=$db->query('SELECT * FROM bo_campaigns WHERE id=1')->fetch();
+boAssert($new['venue_id']==='bad-saarow','Standortwahl nicht gespeichert');
+[,,$venueHtml]=boMailContent($new,['name'=>'Max Beispiel']);
+boAssert(str_contains($venueHtml,'Musterstraße 10'),'Standort fehlt im Turnier-Guide');
+boAssert(str_contains($venueHtml,'Bar oder Karte nur nach Bestätigung'),'Guide-Baustein fehlt im HTML');
+boAssert(str_contains($venueHtml,'SPIELORT'),'Turnier-Hero enthält keine Ortskarte');
+boAssert(str_contains($venueHtml,'https://www.tennis.de/turnier/123'),'Offizieller Auslosungslink fehlt');
+$before=$new['venue_data'];
+$db->prepare('UPDATE bo_venues SET data=? WHERE id=?')->execute(['{}','bad-saarow']);
+$after=$db->query('SELECT venue_data FROM bo_campaigns WHERE id=1')->fetchColumn();
+boAssert($before===$after,'Änderungen an Standorten verändern vorhandene Mail-Snapshots');
+
 fwrite(STDOUT,"Tennis-Schiri Backoffice: SQLite, Templates, escape, mail preview, tracking safety and separate contacts verified.\n");
