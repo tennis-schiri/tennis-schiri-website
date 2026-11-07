@@ -19,6 +19,11 @@ on:
       - 'tests/newsletter-events-test.php'
       - 'public/turniere/index.html'
       - 'public/assets/tournament-calendar.js'
+      - 'public/assets/tournament-detail.js'
+      - 'public/assets/tournament-detail.css'
+      - 'public/turniere/termin.html'
+      - 'tests/tournament-detail-test.py'
+      - 'public/index.html'
       - 'public/turnierinfos.php'
       - 'public/leistungen/index.html'
       - 'tests/newsletter-template-test.php'
@@ -51,8 +56,11 @@ jobs:
         run: |
           python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
           python scripts/build_newsletter_partners.py --output public/data/newsletter-partners.json
-      - name: Kalender-JavaScript prüfen
-        run: node --check public/assets/tournament-calendar.js
+      - name: Kalender und Detailseiten prüfen
+        run: |
+          node --check public/assets/tournament-calendar.js
+          node --check public/assets/tournament-detail.js
+          python tests/tournament-detail-test.py
       - name: HTML-Newsletter testen (kein Versand)
         run: |
           php tests/newsletter-template-test.php
