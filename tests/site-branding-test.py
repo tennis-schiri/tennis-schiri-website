@@ -42,6 +42,10 @@ for name in [
     if min(width,height)<64 or max(width,height)>4000:
         raise SystemExit(f"Ungültige Bildgröße für {name}: {width}x{height}")
 
+svg=(PUB/"favicon.svg").read_text(encoding="utf-8")
+if 'data:image/png;base64,' not in svg:
+    raise SystemExit("Legacy-Favicon verweist noch auf die alte Zeichenlogo-Version")
+
 email=(PUB/"newsletter-template.php").read_text(encoding="utf-8")
 if 'https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png' not in email:
     raise SystemExit("HTML-Newsletter benutzt noch altes Textlogo")
