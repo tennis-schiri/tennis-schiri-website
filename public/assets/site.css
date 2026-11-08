@@ -2674,3 +2674,6 @@ html{scroll-padding-top:112px}
 @media(max-width:620px){
  .site-head{background:#132b28}
 }
+
+/* TENNILO umbrella brand with the approved TT04 Tournament product logo */
+.tennilo-tournament-mark{display:block;width:min(100%,380px);height:auto;object-fit:contain;object-position:left center;margin:14px 0 18px;border-radius:8px}
