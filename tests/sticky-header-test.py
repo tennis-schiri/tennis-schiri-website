@@ -25,7 +25,7 @@ for page in pages:
     html=page.read_text(encoding="utf-8")
     if '<header class="site-head"' not in html:
         raise SystemExit("Website-Kopf fehlt: "+str(page))
-    if 'site.css?v=20261108-2' not in html:
+    if 'site.css?v=20261109-1' not in html:
         raise SystemExit("Alte CSS-Cacheversion: "+str(page))
     if 'id="menu-toggle"' not in html or 'id="site-nav"' not in html:
         raise SystemExit("Mobiles Menü fehlt: "+str(page))
