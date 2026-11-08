@@ -106,6 +106,7 @@ jobs:
               "assets/branding/ts-logo-ball.png",
               "assets/branding/ts-favicon.png",
               "assets/back-to-top.js", "assets/privacy-consent.js",
+              "assets/home-refresh.css", "assets/home-refresh.js",
               "mein-turniertag/index.html", "assets/mein-turniertag.js", "assets/mein-turniertag.css",
               "assets/tennilo-logo.png", "assets/tennilo-icon.png",
               "data/instagram.json", "data/statistics.json",
@@ -161,6 +162,8 @@ jobs:
           node tests/privacy-consent-test.mjs
           python tests/tennilo-branding-test.py
           python tests/sticky-header-test.py
+          node --check public/assets/home-refresh.js
+          node tests/home-layout-test.mjs
           php -l public/turnierinfos.php
           php -l public/workshop-lib.php
           php -l public/workshop.php
