@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="assets/site.css?v=20261108-2">
 <link rel="stylesheet" href="assets/rules-library.css?v=2">
 <link rel="stylesheet" href="assets/workshop.css?v=2">
-<link rel="stylesheet" href="assets/home-refresh.css?v=1">
+<link rel="stylesheet" href="assets/home-refresh.css?v=2">
 <script src="assets/privacy-consent.js?v=1" defer></script>
 <script src="assets/back-to-top.js?v=2" defer></script>
 <script src="assets/home-refresh.js?v=1" defer></script>
@@ -41,7 +41,7 @@
     <h1><span class="line">MEHR ALS</span><span class="line">NUR EIN</span><span class="line accent">SPIEL.</span></h1>
     <p class="hero-desc">Tennisturniere entdecken, Regeln verstehen und Veranstaltungen professionell organisieren – mit Erfahrung, Leidenschaft und einem Blick fürs Detail.</p>
     <div class="actions"><a class="btn btn-primary" href="turniere/">Turniere entdecken <span>↗</span></a><a class="btn btn-outline" href="#regelworkshop-anmeldung">Regelworkshop anmelden <span>↗</span></a></div>
-    <div class="hero-foot"><div><strong>Berlin & Brandenburg</strong>Turniere und Tennis-Community</div><div><strong>Seit 1999</strong>Erfahrung als lizenzierter Schiedsrichter</div></div>
+    <div class="hero-foot"><div><strong>Berlin &amp; Brandenburg</strong> <span>Turniere und Tennis-Community</span></div><div><strong>Seit 1999</strong> <span>Erfahrung als lizenzierter Schiedsrichter</span></div></div>
   </div>
   <div class="hero-side">
     <section class="hero-stat" id="hero-statistic" aria-label="Wechselnde Statistik aus dem Turnierbetrieb">
@@ -63,14 +63,39 @@
   </div>
  </div>
 </section>
-
-
+<section class="tennis-quote-strip" aria-label="Zufälliges Tenniszitat">
+ <div class="container"><div class="tennis-quote-line">
+  <div class="tennis-quote-label"><span>GEDANKEN VOM COURT</span><small>Stimmen aus dem Tennis</small></div>
+  <figure class="tennis-quote-figure" aria-live="polite" aria-atomic="true">
+   <blockquote id="tennis-quote-text" lang="en">“Pressure is a privilege.”</blockquote>
+   <figcaption><span id="tennis-quote-author">Billie Jean King</span><span class="tennis-quote-translation">Frei übersetzt: <span id="tennis-quote-de" lang="de">Druck ist ein Privileg.</span></span></figcaption>
+  </figure>
+  <div class="tennis-quote-actions"><a id="tennis-quote-source" href="https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour" target="_blank" rel="noopener noreferrer" aria-label="Quelle für das aktuelle Tenniszitat öffnen">Quelle ↗</a><button type="button" id="tennis-quote-next" aria-label="Anderes Tenniszitat anzeigen">Anderes Zitat <span aria-hidden="true">↻</span></button></div>
+ </div></div>
+</section>
 <section class="quicknav" aria-label="Direkteinstieg"><div class="container"><div class="quicknav-inner">
   <a class="quick" href="#turniere"><div class="quick-top"><span class="quick-index">01 / MITMACHEN</span><span class="arrow">↗</span></div><h3>Aktuelle Turniere</h3><p>Termine, Orte und die passende Veranstaltung finden.</p></a>
   <a class="quick" href="#regelwissen"><div class="quick-top"><span class="quick-index">02 / VERSTEHEN</span><span class="arrow">↗</span></div><h3>Tennisregeln</h3><p>Regelfragen aus der Praxis einfach erklärt.</p></a>
   <a class="quick" href="#leistungen"><div class="quick-top"><span class="quick-index">03 / ORGANISIEREN</span><span class="arrow">↗</span></div><h3>Für Vereine</h3><p>Turnierleitung, Oberschiedsrichter und Workshops.</p></a>
 </div></div></section>
-
+<div class="home-zone home-zone--news">
+<section class="home-news section" id="aktuelles" aria-labelledby="home-news-title">
+  <div class="container">
+    <div class="section-head home-news-heading">
+      <div><div class="eyebrow kicker">AKTUELLES</div><h2 id="home-news-title">Aktuelles &amp; Neuigkeiten.</h2></div>
+      <a class="section-link" href="aktuelles/">Alle Meldungen ansehen ↗</a>
+    </div>
+    <div class="home-news-grid">
+      <article class="home-news-card home-news-featured">
+        <div class="home-news-meta"><time datetime="2026-11-07">07. November 2026</time><span>Website &amp; Funktionen</span></div>
+        <h3><a href="aktuelles/#website-relaunch-2026">Neue Website, neue Möglichkeiten: Tennis-Schiri startet neu</a></h3>
+        <p>Neuer Look, übersichtlicher Turnier- und Eventkalender, direkte Anmeldung zu Regelworkshops, Newsletter und WhatsApp-Community: Das ist neu auf tennis-schiri.de.</p>
+        <a class="home-news-read" href="aktuelles/#website-relaunch-2026" aria-label="Bericht über die neue Tennis-Schiri-Website lesen">Bericht lesen <span aria-hidden="true">↗</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+</div>
 <div class="home-zone home-zone--calendar">
 <section class="section" id="turniere"><div class="container">
  <div class="section-head"><div><div class="eyebrow kicker">TURNIERKALENDER</div><h2>Die nächsten<br>Turniere &amp; Events.</h2></div><div><p class="small">Von LK-Turnieren bis zu Ranglistenveranstaltungen: aktuelle Termine aus meinem Turnierkalender.</p><a class="section-link" href="turniere/">Zur vollständigen Übersicht ↗</a></div></div>
@@ -140,7 +165,6 @@
  <div class="home-tourney-footer"><span id="home-tourney-summary" aria-live="polite">Die nächsten Turniere auf einen Blick</span><a href="turniere/">Alle Turniere in der Übersicht ansehen <span aria-hidden="true">↗</span></a></div>
  <p class="fineprint">Konkurrenzen für die drei SUNBALL-Turniere laut TVBB-Turnierkalender und für das Indoor-Mixed-Turnier laut tennis.de. Meldeschluss und Auslosung bitte in den offiziellen Turnierdetails kontrollieren; bei den übrigen Turnieren folgen die Angaben mit der Ausschreibung. Änderungen vorbehalten.</p>
  </div></section>
-
 </div>
 <div class="home-zone home-zone--knowledge">
 <section class="home-guides section" id="spielerhilfen" aria-labelledby="home-guides-heading">
@@ -175,7 +199,6 @@
  <p><strong>Gut!</strong> Die Linie gehört zum Spielfeld. Selbst wenn der Ball sie nur am Rand berührt, ist er noch gut (ITF-Regel 12).</p>
  <a href="regelwissen/#linienball">Diesen und weitere Regelfälle ansehen ↗</a></details>
 </div></div></div></section>
-
 </div>
 <div class="home-zone home-zone--services">
 <section class="section services" id="leistungen"><div class="container"><div class="section-head"><div><div class="eyebrow kicker">FÜR VEREINE &amp; VERANSTALTER</div><h2>Gute Turniere<br>sind kein Zufall.</h2></div><p class="small">Veranstalter und Vereine profitieren von Erfahrung, verlässlichen Abläufen und einem sicheren Umgang mit dem Regelwerk.</p></div>
@@ -194,57 +217,8 @@
  <div class="workshop-signup-copy"><div class="eyebrow">REGELWORKSHOP · 04.03.2027 · 19:00 UHR</div><h3 id="workshop-signup-home-title">Direkt zum Workshop anmelden.</h3><p>Tennisregeln aus der Praxis, verständlich erklärt und mit Raum für konkrete Fragen.</p><div class="workshop-price-box"><strong>NTC-93-Mitglieder: kostenlos</strong><span>Gäste: 15 € · vor Ort oder PayPal</span><small>Den PayPal-Zahlungslink erhältst du direkt in der Bestätigungs-E-Mail.</small></div><p class="workshop-address"><strong>NTC 93</strong><br>Hildesheimer Straße 11–13<br>15366 Neuenhagen bei Berlin</p></div>
  <div class="workshop-registration-card"><form class="workshop-form" method="post" action="workshop.php"><input type="hidden" name="action" value="register"><input type="hidden" name="workshop" value="regelworkshop-2027-03-04"><div class="workshop-form-grid"><label>Vor- und Nachname <span>*</span><input type="text" name="name" autocomplete="name" maxlength="160" required></label><label>E-Mail-Adresse <span>*</span><input type="email" name="email" autocomplete="email" maxlength="254" required></label></div><label>Verein <small>(optional)</small><input type="text" name="club" autocomplete="organization" maxlength="160"></label><label class="workshop-check"><input type="checkbox" name="member" value="yes"><span>Ich bin Mitglied im NTC 93. Die Teilnahme ist dann kostenfrei.</span></label><fieldset><legend>Zahlung für Gäste</legend><div class="workshop-payment-options"><label><input type="radio" name="payment" value="onsite" checked><span>15 € vor Ort</span></label><label><input type="radio" name="payment" value="paypal"><span>15 € per PayPal <small>Zahlungslink per E-Mail</small></span></label></div><p>Bei NTC-93-Mitgliedern wird diese Auswahl nicht verwendet.</p></fieldset><label class="workshop-check workshop-privacy"><input type="checkbox" name="privacy" value="yes" required><span>Ich melde mich verbindlich an und habe die <a href="datenschutz/#workshop-anmeldung">Datenschutzhinweise</a> gelesen. <span>*</span></span></label><div class="workshop-honeypot" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div><button class="workshop-submit" type="submit">Jetzt anmelden <span aria-hidden="true">↗</span></button><p class="workshop-form-note">Nach der Anmeldung erhältst du eine Bestätigung per E-Mail. Die Anmeldung ist unabhängig vom Newsletter.</p></form></div>
 </section></details></div></section>
-
 </div>
 <div class="home-zone home-zone--activity">
- <div class="container home-zone-heading">
-  <div class="eyebrow kicker">AUS DER TENNIS-COMMUNITY</div>
-  <h2>Verbunden bleiben.</h2>
-  <p>Neues von den Turnieren, der Community und unseren Projekten.</p>
- </div>
- <div class="home-activity-pair">
-<section class="community-spotlight" aria-labelledby="community-title">
-  <div class="container">
-    <div class="community-panel">
-      <div class="community-symbol" aria-hidden="true">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M11 32c0-11.6 9.5-21 21-21s21 9.4 21 21-9.5 21-21 21c-4 0-7.7-1.1-10.9-3L11 53l3.4-10.2C12.2 39.6 11 36 11 32Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
-          <path d="M21 32h22M32 21v22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".35"/>
-          <circle cx="32" cy="32" r="8.5" fill="#C8F16D" stroke="currentColor" stroke-width="2"/>
-          <path d="M28 26c2.3 3.4 2.3 8.6 0 12M36 26c-2.3 3.4-2.3 8.6 0 12" stroke="#214333" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="community-content">
-        <div class="community-eyebrow">GEMEINSAM AUF DEM LAUFENDEN BLEIBEN</div>
-        <h2 id="community-title">Kein Turnier mehr verpassen.</h2>
-        <p>Aktuelle Turniertermine, Ankündigungen und Hinweise aus Berlin &amp; Brandenburg direkt über unsere <strong>WhatsApp-Turnier-Community</strong>.</p>
-      </div>
-      <div class="community-action">
-        <a class="community-join" href="https://chat.whatsapp.com/H0pkQrGCRT61sJAPulYLp5" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp-Turnier-Community in einem neuen Tab öffnen">Community beitreten <span aria-hidden="true">↗</span></a>
-        <span>Weiterleitung zu WhatsApp</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="home-news section" id="aktuelles" aria-labelledby="home-news-title">
-  <div class="container">
-    <div class="section-head home-news-heading">
-      <div><div class="eyebrow kicker">AKTUELLES</div><h2 id="home-news-title">Aktuelles &amp; Neuigkeiten.</h2></div>
-      <a class="section-link" href="aktuelles/">Alle Meldungen ansehen ↗</a>
-    </div>
-    <div class="home-news-grid">
-      <article class="home-news-card home-news-featured">
-        <div class="home-news-meta"><time datetime="2026-11-07">07. November 2026</time><span>Website &amp; Funktionen</span></div>
-        <h3><a href="aktuelles/#website-relaunch-2026">Neue Website, neue Möglichkeiten: Tennis-Schiri startet neu</a></h3>
-        <p>Neuer Look, übersichtlicher Turnier- und Eventkalender, direkte Anmeldung zu Regelworkshops, Newsletter und WhatsApp-Community: Das ist neu auf tennis-schiri.de.</p>
-        <a class="home-news-read" href="aktuelles/#website-relaunch-2026" aria-label="Bericht über die neue Tennis-Schiri-Website lesen">Bericht lesen <span aria-hidden="true">↗</span></a>
-      </article>
-    </div>
-  </div>
-</section>
-
- </div>
 <section class="section ig-feed-section" id="instagram" aria-label="Aktuelle Instagram-Beiträge">
   <div class="container">
     <div class="section-head">
@@ -280,14 +254,8 @@
     <p class="ig-feed-footnote">Die Vorschaubilder werden auf unserer Website gespeichert. Erst beim Öffnen eines Beitrags gelangst du zu Instagram.</p>
   </div>
 </section>
-
 </div>
 <div class="home-zone home-zone--profile">
-<section class="section about" id="ueber-mich"><div class="container"><div class="about-layout">
- <div class="portrait-placeholder photo"><img src="assets/michael-wiedeck-portrait.jpg" alt="Michael Wiedeck auf dem Tennisplatz" loading="lazy"><div class="portrait-caption"><div class="name">Michael Wiedeck</div><div class="sub">Turnierleiter · Oberschiedsrichter · Tennis aus Leidenschaft</div></div></div>
- <div><div class="eyebrow kicker">HINTER TENNIS-SCHIRI</div><h2>Tennis ist<br>meine Leidenschaft.</h2><p class="lead">Ich bin Michael Wiedeck. Seit mehr als drei Jahrzehnten ist Tennis ein fester Bestandteil meines Lebens. Als DTB-C-Stuhlschiedsrichter seit 1999 und DTB-B-Oberschiedsrichter seit 2016 begleite ich Turniere und Vereine – von LK-Events bis zu internationalen Wettbewerben.</p><div class="stats"><div class="stat"><strong>1999</strong><span>Beginn meiner Tätigkeit als lizenzierter DTB-Schiedsrichter</span></div><div class="stat"><strong>2016</strong><span>DTB-B-Oberschiedsrichter</span></div></div><a class="btn btn-dark" href="ueber-mich/">Mehr über mich <span>↗</span></a><a class="secondary-link" href="referenzen/">Meine Referenzen ↗</a></div>
- </div></div></section>
-
 <section class="tennilo" id="tennilo" aria-labelledby="tennilo-section-title">
  <div class="container tennilo-inner">
   <a class="tennilo-brand-card" href="https://tennilo.de/" target="_blank" rel="noopener noreferrer" aria-label="TENNILO – Projektwebsite öffnen">
@@ -302,7 +270,6 @@
   </div>
  </div>
 </section>
-
 </div>
 <div class="home-zone home-zone--closing">
 <section class="newsletter-section" id="newsletter" aria-labelledby="home-newsletter-title">
@@ -333,21 +300,36 @@
   </div>
  </div>
 </section>
-
-<section class="tennis-quote-strip" aria-label="Zufälliges Tenniszitat">
- <div class="container"><div class="tennis-quote-line">
-  <div class="tennis-quote-label"><span>GEDANKEN VOM COURT</span><small>Stimmen aus dem Tennis</small></div>
-  <figure class="tennis-quote-figure" aria-live="polite" aria-atomic="true">
-   <blockquote id="tennis-quote-text" lang="en">“Pressure is a privilege.”</blockquote>
-   <figcaption><span id="tennis-quote-author">Billie Jean King</span><span class="tennis-quote-translation">Frei übersetzt: <span id="tennis-quote-de" lang="de">Druck ist ein Privileg.</span></span></figcaption>
-  </figure>
-  <div class="tennis-quote-actions"><a id="tennis-quote-source" href="https://www.wtatennis.com/news/1675475/champions-adjust-billie-jean-kings-virtual-power-hour" target="_blank" rel="noopener noreferrer" aria-label="Quelle für das aktuelle Tenniszitat öffnen">Quelle ↗</a><button type="button" id="tennis-quote-next" aria-label="Anderes Tenniszitat anzeigen">Anderes Zitat <span aria-hidden="true">↻</span></button></div>
- </div></div>
+<section class="community-spotlight" aria-labelledby="community-title">
+  <div class="container">
+    <div class="community-panel">
+      <div class="community-symbol" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 32c0-11.6 9.5-21 21-21s21 9.4 21 21-9.5 21-21 21c-4 0-7.7-1.1-10.9-3L11 53l3.4-10.2C12.2 39.6 11 36 11 32Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M21 32h22M32 21v22" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".35"/>
+          <circle cx="32" cy="32" r="8.5" fill="#C8F16D" stroke="currentColor" stroke-width="2"/>
+          <path d="M28 26c2.3 3.4 2.3 8.6 0 12M36 26c-2.3 3.4-2.3 8.6 0 12" stroke="#214333" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="community-content">
+        <div class="community-eyebrow">GEMEINSAM AUF DEM LAUFENDEN BLEIBEN</div>
+        <h2 id="community-title">Kein Turnier mehr verpassen.</h2>
+        <p>Aktuelle Turniertermine, Ankündigungen und Hinweise aus Berlin &amp; Brandenburg direkt über unsere <strong>WhatsApp-Turnier-Community</strong>.</p>
+      </div>
+      <div class="community-action">
+        <a class="community-join" href="https://chat.whatsapp.com/H0pkQrGCRT61sJAPulYLp5" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp-Turnier-Community in einem neuen Tab öffnen">Community beitreten <span aria-hidden="true">↗</span></a>
+        <span>Weiterleitung zu WhatsApp</span>
+      </div>
+    </div>
+  </div>
 </section>
-
-
+</div>
+<div class="home-zone home-zone--personal">
+<section class="section about" id="ueber-mich"><div class="container"><div class="about-layout">
+ <div class="portrait-placeholder photo"><img src="assets/michael-wiedeck-portrait.jpg" alt="Michael Wiedeck auf dem Tennisplatz" loading="lazy"><div class="portrait-caption"><div class="name">Michael Wiedeck</div><div class="sub">Turnierleiter · Oberschiedsrichter · Tennis aus Leidenschaft</div></div></div>
+ <div><div class="eyebrow kicker">HINTER TENNIS-SCHIRI</div><h2>Tennis ist<br>meine Leidenschaft.</h2><p class="lead">Ich bin Michael Wiedeck. Seit mehr als drei Jahrzehnten ist Tennis ein fester Bestandteil meines Lebens. Als DTB-C-Stuhlschiedsrichter seit 1999 und DTB-B-Oberschiedsrichter seit 2016 begleite ich Turniere und Vereine – von LK-Events bis zu internationalen Wettbewerben.</p><div class="stats"><div class="stat"><strong>1999</strong><span>Beginn meiner Tätigkeit als lizenzierter DTB-Schiedsrichter</span></div><div class="stat"><strong>2016</strong><span>DTB-B-Oberschiedsrichter</span></div></div><a class="btn btn-dark" href="ueber-mich/">Mehr über mich <span>↗</span></a><a class="secondary-link" href="referenzen/">Meine Referenzen ↗</a></div>
+ </div></div></section>
 <section class="contact" id="kontakt"><div class="container contact-inner"><div><div class="eyebrow">KONTAKT / ZUSAMMENARBEIT</div><h2>Ein Turnier geplant?<br>Wir sollten sprechen.</h2></div><a class="btn btn-dark" href="mailto:mw@tennis-schiri.de?subject=Anfrage%20%C3%BCber%20tennis-schiri.de">Anfrage per E-Mail <span>↗</span></a></div></section>
-
 </div>
 </main>
 <footer><div class="container"><div class="footer-top"><div><a class="brand brand-logo" href="#start"><img src="assets/branding/ts-logo-dunkel.png?v=20261107-3" alt="Tennis-Schiri" width="268" height="67" decoding="async"></a><p>Turniere, Tennisregeln und professionelle Turnierorganisation – mit Leidenschaft für den Sport.</p></div><div class="footer-links"><div><strong>Entdecken</strong><a href="turniere/">Turniere</a><a href="regelwissen/">Regelwissen</a><a href="leistungen/">Leistungen</a><a href="aktuelles/">Aktuelles</a><a href="partner/">Partner</a><a href="statistiken/">Statistiken</a><a href="newsletter/">Newsletter</a></div><div><strong>Information</strong><a href="ueber-mich/">Über mich</a><a href="referenzen/">Referenzen</a><a href="kontakt/">Kontakt</a><a href="impressum/">Impressum</a><a href="datenschutz/">Datenschutz</a><a href="admin/" target="_blank" rel="noopener noreferrer">Backend</a></div></div></div><div class="footer-social" aria-label="Instagram-Profile"><div class="footer-social-title">Folge uns auf Instagram</div><div class="footer-social-links"><a class="footer-social-link" href="https://www.instagram.com/tennis.schiri/" target="_blank" rel="noopener noreferrer" aria-label="Tennis-Schiri auf Instagram öffnen"><svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span><strong>Tennis-Schiri</strong><small>@tennis.schiri</small></span></a><a class="footer-social-link" href="https://www.instagram.com/tennilo.app/" target="_blank" rel="noopener noreferrer" aria-label="TENNILO auf Instagram öffnen"><svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span><strong>TENNILO</strong><small>@tennilo.app</small></span></a><a class="footer-social-link" href="https://www.instagram.com/michaelwiedeck/" target="_blank" rel="noopener noreferrer" aria-label="Michael Wiedeck auf Instagram öffnen"><svg class="footer-social-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span><strong>Michael Wiedeck</strong><small>@michaelwiedeck</small></span></a></div></div>
