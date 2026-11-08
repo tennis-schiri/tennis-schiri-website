@@ -7,6 +7,9 @@ on:
       - 'scripts/build_site_branding.py'
       - 'tests/site-branding-test.py'
       - 'public/assets/site.css'
+      - 'public/assets/home-refresh.css'
+      - 'public/assets/home-refresh.js'
+      - 'tests/home-layout-test.mjs'
       - 'tests/sticky-header-test.py'
       - 'public/assets/tennilo-logo.png'
       - 'public/assets/tennilo-icon.png'
@@ -71,3 +74,5 @@ jobs:
           node tests/privacy-consent-test.mjs
           python tests/tennilo-branding-test.py
           python tests/sticky-header-test.py
+          node --check public/assets/home-refresh.js
+          node tests/home-layout-test.mjs
