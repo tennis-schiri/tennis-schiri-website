@@ -382,3 +382,123 @@
  .home-v2 .quick p{display:block}
 }
 @media(prefers-reduced-motion:reduce){.home-v2 .quick{transition:none}}
+
+/* Startseite 2.1: News / Zitat nach oben, Community beim Newsletter,
+   die Person direkt vor dem Kontakt. Harmonische Abstände und mobile Lesbarkeit. */
+.home-v2 .hero-foot>div>span{display:block;margin-top:4px;line-height:1.5}
+.home-v2 .hero-foot{column-gap:30px;row-gap:14px}
+.home-v2 .home-zone--news{background:#f3f7ef}
+.home-v2 .home-zone--news .home-news{background:transparent;padding:28px 0 31px}
+.home-v2 .home-zone--news .home-news>.container{
+ display:grid;grid-template-columns:minmax(190px,.53fr) minmax(0,1.47fr);
+ align-items:center;gap:25px;
+}
+.home-v2 .home-zone--news .home-news-heading{
+ display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+ margin:0;min-width:0;
+}
+.home-v2 .home-zone--news .home-news-heading h2{
+ font-size:clamp(24px,2.9vw,33px);line-height:1.13;margin:6px 0 0;
+}
+.home-v2 .home-zone--news .home-news-heading .section-link{font-size:12px;white-space:normal;line-height:1.5}
+.home-v2 .home-zone--news .home-news-grid{display:block;min-width:0}
+.home-v2 .home-zone--news .home-news-card{
+ background:#fff;border:1px solid #d6e3d0;border-radius:16px;
+ padding:20px 24px;box-shadow:none;
+}
+.home-v2 .home-zone--news .home-news-featured{border-left:3px solid #9acb73}
+.home-v2 .home-zone--news .home-news-card h3{font-size:clamp(17px,1.9vw,21px);line-height:1.28;margin:9px 0}
+.home-v2 .home-zone--news .home-news-card p{font-size:12px;line-height:1.6;margin:0 0 12px}
+.home-v2 .home-zone--news .home-news-card .home-news-meta{font-size:10px}
+.home-v2 .home-zone--news .home-news-read{font-size:12px}
+
+/* Instagram bekommt einen eigenen, übersichtlichen Abschnitt. */
+.home-v2 .home-zone--activity{padding:clamp(35px,4vw,50px) 0}
+.home-v2 .home-zone--activity #instagram{background:transparent;padding:0}
+.home-v2 .home-zone--activity #instagram .section-head{margin-bottom:20px}
+.home-v2 .home-zone--activity #instagram .section-head h2{font-size:clamp(27px,3vw,37px)}
+.home-v2 .home-zone--activity .ig-feed-footnote{margin:15px 0 0}
+
+/* Community direkt unter dem Newsletter, gleiche Flächen und Akzentfarben. */
+.home-v2 .home-zone--closing{background:#f7f8f4}
+.home-v2 .home-zone--closing .newsletter-section{padding-bottom:27px}
+.home-v2 .home-zone--closing .community-spotlight{padding:0 0 49px;background:transparent}
+.home-v2 .home-zone--closing .community-panel{
+ display:grid;grid-template-columns:54px minmax(0,1fr) auto;
+ align-items:center;gap:18px;
+ background:#e9f2e4;border:1px solid #d2e3ca;
+ border-radius:16px;color:#204933;
+ padding:22px 26px;box-shadow:none;
+}
+.home-v2 .home-zone--closing .community-panel:after{display:none}
+.home-v2 .home-zone--closing .community-symbol{
+ width:54px;height:54px;border-radius:14px;
+ background:#d4e9c8;color:#2b6044;
+}
+.home-v2 .home-zone--closing .community-symbol svg{width:37px;height:37px}
+.home-v2 .home-zone--closing .community-content{max-width:650px}
+.home-v2 .home-zone--closing .community-eyebrow{font-size:10px;letter-spacing:.12em;color:#53835a}
+.home-v2 .home-zone--closing .community-content h2{
+ color:#194532;font-size:clamp(19px,2.2vw,25px);
+ margin:5px 0;line-height:1.22;
+}
+.home-v2 .home-zone--closing .community-content p,
+.home-v2 .home-zone--closing .community-content p strong{
+ color:#4f6b56;font-size:12px;line-height:1.6;
+}
+.home-v2 .home-zone--closing .community-action{
+ grid-column:auto;display:flex;align-items:center;
+ gap:5px;min-width:190px;
+}
+.home-v2 .home-zone--closing .community-join{
+ width:100%;padding:11px 15px;border-radius:999px;
+ background:#225b3e;color:#fff;border:1px solid #225b3e;
+ box-shadow:none;font-size:12px;
+}
+.home-v2 .home-zone--closing .community-join:hover{
+ background:#30704d;box-shadow:none;transform:none;
+}
+.home-v2 .home-zone--closing .community-action>span{color:#718974;font-size:10px}
+
+/* Über mich unmittelbar vor dem Abschlusskontakt. */
+.home-v2 .home-zone--personal{background:#edf2e9;border-top:1px solid #d8e3d5}
+.home-v2 .home-zone--personal #ueber-mich{padding:clamp(35px,4.5vw,55px) 0}
+.home-v2 .home-zone--personal #kontakt{
+ border-top:1px solid #d4e4d1;
+ padding:clamp(30px,3.7vw,44px) 0;
+ background:#e1edd9;
+}
+.home-v2 .home-zone--personal .about-layout{align-items:center}
+
+/* Ruhige Abstände bei Text, Links und Karten. */
+.home-v2 .home-news-meta{gap:7px 12px;flex-wrap:wrap}
+.home-v2 .newsletter-home-perks{gap:7px 10px;flex-wrap:wrap}
+.home-v2 .home-guide-card p{line-height:1.65}
+.home-v2 a:focus-visible{outline-offset:3px}
+@media(max-width:900px){
+ .home-v2 .home-zone--closing .community-panel{
+  grid-template-columns:48px minmax(0,1fr);
+  gap:13px;padding:20px;
+ }
+ .home-v2 .home-zone--closing .community-symbol{width:48px;height:48px}
+ .home-v2 .home-zone--closing .community-action{grid-column:2;min-width:0;justify-self:start;align-items:flex-start}
+}
+@media(max-width:760px){
+ .home-v2 .home-zone--news .home-news>.container{grid-template-columns:1fr;gap:16px}
+ .home-v2 .home-zone--news .home-news-heading{gap:10px}
+ .home-v2 .home-zone--news .home-news-heading h2{font-size:27px}
+ .home-v2 .home-zone--news .home-news-card{padding:19px}
+ .home-v2 .home-zone--activity{padding:36px 0}
+}
+@media(max-width:620px){
+ .home-v2 .home-zone--closing .newsletter-section{padding-bottom:22px}
+ .home-v2 .home-zone--closing .community-spotlight{padding-bottom:34px}
+ .home-v2 .home-zone--closing .community-panel{
+  grid-template-columns:1fr;gap:11px;padding:20px;
+ }
+ .home-v2 .home-zone--closing .community-action{
+  grid-column:1;align-items:stretch;width:100%;
+ }
+ .home-v2 .home-zone--closing .community-join{justify-content:center}
+ .home-v2 .home-zone--personal #kontakt .contact-inner{gap:18px}
+}
