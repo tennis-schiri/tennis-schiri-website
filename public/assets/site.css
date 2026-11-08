@@ -2677,3 +2677,10 @@ html{scroll-padding-top:112px}
 
 /* TENNILO umbrella brand with the approved TT04 Tournament product logo */
 .tennilo-tournament-mark{display:block;width:min(100%,380px);height:auto;object-fit:contain;object-position:left center;margin:14px 0 18px;border-radius:8px}
+
+/* TENNILO Score is currently the lead product while TENNILO remains the umbrella brand. */
+.tennilo-score-preview{max-width:630px;margin:18px 0 16px;padding:19px;border-radius:15px;background:#f4faf9;border:1px solid #cbdedb;box-shadow:0 8px 22px rgba(11,60,70,.045)}
+.tennilo-score-mark{display:block;width:min(100%,390px);height:auto;max-height:100px;object-fit:contain;object-position:left center;background:#fff;border-radius:9px;padding:7px}
+.tennilo-score-preview p{font-size:13px;line-height:1.68;color:#345c62;margin:13px 0 0}
+.tennilo-score-preview p span{font-weight:850;white-space:nowrap;color:#077e82}
+.tennilo-other-products{font-size:14px;line-height:1.65}
