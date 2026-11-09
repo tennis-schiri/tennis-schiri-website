@@ -1,0 +1,29 @@
+name: tennis.de – Ahlbeck-Turnierdaten nur lesen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    name: Ahlbeck 870524 im öffentlichen Browser prüfen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - name: Quellcode abrufen
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Öffentlichen Browser vorbereiten
+        shell: bash
+        run: |
+          python3 -m pip install --disable-pip-version-check --quiet selenium==4.38.0
+          google-chrome --version || chromium --version
+
+      - name: Ahlbeck-Turnier bei tennis.de lesen (ohne Login)
+        shell: bash
+        run: |
+          python3 scripts/tennis_de_ahlbeck_preview.py
