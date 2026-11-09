@@ -128,6 +128,7 @@
    const response=await fetch('./index.html',{credentials:'omit',cache:'no-store'});
    if(!response.ok)throw new Error('Katalog nicht verfügbar');
    const doc=new DOMParser().parseFromString(await response.text(),'text/html');
+   if(window.TSNuLiga?.applyToCards)await window.TSNuLiga.applyToCards(doc);
    const card=Array.from(doc.querySelectorAll('#tourney-grid > .tourney-card')).find(c=>c.id===id);
    if(!card)throw new Error('Veranstaltung unbekannt');
    const title=VALUE(card.querySelector('h3'));
@@ -173,6 +174,11 @@
     addAction($('event-registration'),destination,VALUE(registration),false,external);
    }else{
     $('event-registration').appendChild(newEl('span',VALUE(card.querySelector('.tournament-soon'))||'Weitere Informationen folgen','tournament-soon'));
+   }
+   if(!workshop&&window.TSNuLiga?.get){
+    const official=await window.TSNuLiga.get(id);
+    const source=window.TSNuLiga.validSource(official?.source_url);
+    if(source)addAction($('event-registration'),source,'Offizielle TVBB-Daten ↗',true,true);
    }
    renderMap(address);
    installCalendar(event);
