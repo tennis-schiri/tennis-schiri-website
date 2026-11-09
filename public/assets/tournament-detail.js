@@ -142,7 +142,7 @@
    const address=venueCard?VALUE(venueCard.querySelector('address')):'';
    const meta=Array.from(card.querySelectorAll('.meta-chip')).map(VALUE);
    const details=Array.from(card.querySelectorAll('.tournament-detail')).map(n=>[VALUE(n.querySelector('dt')),VALUE(n.querySelector('dd'))]).filter(pair=>pair[0]&&pair[1]);
-   const description=VALUE(card.querySelector('.workshop-event-description'));
+   const description=VALUE(card.querySelector('.workshop-event-description,.tournament-data-note'));
    const time=workshop?(place.match(/(\d{1,2}:\d{2})\s*Uhr/)||[])[1]||'':'';
    const event={id,title,location:place,date,venue,address,meta,details,type:workshop?'workshop':'turnier',time};
    const myDay=$('event-my-day');
