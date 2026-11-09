@@ -135,6 +135,23 @@
       ],
       "source_url": "https://tvbb.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/tournamentCalendar?date=2027-02-01&federation=TVBB",
       "verified_on": "2026-11-09"
+    },
+    "turnier-neuenhagen-mixed-2027": {
+      "official_title": "Indoor-MIXED-Turnier in der Gartenstadt Neuenhagen bei Berlin 2027 Neuenhagener Tennisclub 93",
+      "date_start": "2027-03-27",
+      "date_end": "2027-03-27",
+      "competitions": [
+        {
+          "name": "Mixed 40 Doppel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Mixed Aktive Doppel",
+          "lk": "1,0–25,0"
+        }
+      ],
+      "source_url": "https://tvbb.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/tournamentCalendar?date=2027-03-22&federation=TVBB",
+      "verified_on": "2026-11-09"
     }
   }
 }
