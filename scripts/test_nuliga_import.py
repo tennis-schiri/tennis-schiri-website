@@ -1,7 +1,14 @@
 """Synthetic tests for the read-only TVBB nuLiga HTML parser."""
 import datetime as dt
+import io
+import json
+import os
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
+import nuliga_import
 from nuliga_import import best_match, tournaments_from_html
 
 
@@ -42,6 +49,35 @@ class ReadOnlyParserTest(unittest.TestCase):
         items = tournaments_from_html(SAMPLE, dt.date(2026, 12, 27))
         config = {"date_start": "2027-12-27", "title_contains": ["sunball"]}
         self.assertFalse(best_match(items[0], config))
+
+
+    def test_preview_without_public_match_does_not_write_and_is_not_a_ci_error(self):
+        with tempfile.TemporaryDirectory() as temp:
+            config_file = Path(temp) / "events.json"
+            output_file = Path(temp) / "public.json"
+            config_file.write_text(json.dumps({"events": [
+                {"id": "turnier-neuenhagen-open-2027",
+                 "date_start": "2027-06-15",
+                 "title_contains": ["neuenhagen open"]}
+            ]}), encoding="utf-8")
+            env = dict(os.environ)
+            env.pop("GITHUB_STEP_SUMMARY", None)
+            stdout = io.StringIO()
+            with patch.object(nuliga_import, "CONFIG", config_file), \
+                 patch.object(nuliga_import, "DEST", output_file), \
+                 patch.object(nuliga_import, "download", return_value=("https://tvbb.liga.nu/", "<table></table>")), \
+                 patch("sys.argv", ["nuliga_import.py", "--event-id", "turnier-neuenhagen-open-2027"]), \
+                 patch.dict(os.environ, env, clear=True), \
+                 patch("sys.stdout", stdout):
+                exit_code = nuliga_import.main()
+            self.assertEqual(exit_code, 0)
+            self.assertFalse(output_file.exists())
+            self.assertIn("kein bestätigter Datenabgleich", stdout.getvalue())
+
+    def test_apply_without_explicit_approval_does_not_write(self):
+        with patch("sys.argv", ["nuliga_import.py", "--event-id", "turnier-neuenhagen-open-2027", "--apply"]), \
+             patch.dict(os.environ, {"NULIGA_IMPORT_APPROVED": ""}, clear=True):
+            self.assertEqual(nuliga_import.main(), 2)
 
 
 if __name__ == "__main__":
