@@ -45,3 +45,59 @@
     initBackToTop();
   }
 })();
+
+
+/* Seitenweiter Schalter: hell als Standard, dunkel auf ausdruecklichen Wunsch. */
+(() => {
+  "use strict";
+  const key = "tennis-schiri-theme";
+  const root = document.documentElement;
+  let saved = null;
+  try { saved = window.localStorage.getItem(key); } catch (_) { /* private mode */ }
+  root.setAttribute("data-theme", saved === "dark" ? "dark" : "light");
+
+  function initThemeToggle() {
+    const header = document.querySelector(".site-head .header-inner");
+    if (!header || header.querySelector(".theme-toggle")) return;
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "theme-toggle";
+    const symbol = document.createElement("span");
+    symbol.className = "theme-toggle-icon";
+    symbol.setAttribute("aria-hidden", "true");
+    const label = document.createElement("span");
+    label.className = "theme-toggle-label";
+    toggle.append(symbol, label);
+
+    function paint() {
+      const dark = root.getAttribute("data-theme") === "dark";
+      symbol.textContent = dark ? "☀" : "☾";
+      label.textContent = dark ? "Hell" : "Dunkel";
+      toggle.setAttribute("aria-pressed", String(dark));
+      toggle.setAttribute("aria-label", dark ? "Helles Design aktivieren" : "Dunkles Design aktivieren");
+      toggle.title = dark ? "Zum hellen Design wechseln" : "Zum dunklen Design wechseln";
+    }
+    toggle.addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { window.localStorage.setItem(key, next); } catch (_) { /* private mode */ }
+      paint();
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== key) return;
+      root.setAttribute("data-theme", event.newValue === "dark" ? "dark" : "light");
+      paint();
+    });
+
+    const mobileToggle = header.querySelector(".mobile-toggle");
+    if (mobileToggle) header.insertBefore(toggle, mobileToggle);
+    else header.appendChild(toggle);
+    paint();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initThemeToggle, { once: true });
+  } else {
+    initThemeToggle();
+  }
+})();
