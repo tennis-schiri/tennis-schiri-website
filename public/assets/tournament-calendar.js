@@ -266,6 +266,7 @@
   for(const item of upcoming)void addWeather(item.node,item.event);
  }
  async function start(){
+  if(window.TSNuLiga?.applyToCards)await window.TSNuLiga.applyToCards(document);
   const home=document.getElementById('event-list');
   const list=document.getElementById('tourney-grid');
   if(!home&&!list)return;
