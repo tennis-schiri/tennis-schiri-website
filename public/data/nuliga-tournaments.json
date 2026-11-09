@@ -1,4 +1,140 @@
 {
   "source": "TVBB nuLiga public tournament calendar",
-  "events": {}
+  "events": {
+    "turnier-bad-saarow-2026-12-27": {
+      "official_title": "2. SUNBALL TENNIS Winter-LK-Cup in Bad Saarow 2026/2027 TC Bad Saarow",
+      "date_start": "2026-12-27",
+      "date_end": "2026-12-27",
+      "competitions": [
+        {
+          "name": "Herren Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Damen Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Herren 30 Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Damen 30 Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U18 männlich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U14 männlich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U18 weiblich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U14 weiblich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Mixed Aktive Doppel",
+          "lk": "1,0–25,0"
+        }
+      ],
+      "source_url": "https://tvbb.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/tournamentCalendar?date=2026-12-21&federation=TVBB",
+      "verified_on": "2026-11-09"
+    },
+    "turnier-bad-saarow-2027-01-30": {
+      "official_title": "3. SUNBALL TENNIS Winter-LK-Cup in Bad Saarow 2026/2027 TC Bad Saarow",
+      "date_start": "2027-01-30",
+      "date_end": "2027-01-30",
+      "competitions": [
+        {
+          "name": "Herren Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Damen Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Herren 30 Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Damen 30 Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U18 männlich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U14 männlich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U18 weiblich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U14 weiblich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Mixed Aktive Doppel",
+          "lk": "1,0–25,0"
+        }
+      ],
+      "source_url": "https://tvbb.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/tournamentCalendar?date=2027-01-25&federation=TVBB",
+      "verified_on": "2026-11-09"
+    },
+    "turnier-bad-saarow-2027-02-06": {
+      "official_title": "4. SUNBALL TENNIS Winter-LK-Cup in Bad Saarow 2026/2027 TC Bad Saarow",
+      "date_start": "2027-02-06",
+      "date_end": "2027-02-06",
+      "competitions": [
+        {
+          "name": "Herren Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Damen Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Herren 30 Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Damen 30 Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U18 männlich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U14 männlich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U18 weiblich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "U14 weiblich Einzel",
+          "lk": "1,0–25,0"
+        },
+        {
+          "name": "Mixed Aktive Doppel",
+          "lk": "1,0–25,0"
+        }
+      ],
+      "source_url": "https://tvbb.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/tournamentCalendar?date=2027-02-01&federation=TVBB",
+      "verified_on": "2026-11-09"
+    }
+  }
 }
