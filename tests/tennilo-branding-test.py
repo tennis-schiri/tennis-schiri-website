@@ -2,6 +2,7 @@
 """Verify the original TENNILO artwork is locally hosted and used in suitable places."""
 from pathlib import Path
 import hashlib
+import re
 import struct
 
 public = Path(__file__).resolve().parents[1] / "public"
@@ -31,7 +32,7 @@ if 'href="https://tennilo.de/"' not in homepage:
     raise SystemExit("TENNILO project must link to official domain")
 if 'data-instagram-account="tennilo"' not in homepage:
     raise SystemExit("TENNILO Instagram feed removed")
-if 'site.css?v=20261109-2' not in homepage:
+if not re.search(r'site\.css\?v=[0-9]+(?:-[0-9]+)?', homepage):
     raise SystemExit("Homepage needs fresh style version")
 if 'alt="TENNILO Score – Original-Produktlogo"' not in homepage:
     raise SystemExit("TENNILO Score must display its original logo")

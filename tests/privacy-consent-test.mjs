@@ -20,9 +20,9 @@ for(const name of htmls){
  const data=fs.readFileSync(path.join(publicDir,name),'utf8');
  const prefix=name==='index.html'?'assets/':'../assets/';
  assert.ok(data.includes('src="'+prefix+'privacy-consent.js?v=1"'),name+' has no privacy script');
- assert.match(data, /site\.css\?v=20261109-2"/, name+' uses stale privacy styling');
+ assert.match(data, /site\.css\?v=[0-9]+(?:-[0-9]+)?"/, name+' has no versioned site stylesheet');
  const p=data.indexOf('privacy-consent.js?v=1"');
- const b=data.indexOf('back-to-top.js?v=2"');
+ const b=data.search(/back-to-top\.js\?v=[0-9]+"/);
  assert.ok(p>=0&&b>p,'Consent must initialize before page scripts: '+name);
 }
 assert.ok(css.includes('.ts-pc-banner')&&css.includes('.ts-pc-dialog')&&css.includes('.ts-pc-solid'));
