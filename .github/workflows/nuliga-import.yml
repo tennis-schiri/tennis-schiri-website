@@ -21,6 +21,10 @@ jobs:
         with:
           persist-credentials: true
 
+      - name: Parser und eindeutige Turnierzuordnung prüfen
+        shell: bash
+        run: python3 -m unittest discover -s scripts -p 'test_nuliga_import.py' -v
+
       - name: nuLiga-Turnierkalender lesen (ohne Login)
         shell: bash
         run: |
