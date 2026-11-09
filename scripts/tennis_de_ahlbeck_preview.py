@@ -92,13 +92,13 @@ def main():
                   "Die Seite erfordert möglicherweise einen anderen Zugriff.")
         with open(__import__("os").environ.get("GITHUB_STEP_SUMMARY", "/dev/null"),
                   "a", encoding="utf-8") as summary:
-            summary.write("## tennis.de – öffentliche Ahlbeck-Vorschau\\n\\n")
-            summary.write("Turnier-ID 870524 · nur gelesen · keine Anmeldung und keine Übernahme\\n\\n")
+            summary.write("## tennis.de – öffentliche Ahlbeck-Vorschau\n\n")
+            summary.write("Turnier-ID 870524 · nur gelesen · keine Anmeldung und keine Übernahme\n\n")
             summary.write("Turnierdetail erkennbar: **" +
                           ("ja" if re.search(r"manfred.{0,15}krohn", best, re.I) else "nein") +
-                          "**\\n\\n")
+                          "**\n\n")
             for item in items:
-                summary.write("- " + item.replace("<", "&lt;").replace(">", "&gt;") + "\\n")
+                summary.write("- " + item.replace("<", "&lt;").replace(">", "&gt;") + "\n")
         return 0
     finally:
         driver.quit()
