@@ -1,10 +1,34 @@
-name: nuLiga – Turnierdaten in Website übernehmen
+name: nuLiga – Turnierdaten nur nach Freigabe übernehmen
 
 on:
   workflow_dispatch:
+    inputs:
+      event_id:
+        description: 'Welches einzelne Turnier prüfen oder übernehmen?'
+        required: true
+        type: choice
+        options:
+          - turnier-bad-saarow-2026-12-27
+          - turnier-bad-saarow-2027-01-30
+          - turnier-bad-saarow-2027-02-06
+          - turnier-neuenhagen-mixed-2027
+          - turnier-neuenhagen-lk-2027-04-24
+          - turnier-neuenhagen-lk-2027-04-25
+          - turnier-neuenhagen-open-2027
+          - turnier-neuenhagen-senior-2027
+          - turnier-roha-open-2027
+          - turnier-ahlbeck-2027
+      freigabe:
+        description: 'Nur Vorschau (Standard) oder ausdrücklich freigegebene Übernahme?'
+        required: true
+        type: choice
+        default: nur_pruefen
+        options:
+          - nur_pruefen
+          - freigegeben_uebernehmen
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: tennis-schiri-nuliga-import
@@ -12,9 +36,13 @@ concurrency:
 
 jobs:
   import:
-    name: Öffentliche Turnierdaten lesen und GitHub-Katalog aktualisieren
+    name: Einzelturnier nur nach expliziter Freigabe
     runs-on: ubuntu-24.04
     timeout-minutes: 5
+    permissions:
+      contents: write
+    env:
+      SELECTED_EVENT_ID: ${{ inputs.event_id }}
     steps:
       - name: Website-Repository abrufen
         uses: actions/checkout@v7
@@ -25,13 +53,24 @@ jobs:
         shell: bash
         run: python3 -m unittest discover -s scripts -p 'test_nuliga_import.py' -v
 
-      - name: nuLiga-Turnierkalender lesen (ohne Login)
+      - name: Nur Turnier-Vorschau lesen – nichts übernehmen
+        if: ${{ inputs.freigabe != 'freigegeben_uebernehmen' }}
         shell: bash
         run: |
           set -euo pipefail
-          python3 scripts/nuliga_import.py
+          python3 scripts/nuliga_import.py --event-id "$SELECTED_EVENT_ID"
 
-      - name: Aktualisierte öffentliche Turnierdaten speichern
+      - name: Ausdrücklich freigegebenes einzelnes Turnier übernehmen
+        if: ${{ inputs.freigabe == 'freigegeben_uebernehmen' }}
+        shell: bash
+        env:
+          NULIGA_IMPORT_APPROVED: "JA"
+        run: |
+          set -euo pipefail
+          python3 scripts/nuliga_import.py --event-id "$SELECTED_EVENT_ID" --apply
+
+      - name: Ausschließlich freigegebene Daten in GitHub speichern
+        if: ${{ inputs.freigabe == 'freigegeben_uebernehmen' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -42,6 +81,6 @@ jobs:
           fi
           git config user.name "Tennis-Schiri Import Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "data: sync confirmed TVBB nuLiga tournament competitions"
+          git commit -m "data: manually approved nuLiga update for $SELECTED_EVENT_ID"
           git push origin HEAD:main
-          echo "Neue Turnierdaten sind in GitHub gespeichert. Website-Upload bitte separat starten."
+          echo "Freigegebenes Einzelturnier gespeichert. Website-Upload muss separat gestartet werden."
