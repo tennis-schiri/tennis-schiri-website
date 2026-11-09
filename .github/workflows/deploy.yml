@@ -28,6 +28,11 @@ jobs:
           for file in \
             public/index.html \
             public/turniere/index.html \
+            public/turniere/termin.html \
+            public/statistiken/index.html \
+            public/newsletter/index.html \
+            public/lk-turnier/index.html \
+            public/mein-turniertag/index.html \
             public/ueber-mich/index.html \
             public/referenzen/index.html \
             public/leistungen/index.html \
@@ -91,6 +96,11 @@ jobs:
             public/assets/michael-wiedeck-tennis.jpg \
             public/assets/michael-wiedeck-spiel.jpg \
             public/turniere/index.html \
+            public/turniere/termin.html \
+            public/statistiken/index.html \
+            public/newsletter/index.html \
+            public/lk-turnier/index.html \
+            public/mein-turniertag/index.html \
             public/ueber-mich/index.html \
             public/referenzen/index.html \
             public/leistungen/index.html \
