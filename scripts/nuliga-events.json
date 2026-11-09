@@ -1,0 +1,87 @@
+{
+  "events": [
+    {
+      "id": "turnier-bad-saarow-2026-12-27",
+      "date_start": "2026-12-27",
+      "title_contains": [
+        "sunball tennis winter-lk-cup"
+      ],
+      "club_contains": "tc bad saarow"
+    },
+    {
+      "id": "turnier-bad-saarow-2027-01-30",
+      "date_start": "2027-01-30",
+      "title_contains": [
+        "sunball tennis winter-lk-cup"
+      ],
+      "club_contains": "tc bad saarow"
+    },
+    {
+      "id": "turnier-bad-saarow-2027-02-06",
+      "date_start": "2027-02-06",
+      "title_contains": [
+        "sunball tennis winter-lk-cup"
+      ],
+      "club_contains": "tc bad saarow"
+    },
+    {
+      "id": "turnier-neuenhagen-mixed-2027",
+      "date_start": "2027-03-27",
+      "title_contains": [
+        "mixed-turnier",
+        "mixed turnier"
+      ],
+      "club_contains": "neuenhagen"
+    },
+    {
+      "id": "turnier-neuenhagen-lk-2027-04-24",
+      "date_start": "2027-04-24",
+      "title_contains": [
+        "lk-turnier",
+        "lk turnier"
+      ],
+      "club_contains": "neuenhagen"
+    },
+    {
+      "id": "turnier-neuenhagen-lk-2027-04-25",
+      "date_start": "2027-04-25",
+      "title_contains": [
+        "lk-turnier",
+        "lk turnier"
+      ],
+      "club_contains": "neuenhagen"
+    },
+    {
+      "id": "turnier-neuenhagen-open-2027",
+      "date_start": "2027-06-15",
+      "title_contains": [
+        "neuenhagen open"
+      ],
+      "club_contains": "neuenhagen"
+    },
+    {
+      "id": "turnier-neuenhagen-senior-2027",
+      "date_start": "2027-06-18",
+      "title_contains": [
+        "neuenhagen senior open"
+      ],
+      "club_contains": "neuenhagen"
+    },
+    {
+      "id": "turnier-roha-open-2027",
+      "date_start": "2027-06-24",
+      "title_contains": [
+        "roha open"
+      ],
+      "club_contains": "rotation"
+    },
+    {
+      "id": "turnier-ahlbeck-2027",
+      "date_start": "2027-08-19",
+      "title_contains": [
+        "manfred-krohn"
+      ],
+      "club_contains": "ahlbeck"
+    }
+  ]
+}
