@@ -2684,3 +2684,187 @@ html{scroll-padding-top:112px}
 .tennilo-score-preview p{font-size:13px;line-height:1.68;color:#345c62;margin:13px 0 0}
 .tennilo-score-preview p span{font-weight:850;white-space:nowrap;color:#077e82}
 .tennilo-other-products{font-size:14px;line-height:1.65}
+
+
+/* Tennis-Schiri 1.5: umschaltbares Farbschema */
+.site-head .header-inner { gap: clamp(10px, 1.35vw, 20px); }
+.site-head .nav { gap: clamp(10px, 1.4vw, 20px); }
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  flex: none; min-height: 40px; padding: 8px 12px;
+  border: 1px solid rgba(219,244,221,.38); border-radius: 999px;
+  background: rgba(255,255,255,.07); color: #edf7ef;
+  font-size: 12px; font-weight: 800; line-height: 1; cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.theme-toggle:hover { background: rgba(200,241,109,.17); border-color: #c8f16d; }
+.theme-toggle:focus-visible { outline: 3px solid #c8f16d; outline-offset: 3px; }
+.theme-toggle-icon { font-size: 19px; line-height: 1; width: 20px; text-align: center; }
+html[data-theme="dark"] .theme-toggle { background: #c8f16d; color: #18372a; border-color: #c8f16d; }
+html[data-theme="dark"] .theme-toggle:hover { background: #e2ffac; }
+@media (min-width:851px) and (max-width:1180px) {
+  .site-head .brand-logo img { width: 197px; }
+  .site-head .nav a { font-size: 11px; }
+  .site-head .header-action { padding: 11px 12px; font-size: 11px; }
+}
+@media (min-width:851px) and (max-width:990px) {
+  .site-head .header-action { display:none; }
+}
+@media (max-width:850px) {
+  .theme-toggle { padding: 8px 10px; min-width: 42px; min-height: 42px; }
+  .theme-toggle-label { display: none; }
+}
+@media (max-width:620px) {
+  .theme-toggle { margin-left: auto; }
+}
+@media (max-width:380px) {
+  .site-head .brand-logo img { width: 165px; }
+  .site-head .header-inner { gap: 8px; }
+}
+
+/* Darkmode ist bewusst opt-in: der helle Auftritt bleibt Standard. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cream: #101f1b;
+  --offwhite: #152b24;
+  --ink: #eef6ed;
+  --muted: #b3c7b6;
+  --stroke: #365247;
+  --ts-bg: #101f1b;
+  --ts-alt: #142820;
+  --ts-panel: #19332a;
+  --ts-panel-raised: #203d32;
+  --ts-line: #365448;
+  --ts-text: #edf6eb;
+  --ts-muted: #b8cdbd;
+  --ts-link: #c8f16d;
+}
+html[data-theme="dark"] body { background: var(--ts-bg); color: var(--ts-text); }
+html[data-theme="dark"] .home-v2 {
+  --home-bg: var(--ts-bg);
+  --home-alt: var(--ts-alt);
+  --home-ink: var(--ts-text);
+  --home-line: var(--ts-line);
+  --home-card: var(--ts-panel);
+  background: var(--ts-bg);
+}
+html[data-theme="dark"] .site-head { background: rgba(10,27,22,.97); }
+@supports(backdrop-filter:blur(12px)) {
+  html[data-theme="dark"] .site-head { background: rgba(10,27,22,.91); }
+}
+html[data-theme="dark"] .nav.open { background: #18392b; }
+html[data-theme="dark"] :is(.inner-section, .services, .rules, .rules-library, .stats-page-section, .newsletter-page-content, .news-overview, .home-news, .ig-feed-section, .news-spotlight) {
+  background: var(--ts-bg); color: var(--ts-text);
+}
+html[data-theme="dark"] :is(.notice-band, .info-note, .stats-source-note, .stats-match-note, .stats-age-foot-note, .tourney-weather) {
+  background: var(--ts-alt); color: var(--ts-muted); border-color: var(--ts-line);
+}
+html[data-theme="dark"] :is(.quicknav-inner, .service, .card-panel, .event-group, .tourney-card, .venue-card, .partner-card, .ig-account, .ig-empty, .stats-kpi, .stats-chart-card, .stats-table-wrap, .stats-age-foot-note, .news-index-card, .news-archive-card, .news-article-detail, .news-list .news-article-body, .home-news-card, .tennis-quote-line, .lk-home-teaser, .mt-home-promo, .workshop-registration-card, .workshop-signup-home, .rules-case, .rules-further article, .newsletter-signup-home, .newsletter-signup-light, .newsletter-form-card) {
+  background: var(--ts-panel); color: var(--ts-text); border-color: var(--ts-line);
+}
+html[data-theme="dark"] :is(.quick:hover, .event:hover, .event.tournament-row:hover, .venue-event-list a:hover, .venue-event-list a:focus-visible, .stats-year-table tbody tr:hover, .tourney-page-btn:hover:not(:disabled)) {
+  background: var(--ts-panel-raised);
+}
+html[data-theme="dark"] :is(.events, .event, .event.tournament-row, .quick + .quick, .date-line, .venue-event-list, .stats-year-table td, .stats-year-table th, .tourney-status-row, .tennis-quote-strip, .stats) {
+  border-color: var(--ts-line);
+}
+html[data-theme="dark"] :is(.datebox, .taglist span, .partner-wordmark, .service-number, .meta-chip, .tournament-soon, .filter, .tourney-page-btn, .stats-age-filter button, .mt-calendar-links a, .rules-filter, .rules-search, .community-symbol, .news-list .news-article-summary-action, .tennis-quote-actions button) {
+  background: var(--ts-panel-raised); color: var(--ts-text); border-color: var(--ts-line);
+}
+html[data-theme="dark"] :is(.meta-chip.type-lk, .meta-chip.type-rl) { color: #e0f6b8; border-color: #648b4b; }
+html[data-theme="dark"] :is(.filter.active, .filter:hover, .rules-filter[aria-pressed="true"], .stats-age-filter button.is-active) {
+  background: #c8f16d; border-color: #c8f16d; color: #193a29;
+}
+html[data-theme="dark"] :is(.tournament-cta, .btn-dark, .newsletter-signup-light .newsletter-submit) {
+  background: #b9e875; color: #173524;
+}
+html[data-theme="dark"] :is(.tournament-cta:hover, .btn-dark:hover) { background: #d9ffa6; }
+html[data-theme="dark"] .featured-tournament .tournament-cta { background: #c8f16d; color: #193322; }
+html[data-theme="dark"] .featured-tournament .meta-chip { background: rgba(255,255,255,.10); color: #eff9e9; border-color: rgba(255,255,255,.23); }
+html[data-theme="dark"] .featured-tournament .meta-chip.type-lk { background: #d7f6a1; color: #203c2a; }
+html[data-theme="dark"] .archived-tourney { background: #14261e; opacity: .9; }
+html[data-theme="dark"] .archived-tourney .tourney-actions > .tournament-cta { background: #264739; color: #d6e9d8; }
+html[data-theme="dark"] :is(.prose p, .prose li, .prose .lead, .card-panel p, .card-panel li, .event-group p, .date-line span, .tourney-card .where, .event-where, .event-group .small, .venue-intro, .venue-meta address, .ig-empty p, .ig-post-caption, .ig-feed-footnote, .partner-card p, .stats-source-note p, .newsletter-home-info, .newsletter-page-content p, .news-article-body p, .news-index-card p, .news-archive-card p, .rules-library-intro p, .rules-case-answer p, .rules-further p, .workshop-registration-intro p, .lk-home-teaser-copy p, .mt-home-promo p) {
+  color: var(--ts-muted);
+}
+html[data-theme="dark"] :is(.quick-index, .partner-kind, .tourney-card .category-note, .datebox .month, .venue-event-date, .rule-answer span, .stat span, .ig-account-identity p) { color: #abc7b2; }
+html[data-theme="dark"] :is(.partner-open, .ig-profile-link, .ig-empty-link, .section-link, .rules-further a, .rules-case-answer a, .venue-event-arrow, .mt-calendar-links a, .home-guide-action, .news-list a) { color: var(--ts-link); }
+html[data-theme="dark"] .partner-original .partner-logo-frame { background: #fff; border-color: #e5ede5; }
+html[data-theme="dark"] .partner-original .partner-logo-pending { background: var(--ts-panel-raised); border-color: var(--ts-line); }
+html[data-theme="dark"] .partner-original .partner-logo-pending span { color: var(--ts-muted); }
+html[data-theme="dark"] .stats-year-table tbody { background: var(--ts-panel); color: var(--ts-text); }
+html[data-theme="dark"] .stats-year-table thead { background: #285740; }
+html[data-theme="dark"] :is(.stats-bar-track, .stats-match-progress) { background: #38554a; }
+html[data-theme="dark"] :is(.stats-match-metric, .stats-age-note, .stats-table-filter, .stats-age-filter, .rules-case-answer, .rules-library-note, .rules-count, .rules-empty) {
+  border-color: var(--ts-line); color: var(--ts-text);
+}
+html[data-theme="dark"] :is(.rules-case-answer, .rules-library-note) { background: var(--ts-alt); }
+html[data-theme="dark"] :is(.rules-case-answer strong, .rules-library-note strong, .rules-further h3, .stats-kpi strong, .rules-case summary strong) { color: var(--ts-text); }
+html[data-theme="dark"] :is(.home-news-featured, .news-index-latest, .news-list .news-article-featured) {
+  background: linear-gradient(130deg,#23492e,#1a3529 75%); border-color: #6b965a;
+}
+html[data-theme="dark"] .news-list .news-article-body { background: var(--ts-panel); }
+html[data-theme="dark"] .tennis-quote-strip { background: var(--ts-alt); }
+html[data-theme="dark"] :is(.tennis-quote-actions button, .tennis-quote-actions a) { color: #c8f16d; }
+html[data-theme="dark"] :is(.news-article-detail > summary, .news-article-summary, .news-article-detail .news-article-body) { color: var(--ts-text); }
+html[data-theme="dark"] :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select) {
+  background: #11271f; color: #f0f8ee; border-color: #52705c;
+}
+html[data-theme="dark"] :is(input, textarea, select)::placeholder { color: #afc2b5; opacity: 1; }
+html[data-theme="dark"] :is(input, textarea, select, button, a):focus-visible {
+  outline-color: #c8f16d;
+}
+
+/* Startseite: eigene Zonen und Karten mit gleichbleibender visueller Hierarchie. */
+html[data-theme="dark"] .home-v2 :is(.home-zone--news, .home-zone--services, .home-zone--closing, .home-zone--personal, .home-zone--calendar) {
+  background: var(--ts-bg); border-color: var(--ts-line);
+}
+html[data-theme="dark"] .home-v2 :is(.home-zone--knowledge, .home-zone--profile, .home-zone--activity) {
+  background: var(--ts-alt); border-color: var(--ts-line);
+}
+html[data-theme="dark"] .home-v2 :is(.home-zone--personal #kontakt, #kontakt) {
+  background: #1c3a2b; border-color: var(--ts-line); color: var(--ts-text);
+}
+html[data-theme="dark"] .home-v2 :is(.quicknav, .tennis-quote-strip) {
+  background: var(--ts-alt); border-color: var(--ts-line);
+}
+html[data-theme="dark"] .home-v2 :is(.quicknav-inner, .quick, .tennis-quote-line) {
+  background: transparent;
+}
+html[data-theme="dark"] .home-v2 .quick:hover { background: var(--ts-panel-raised); }
+html[data-theme="dark"] .home-v2 :is(.quick h3, .home-guide-card h3, .home-workshop-details > summary strong, .home-news-card h3, .community-content h2, .section-head h2, .home-zone-heading h2, .newsletter-home-copy h2, .about h2, #kontakt h2) {
+  color: var(--ts-text);
+}
+html[data-theme="dark"] .home-v2 :is(.quick p, .home-guide-card p, .home-news-card p, .community-content p, .community-content p strong, .home-zone-heading p, .section-head .small, .fineprint, .home-zone--closing .community-content p, .home-zone--closing .community-content p strong) {
+  color: var(--ts-muted);
+}
+html[data-theme="dark"] .home-v2 :is(.home-guide-card, .home-news-card, .community-panel, .ig-account, .home-workshop-details, .workshop-registration-card, .newsletter-signup-home) {
+  background: var(--ts-panel); color: var(--ts-text); border-color: var(--ts-line);
+}
+html[data-theme="dark"] .home-v2 :is(.hero-stat, .hero-side .hero-plate) {
+  background: #1d3c30; border-color: #60836a; color: #eef6ec;
+}
+html[data-theme="dark"] .home-v2 :is(.hero-stat-value, .hero-stat-label, .hero-stat-detail, .hero-plate-title, .hero-plate-place, .hero-plate-cta, .hero-plate .date) { color: #eff9ed; }
+html[data-theme="dark"] .home-v2 :is(.hero-stat-period, .hero-stat-actions button, .hero-stat-link, .hero-stat .small, .hero-plate .small) {
+  color: #c9e9bd;
+}
+html[data-theme="dark"] .home-v2 .hero-stat-actions button { border-color: #63886b; background: #2c5540; }
+html[data-theme="dark"] .home-v2 .hero-side .hero-plate .small { background: #2c5d42; border-color: #2c5d42; }
+html[data-theme="dark"] .home-v2 .home-workshop-details .workshop-signup-home {
+  background: #1a3429; border-color: var(--ts-line);
+}
+html[data-theme="dark"] .home-v2 .home-workshop-details .workshop-registration-card { background: var(--ts-panel); }
+html[data-theme="dark"] .home-v2 .community-join { background: #2b5b3e; border-color: #538a5b; color: #eff9ea; }
+html[data-theme="dark"] .home-v2 .community-join:hover { background: #356e4a; }
+html[data-theme="dark"] .home-v2 .home-zone--closing .community-join {
+  background: #c8f16d; color: #1c3d29; border-color: #c8f16d;
+}
+html[data-theme="dark"] .home-v2 .home-zone--closing .community-action > span { color: #b5cdb8; }
+html[data-theme="dark"] .home-v2 .home-zone--personal #kontakt .eyebrow { color: #bbe589; }
+html[data-theme="dark"] .home-v2 .home-news-featured { background: var(--ts-panel-raised); border-color: #638c52; }
+html[data-theme="dark"] .home-v2 .service-next-date { background: #274935; color: #deecda; border-color: #5e7a57; }
+html[data-theme="dark"] .home-v2 .home-guide-action { color: var(--ts-link); }
+html[data-theme="dark"] :is(.workshop-event, .workshop-event .meta-chip) { border-color: #7885c9!important; }
+html[data-theme="dark"] .workshop-event { background: #252a4d!important; }
+html[data-theme="dark"] .workshop-event :is(.event-title, h3, .workshop-event-description, .workshop-event-label) { color: #e0e6ff; }
+html[data-theme="dark"] .workshop-event .meta-chip { background: #353e6f; color: #f1f3ff; }
