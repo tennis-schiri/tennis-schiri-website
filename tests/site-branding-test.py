@@ -17,7 +17,8 @@ for html in pages:
     if data.count(expected)!=2:
         raise SystemExit(f"Header/Footer ohne freigegebenes Logo: {html}")
     for required in [
-        '<link rel="icon" type="image/png" href="/assets/branding/ts-favicon.png">',
+        '<link rel="icon" type="image/png" href="/assets/branding/ts-favicon.png?v=20261109-1">',
+        '<link rel="apple-touch-icon" href="/assets/branding/ts-favicon.png?v=20261109-1">',
         '<meta property="og:image" content="https://tennis-schiri.de/assets/branding/ts-logo-ball.png">',
     ]:
         if required not in data:
