@@ -1,3 +1,4 @@
+/* Source fingerprint MW-TSW-2026-6e41b9a2 | Copyright (c) 2026 Michael Wiedeck. All rights reserved. */
 /* Gemeinsamer, barrierearmer Zurueck-nach-oben-Button fuer alle Seiten. */
 (() => {
   "use strict";
