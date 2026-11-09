@@ -1,0 +1,43 @@
+name: nuLiga – Turnierdaten in Website übernehmen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tennis-schiri-nuliga-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    name: Öffentliche Turnierdaten lesen und GitHub-Katalog aktualisieren
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Website-Repository abrufen
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+
+      - name: nuLiga-Turnierkalender lesen (ohne Login)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/nuliga_import.py
+
+      - name: Aktualisierte öffentliche Turnierdaten speichern
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- public/data/nuliga-tournaments.json
+          if git diff --cached --quiet; then
+            echo "Keine neuen Turnierdaten."
+            exit 0
+          fi
+          git config user.name "Tennis-Schiri Import Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: sync confirmed TVBB nuLiga tournament competitions"
+          git push origin HEAD:main
+          echo "Neue Turnierdaten sind in GitHub gespeichert. Website-Upload bitte separat starten."
