@@ -178,7 +178,12 @@ def main():
                 url, html = download(week)
                 parsed = tournaments_from_html(html, start)
                 fetched[week] = (url, parsed)
-                print(f"Kalender {week}: {len(parsed)} Turniereinträge gelesen")
+                table_rows = html.lower().count("<tr")
+                print(f"Kalender {week}: {len(parsed)} Turniereinträge erkannt "
+                      f"(HTML {len(html)} Zeichen, Tabellenzeilen ca. {table_rows})")
+                if not parsed:
+                    print("::warning::Keine Turniere erkennbar – Kalender eventuell leer, "
+                          "noch nicht veröffentlicht oder HTML-Struktur abweichend.")
             except Exception as error:
                 print(f"::warning::Kalender {week} nicht abrufbar: {type(error).__name__}")
                 fetched[week] = (None, [])
@@ -208,8 +213,20 @@ def main():
         print(f"{config['id']}: {len(labels)} Konkurrenzen übernommen")
 
     if not results:
-        print("::error::Kein Turnier eindeutig zugeordnet: Import abgebrochen")
-        return 1
+        if args.apply:
+            print("::error::Keine verlässlichen Turnierdaten gefunden; nichts übernehmen.")
+            return 1
+        print("::warning::VORSCHAU: Turnier nicht im öffentlichen Kalender erkannt. "
+              "Keine Daten übernommen. Dies ist kein bestätigter Datenabgleich.")
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+                summary.write("## Vorschau: kein bestätigter Treffer\n\n")
+                summary.write(f"Turnier: \`{args.event_id}\`\n\n")
+                summary.write("Der öffentliche TVBB-Kalender hat keine eindeutig passenden "
+                              "Datensätze geliefert. **Nichts wurde übernommen.**\n\n")
+                summary.write("Mögliche Gründe: Termin noch nicht veröffentlicht, "
+                              "keine Treffer oder geänderte HTML-Struktur.\n")
+        return 0
     if not args.apply:
         print("VORSCHAU – keine Dateien geändert, keine Turniere übernommen.")
         for key, item in results.items():
