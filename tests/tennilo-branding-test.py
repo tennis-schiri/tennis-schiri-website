@@ -8,6 +8,7 @@ public = Path(__file__).resolve().parents[1] / "public"
 assets = public / "assets"
 logos = {
     "tennilo-logo.png": ("032347385953a24aa3cc77c944c8c1c0d51459a9", (4000, 723)),
+    "tennilo-score-logo.png": ("356cbf1c0b517d3c5d82db4b3ada56e0a290b213", (863, 121)),
     "tennilo-icon.png": ("28ff5eec0e6cdbf890c727c47c1b496deb68919c", (2048, 2048)),
 }
 for name, (expected_hash, expected_size) in logos.items():
@@ -30,8 +31,12 @@ if 'href="https://tennilo.de/"' not in homepage:
     raise SystemExit("TENNILO project must link to official domain")
 if 'data-instagram-account="tennilo"' not in homepage:
     raise SystemExit("TENNILO Instagram feed removed")
-if 'site.css?v=20261109-1' not in homepage:
+if 'site.css?v=20261109-2' not in homepage:
     raise SystemExit("Homepage needs fresh style version")
+if 'alt="TENNILO Score – Original-Produktlogo"' not in homepage:
+    raise SystemExit("TENNILO Score must display its original logo")
+if '27. Dezember 2026' not in homepage or 'Bad Saarow' not in homepage:
+    raise SystemExit("Score beta milestones must be visible")
 if ".tennilo-brand-card" not in css or ".ig-tennilo-wordmark" not in css:
     raise SystemExit("TENNILO logo styling missing")
 if 'background:url("tennilo-icon.png")' in css:
