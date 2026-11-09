@@ -2707,7 +2707,7 @@ html[data-theme="dark"] .theme-toggle:hover { background: #e2ffac; }
   .site-head .nav a { font-size: 11px; }
   .site-head .header-action { padding: 11px 12px; font-size: 11px; }
 }
-@media (min-width:851px) and (max-width:990px) {
+@media (min-width:851px) and (max-width:1100px) {
   .site-head .header-action { display:none; }
 }
 @media (max-width:850px) {
