@@ -17,13 +17,18 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Python-Umgebung vorbereiten
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
       - name: Öffentlichen Browser vorbereiten
         shell: bash
         run: |
-          python3 -m pip install --disable-pip-version-check --quiet selenium==4.38.0
+          python -m pip install --disable-pip-version-check --quiet selenium==4.38.0
           google-chrome --version || chromium --version
 
       - name: Ahlbeck-Turnier bei tennis.de lesen (ohne Login)
         shell: bash
         run: |
-          python3 scripts/tennis_de_ahlbeck_preview.py
+          python scripts/tennis_de_ahlbeck_preview.py
