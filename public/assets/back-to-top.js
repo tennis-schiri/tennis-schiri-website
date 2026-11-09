@@ -34,7 +34,17 @@
 
     button.addEventListener("click", () => {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({ top: 0, behavior: reducedMotion ? "instant" : "smooth" });
+      if (!reducedMotion) {
+        button.classList.remove("is-launching");
+        window.requestAnimationFrame(() => button.classList.add("is-launching"));
+      }
+      window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+    });
+
+    button.addEventListener("animationend", (event) => {
+      if (event.animationName === "ts-back-to-top-launch") {
+        button.classList.remove("is-launching");
+      }
     });
 
     updateVisibility();

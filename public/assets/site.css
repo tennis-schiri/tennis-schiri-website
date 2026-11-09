@@ -777,6 +777,19 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   flex:none;
   width:22px;
   height:22px;
+  transform-origin:center;
+  animation:ts-back-to-top-float 2.4s ease-in-out infinite;
+}
+@keyframes ts-back-to-top-float{
+  0%,100%{transform:translateY(1px)}
+  50%{transform:translateY(-4px)}
+}
+.back-to-top.is-visible:hover svg{animation-duration:.85s}
+.back-to-top.is-launching svg{animation:ts-back-to-top-launch .55s cubic-bezier(.2,.65,.2,1) both}
+@keyframes ts-back-to-top-launch{
+  0%{transform:translateY(0) scale(1);opacity:1}
+  38%{transform:translateY(-7px) scale(1.16);opacity:1}
+  100%{transform:translateY(-18px) scale(.78);opacity:0}
 }
 .back-to-top.is-visible{
   opacity:1;
@@ -809,6 +822,9 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 @media(prefers-reduced-motion:reduce){
   .back-to-top{transition:none}
   .back-to-top.is-visible:hover{transform:none}
+  .back-to-top svg,
+  .back-to-top.is-visible:hover svg,
+  .back-to-top.is-launching svg{animation:none!important}
 }
 
 
