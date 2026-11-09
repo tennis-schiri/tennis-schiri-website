@@ -80,7 +80,7 @@ def export(target:Path) -> None:
         legacy.write_text(
             f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 {size} {size}" role="img" aria-label="Tennis-Schiri">'
             '<image href="data:image/png;base64,'+encoded+f'" width="{size}" height="{size}"/>'
-            '</svg>\\n',encoding="utf-8"
+            '</svg>\n',encoding="utf-8"
         )
         print("Legacy favicon.svg auf Original-TS-09c-Grafik aktualisiert")
 
