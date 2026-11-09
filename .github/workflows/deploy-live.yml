@@ -191,6 +191,7 @@ jobs:
           php -l tests/newsletter-partners-test.php
           php tests/newsletter-partners-test.php
           python tests/site-branding-test.py
+          python tests/favicon-test.py
           test -s public/newsletter/index.html
           # Private Konfiguration und personenbezogene Datensaetze gehoeren nicht ins Repository.
           test ! -e public/tennis-schiri-newsletter-config.php
