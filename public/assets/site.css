@@ -2869,3 +2869,18 @@ html[data-theme="dark"] :is(.workshop-event, .workshop-event .meta-chip) { borde
 html[data-theme="dark"] .workshop-event { background: #252a4d!important; }
 html[data-theme="dark"] .workshop-event :is(.event-title, h3, .workshop-event-description, .workshop-event-label) { color: #e0e6ff; }
 html[data-theme="dark"] .workshop-event .meta-chip { background: #353e6f; color: #f1f3ff; }
+
+
+/* nuLiga: publicly verified competition data and official source link. */
+.nuliga-source{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 12px;border:1px solid #a9c4ab;border-radius:999px;
+  color:#245c40;font-size:11px;font-weight:850;line-height:1.3;
+  text-decoration:none;white-space:nowrap;
+}
+.nuliga-source:hover{background:#e8f2e2;border-color:#7fac7c}
+.nuliga-source:focus-visible{outline:3px solid #82b65a;outline-offset:3px}
+html[data-theme="dark"] .nuliga-source{
+  background:#234433;border-color:#5b8c63;color:#dcf3bf;
+}
+html[data-theme="dark"] .nuliga-source:hover{background:#305741}
