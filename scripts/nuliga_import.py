@@ -4,8 +4,10 @@
 No login, no personal data, no requests that modify nuLiga.
 Only explicitly allowlisted Tennis-Schiri events are matched.
 """
+import argparse
 import datetime as dt
 import json
+import os
 import re
 import sys
 import unicodedata
@@ -150,7 +152,18 @@ def best_match(source, config):
 
 
 def main():
-    entries = json.loads(CONFIG.read_text(encoding="utf-8"))["events"]
+    parser = argparse.ArgumentParser(description="Einzelnes nuLiga-Turnier nur nach Freigabe übernehmen")
+    parser.add_argument("--event-id", required=True, help="Eindeutige ID des freigegebenen Turniers")
+    parser.add_argument("--apply", action="store_true", help="Erst nach ausdrücklicher Freigabe übernehmen")
+    args = parser.parse_args()
+    entries = [e for e in json.loads(CONFIG.read_text(encoding="utf-8"))["events"]
+               if e["id"] == args.event_id]
+    if len(entries) != 1:
+        print("::error::Turnier-ID unbekannt oder nicht eindeutig; keine Übernahme.")
+        return 2
+    if args.apply and os.environ.get("NULIGA_IMPORT_APPROVED") != "JA":
+        print("::error::Keine ausdrückliche Importfreigabe vorhanden; keine Übernahme.")
+        return 2
     previous = json.loads(DEST.read_text(encoding="utf-8")) if DEST.exists() else {"events": {}}
     existing = previous.get("events", {})
     results = {}
@@ -197,6 +210,20 @@ def main():
     if not results:
         print("::error::Kein Turnier eindeutig zugeordnet: Import abgebrochen")
         return 1
+    if not args.apply:
+        print("VORSCHAU – keine Dateien geändert, keine Turniere übernommen.")
+        for key, item in results.items():
+            print(f"{key}: {item['official_title']} – {len(item['competitions'])} Konkurrenzen")
+            for comp in item["competitions"]:
+                print(f"  - {comp['name']}" + (f" (LK {comp['lk']})" if comp.get("lk") else ""))
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+                summary.write("## Vorschau – keine Daten übernommen\n\n")
+                for key, item in results.items():
+                    summary.write(f"- {key}: {len(item['competitions'])} Konkurrenzen\n")
+                summary.write("\nFür eine Übernahme ist eine separate ausdrückliche Freigabe erforderlich.\n")
+        return 0
+
     # Keep older confirmed events where nuLiga has no current data.
     merged = dict(existing)
     for key, item in results.items():
