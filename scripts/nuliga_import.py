@@ -221,7 +221,7 @@ def main():
         if os.environ.get("GITHUB_STEP_SUMMARY"):
             with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
                 summary.write("## Vorschau: kein bestätigter Treffer\n\n")
-                summary.write(f"Turnier: \`{args.event_id}\`\n\n")
+                summary.write(f"Turnier-ID: {args.event_id}\n\n")
                 summary.write("Der öffentliche TVBB-Kalender hat keine eindeutig passenden "
                               "Datensätze geliefert. **Nichts wurde übernommen.**\n\n")
                 summary.write("Mögliche Gründe: Termin noch nicht veröffentlicht, "
