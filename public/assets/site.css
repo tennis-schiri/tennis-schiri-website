@@ -2900,3 +2900,15 @@ html[data-theme="dark"] .nuliga-source{
   background:#234433;border-color:#5b8c63;color:#dcf3bf;
 }
 html[data-theme="dark"] .nuliga-source:hover{background:#305741}
+
+/* Ahlbeck tournament source note */
+.tournament-data-note {
+  margin: 10px 0 6px;
+  padding: 10px 12px;
+  border-left: 3px solid #8aaf78;
+  color: inherit;
+  font-size: .85rem;
+  line-height: 1.6;
+  opacity: .9;
+}
+html[data-theme="dark"] .tournament-data-note { border-left-color: #9ac886; }
