@@ -1,0 +1,114 @@
+name: nuLiga – Turnierdaten-Test (nur lesen)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nuliga-readonly-test
+  cancel-in-progress: false
+
+jobs:
+  check-public-tournament:
+    name: SUNBALL-Turnier im öffentlichen TVBB-Kalender prüfen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - name: Kalender einmalig abrufen und Treffer zusammenfassen
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from urllib.request import Request, urlopen
+          from urllib.parse import urlparse
+          import os
+          import re
+          import sys
+
+          URL = "https://tvbb.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/tournamentCalendar?date=2026-12-21&federation=TVBB"
+          SEARCH = "sunball tennis winter-lk-cup"
+
+          class CalendarRows(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True)
+                  self.rows = []
+                  self.row = None
+                  self.cell = None
+                  self.visible = []
+                  self.links = []
+
+              def handle_starttag(self, tag, attrs):
+                  if tag == "tr":
+                      self.row = []
+                  if tag in ("td", "th") and self.row is not None:
+                      self.cell = []
+                  if tag == "a":
+                      href = dict(attrs).get("href", "")
+                      if urlparse(href).netloc in ("www.tennis.de", "tennis.de"):
+                          self.links.append(href)
+
+              def handle_data(self, text):
+                  self.visible.append(text)
+                  if self.cell is not None:
+                      self.cell.append(text)
+
+              def handle_endtag(self, tag):
+                  if tag in ("td", "th") and self.cell is not None and self.row is not None:
+                      value = re.sub(r"\s+", " ", " ".join(self.cell)).strip()
+                      self.row.append(value)
+                      self.cell = None
+                  if tag == "tr" and self.row is not None:
+                      self.rows.append(self.row)
+                      self.row = None
+
+          try:
+              req = Request(URL, headers={"User-Agent": "TennisSchiri-ReadOnly-Check/1.0"})
+              with urlopen(req, timeout=20) as response:
+                  if response.status != 200:
+                      raise RuntimeError("Kalender antwortete nicht mit HTTP 200")
+                  charset = response.headers.get_content_charset() or "utf-8"
+                  document = response.read(1_500_000).decode(charset, errors="replace")
+          except Exception as exc:
+              print(f"::error::Der öffentliche nuLiga-Kalender konnte nicht geladen werden: {type(exc).__name__}")
+              sys.exit(1)
+
+          parser = CalendarRows()
+          parser.feed(document)
+          text = re.sub(r"\s+", " ", " ".join(parser.visible)).lower()
+          found = SEARCH in text
+          rows = [r for r in parser.rows if SEARCH in " ".join(r).lower()]
+
+          summary = [
+              "## nuLiga – öffentlicher, lesender Test",
+              "",
+              "- Quelle: [TVBB-Turnierkalender KW 52/2026](" + URL + ")",
+              "- Testturnier: SUNBALL TENNIS Winter-LK-Cup, 27.12.2026",
+              "- Login: **nicht verwendet**",
+              "- Änderungen an nuLiga oder tennis-schiri.de: **keine**",
+              "- Ergebnis: **" + ("Treffer gefunden" if found else "kein Treffer gefunden") + "**",
+              "",
+          ]
+          if rows:
+              summary.append("### Erkannte Tabellenzeilen")
+              for row in rows[:5]:
+                  cells = [cell[:240] for cell in row if cell]
+                  summary.append("- " + " | ".join(cells))
+          if found and not rows:
+              summary.append("Der Turniername ist im HTML vorhanden; die Tabellenstruktur muss für den Import noch angepasst werden.")
+
+          for url in parser.links:
+              if "detail/" in url and "sunball" not in url.lower():
+                  # Links sind nur Zusatzinformation; keine Zuordnung ohne eindeutige HTML-Struktur.
+                  continue
+
+          output = "\n".join(summary) + "\n"
+          print(output)
+          if os.environ.get("GITHUB_STEP_SUMMARY"):
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as report:
+                  report.write(output)
+          if not found:
+              print("::error::Das erwartete Turnier wurde in der Kalenderansicht nicht gefunden.")
+              sys.exit(1)
+          PY
