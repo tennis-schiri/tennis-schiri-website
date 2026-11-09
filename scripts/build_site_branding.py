@@ -12,6 +12,7 @@ import struct
 import sys
 import zipfile
 from pathlib import Path
+from fix_favicon import clean_favicon
 
 ROOT=Path(__file__).resolve().parents[1]
 SOURCE=ROOT/"branding"/"tennis-schiri-ts09c-logo-set.zip"
@@ -42,6 +43,9 @@ def export(target:Path) -> None:
             width,height=struct.unpack(">II",data[16:24])
             if width<64 or height<64 or width>4000 or height>4000:
                 raise SystemExit(f"Logo hat unerwartete Bildabmessungen: {original}")
+            if exported == "ts-favicon.png":
+                data=clean_favicon(data)
+                width,height=struct.unpack(">II",data[16:24])
             (target/exported).write_bytes(data)
             print(f"{exported}: {width}x{height} · {len(data):,} Bytes · SHA256 {hashlib.sha256(data).hexdigest()[:12]}")
         # Override the old PNGs with the approved, clean, truly transparent
@@ -69,13 +73,14 @@ def export(target:Path) -> None:
             print(f"Logo ohne Rahmen aktiviert: {output_name} ({len(clean):,} Bytes)")
         # Legacy /favicon.svg should display the same original TS-09c symbol,
         # never the older hand-drawn icon. Embedded PNG avoids outside resources.
-        icon=archive.read("06_favicon.png")
+        icon=(target/"ts-favicon.png").read_bytes()
+        size=struct.unpack(">I",icon[16:20])[0]
         encoded=base64.b64encode(icon).decode("ascii")
         legacy=ROOT/"public"/"favicon.svg"
         legacy.write_text(
-            '<svg xmlns="http://www.w3.org/2000/svg" width="155" height="140" viewBox="0 0 155 140" role="img" aria-label="Tennis-Schiri">'
-            '<image href="data:image/png;base64,'+encoded+'" width="155" height="140"/>'
-            '</svg>\n',encoding="utf-8"
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{size}" height="{size}" viewBox="0 0 {size} {size}" role="img" aria-label="Tennis-Schiri">'
+            '<image href="data:image/png;base64,'+encoded+f'" width="{size}" height="{size}"/>'
+            '</svg>\\n',encoding="utf-8"
         )
         print("Legacy favicon.svg auf Original-TS-09c-Grafik aktualisiert")
 
