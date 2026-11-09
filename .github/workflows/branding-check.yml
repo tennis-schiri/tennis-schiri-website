@@ -5,6 +5,8 @@ on:
     paths:
       - 'branding/tennis-schiri-ts09c-logo-set.zip'
       - 'scripts/build_site_branding.py'
+      - 'scripts/fix_favicon.py'
+      - 'tests/favicon-test.py'
       - 'tests/site-branding-test.py'
       - 'public/assets/site.css'
       - 'public/assets/home-refresh.css'
@@ -59,7 +61,9 @@ jobs:
       - name: Freigegebenes TS-09c-Set extrahieren
         run: python scripts/build_site_branding.py --output public/assets/branding
       - name: Marken-Integration prüfen
-        run: python tests/site-branding-test.py
+        run: |
+          python tests/site-branding-test.py
+          python tests/favicon-test.py
       - name: Regelwissen und Startseiten-Regelfrage prüfen
         run: |
           node --check public/assets/rules-library.js
