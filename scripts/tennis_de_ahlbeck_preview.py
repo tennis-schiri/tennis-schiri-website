@@ -30,7 +30,7 @@ BLOCKED_TERMS = re.compile(
 
 def extract(text):
     """Show only tournament-related labels, never members/registration records."""
-    lines = [re.sub(r"\\s+", " ", x).strip() for x in text.splitlines()]
+    lines = [re.sub(r"\s+", " ", x).strip() for x in text.splitlines()]
     lines = [x for x in lines if x and len(x) < 220]
     indices = [i for i, line in enumerate(lines) if re.search(r"manfred.{0,15}krohn", line, re.I)]
     if not indices:
@@ -41,7 +41,7 @@ def extract(text):
     seen = set()
     for index, line in enumerate(window):
         if (line in seen or BLOCKED_TERMS.search(line) or "@" in line or
-            re.search(r"(?:\\+?\\d[\\d -]{8,}\\d)", line)):
+            re.search(r"(?:\+?\d[\d -]{8,}\d)", line)):
             continue
         if SAFE_TERMS.search(line):
             result.append(line)
@@ -50,9 +50,9 @@ def extract(text):
             # time, monetary amounts and LK ranges; never names or contact details.
             if index + 1 < len(window):
                 val = window[index + 1]
-                if (re.search(r"\\b\\d{1,2}[.]\\d{1,2}[.]20\\d{2}\\b|"
-                              r"\\b\\d{1,2}:\\d{2}\\b|"
-                              r"\\bLK\\s*\\d{1,2}|\\b\\d+\\s*€", val, re.I)
+                if (re.search(r"\b\d{1,2}[.]\d{1,2}[.]20\d{2}\b|"
+                              r"\b\d{1,2}:\d{2}\b|"
+                              r"\bLK\s*\d{1,2}|\b\d+\s*€", val, re.I)
                     and val not in seen and "@" not in val and
                     not BLOCKED_TERMS.search(val) and len(val) < 100):
                     result.append(val)
@@ -184,7 +184,7 @@ def main():
                   "Die Seite erfordert möglicherweise einen anderen Zugriff.")
         with open(__import__("os").environ.get("GITHUB_STEP_SUMMARY", "/dev/null"),
                   "a", encoding="utf-8") as summary:
-            summary.write("## tennis.de – öffentliche Ahlbeck-Vorschau\n\n")
+            summary.write("## tennis.de – Ahlbeck-Vorschau (nur lesen)\n\n")
             summary.write("Turnier-ID 870524 · keine Turnieranmeldung und keine Datenübernahme\n\n")
             summary.write("Turnierdetail erkennbar: **" +
                           ("ja" if re.search(r"manfred.{0,15}krohn", best, re.I) else "nein") +
