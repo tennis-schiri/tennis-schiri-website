@@ -29,29 +29,37 @@ BLOCKED_TERMS = re.compile(
 
 
 def extract(text):
-    lines = [re.sub(r"\s+", " ", x).strip() for x in text.splitlines()]
-    lines = [x for x in lines if x and len(x) < 240]
+    """Show only tournament-related labels, never members/registration records."""
+    lines = [re.sub(r"\\s+", " ", x).strip() for x in text.splitlines()]
+    lines = [x for x in lines if x and len(x) < 220]
+    indices = [i for i, line in enumerate(lines) if re.search(r"manfred.{0,15}krohn", line, re.I)]
+    if not indices:
+        return []
+    # Ignore page header, navigation and all unrelated tennis.de content.
+    window = lines[indices[0]:indices[0] + 110]
     result = []
     seen = set()
-    for i, line in enumerate(lines):
-        if BLOCKED_TERMS.search(line):
+    for index, line in enumerate(window):
+        if (line in seen or BLOCKED_TERMS.search(line) or "@" in line or
+            re.search(r"(?:\\+?\\d[\\d -]{8,}\\d)", line)):
             continue
         if SAFE_TERMS.search(line):
-            for candidate in lines[max(0, i - 1):min(len(lines), i + 3)]:
-                if (candidate in seen or BLOCKED_TERMS.search(candidate)
-                        or "@" in candidate or len(candidate) > 200):
-                    continue
-                # Skip long digit sequences and likely telephone numbers.
-                if re.search(r"(?:\+?\d[\d -]{8,}\d)", candidate):
-                    continue
-                seen.add(candidate)
-                result.append(candidate)
-                if len(result) >= 100:
-                    break
-        if len(result) >= 100:
+            result.append(line)
+            seen.add(line)
+            # Values may be placed below their label. Only include dates,
+            # time, monetary amounts and LK ranges; never names or contact details.
+            if index + 1 < len(window):
+                val = window[index + 1]
+                if (re.search(r"\\b\\d{1,2}[.]\\d{1,2}[.]20\\d{2}\\b|"
+                              r"\\b\\d{1,2}:\\d{2}\\b|"
+                              r"\\bLK\\s*\\d{1,2}|\\b\\d+\\s*€", val, re.I)
+                    and val not in seen and "@" not in val and
+                    not BLOCKED_TERMS.search(val) and len(val) < 100):
+                    result.append(val)
+                    seen.add(val)
+        if len(result) >= 55:
             break
     return result
-
 
 
 def check_host(driver):
