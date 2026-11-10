@@ -102,7 +102,7 @@ def prepare_login_page(driver):
             driver.switch_to.window(driver.window_handles[-1])
         check_host(driver)
     if not login_form(driver):
-        driver.get("https://account.tennis.de/external-application-login-dialog")
+        driver.get("https://account.tennis.de/web/konten/home")
     check_host(driver)
     return WebDriverWait(driver, 15).until(lambda d: login_form(d))
 
@@ -172,10 +172,19 @@ def main():
                 break
             time.sleep(2)
         print("## tennis.de: Ahlbeck-Vorschau 870524")
-        print("Anmeldeversuch:", "ja" if attempted_login else "nein")
+        print("Loginformular abgeschickt:", "ja" if attempted_login else "nein")
         print("Webadresse:", URL)
         print("Geladene sichtbare Zeichen:", len(best))
         print("Turnierdetail erkannt:", bool(re.search(r"manfred.{0,15}krohn", best, re.I)))
+        detail_visible = bool(re.search(r"manfred.{0,15}krohn", best, re.I))
+        login_still_required = bool(re.search(
+            r"bitte\s+logge\s+dich\s+ein|um\s+nähere\s+informationen\s+zum\s+turnier",
+            best, re.I
+        ))
+        if mode and login_still_required:
+            print("::error::Anmeldung nicht bestätigt: tennis.de verlangt weiterhin einen Login.")
+        elif mode and not detail_visible:
+            print("::error::Angemeldete Turnierdetails konnten nicht nachgewiesen werden.")
         items = extract(best)
         for item in items:
             print("•", item)
@@ -191,6 +200,10 @@ def main():
                           "**\n\n")
             for item in items:
                 summary.write("- " + item.replace("<", "&lt;").replace(">", "&gt;") + "\n")
+        # An explicitly requested authenticated test must fail unless the
+        # protected tournament details are actually visible.
+        if mode and not detail_visible:
+            return 2
         return 0
     finally:
         driver.quit()
