@@ -78,6 +78,26 @@ def _submit_label(button):
             button.get_attribute("value") or "").strip().casefold()
 
 
+def diagnose_login_ui(driver, stage):
+    """Only counts and known control labels; never log field values or page text."""
+    host = urlparse(driver.current_url).hostname
+    try:
+        input_fields = visible(driver.find_elements(By.CSS_SELECTOR, "input"))
+        passwords = [x for x in input_fields if x.get_attribute("type") == "password"]
+        emails = [x for x in input_fields if x.get_attribute("type") in ("email", "text")]
+        actions = visible(driver.find_elements(
+            By.CSS_SELECTOR, "button, input[type='submit'], [role='button']"
+        ))
+        known = {"login", "einloggen", "anmelden", "registrieren", "weiter"}
+        buttons = sorted(set(_submit_label(x) for x in actions) & known)
+        print(f"Login-Diagnose ({stage}): Domain={host}; sichtbare "
+              f"Passwortfelder={len(passwords)}; Text-/E-Mail-Felder={len(emails)}; "
+              f"Login-/Registrierungsbuttons={buttons}; "
+              f"iFrames={len(driver.find_elements(By.TAG_NAME, 'iframe'))}")
+    except Exception as error:
+        print(f"::warning::Login-Diagnose ({stage}) nicht möglich: {type(error).__name__}")
+
+
 def login_form(driver):
     """Select the actual SIGN-IN form, never the adjacent registration form.
 
@@ -122,33 +142,45 @@ def login_form(driver):
 
 
 def prepare_login_page(driver):
-    # Prefer the native tennis.de sign-in dialog to preserve the www.tennis.de
-    # session. account.tennis.de has its own cookies and may not SSO back.
+    # The portal can display registration and login dialogs simultaneously.
+    # Never use the first password field without checking the sign-in action.
     check_host(driver)
+    diagnose_login_ui(driver, "Turnierseite")
     match = login_form(driver)
     if match:
-        print("Anmeldeformular auf tennis.de eindeutig erkannt.")
+        print("Eindeutiges Anmeldeformular auf tennis.de gefunden.")
         return match
 
     opens = visible(driver.find_elements(
         By.XPATH, "//button[normalize-space()='Login'] | //a[normalize-space()='Login']"
     ))
-    for trigger in opens:
+    print("Sichtbare Login-Einstiege:", len(opens))
+    if opens:
         try:
-            trigger.click()
-            WebDriverWait(driver, 8).until(lambda d: login_form(d))
+            opens[0].click()
+            time.sleep(2)
+            if len(driver.window_handles) > 1:
+                driver.switch_to.window(driver.window_handles[-1])
             check_host(driver)
-            print("Tennis.de-Anmeldedialog geöffnet, separates Registrierungsformular ignoriert.")
-            return login_form(driver)
-        except Exception:
-            continue
+            diagnose_login_ui(driver, "nach Login-Klick")
+            match = login_form(driver)
+            if match:
+                print("Eindeutiges Anmeldeformular nach Login-Klick gefunden.")
+                return match
+        except Exception as error:
+            print(f"::warning::Login-Dialog ließ sich nicht öffnen: {type(error).__name__}")
 
-    # Last-resort official login page. Do not submit to a third-party domain.
+    # Public official account page as fallback. No other domains.
+    print("Fallback: offizielle Account-Anmeldeseite wird geprüft.")
     driver.get("https://account.tennis.de/web/konten/home")
     check_host(driver)
-    match = WebDriverWait(driver, 15).until(lambda d: login_form(d))
-    print("Fallback: offizielles tennis.de-Accountformular.")
-    return match
+    time.sleep(3)
+    diagnose_login_ui(driver, "Accountseite")
+    match = login_form(driver)
+    if match:
+        print("Eindeutiges Formular auf Accountseite gefunden.")
+        return match
+    raise RuntimeError("Kein eindeutiges, sichtbares Anmeldeformular auf tennis.de gefunden")
 
 
 def try_login(driver, username, password):
