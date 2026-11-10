@@ -109,7 +109,7 @@ def prepare_login_page(driver):
 
 def try_login(driver, username, password):
     if not username or not password:
-        print("::warning::NULIGA_USERNAME und/oder NULIGA_PASSWORD nicht hinterlegt.")
+        print("::warning::NULIGA_USERNAME und/oder TENNIS_DE_PASSWORD nicht hinterlegt.")
         return False
     try:
         form, email_field, pass_field = prepare_login_page(driver)
@@ -155,7 +155,7 @@ def main():
         attempted_login = False
         if mode:
             attempted_login = try_login(driver, os.environ.get("NULIGA_USERNAME", ""),
-                                        os.environ.get("NULIGA_PASSWORD", ""))
+                                        os.environ.get("TENNIS_DE_PASSWORD", ""))
             # Return to the selected tournament after SSO.
             if attempted_login:
                 driver.get(URL)
