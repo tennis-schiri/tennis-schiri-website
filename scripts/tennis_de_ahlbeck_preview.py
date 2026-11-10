@@ -126,6 +126,30 @@ def try_login(driver, username, password):
             pass_field.submit()
         time.sleep(5)
         check_host(driver)
+        # Diagnose nur als Statussignale. Keine Zugangsdaten, Session-URLs,
+        # Cookies oder personenbezogenen Fehlermeldungen protokollieren.
+        print("Login-Rückkehr-Domain:", urlparse(driver.current_url).hostname)
+        form_still_open = bool(login_form(driver))
+        print("Loginformular weiterhin sichtbar:", "ja" if form_still_open else "nein")
+        safe_visible = driver.find_element(By.TAG_NAME, "body").text[:12000].casefold()
+        explicit_invalid = any(term in safe_visible for term in (
+            "passwort ist falsch", "kennwort ist falsch",
+            "ungültige anmeldedaten", "benutzername oder passwort ist falsch",
+            "anmeldung fehlgeschlagen", "incorrect password",
+            "invalid username or password"
+        ))
+        verification = any(term in safe_visible for term in (
+            "zweifaktor", "zwei-faktor", "2-faktor", "bestätigungscode",
+            "verification code", "sicherheitscode", "captcha"
+        ))
+        if explicit_invalid:
+            print("::warning::tennis.de zeigt einen Hinweis auf ungültige Anmeldedaten.")
+        elif verification:
+            print("::warning::tennis.de zeigt Hinweise auf eine zusätzliche Sicherheitsprüfung.")
+        elif form_still_open:
+            print("::warning::Das Loginformular ist nach dem Absenden weiterhin sichtbar.")
+        else:
+            print("Loginformular geschlossen; eine gültige Sitzung ist damit noch nicht bestätigt.")
         return True
     except Exception as error:
         print(f"::warning::Anmeldeversuch konnte nicht abgeschlossen werden: {type(error).__name__}")
