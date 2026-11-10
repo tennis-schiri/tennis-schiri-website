@@ -34,6 +34,11 @@ jobs:
           python -m pip install --disable-pip-version-check --quiet selenium==4.38.0
           google-chrome --version || chromium --version
 
+      - name: Loginformular-Auswahl offline testen
+        shell: bash
+        run: |
+          python -m unittest discover -s scripts -p 'test_tennis_de_login.py' -v
+
       - name: Ahlbeck-Turnier bei tennis.de lesen (keine Änderungen)
         shell: bash
         env:
