@@ -72,39 +72,83 @@ def visible(elements):
     return [el for el in elements if el.is_displayed() and el.is_enabled()]
 
 
+def _submit_label(button):
+    """Return only a public button label, not entered values."""
+    return (button.get_attribute("aria-label") or button.text or
+            button.get_attribute("value") or "").strip().casefold()
+
+
 def login_form(driver):
-    """Find the visible login fields; ignore registration and newsletter forms."""
-    passwords = visible(driver.find_elements(By.CSS_SELECTOR, "input[type='password']"))
-    for password in passwords:
-        forms = password.find_elements(By.XPATH, "./ancestor::form[1]")
-        form = forms[0] if forms else driver
-        email_fields = visible(form.find_elements(
-            By.CSS_SELECTOR, "input[type='email'],input[name*='email'],input[name*='login'],input[autocomplete='username']"
-        ))
-        if not email_fields:
-            email_fields = [el for el in visible(form.find_elements(By.CSS_SELECTOR, "input[type='text']"))
-                            if "mail" in ((el.get_attribute("placeholder") or "") +
-                                          (el.get_attribute("name") or "") +
-                                          (el.get_attribute("id") or "")).lower()]
-        if email_fields:
-            return form, email_fields[0], password
+    """Select the actual SIGN-IN form, never the adjacent registration form.
+
+    tennis.de renders both forms in the same page. Previously, the first
+    visible password field could belong to registration. Select by the
+    'Einloggen' action and require exactly one password + one email input.
+    """
+    submits = visible(driver.find_elements(
+        By.CSS_SELECTOR, "button, input[type='submit']"
+    ))
+    for submit in submits:
+        if _submit_label(submit) not in ("einloggen", "login", "anmelden"):
+            continue
+        scope = submit
+        for _ in range(9):
+            try:
+                scope = scope.find_element(By.XPATH, "..")
+                password_fields = visible(scope.find_elements(
+                    By.CSS_SELECTOR, "input[type='password']"
+                ))
+                email_fields = visible(scope.find_elements(
+                    By.CSS_SELECTOR,
+                    "input[type='email'],input[autocomplete='username'],input[name*='email'],input[name*='login']"
+                ))
+                # Some tennis.de forms use text for the email address.
+                if not email_fields:
+                    email_fields = [
+                        x for x in visible(scope.find_elements(By.CSS_SELECTOR, "input[type='text']"))
+                        if any(word in (
+                            (x.get_attribute("placeholder") or "") + " " +
+                            (x.get_attribute("name") or "") + " " +
+                            (x.get_attribute("id") or "")
+                        ).casefold() for word in ("e-mail", "email", "benutzer"))
+                    ]
+                # A registration form typically has two password inputs,
+                # so this check prevents accidentally submitting it.
+                if len(password_fields) == 1 and len(email_fields) == 1:
+                    return submit, email_fields[0], password_fields[0]
+            except Exception:
+                break
     return None
 
 
 def prepare_login_page(driver):
-    # First follow tennis.de's own login entry point to preserve SSO state.
-    buttons = visible(driver.find_elements(
-        By.XPATH, "//a[normalize-space()='Login'] | //button[normalize-space()='Login']"))
-    if buttons:
-        buttons[-1].click()
-        time.sleep(3)
-        if len(driver.window_handles) > 1:
-            driver.switch_to.window(driver.window_handles[-1])
-        check_host(driver)
-    if not login_form(driver):
-        driver.get("https://account.tennis.de/web/konten/home")
+    # Prefer the native tennis.de sign-in dialog to preserve the www.tennis.de
+    # session. account.tennis.de has its own cookies and may not SSO back.
     check_host(driver)
-    return WebDriverWait(driver, 15).until(lambda d: login_form(d))
+    match = login_form(driver)
+    if match:
+        print("Anmeldeformular auf tennis.de eindeutig erkannt.")
+        return match
+
+    opens = visible(driver.find_elements(
+        By.XPATH, "//button[normalize-space()='Login'] | //a[normalize-space()='Login']"
+    ))
+    for trigger in opens:
+        try:
+            trigger.click()
+            WebDriverWait(driver, 8).until(lambda d: login_form(d))
+            check_host(driver)
+            print("Tennis.de-Anmeldedialog geöffnet, separates Registrierungsformular ignoriert.")
+            return login_form(driver)
+        except Exception:
+            continue
+
+    # Last-resort official login page. Do not submit to a third-party domain.
+    driver.get("https://account.tennis.de/web/konten/home")
+    check_host(driver)
+    match = WebDriverWait(driver, 15).until(lambda d: login_form(d))
+    print("Fallback: offizielles tennis.de-Accountformular.")
+    return match
 
 
 def try_login(driver, username, password):
@@ -112,44 +156,39 @@ def try_login(driver, username, password):
         print("::warning::NULIGA_USERNAME und/oder TENNIS_DE_PASSWORD nicht hinterlegt.")
         return False
     try:
-        form, email_field, pass_field = prepare_login_page(driver)
+        submit, email_field, pass_field = prepare_login_page(driver)
         check_host(driver)
+        print("Ausgewähltes Formular:", _submit_label(submit))
         email_field.clear()
         email_field.send_keys(username)
         pass_field.clear()
         pass_field.send_keys(password)
-        # Submit only the login form. Never interact with the registration form.
-        buttons = visible(form.find_elements(By.CSS_SELECTOR, "button[type='submit'],input[type='submit']"))
-        if buttons:
-            buttons[0].click()
-        else:
-            pass_field.submit()
+        # Only the unequivocally identified login button is clicked.
+        submit.click()
         time.sleep(5)
         check_host(driver)
-        # Diagnose nur als Statussignale. Keine Zugangsdaten, Session-URLs,
-        # Cookies oder personenbezogenen Fehlermeldungen protokollieren.
         print("Login-Rückkehr-Domain:", urlparse(driver.current_url).hostname)
         form_still_open = bool(login_form(driver))
-        print("Loginformular weiterhin sichtbar:", "ja" if form_still_open else "nein")
-        safe_visible = driver.find_element(By.TAG_NAME, "body").text[:12000].casefold()
-        explicit_invalid = any(term in safe_visible for term in (
+        print("Anmeldeformular weiterhin sichtbar:", "ja" if form_still_open else "nein")
+        visible_text = driver.find_element(By.TAG_NAME, "body").text[:12000].casefold()
+        invalid = any(term in visible_text for term in (
             "passwort ist falsch", "kennwort ist falsch",
             "ungültige anmeldedaten", "benutzername oder passwort ist falsch",
             "anmeldung fehlgeschlagen", "incorrect password",
             "invalid username or password"
         ))
-        verification = any(term in safe_visible for term in (
+        verification = any(term in visible_text for term in (
             "zweifaktor", "zwei-faktor", "2-faktor", "bestätigungscode",
             "verification code", "sicherheitscode", "captcha"
         ))
-        if explicit_invalid:
-            print("::warning::tennis.de zeigt einen Hinweis auf ungültige Anmeldedaten.")
+        if invalid:
+            print("::warning::Die Seite meldet ein Authentifizierungsproblem (ohne Inhalt offenzulegen).")
         elif verification:
-            print("::warning::tennis.de zeigt Hinweise auf eine zusätzliche Sicherheitsprüfung.")
+            print("::warning::Die Seite fordert möglicherweise eine zusätzliche Sicherheitsprüfung.")
         elif form_still_open:
-            print("::warning::Das Loginformular ist nach dem Absenden weiterhin sichtbar.")
+            print("::warning::Das Anmeldeformular ist weiterhin sichtbar.")
         else:
-            print("Loginformular geschlossen; eine gültige Sitzung ist damit noch nicht bestätigt.")
+            print("Anmeldeformular geschlossen; Berechtigung wird am Turnierdetail geprüft.")
         return True
     except Exception as error:
         print(f"::warning::Anmeldeversuch konnte nicht abgeschlossen werden: {type(error).__name__}")
