@@ -39,7 +39,7 @@ jobs:
         env:
           TENNIS_DE_LOGIN: ${{ inputs.mit_login && '1' || '0' }}
           NULIGA_USERNAME: ${{ secrets.NULIGA_USERNAME }}
-          NULIGA_PASSWORD: ${{ secrets.NULIGA_PASSWORD }}
+          TENNIS_DE_PASSWORD: ${{ secrets.TENNIS_DE_PASSWORD }}
         run: |
           python -m py_compile scripts/tennis_de_ahlbeck_preview.py
           python scripts/tennis_de_ahlbeck_preview.py
