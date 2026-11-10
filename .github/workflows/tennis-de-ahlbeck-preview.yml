@@ -2,13 +2,19 @@ name: tennis.de – Ahlbeck-Turnierdaten nur lesen
 
 on:
   workflow_dispatch:
+    inputs:
+      mit_login:
+        description: 'Mit GitHub-Secrets bei tennis.de anmelden?'
+        type: boolean
+        default: false
+        required: true
 
 permissions:
   contents: read
 
 jobs:
   preview:
-    name: Ahlbeck 870524 im öffentlichen Browser prüfen
+    name: Ahlbeck 870524 nur lesend prüfen
     runs-on: ubuntu-24.04
     timeout-minutes: 7
     steps:
@@ -28,7 +34,12 @@ jobs:
           python -m pip install --disable-pip-version-check --quiet selenium==4.38.0
           google-chrome --version || chromium --version
 
-      - name: Ahlbeck-Turnier bei tennis.de lesen (ohne Login)
+      - name: Ahlbeck-Turnier bei tennis.de lesen (keine Änderungen)
         shell: bash
+        env:
+          TENNIS_DE_LOGIN: ${{ inputs.mit_login && '1' || '0' }}
+          NULIGA_USERNAME: ${{ secrets.NULIGA_USERNAME }}
+          NULIGA_PASSWORD: ${{ secrets.NULIGA_PASSWORD }}
         run: |
+          python -m py_compile scripts/tennis_de_ahlbeck_preview.py
           python scripts/tennis_de_ahlbeck_preview.py
