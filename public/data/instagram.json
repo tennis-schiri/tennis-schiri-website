@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T10:33:14Z",
+  "updated_at": "2026-11-14T10:20:07Z",
   "accounts": [
     {
       "key": "tennis-schiri",
@@ -37,25 +37,25 @@
       "profile_url": "https://www.instagram.com/tennilo.app/",
       "posts": [
         {
+          "id": "18109006916361644",
+          "caption": "🎀 Schleifchenturnier – viel Spielspaß, aber oft auch viel Organisation! 🎾 Wer spielt mit wem? Wann beginnt die nächste Runde? Und wie behält die Turnierleitung den Überblick? Genau für solche geselligen Vereinsturniere entwickeln wir tennilo: weniger Zettelwirtschaft, mehr Zeit für Tennis und Gemeinschaft. 🏆 Das Schleifchenturnier ist eines der Turnierformate, an denen wir arbeiten. 💬 Habt ihr in eurem Verein schon ein Schleifchenturnier veranstaltet? Was müsste eine App dafür unbedingt können? ",
+          "image": "assets/instagram/tennilo-1-18109006916361644.jpg",
+          "permalink": "https://www.instagram.com/p/Dft1qlZit66/",
+          "timestamp": "2026-11-14T09:03:37+0000"
+        },
+        {
           "id": "18133752565871037",
           "caption": "🎾 Zähl-Apps im Tennis: Was ist euch wichtig? Wer seinen Spielstand digital festhält, kennt sicher gute Lösungen – aber auch Dinge, die im Match unnötig kompliziert sind. Was zählt für euch am meisten? 👇 ✅ Punkte mit wenigen Klicks erfassen ✅ Einen falschen Punkt schnell korrigieren ✅ Spielstand und Sätze jederzeit klar sehen ✅ Nach dem Match hilfreiche Statistiken bekommen Und was fehlt euch bisher komplett? 💬 Erzählt uns von euren Erfahrungen in den Kommentaren! #Tennis #TennisCommunity #Tennis",
-          "image": "assets/instagram/tennilo-1-18133752565871037.jpg",
+          "image": "assets/instagram/tennilo-2-18133752565871037.jpg",
           "permalink": "https://www.instagram.com/p/DfosmFSinbv/",
           "timestamp": "2026-11-12T09:09:20+0000"
         },
         {
           "id": "17926032351446586",
           "caption": "🎾 Vereinsturnier organisieren? Klingt einfach … Bis die ersten Absagen kommen, Paarungen geändert werden müssen und plötzlich niemand mehr weiß, auf welchem Platz das nächste Spiel stattfindet. Ob Schleifchenturnier, Mixed-Turnier oder Vereinsmeisterschaft – die Organisation kostet oft mehr Zeit als gedacht. Genau deshalb entwickeln wir tennilo: eine App, die Tennisvereinen die Turnierorganisation erleichtern soll. 💬 Jetzt seid ihr gefragt: Was ist bei euren Vereinsturnieren die größte Herausfor",
-          "image": "assets/instagram/tennilo-2-17926032351446586.jpg",
+          "image": "assets/instagram/tennilo-3-17926032351446586.jpg",
           "permalink": "https://www.instagram.com/p/Dfb0UFtjV69/",
           "timestamp": "2026-11-07T09:05:50+0000"
-        },
-        {
-          "id": "18016948052752172",
-          "caption": "🎾 tennilo kommt 2027! Wir entwickeln eine App, die Vereinsturniere im Tennis einfacher organisierbar machen soll. Von der Auslosung über den Spielplan bis zu den Ergebnissen: tennilo soll Vereinen helfen, Turniere übersichtlicher und digitaler umzusetzen. 💬 Und jetzt seid ihr gefragt: Was darf in einer guten Turnier-App für Tennisvereine auf keinen Fall fehlen? Schreibt eure Ideen und Wünsche in die Kommentare 👇 #tennilo #Tennisverein #Vereinsturnier #Tennisturnier #Turnierorganisation #TennisDe",
-          "image": "assets/instagram/tennilo-3-18016948052752172.jpg",
-          "permalink": "https://www.instagram.com/p/DfW4a-PPuiu/",
-          "timestamp": "2026-11-05T11:04:17+0000"
         }
       ]
     }
