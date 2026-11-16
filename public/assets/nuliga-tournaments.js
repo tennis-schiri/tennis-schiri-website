@@ -18,7 +18,7 @@
     try {
       const url = new URL(value);
       return url.protocol === "https:" &&
-        url.hostname === "tvbb.liga.nu" &&
+        ["tvbb.liga.nu", "tmv.liga.nu"].includes(url.hostname) &&
         url.pathname.endsWith("/tournamentCalendar") ? url.href : "";
     } catch (_) { return ""; }
   }
@@ -64,7 +64,7 @@
     if (actions && source && !actions.querySelector(".nuliga-source")) {
       const a = document.createElement("a");
       a.className = "nuliga-source";
-      a.textContent = "TVBB-Kalender ↗";
+      a.textContent = new URL(source).hostname === "tmv.liga.nu" ? "TMV-Kalender ↗" : "TVBB-Kalender ↗";
       a.href = source;
       a.rel = "noopener noreferrer";
       a.target = "_blank";
