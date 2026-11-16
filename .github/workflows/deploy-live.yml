@@ -51,6 +51,7 @@ jobs:
           python - <<'PY'
           import pathlib
           import re
+          import os
           import shutil
           import xml.etree.ElementTree as ET
 
@@ -80,6 +81,16 @@ jobs:
               if 'Entwicklungsfassung' in cleaned or 'Entwurfsseiten' in cleaned:
                   raise SystemExit(f"Ungeprüfter Entwicklungsvermerk: {page}")
               page.write_text(cleaned, encoding="utf-8")
+          # Eindeutiger Build-Nachweis: per HTTP pruefbar, ohne FTP-Zugang.
+          revision = os.environ.get("GITHUB_SHA", "").strip()
+          if not re.fullmatch(r"[0-9a-f]{40}", revision):
+              raise SystemExit("GitHub-Commit-ID für Live-Verifikation fehlt")
+          home = out / "index.html"
+          content = home.read_text(encoding="utf-8")
+          if "<head>" not in content:
+              raise SystemExit("Startseite hat keinen Head-Bereich")
+          content = content.replace("<head>", f'<head>\n<meta name="ts-deploy-sha" content="{revision}">', 1)
+          home.write_text(content, encoding="utf-8")
           # Sitemap ausschließlich aus echten Inhaltsseiten erzeugen.
           # Die Google-Bestaetigungsdatei ist keine Inhaltsseite.
           namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -224,4 +235,20 @@ jobs:
               --upload-file "${file}" \
               "ftp://${FTP_LIVE_HOST}:21/${relative}"
           done < <(find _live_upload -type f -print0 | sort -z)
-          echo "Produktivdateien liegen im separaten Live-Ordner. Die Hauptdomain wird NICHT automatisch umgestellt."
+          echo "FTPS-Upload abgeschlossen. Prüfe jetzt, ob die Hauptdomain auf das Live-Verzeichnis zeigt."
+
+      - name: Verifizieren, dass tennis-schiri.de wirklich den neuen Commit ausliefert
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Query-Parameter und Cache-Control helfen gegen zwischengespeicherte HTML-Seiten.
+          url="https://tennis-schiri.de/?ts-deploy=${GITHUB_SHA}"
+          response="$(curl --fail --silent --show-error --location --retry 3 --retry-delay 2 --max-time 45 --header 'Cache-Control: no-cache' "$url")"
+          expected="name=\"ts-deploy-sha\" content=\"${GITHUB_SHA}\""
+          if [[ "$response" != *"$expected"* ]]; then
+            echo "::error::FTP-Upload erfolgreich, aber tennis-schiri.de liefert NICHT den neuen GitHub-Stand (${GITHUB_SHA})."
+            echo "::error::ALL-INKL KAS → Domains: Zielverzeichnis der Hauptdomain prüfen (Live-Webspace /tennis-schiri-live/)."
+            exit 1
+          fi
+          echo "✓ tennis-schiri.de liefert den neuen GitHub-Commit: ${GITHUB_SHA}"
+
