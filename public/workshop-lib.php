@@ -12,10 +12,11 @@ function workshopCatalog(): array {
    'date_iso'=>'2027-03-04',
    'date'=>'Donnerstag, 4. März 2027',
    'time'=>'19:00 Uhr',
+   'duration'=>'ca. 2–2,5 Stunden',
    'location'=>'Neuenhagener Tennisclub 93 e. V.',
    'address'=>'Hildesheimer Straße 11–13, 15366 Neuenhagen bei Berlin',
    'host_club'=>'Neuenhagener Tennisclub 93 e. V.',
-   'guest_fee_cents'=>1500,
+   'guest_fee_cents'=>2000,
   ],
  ];
 }
@@ -28,7 +29,7 @@ function workshopSchema(PDO $db): void {
   email TEXT NOT NULL COLLATE NOCASE,
   club TEXT NOT NULL DEFAULT '',
   is_member INTEGER NOT NULL DEFAULT 0,
-  fee_cents INTEGER NOT NULL DEFAULT 1500,
+  fee_cents INTEGER NOT NULL DEFAULT 2000,
   payment_method TEXT NOT NULL DEFAULT 'onsite',
   payment_status TEXT NOT NULL DEFAULT 'open',
   status TEXT NOT NULL DEFAULT 'registered',
@@ -99,13 +100,14 @@ function workshopPaypalLink(int $fee,string $workshopId): string {
 function workshopMailContent(array $workshop,array $registration,string $kind='confirmation',string $paypalInstructions=''): array {
  $name=trim((string)($registration['name']??'')) ?: 'Tennisfreundin/Tennisfreund';
  $fee=(int)($registration['fee_cents']??0);
+ $feeDisplay=workshopFeeLabel($fee);
  $payment=(string)($registration['payment_method']??'onsite');
  $isMember=(int)($registration['is_member']??0)===1;
- $event=$workshop['title'].' · '.$workshop['date'].' · '.$workshop['time'];
+ $event=$workshop['title'].' · '.$workshop['date'].' · '.$workshop['time'].' · Dauer: '.($workshop['duration']??'ca. 2–2,5 Stunden');
  $venue=$workshop['location'].', '.$workshop['address'];
  $cancelUrl=(string)($registration['cancel_url']??'');
  $paypalUrl=(!$isMember&&$fee>0&&$payment==='paypal')?workshopPaypalLink($fee,(string)$workshop['id']):'';
- $paypalDetail=$paypalUrl!==''?"\nJetzt 15 € per PayPal zahlen: ".$paypalUrl."\nEmpfänger: paypal@tennis-schiri.de":'';
+ $paypalDetail=$paypalUrl!==''?"\nJetzt ".$feeDisplay." per PayPal zahlen: ".$paypalUrl."\nEmpfänger: paypal@tennis-schiri.de":'';
 
  if($isMember || $fee<=0){
   $paymentText='Als Mitglied des NTC 93 nimmst du kostenfrei teil.';
@@ -142,7 +144,7 @@ function workshopMailContent(array $workshop,array $registration,string $kind='c
   $paragraphs.='<p style="margin:0 0 18px;font:15px/1.7 Arial,Helvetica,sans-serif;color:#365447">'.nl2br($esc(trim($part)),false).'</p>';
  }
  $actions='';
- if($paypalUrl!==''&&$kind!=='cancelled')$actions.='<p style="margin:12px 0 22px"><a href="'.$esc($paypalUrl).'" style="display:inline-block;background:#c8f16d;color:#173d2d;padding:13px 19px;border-radius:8px;text-decoration:none;font-weight:bold">15 € mit PayPal bezahlen</a></p><p style="font-size:12px;color:#5c705e">Empfänger: paypal@tennis-schiri.de · Zahlung wird manuell geprüft.</p>';
+ if($paypalUrl!==''&&$kind!=='cancelled')$actions.='<p style="margin:12px 0 22px"><a href="'.$esc($paypalUrl).'" style="display:inline-block;background:#c8f16d;color:#173d2d;padding:13px 19px;border-radius:8px;text-decoration:none;font-weight:bold">".$esc($feeDisplay)." mit PayPal bezahlen</a></p><p style="font-size:12px;color:#5c705e">Empfänger: paypal@tennis-schiri.de · Zahlung wird manuell geprüft.</p>';
  if($cancelUrl!==''&&$kind!=='cancelled')$actions.='<p style="margin:20px 0 4px;border-top:1px solid #dbe7d5;padding-top:20px;font-size:13px"><a href="'.$esc($cancelUrl).'" style="color:#276744;font-weight:bold">Vom Regelworkshop abmelden</a><br><span style="color:#657b69">Die Abmeldung wird erst nach deiner Bestätigung auf der Website wirksam.</span></p>';
  $html='<!doctype html><html lang="de"><meta charset="utf-8"><body style="margin:0;background:#eef3e8;padding:28px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center"><table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#fff;border-radius:16px;overflow:hidden"><tr><td style="background:#143b2c;padding:27px 34px"><img src="https://tennis-schiri.de/assets/branding/ts-logo-dunkel.png?v=20261107-3" width="240" alt="Tennis-Schiri" style="display:block;max-width:100%;height:auto"></td></tr><tr><td style="height:5px;background:#c8f16d"></td></tr><tr><td style="padding:34px">'.$paragraphs.$actions.'<p style="margin:26px 0 0;font:12px/1.6 Arial,Helvetica,sans-serif;color:#738579">Tennis-Schiri · Regelworkshop · <a href="https://tennis-schiri.de/leistungen/#'.$esc($workshop['id']).'" style="color:#2a6844">Workshopseite</a></p></td></tr></table></td></tr></table></body></html>';
  return [$subject,$text,$html];
