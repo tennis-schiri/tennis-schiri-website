@@ -153,7 +153,7 @@
   });
   const google=$('event-google-calendar');
   if(isWorkshop&&event.time){
-   $('calendar-note').textContent='Beginn: '+event.time+' Uhr. Eine Endzeit ist nicht angegeben. Die .ics-Datei übernimmt den bekannten Beginn.';
+   $('calendar-note').textContent='Beginn: '+event.time+' Uhr · Dauer: ca. 2–2,5 Stunden. Die Endzeit ist nicht verbindlich; die .ics-Datei übernimmt nur den Beginn.';
    google.hidden=true; // Kein erfundenes Ende für einen Google-Kalendereintrag
   }else{
    $('calendar-note').textContent='Keine Startzeit veröffentlicht – der Termin wird ganztägig übernommen.';
