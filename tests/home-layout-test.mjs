@@ -7,7 +7,9 @@ const html=fs.readFileSync('public/index.html','utf8');
 const css=fs.readFileSync('public/assets/home-refresh.css','utf8');
 const script=fs.readFileSync('public/assets/home-refresh.js','utf8');
 assert.ok(html.includes('<body class="home-v2">'));
-assert.ok(html.includes('href="assets/home-refresh.css?v=2"'));
+assert.match(html,/href="assets\/home-refresh\.css\?v=[a-zA-Z0-9._-]+"/);
+assert.match(html,/src="assets\/home-rule-question\.js\?v=[a-zA-Z0-9._-]+"/);
+assert.ok(html.includes('class="rules-next-question"'), 'Random practice question control missing');
 assert.ok(html.includes('src="assets/home-refresh.js?v=1"'));
 const sections=['id="start"','class="tennis-quote-strip"','class="quicknav"','id="aktuelles"','id="turniere"','id="spielerhilfen"','id="regelwissen"','id="leistungen"','id="instagram"','id="tennilo"','id="newsletter"','class="community-spotlight"','id="ueber-mich"','id="kontakt"'];
 let last=-1;
@@ -33,7 +35,7 @@ assert.ok(eventCount>=10,'Tournament data missing: '+eventCount);
 assert.ok(html.includes('<details class="home-workshop-details" id="regelworkshop-anmeldung">'));
 assert.ok(!html.includes('class="workshop-feature"'),'Duplicate full-size workshop promotion remained');
 
-assert.ok(html.includes('href="assets/home-refresh.css?v=2"'),'Homepage CSS cache must refresh');
+assert.match(html,/href="assets\/home-refresh\.css\?v=[a-zA-Z0-9._-]+"/,'Homepage CSS cache must refresh');
 // Navigation from top to bottom: opening quote, news, events, services, links, contact.
 const between=(start,end)=>{
  const a=html.indexOf(start),b=html.indexOf(end,a+start.length);
