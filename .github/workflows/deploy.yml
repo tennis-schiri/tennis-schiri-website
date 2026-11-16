@@ -44,6 +44,9 @@ jobs:
             public/partner/index.html \
             public/favicon.svg \
             public/assets/site.css \
+            public/assets/home-refresh.css \
+            public/assets/home-refresh.js \
+            public/assets/home-rule-question.js \
             public/assets/nuliga-tournaments.js \
             public/assets/tournament-calendar.js \
             public/assets/tournament-detail.js \
@@ -86,6 +89,9 @@ jobs:
           for file in \
             public/favicon.svg \
             public/assets/site.css \
+            public/assets/home-refresh.css \
+            public/assets/home-refresh.js \
+            public/assets/home-rule-question.js \
             public/assets/nuliga-tournaments.js \
             public/assets/tournament-calendar.js \
             public/assets/tournament-detail.js \
