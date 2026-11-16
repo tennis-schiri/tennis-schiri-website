@@ -70,8 +70,8 @@ jobs:
               # Die Cache-Version von site.css darf sich bei jeder Designänderung ändern.
               # Wichtig ist die korrekte Einbindung, nicht ein fest codierter Versionswert.
               expected_css = rf'<link\s+rel="stylesheet"\s+href="{re.escape(rel)}/site\.css\?v=[A-Za-z0-9._-]+">'
-              expected_script = f'<script src="{rel}/back-to-top.js?v=2" defer></script>'
-              if not re.search(expected_css, raw) or expected_script not in raw:
+              expected_script = rf'<script\s+src="{re.escape(rel)}/back-to-top\.js\?v=[A-Za-z0-9._-]+"\s+defer></script>'
+              if not re.search(expected_css, raw) or not re.search(expected_script, raw):
                   raise SystemExit(f"Stylesheet oder Nach-oben-Skript fehlerhaft eingebunden: {page}")
               pattern = r'<meta\s+name=["\']robots["\']\s+content=["\']noindex\s*,\s*nofollow\s*,\s*noarchive["\']\s*/?>'
               cleaned, count = re.subn(pattern, "", raw, count=1, flags=re.IGNORECASE)
@@ -106,7 +106,7 @@ jobs:
               "assets/branding/ts-logo-ball.png",
               "assets/branding/ts-favicon.png",
               "assets/back-to-top.js", "assets/privacy-consent.js",
-              "assets/home-refresh.css", "assets/home-refresh.js",
+              "assets/home-refresh.css", "assets/home-refresh.js", "assets/home-rule-question.js",
               "mein-turniertag/index.html", "assets/mein-turniertag.js", "assets/mein-turniertag.css",
               "assets/tennilo-logo.png", "assets/tennilo-icon.png",
               "data/instagram.json", "data/statistics.json",
@@ -163,6 +163,7 @@ jobs:
           python tests/tennilo-branding-test.py
           python tests/sticky-header-test.py
           node --check public/assets/home-refresh.js
+          node --check public/assets/home-rule-question.js
           node tests/home-layout-test.mjs
           php -l public/turnierinfos.php
           php -l public/workshop-lib.php
