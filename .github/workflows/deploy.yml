@@ -1,4 +1,4 @@
-name: Website per FTPS veröffentlichen
+name: TESTWEBSITE aktualisieren (nicht Live)
 
 on:
   workflow_dispatch:
