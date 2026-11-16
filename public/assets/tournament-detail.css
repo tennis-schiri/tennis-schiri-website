@@ -43,3 +43,117 @@
 
 .tourney-detail-logo[hidden]{display:none}
 .tourney-detail-heading .tourney-detail-date{font-size:clamp(19px,2.7vw,27px);font-weight:800;margin:0 0 14px}
+
+/* Tennis-Schiri 2026: organizer branding, back navigation and tournament categories */
+.tourney-detail-back{
+ display:inline-flex;align-items:center;gap:7px;
+ padding:11px 16px;margin:0 0 24px;
+ border:1px solid #a9c2ae;border-radius:999px;
+ background:#e5f0dd;color:#1e5135;
+ text-decoration:none;font-size:13px;font-weight:900;
+ transition:background .16s,border-color .16s;
+}
+.tourney-detail-back:hover{background:#d4e7c8;border-color:#649e6c}
+.tourney-detail-back:focus-visible{outline:3px solid #88b65e;outline-offset:3px}
+.tourney-detail-panel[hidden],.tourney-detail-workshop-spotlight[hidden]{display:none!important}
+.tourney-detail-competitions{margin:0 0 24px;border-color:#c6dfb6}
+.tourney-competitions-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:23px}
+.tourney-competitions-title h2{margin:9px 0 0}
+.tourney-competitions-title>strong{
+ flex:0 0 auto;background:#e4f4d6;color:#254a32;
+ border-radius:999px;padding:9px 13px;font-size:12px;white-space:nowrap
+}
+.tourney-competitions-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tourney-competition-group{border:1px solid #dbe7d6;background:#f7faf5;border-radius:15px;padding:19px}
+.tourney-competition-group h3{font-size:17px;margin:0 0 13px;color:#254735}
+.tourney-competition-group ul{list-style:none;margin:0;padding:0}
+.tourney-competition-group li{font-size:13px;line-height:1.45;color:#345540;
+ display:flex;align-items:center;justify-content:space-between;gap:7px;
+ padding:7px 0;border-bottom:1px solid #e3ebe1}
+.tourney-competition-group li:last-child{border-bottom:0}
+.tourney-competition-grade{border:1px solid #c1d9ba;background:#eaf3e6;
+ border-radius:8px;padding:3px 6px;color:#2e6040;font-size:10px;font-weight:900}
+.tourney-detail-logo{width:188px;flex-basis:188px;min-height:145px}
+.tourney-detail-logo img{max-height:130px}
+@media(max-width:830px){.tourney-competitions-groups{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){
+ .tourney-competitions-title{align-items:flex-start;flex-direction:column}
+ .tourney-competitions-groups{grid-template-columns:1fr}
+ .tourney-detail-logo{width:155px;min-height:110px}
+ .tourney-detail-back{margin-bottom:16px}
+}
+
+/* Rule workshops share the indigo/blue styling used in the event calendar. */
+body.is-workshop-detail .tourney-detail-hero{
+ background:linear-gradient(130deg,#17265a,#293d93 72%,#344ba8);
+ color:#fff;
+}
+body.is-workshop-detail .tourney-detail-hero .breadcrumb,
+body.is-workshop-detail .tourney-detail-hero .breadcrumb a,
+body.is-workshop-detail .tourney-detail-hero h1,
+body.is-workshop-detail .tourney-detail-hero p{color:#f2f5ff}
+body.is-workshop-detail .tourney-detail-hero .eyebrow{color:#c9d7ff}
+body.is-workshop-detail .tourney-detail-back{
+ background:rgba(255,255,255,.10);border-color:#91a9e5;color:#fff;
+}
+body.is-workshop-detail .tourney-detail-back:hover{background:rgba(255,255,255,.22)}
+body.is-workshop-detail .tourney-detail-section{background:#f1f3ff}
+body.is-workshop-detail .tourney-detail-panel{border-color:#bdc9f5;background:#fff}
+body.is-workshop-detail .tourney-detail-panel h2,
+body.is-workshop-detail .tourney-detail-panel h3{color:#233775}
+body.is-workshop-detail .tourney-detail-heading .kicker{color:#4055a7}
+body.is-workshop-detail .tourney-detail-chips span{background:#e8edff;border-color:#b9c8fa;color:#344b9a}
+body.is-workshop-detail .tourney-detail-calendar{background:#edf1ff}
+body.is-workshop-detail .tourney-detail-cta a{background:#354eae;color:#fff}
+body.is-workshop-detail .tourney-detail-cta a:hover{background:#253e99}
+body.is-workshop-detail .tourney-detail-cta a.tourney-detail-cta-light{background:#dfe6ff;color:#263f8a}
+body.is-workshop-detail .tourney-detail-secondary{color:#354eae}
+.tourney-detail-workshop-spotlight{
+ margin:8px 0 27px;padding:clamp(24px,4vw,42px);
+ border:1px solid #7f91d9;border-radius:25px;
+ color:#f7f8ff;background:linear-gradient(135deg,#243881 0%,#354eae 70%,#4e65bb 100%);
+ box-shadow:0 20px 45px rgba(39,58,126,.13);
+}
+.tourney-workshop-kicker{color:#cbdaff;font-size:11px;letter-spacing:.14em;font-weight:900}
+.tourney-detail-workshop-spotlight h2{
+ color:#fff;font-size:clamp(27px,3.65vw,42px);letter-spacing:-.045em;line-height:1.13;
+ margin:13px 0 12px;
+}
+.tourney-detail-workshop-spotlight>p{font-size:15px;line-height:1.65;max-width:720px;color:#e2e8ff}
+.tourney-workshop-prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:25px 0 21px}
+.tourney-workshop-price{padding:23px;border:1px solid #aabcef;border-radius:17px;background:rgba(255,255,255,.11)}
+.tourney-workshop-price span,.tourney-workshop-price small,.tourney-workshop-price strong{display:block}
+.tourney-workshop-price span{font-size:12px;font-weight:850;color:#dbe5ff}
+.tourney-workshop-price strong{font-size:clamp(30px,4.7vw,46px);line-height:1.1;letter-spacing:-.05em;margin:11px 0 9px;color:#fff}
+.tourney-workshop-price small{font-size:12px;line-height:1.6;color:#e1e7ff}
+.tourney-workshop-price--members{background:#e9f4cb;border-color:#e9f4cb}
+.tourney-workshop-price--members span{color:#38582d}
+.tourney-workshop-price--members strong{color:#204a31}
+.tourney-workshop-price--members small{color:#4e6b42}
+.tourney-workshop-signup{
+ display:inline-flex;align-items:center;justify-content:center;
+ padding:14px 24px;border-radius:999px;background:#fff;color:#2b4397;
+ text-decoration:none;font-weight:900;font-size:13px;
+}
+.tourney-workshop-signup:hover{background:#eaf1ff}
+.tourney-workshop-signup:focus-visible{outline:3px solid #d6f2a1;outline-offset:3px}
+@media(max-width:640px){
+ .tourney-workshop-prices{grid-template-columns:1fr}
+ .tourney-detail-workshop-spotlight{padding:24px 21px;border-radius:19px}
+ .tourney-workshop-price{padding:20px}
+ .tourney-workshop-signup{width:100%}
+}
+html[data-theme="dark"] .tourney-detail-competitions,
+html[data-theme="dark"] .tourney-competition-group{background:var(--ts-panel);border-color:var(--ts-line)}
+html[data-theme="dark"] .tourney-competition-group h3,
+html[data-theme="dark"] .tourney-competition-group li{color:var(--ts-text)}
+html[data-theme="dark"] .tourney-competitions-title>strong{color:#dbf4bc;background:#294c36}
+html[data-theme="dark"] .tourney-competition-grade{background:#2b5138;color:#d6f1bc}
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-section{background:#171d37}
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-panel{background:#222b4c;border-color:#4c60a0;color:#e8eeff}
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-panel h2,
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-panel h3{color:#e6edff}
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-facts dd{color:#dae3ff}
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-facts dt{color:#adbfed}
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-calendar{background:#29375f}
+html[data-theme="dark"] body.is-workshop-detail .tourney-detail-secondary{color:#c6d6ff}
