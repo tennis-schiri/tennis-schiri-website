@@ -502,3 +502,12 @@
  .home-v2 .home-zone--closing .community-join{justify-content:center}
  .home-v2 .home-zone--personal #kontakt .contact-inner{gap:18px}
 }
+
+
+/* 2026-11: longer service-card descriptions */
+.home-v2 .services-grid .service p{font-size:14px;line-height:1.7}
+.home-v2 .services-grid .service a{font-size:13px;line-height:1.5;margin-top:auto;padding-top:20px}
+@media(max-width:620px){
+ .home-v2 .services-grid .service p{font-size:14px}
+ .home-v2 .services-grid .service{min-height:0}
+}
