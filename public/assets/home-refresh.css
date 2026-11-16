@@ -511,3 +511,62 @@
  .home-v2 .services-grid .service p{font-size:14px}
  .home-v2 .services-grid .service{min-height:0}
 }
+
+
+/* Zufällige Regelfrage auf der Startseite */
+.home-v2 .rules-art .rules-question {
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  max-width: 580px;
+  margin-bottom: 10px!important;
+}
+.home-v2 .rules-home-situation {
+  position: relative;
+  z-index: 2;
+  color: #d3e4d7;
+  max-width: 470px;
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 0 0 17px;
+}
+.home-v2 .rules-home-answer .rules-home-source {
+  display: block;
+  margin: 9px 0 7px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #c8f16d;
+}
+.home-v2 .rules-home-answer .rules-home-case-link {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+}
+.home-v2 .rules-next-question {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 19px;
+  padding: 10px 14px;
+  border: 1px solid #739c7d;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  color: #e6f4e6;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+.home-v2 .rules-next-question:hover {
+  background: rgba(200,241,109,.13);
+  border-color: #c8f16d;
+}
+.home-v2 .rules-next-question:focus-visible {
+  outline: 3px solid #c8f16d;
+  outline-offset: 3px;
+}
+@media(max-width:620px) {
+  .home-v2 .rules-art .rules-question { font-size: clamp(23px, 7vw, 30px); }
+  .home-v2 .rules-home-situation { font-size: 13px; }
+}
