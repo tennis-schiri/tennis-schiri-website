@@ -2978,3 +2978,41 @@ html[data-theme="dark"] .service-detail-body h4,
 html[data-theme="dark"] .service-detail-body li strong { color: var(--ts-text); }
 html[data-theme="dark"] .service-detail-body > a { color: #bfe68a; }
 html[data-theme="dark"] .service-detail-panel:target { border-color: #96c75e; }
+
+/* 2026-11: tournament pager above and below event cards */
+.tourney-pages.tourney-pages--top,
+.tourney-pages.tourney-pages--bottom{
+  justify-content:flex-start;
+  align-items:center;
+  flex-wrap:wrap;
+  column-gap:17px;
+  row-gap:9px;
+  margin-top:0;
+  padding:0 2px;
+}
+.tourney-pages.tourney-pages--top{
+  margin:18px 0 22px;
+}
+.tourney-pages.tourney-pages--bottom{
+  margin:22px 0 36px;
+}
+.tourney-pages .tourney-page-status{
+  flex:0 0 auto;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:750;
+  line-height:1.45;
+}
+@media(max-width:620px){
+ .tourney-pages.tourney-pages--top,
+ .tourney-pages.tourney-pages--bottom{
+  flex-direction:row;
+  align-items:center;
+  gap:9px 13px;
+ }
+ .tourney-pages .tourney-page-controls{
+  display:flex;
+  flex-wrap:wrap;
+ }
+ .tourney-pages .tourney-page-status{font-size:12px}
+}
