@@ -163,6 +163,7 @@ jobs:
           php -l public/tournament-weather.php
           node --check public/assets/tournament-calendar.js
           python tests/tournament-pagination-test.py
+          node --check public/assets/back-to-top.js
           node --check public/assets/tournament-detail.js
           python tests/tournament-detail-test.py
           python tests/ahlbeck-competition-test.py
@@ -178,6 +179,7 @@ jobs:
           node tests/privacy-consent-test.mjs
           python tests/tennilo-branding-test.py
           python tests/sticky-header-test.py
+          python tests/back-to-top-test.py
           node --check public/assets/home-refresh.js
           node --check public/assets/home-rule-question.js
           node tests/home-layout-test.mjs
