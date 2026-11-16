@@ -126,6 +126,14 @@ body.is-workshop-detail .tourney-detail-secondary{color:#354eae}
 .tourney-workshop-price span{font-size:12px;font-weight:850;color:#dbe5ff}
 .tourney-workshop-price strong{font-size:clamp(30px,4.7vw,46px);line-height:1.1;letter-spacing:-.05em;margin:11px 0 9px;color:#fff}
 .tourney-workshop-price small{font-size:12px;line-height:1.6;color:#e1e7ff}
+.tourney-workshop-price--guests .tourney-workshop-price-later{
+  margin:17px 0 8px;
+  padding-top:16px;
+  border-top:1px solid rgba(221,231,255,.33);
+  font-size:clamp(27px,3.6vw,36px);
+}
+.tourney-workshop-price--guests small{font-weight:700}
+
 .tourney-workshop-price--members{background:#e9f4cb;border-color:#e9f4cb}
 .tourney-workshop-price--members span{color:#38582d}
 .tourney-workshop-price--members strong{color:#204a31}
