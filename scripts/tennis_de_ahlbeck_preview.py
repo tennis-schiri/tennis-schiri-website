@@ -141,6 +141,29 @@ def login_form(driver):
     return None
 
 
+
+def account_login_form(driver):
+    """Strict fallback for the official account.tennis.de page only.
+
+    Its sign-in button and two inputs can be in separate DOM wrappers, so
+    searching for one shared parent as login_form() does is not sufficient.
+    No broad guessing across unrelated forms or domains is allowed.
+    """
+    if urlparse(driver.current_url).hostname != "account.tennis.de":
+        return None
+    passwords = visible(driver.find_elements(By.CSS_SELECTOR, "input[type='password']"))
+    fields = visible(driver.find_elements(By.CSS_SELECTOR,
+        "input[type='email'], input[type='text'], input[autocomplete='username']"))
+    # De-duplicate elements matching multiple CSS selectors.
+    unique = {field.id: field for field in fields}
+    actions = [b for b in visible(driver.find_elements(
+        By.CSS_SELECTOR, "button, input[type='submit']"
+    )) if _submit_label(b) in ("login", "einloggen", "anmelden")]
+    if len(passwords) != 1 or len(unique) != 1 or len(actions) != 1:
+        return None
+    return actions[0], next(iter(unique.values())), passwords[0]
+
+
 def prepare_login_page(driver):
     # The portal can display registration and login dialogs simultaneously.
     # Never use the first password field without checking the sign-in action.
@@ -176,7 +199,7 @@ def prepare_login_page(driver):
     check_host(driver)
     time.sleep(3)
     diagnose_login_ui(driver, "Accountseite")
-    match = login_form(driver)
+    match = login_form(driver) or account_login_form(driver)
     if match:
         print("Eindeutiges Formular auf Accountseite gefunden.")
         return match
