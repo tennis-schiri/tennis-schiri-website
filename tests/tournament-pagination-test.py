@@ -14,6 +14,41 @@ for marker in [top, bottom, 'tourney-page-controls-top', 'tourney-page-controls'
                'tourney-page-status-top', 'tourney-page-status']:
     assert page.count(f'id="{marker}"') == 1, f"Pagination anchor must be unique: {marker}"
 
+# Guard against mismatched closing tags: one extra </div> previously made the
+# browser move the lower page controls into the first event's grid row.
+from html.parser import HTMLParser
+
+class ContainerStructure(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.stack=[]
+        self.errors=[]
+        self.parents={}
+    def handle_starttag(self, tag, attrs):
+        if tag not in {"div","article","section","nav","main","aside","header","footer"}:
+            return
+        attrs=dict(attrs)
+        ident=attrs.get("id")
+        if ident:
+            self.parents[ident]=self.stack[-1][1] if self.stack else None
+        self.stack.append((tag,ident))
+    def handle_endtag(self,tag):
+        if tag not in {"div","article","section","nav","main","aside","header","footer"}:
+            return
+        if not self.stack or self.stack[-1][0]!=tag:
+            self.errors.append((tag,self.stack[-1] if self.stack else None))
+        else:
+            self.stack.pop()
+
+structure=ContainerStructure()
+structure.feed(page)
+assert not structure.errors and not structure.stack, (
+    f"Unbalanced HTML containers cause misplaced pagination: {structure.errors}, {structure.stack}"
+)
+assert structure.parents["tourney-pagination-top"]==structure.parents["tourney-grid"]==structure.parents["tourney-pagination"], (
+    "Both page controls must be siblings of the event grid"
+)
+
 assert page.index(f'id="{top}"') < page.index('id="tourney-grid"'), "Top pager below events"
 assert page.index('id="tourney-grid"') < page.index(f'id="{bottom}"'), "Bottom pager above events"
 
