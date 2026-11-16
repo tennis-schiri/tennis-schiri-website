@@ -118,6 +118,9 @@ jobs:
               "assets/branding/ts-favicon.png",
               "assets/back-to-top.js", "assets/privacy-consent.js",
               "assets/home-refresh.css", "assets/home-refresh.js", "assets/home-rule-question.js",
+              "assets/tournament-detail.css", "assets/tournament-detail.js",
+              "assets/venues/ntc-93.jpg", "assets/venues/tc-blau-weiss-ahlbeck.png",
+              "assets/venues/tc-rotation-friedrichsfelde.jpg",
               "mein-turniertag/index.html", "assets/mein-turniertag.js", "assets/mein-turniertag.css",
               "assets/tennilo-logo.png", "assets/tennilo-icon.png",
               "data/instagram.json", "data/statistics.json",
@@ -162,6 +165,7 @@ jobs:
           python tests/tournament-pagination-test.py
           node --check public/assets/tournament-detail.js
           python tests/tournament-detail-test.py
+          python tests/ahlbeck-competition-test.py
           node --check public/assets/rules-library.js
           python tests/rules-library-test.py
           node --check public/assets/rules-reference.js
