@@ -21,6 +21,13 @@ wsAssert(!str_contains($html,'Jetzt 20,00 € per PayPal zahlen: https://'),'Kei
 wsAssert(!str_contains($html,'Direkt vom Workshop abmelden:'),'Kein doppelter Abmeldelink im HTML');
 wsAssert(str_contains($text,workshopPaypalLink(2000,$workshop['id'])),'PayPal-Link in Textmail fehlt');
 wsAssert(str_contains($text,$row['cancel_url']),'Abmeldelink in Textmail fehlt');
+wsAssert(str_contains($text,'Dauer: ca. 2–2,5 Stunden'),'Workshop-Dauer fehlt in Bestätigungsmail');
+// Bereits gespeicherte 15-Euro-Anmeldungen dürfen rückwirkend keinen neuen Betrag erhalten.
+$previous=$row;$previous['fee_cents']=1500;
+[, $oldText, $oldHtml]=workshopMailContent($workshop,$previous,'confirmation');
+wsAssert(str_contains($oldText,'15,00 €'),'Bestandsanmeldung muss ihren ursprünglichen Beitrag behalten');
+wsAssert(str_contains($oldHtml,'15,00 € mit PayPal bezahlen'),'PayPal-Button muss den Betrag der Bestandsanmeldung anzeigen');
+wsAssert(str_contains(workshopPaypalLink(1500,$workshop['id']),'amount=15.00'),'Bestandsanmeldung benötigt ihren bisherigen PayPal-Betrag');
 
 [, $reminderText]=workshopMailContent($workshop,$row,'reminder','paypal.me/beispiel');wsAssert(str_contains($reminderText,'kurze Erinnerung'),'Erinnerungsmail fehlt');
 [, $paymentText]=workshopMailContent($workshop,$row,'payment','paypal.me/beispiel');wsAssert(str_contains($paymentText,'Workshopdatum'),'PayPal-Mail unvollständig');
