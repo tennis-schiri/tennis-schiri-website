@@ -1,17 +1,20 @@
-# Neue Website tennis-schiri.de
+# Website tennis-schiri.de
 
-Entwicklung der neuen Website für **tennis-schiri.de**. Die bisherige WordPress-Seite bleibt bis zum finalen Wechsel unverändert.
+## Veröffentlichung: TEST und LIVE sind getrennt
 
-## Testumgebung und Veröffentlichung
+**Für Änderungen auf tennis-schiri.de den Live-Workflow starten**, nicht den Test-Workflow:
 
-- Testadresse: https://neu.tennis-schiri.de/
-- Branch: `main`
-- Website-Dateien im Verzeichnis `public/`
-- Veröffentlichungsworkflow: `.github/workflows/deploy.yml`
-- GitHub → Actions → **Website per FTPS veröffentlichen** → **Run workflow**
-- GitHub Secrets: `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`
-- FTP-Benutzer bei ALL-INKL unbedingt auf das Verzeichnis der Test-Subdomain beschränken (`/tennis-schiri-neu/`)
-- Der Workflow lädt nur namentlich freigegebene Dateien hoch; **keine Löschbefehle**
+- **Live-Upload:** https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-live.yml
+  - Workflow `.github/workflows/deploy-live.yml`; eigene Secrets `FTP_LIVE_HOST`, `FTP_LIVE_USER`, `FTP_LIVE_PASSWORD`
+  - Ziel ist der separate Live-Webspace (FTP-Benutzer laut Konfiguration auf `/tennis-schiri-live/` begrenzt).
+  - Erst wirksam auf der Hauptdomain, wenn `tennis-schiri.de` beim Hoster auf dieses Verzeichnis zeigt.
+- **Nur Testwebsite:** https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy.yml
+  - Workflow `.github/workflows/deploy.yml`; Secrets `FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`
+  - Testadresse https://neu.tennis-schiri.de/; FTP-Ziel `/tennis-schiri-neu/`
+
+Beide Workflows müssen separat manuell gestartet werden. Ein grüner Test-Upload bedeutet **nicht**, dass die Live-Seite aktualisiert wurde. Der Live-Workflow bereitet die Produktivdateien einschließlich Robots-Regeln getrennt auf.
+
+Der Quellcode liegt im Branch `main`, die Website-Dateien unter `public/`. Der Test-Workflow löscht keine Dateien.
 
 ## Seiten
 
