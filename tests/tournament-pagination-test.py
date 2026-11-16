@@ -24,14 +24,16 @@ class ContainerStructure(HTMLParser):
         self.stack=[]
         self.errors=[]
         self.parents={}
+        self.counter=0
     def handle_starttag(self, tag, attrs):
         if tag not in {"div","article","section","nav","main","aside","header","footer"}:
             return
         attrs=dict(attrs)
         ident=attrs.get("id")
         if ident:
-            self.parents[ident]=self.stack[-1][1] if self.stack else None
-        self.stack.append((tag,ident))
+            self.parents[ident]=self.stack[-1][2] if self.stack else None
+        self.counter+=1
+        self.stack.append((tag,ident,self.counter))
     def handle_endtag(self,tag):
         if tag not in {"div","article","section","nav","main","aside","header","footer"}:
             return
