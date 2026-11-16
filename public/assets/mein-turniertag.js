@@ -122,7 +122,86 @@
  });
  for(const box of checks)box.addEventListener('change',update);
  for(const field of [arrival,match,notes])field.addEventListener('input',update);
- $('mt-print').addEventListener('click',()=>window.print());
+ function buildPrintSheet(){
+  // Print from the live checklist, never from a duplicated static list.
+  const mount=$('mt-print-sheet');
+  if(!mount)return;
+  const el=(tag,cls,value)=>{
+   const item=document.createElement(tag);
+   if(cls)item.className=cls;
+   if(value!==undefined)item.textContent=value;
+   return item;
+  };
+  const title=el('header','mt-print-head');
+  title.append(
+   el('div','mt-print-brand','TENNIS-SCHIRI.DE  /  MEIN TURNIERTAG'),
+   el('h1','','Meine Turniercheckliste'),
+   el('span','mt-print-created','Druckstand: '+new Date().toLocaleDateString('de-DE'))
+  );
+  const event=el('section','mt-print-event');
+  event.append(el('span','mt-print-caption','TURNIER'));
+  const selected=!eventBox.hidden;
+  event.append(el('h2','',selected?$('mt-event-name').textContent:'Allgemeine Checkliste'));
+  if(selected){
+   const details=[
+    $('mt-event-date').textContent,
+    $('mt-event-venue').textContent,
+    $('mt-event-address').hidden?'':$('mt-event-address').textContent
+   ].filter(Boolean);
+   event.append(el('p','mt-print-event-meta',details.join('  ·  ')));
+  }else{
+   event.append(el('p','mt-print-event-meta','Kein Turnier ausgewählt – persönliche Vorbereitung'));
+  }
+  const schedule=el('div','mt-print-schedule');
+  const formatTime=t=>t||'________';
+  for(const [label,value] of [
+   ['Geplante Ankunft',formatTime(arrival.value)],
+   ['Erste Ansetzung',formatTime(match.value)]
+  ]){
+   const block=el('div','mt-print-schedule-block');
+   block.append(el('span','',label),el('strong','',value));
+   schedule.append(block);
+  }
+  const notesWrap=el('section','mt-print-notes');
+  notesWrap.append(el('strong','','Notizen'));
+  const full=notes.value.trim().replace(/\s+/g,' ');
+  const shortened=full.length>190?full.slice(0,187).trimEnd()+' … (gekürzt)':full;
+  notesWrap.append(el('p','',shortened||'______________________________________________________________________'));
+  const checklistTitle=el('div','mt-print-checks-title');
+  checklistTitle.append(el('h2','','15 Punkte für deinen Turniertag'));
+  checklistTitle.append(el('span','','4 Phasen  ·  zum Abhaken'));
+  const grid=el('div','mt-print-grid');
+  const sections=Array.from(document.querySelectorAll('.mt-check-section'));
+  for(const section of sections){
+   const block=el('section','mt-print-phase');
+   const heading=el('div','mt-print-phase-heading');
+   heading.append(
+    el('span','mt-print-number',section.querySelector('.mt-step-no')?.textContent||''),
+    el('h3','',section.querySelector('h3')?.textContent||'')
+   );
+   const items=el('div','mt-print-items');
+   for(const label of section.querySelectorAll('.mt-check-item')){
+    const input=label.querySelector('input.mt-check');
+    const line=el('div','mt-print-item');
+    const box=el('span','mt-print-box'+(input?.checked?' is-checked':''),input?.checked?'✓':'');
+    box.setAttribute('aria-hidden','true');
+    line.append(box,el('span','',label.querySelector('span')?.textContent||''));
+    items.append(line);
+   }
+   block.append(heading,items);
+   grid.append(block);
+  }
+  const caution=el('div','mt-print-footer',
+   'Wichtig: Maßgeblich bleiben Ausschreibung, Ansetzungen und Hinweise der Turnierleitung.  ·  tennis-schiri.de');
+  mount.replaceChildren(title,event,schedule,notesWrap,checklistTitle,grid,caution);
+ }
+ // Browser print via button, keyboard shortcut or mobile share dialog.
+ window.addEventListener('beforeprint',buildPrintSheet);
+ if(window.matchMedia){
+  const printMedia=window.matchMedia('print');
+  if(printMedia.addEventListener)printMedia.addEventListener('change',e=>{if(e.matches)buildPrintSheet();});
+ }
+ $('mt-print').addEventListener('click',()=>{buildPrintSheet();window.print();});
  $('mt-reset').addEventListener('click',()=>{
   if(!window.confirm('Alle Häkchen, Uhrzeiten, Notizen und die Turnierauswahl auf diesem Gerät zurücksetzen?'))return;
   try{localStorage.removeItem(STORAGE);}catch(_){}
