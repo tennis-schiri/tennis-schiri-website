@@ -28,6 +28,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Ahlbeck 2027 im zuständigen TMV-nuLiga-Kalender prüfen (nur lesen)
+        shell: bash
+        run: |
+          python scripts/ahlbeck_tmv_preview.py
+
       - name: Öffentlichen Browser vorbereiten
         shell: bash
         run: |
