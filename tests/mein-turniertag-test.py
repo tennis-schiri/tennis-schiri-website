@@ -20,7 +20,7 @@ if len(re.findall(r'class="mt-check-section"',page))!=4:
 for item in ["mt-select","mt-arrival","mt-match","mt-notes","mt-progress","mt-count","mt-print","mt-reset","mt-event","mt-event-detail","mt-event-route","mt-data-status"]:
     if f'id="{item}"' not in page:
         raise SystemExit("Mein Turniertag: Bedienelement fehlt: "+item)
-if 'site.css?v=' not in page or 'mein-turniertag.css?v=1' not in page or 'mein-turniertag.js?v=1' not in page:
+if 'site.css?v=' not in page or 'mein-turniertag.css?v=2' not in page or 'mein-turniertag.js?v=2' not in page:
     raise SystemExit("Mein Turniertag: Styles oder Skript nicht eingebunden")
 for snippet in ["ts-mein-turniertag-v1","../turniere/index.html","DOMParser","localStorage","window.confirm","replaceState","cache:'no-store'"]:
     if snippet not in script:
@@ -29,8 +29,19 @@ if "credentials:'omit'" not in script:
     raise SystemExit("Mein Turniertag: nur öffentliche Kalenderdaten laden")
 if "document.cookie" in script or "fetch('https://" in script:
     raise SystemExit("Mein Turniertag: unbekannte Cookies oder externe Requests")
-if "@media print" not in css or ".mt-check-item" not in css:
-    raise SystemExit("Mein Turniertag: Druckansicht/Checkliste fehlt")
+if "@page{size:A4 portrait;margin:9mm}" not in css or "body>*:not(#mt-print-sheet)" not in css:
+    raise SystemExit("Mein Turniertag: eigenes A4-Drucklayout oder Ausblendregeln fehlen")
+if "id=\"mt-print-sheet\"" not in page or "mt-print-sheet{display:none!important}" not in css:
+    raise SystemExit("Mein Turniertag: separates, nur gedrucktes Blatt fehlt")
+for token in ["buildPrintSheet()", "beforeprint", "window.print()", ".mt-check-section", "mt-print-grid", "mt-print-item", "arrival.value", "match.value", "notes.value"]:
+    if token not in script:
+        raise SystemExit("Mein Turniertag: Druckblatt nimmt Live-Eingaben nicht korrekt auf: "+token)
+for token in [".mt-print-head", ".mt-print-event", ".mt-print-schedule", ".mt-print-notes", ".mt-print-grid", ".mt-print-phase"]:
+    if token not in css:
+        raise SystemExit("Mein Turniertag: kompakter Druckbereich fehlt: "+token)
+if "grid-template-columns:repeat(2,minmax(0,1fr))" not in css:
+    raise SystemExit("Mein Turniertag: zweispaltige Druck-Checkliste fehlt")
+
 for name,source,target in [
     ("Startseite",home,'href="mein-turniertag/"'),
     ("Turnierkalender",turniere,'href="../mein-turniertag/"'),
