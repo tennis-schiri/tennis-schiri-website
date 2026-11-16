@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       mit_login:
-        description: 'Mit GitHub-Secrets bei tennis.de anmelden?'
+        description: 'Angemeldeten Abruf mit vorhandenem tennis.de-Passwort versuchen (nur lesen)'
         type: boolean
-        default: false
+        default: true
         required: true
 
 permissions:
