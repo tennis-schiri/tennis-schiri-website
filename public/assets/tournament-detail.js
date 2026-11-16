@@ -38,6 +38,7 @@
   const label=venue+' '+location;
   if(/ahlbeck/i.test(label))return {src:'../assets/venues/tc-blau-weiss-ahlbeck.png',alt:'Original-Logo TC Blau-Weiß Ahlbeck'};
   if(/neuenhagen|ntc\s*93/i.test(label))return {src:'../assets/venues/ntc-93.jpg',alt:'Original-Logo Neuenhagener Tennisclub 93'};
+  if(/rotation|friedrichsfelde/i.test(label))return {src:'../assets/venues/tc-rotation-friedrichsfelde.jpg',alt:'Vereinslogo TC Rotation Friedrichsfelde'};
   if(/bad saarow|sunball/i.test(label))return {src:'../assets/partner/sunball-tenniscenter.png',alt:'SUNBALL Tennis Center Bad Saarow'};
   return null;
  }
