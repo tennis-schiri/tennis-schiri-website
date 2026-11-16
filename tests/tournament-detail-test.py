@@ -36,7 +36,7 @@ for marker in ['id="event-back"','id="event-competitions-panel"',
                'tourney-workshop-price--members','tourney-workshop-price--guests']:
     if marker not in detail:
         raise SystemExit("Neuer Detailseiten-Baustein fehlt: "+marker)
-for name in ["ntc-93.jpg","tc-blau-weiss-ahlbeck.png","tc-rotation-friedrichsfelde.jpg"]:
+for name in ["ntc-93.png","tc-blau-weiss-ahlbeck.png","tc-rotation-friedrichsfelde.jpg"]:
     image=public/"assets"/"venues"/name
     if not image.is_file() or image.stat().st_size<1000:
         raise SystemExit("Vereinslogo fehlt oder ist leer: "+name)
