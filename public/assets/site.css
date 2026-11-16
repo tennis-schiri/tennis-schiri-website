@@ -742,27 +742,28 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 }
 
 
-/* Dynamischer Zurueck-nach-oben-Button */
+/* Animierter Nach-oben-Button: sanfter Impuls und schwebender Pfeil.
+   Nur opacity und transform animieren – fuer fluessige Darstellung auch auf Mobilgeraeten. */
 .back-to-top{
   appearance:none;
   position:fixed;
-  z-index:90;
+  z-index:110;
   right:max(22px,env(safe-area-inset-right));
   bottom:max(24px,env(safe-area-inset-bottom));
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:9px;
-  min-height:50px;
+  min-height:52px;
   padding:12px 18px 12px 13px;
   color:#19382c;
   background:#c8f16d;
   border:1px solid #a6d851;
   border-radius:999px;
-  box-shadow:0 9px 30px rgba(11,40,26,.28);
+  box-shadow:0 9px 30px rgba(11,40,26,.24);
   font-family:inherit;
   font-size:13px;
-  font-weight:800;
+  font-weight:850;
   line-height:1.1;
   letter-spacing:.01em;
   white-space:nowrap;
@@ -770,37 +771,59 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
   opacity:0;
   visibility:hidden;
   pointer-events:none;
-  transform:translateY(16px);
-  transition:opacity .22s ease,transform .22s ease,visibility .22s ease,background-color .18s ease,box-shadow .18s ease;
+  transform:translate3d(0,18px,0) scale(.94);
+  transition:opacity .32s ease,transform .42s cubic-bezier(.19,.75,.23,1),
+             visibility .32s ease,background-color .18s ease,box-shadow .18s ease;
+  isolation:isolate;
+}
+.back-to-top::before{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border-radius:inherit;
+  border:2px solid rgba(139,188,63,.67);
+  pointer-events:none;
+  opacity:0;
+  transform:scale(.94);
+}
+.back-to-top.is-visible::before{
+  animation:ts-back-to-top-halo 2.9s ease-out infinite;
+}
+@keyframes ts-back-to-top-halo{
+  0%{transform:scale(.92);opacity:.72}
+  68%{transform:scale(1.22);opacity:0}
+  100%{transform:scale(1.22);opacity:0}
 }
 .back-to-top svg{
   flex:none;
   width:22px;
   height:22px;
   transform-origin:center;
-  animation:ts-back-to-top-float 2.4s ease-in-out infinite;
+  animation:ts-back-to-top-float 1.85s ease-in-out infinite;
 }
 @keyframes ts-back-to-top-float{
-  0%,100%{transform:translateY(1px)}
-  50%{transform:translateY(-4px)}
+  0%,100%{transform:translate3d(0,2px,0)}
+  50%{transform:translate3d(0,-4px,0)}
 }
-.back-to-top.is-visible:hover svg{animation-duration:.85s}
-.back-to-top.is-launching svg{animation:ts-back-to-top-launch .55s cubic-bezier(.2,.65,.2,1) both}
+.back-to-top.is-visible:hover svg{animation-duration:1.2s}
+.back-to-top.is-launching svg{
+  animation:ts-back-to-top-launch .65s cubic-bezier(.2,.65,.2,1) both;
+}
 @keyframes ts-back-to-top-launch{
-  0%{transform:translateY(0) scale(1);opacity:1}
-  38%{transform:translateY(-7px) scale(1.16);opacity:1}
-  100%{transform:translateY(-18px) scale(.78);opacity:0}
+  0%{transform:translate3d(0,0,0) scale(1);opacity:1}
+  42%{transform:translate3d(0,-9px,0) scale(1.16);opacity:1}
+  100%{transform:translate3d(0,-22px,0) scale(.8);opacity:0}
 }
 .back-to-top.is-visible{
   opacity:1;
   visibility:visible;
   pointer-events:auto;
-  transform:translateY(0);
+  transform:translate3d(0,0,0) scale(1);
 }
 .back-to-top.is-visible:hover{
   background:#dcffa0;
-  transform:translateY(-3px);
-  box-shadow:0 13px 34px rgba(11,40,26,.34);
+  transform:translate3d(0,-3px,0) scale(1.025);
+  box-shadow:0 13px 34px rgba(11,40,26,.32);
 }
 .back-to-top:focus-visible{
   outline:3px solid #15382d;
@@ -809,19 +832,21 @@ footer p{font-size:13px;color:#aebeb2;max-width:340px;margin:19px 0 0}
 @media(max-width:620px){
   .back-to-top{
     right:max(15px,env(safe-area-inset-right));
-    bottom:max(17px,env(safe-area-inset-bottom));
-    width:49px;
-    height:49px;
-    min-height:49px;
+    bottom:max(18px,env(safe-area-inset-bottom));
+    width:53px;
+    height:53px;
+    min-height:53px;
     padding:0;
     border-radius:50%;
   }
   .back-to-top span{display:none}
-  .back-to-top svg{width:24px;height:24px}
+  .back-to-top svg{width:25px;height:25px}
 }
 @media(prefers-reduced-motion:reduce){
   .back-to-top{transition:none}
   .back-to-top.is-visible:hover{transform:none}
+  .back-to-top::before,
+  .back-to-top.is-visible::before,
   .back-to-top svg,
   .back-to-top.is-visible:hover svg,
   .back-to-top.is-launching svg{animation:none!important}
