@@ -30,4 +30,23 @@ if ".tennis-quote-line{border:" not in css:
     raise SystemExit("Dezenter Rahmen um Tenniszitate fehlt")
 if "tourney-detail-link:after" not in css:
     raise SystemExit("Klickfläche für Termine fehlt")
-print(f"Turnierdetails: {len(ids)} Termine verlinkt; Karte, .ics und Kartenrahmen vorhanden.")
+extra=(public/"assets"/"tournament-detail.css").read_text(encoding="utf-8")
+for marker in ['id="event-back"','id="event-competitions-panel"',
+               'id="event-competitions-groups"','id="event-workshop-spotlight"',
+               'tourney-workshop-price--members','tourney-workshop-price--guests']:
+    if marker not in detail:
+        raise SystemExit("Neuer Detailseiten-Baustein fehlt: "+marker)
+for name in ["ntc-93.jpg","tc-blau-weiss-ahlbeck.png","tc-rotation-friedrichsfelde.jpg"]:
+    image=public/"assets"/"venues"/name
+    if not image.is_file() or image.stat().st_size<1000:
+        raise SystemExit("Vereinslogo fehlt oder ist leer: "+name)
+    if name not in script:
+        raise SystemExit("Logo ist in der Detailseiten-Logik nicht eingebunden: "+name)
+for marker in ["history.back()","renderCompetitions(official)","'is-workshop-detail'","'event-workshop-spotlight'"]:
+    if marker not in script:
+        raise SystemExit("Verhalten der Detailseite fehlt: "+marker)
+for marker in [".tourney-workshop-prices",".tourney-workshop-price--members",
+               ".tourney-detail-back",".tourney-competitions-groups"]:
+    if marker not in extra:
+        raise SystemExit("Gestaltung der Detailseite fehlt: "+marker)
+print(f"Turnierdetails: {len(ids)} Termine verlinkt; Original-Vereinslogos, Zurück, Workshop-Preise und Konkurrenzen vorhanden.")
