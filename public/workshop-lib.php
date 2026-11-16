@@ -3,6 +3,13 @@ declare(strict_types=1);
 
 if (!defined('TS_WORKSHOP')) { http_response_code(404); exit; }
 
+/** The early-booker cutoff is inclusive, measured in Berlin local time. */
+function workshopGuestFeeCents(?DateTimeImmutable $at=null): int {
+ $berlin=new DateTimeZone('Europe/Berlin');
+ $today=($at??new DateTimeImmutable('now',$berlin))->setTimezone($berlin)->format('Y-m-d');
+ return $today<='2027-01-31'?1500:2500;
+}
+
 /** @return array<string,array<string,mixed>> */
 function workshopCatalog(): array {
  return [
@@ -16,7 +23,7 @@ function workshopCatalog(): array {
    'location'=>'Neuenhagener Tennisclub 93 e. V.',
    'address'=>'Hildesheimer Straße 11–13, 15366 Neuenhagen bei Berlin',
    'host_club'=>'Neuenhagener Tennisclub 93 e. V.',
-   'guest_fee_cents'=>2000,
+   'guest_fee_cents'=>workshopGuestFeeCents(),
   ],
  ];
 }
@@ -29,7 +36,7 @@ function workshopSchema(PDO $db): void {
   email TEXT NOT NULL COLLATE NOCASE,
   club TEXT NOT NULL DEFAULT '',
   is_member INTEGER NOT NULL DEFAULT 0,
-  fee_cents INTEGER NOT NULL DEFAULT 2000,
+  fee_cents INTEGER NOT NULL DEFAULT 2500,
   payment_method TEXT NOT NULL DEFAULT 'onsite',
   payment_status TEXT NOT NULL DEFAULT 'open',
   status TEXT NOT NULL DEFAULT 'registered',
@@ -110,7 +117,7 @@ function workshopMailContent(array $workshop,array $registration,string $kind='c
  $paypalDetail=$paypalUrl!==''?"\nJetzt ".$feeDisplay." per PayPal zahlen: ".$paypalUrl."\nEmpfänger: paypal@tennis-schiri.de":'';
 
  if($isMember || $fee<=0){
-  $paymentText='Als Mitglied des NTC 93 nimmst du kostenfrei teil.';
+  $paymentText='Für NTC-93-Mitglieder und Eltern bzw. Familienangehörige jugendlicher NTC-93-Mitglieder ist die Teilnahme kostenlos.';
  }elseif($payment==='paypal'){
   $paymentText='Teilnahmebeitrag: '.workshopFeeLabel($fee).' · Zahlung per PayPal.';
   $paymentText.=$paypalDetail;
@@ -157,7 +164,7 @@ function workshopAdminNotification(array $workshop,array $registration): array {
   "Name: ".($registration['name']??'')."\n".
   "E-Mail: ".($registration['email']??'')."\n".
   "Verein: ".(($registration['club']??'')?:'–')."\n".
-  "NTC-93-Mitglied: ".(((int)($registration['is_member']??0)===1)?'ja':'nein')."\n".
+  "Kostenfreie Teilnahme (Mitglied / Familie eines jugendlichen NTC-Mitglieds): ".(((int)($registration['is_member']??0)===1)?'ja':'nein')."\n".
   "Teilnahmebeitrag: ".workshopFeeLabel((int)($registration['fee_cents']??0))."\n".
   "Zahlungsart: ".workshopPaymentMethodLabel((string)($registration['payment_method']??''))."\n\n".
   "Termin: ".$workshop['date']." · ".$workshop['time']."\n".
