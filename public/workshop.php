@@ -84,7 +84,7 @@ $db->prepare('INSERT INTO workshop_attempts(ip_hash,created_at) VALUES(?,?)')->e
 $fee=$isMember?0:(int)$workshop['guest_fee_cents'];$paymentMethod=$isMember?'free':$payment;$paymentStatus=$isMember?'waived':'open';
 if($isMember&&$club==='')$club=(string)$workshop['host_club'];
 try{
- $q=$db->prepare("INSERT INTO workshop_registrations(workshop_id,name,email,club,is_member,fee_cents,payment_method,payment_status,status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?, 'registered',?,?) ON CONFLICT(workshop_id,email) DO UPDATE SET name=excluded.name,club=excluded.club,is_member=excluded.is_member,fee_cents=excluded.fee_cents,payment_method=excluded.payment_method,payment_status=excluded.payment_status,status='registered',cancel_version=workshop_registrations.cancel_version+1,updated_at=excluded.updated_at");
+ $q=$db->prepare("INSERT INTO workshop_registrations(workshop_id,name,email,club,is_member,fee_cents,payment_method,payment_status,status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?, 'registered',?,?) ON CONFLICT(workshop_id,email) DO UPDATE SET name=excluded.name,club=excluded.club,is_member=excluded.is_member,fee_cents=CASE WHEN workshop_registrations.status='registered' AND workshop_registrations.is_member=excluded.is_member THEN workshop_registrations.fee_cents ELSE excluded.fee_cents END,payment_method=excluded.payment_method,payment_status=CASE WHEN workshop_registrations.status='registered' AND workshop_registrations.is_member=excluded.is_member THEN workshop_registrations.payment_status ELSE excluded.payment_status END,status='registered',cancel_version=workshop_registrations.cancel_version+1,updated_at=excluded.updated_at");
  $q->execute([$workshopId,$name,$email,$club,$isMember?1:0,$fee,$paymentMethod,$paymentStatus,$now,$now]);
  $q=$db->prepare('SELECT * FROM workshop_registrations WHERE workshop_id=? AND email=?');$q->execute([$workshopId,$email]);$registration=$q->fetch();
  if(!$registration)throw new RuntimeException('Anmeldung konnte nicht gelesen werden.');
@@ -99,6 +99,8 @@ else error_log('Workshop confirmation mail not accepted: '.$email);
 [$adminSubject,$adminText,$adminHtml]=workshopAdminNotification($workshop,$registration);
 if(!workshopSendMail('mw@tennis-schiri.de',$adminSubject,$adminText,$adminHtml))error_log('Workshop admin notification not accepted.');
 
-$payText=$isMember?'Für Mitglieder des NTC 93 ist die Teilnahme kostenfrei.':('Teilnahmebeitrag: '.workshopFeeLabel($fee).' · '.($paymentMethod==='paypal'?'Der PayPal-Zahlungslink steht in deiner Bestätigungsmail.':'zahlbar vor Ort.'));
+$savedFee=(int)($registration['fee_cents']??0);
+$savedPayment=(string)($registration['payment_method']??'onsite');
+$payText=$savedFee<=0?'Kostenfrei für NTC-93-Mitglieder sowie Eltern und Familienangehörige jugendlicher NTC-93-Mitglieder.':('Teilnahmebeitrag: '.workshopFeeLabel($savedFee).' · '.($savedPayment==='paypal'?'Der PayPal-Zahlungslink steht in deiner Bestätigungsmail.':'zahlbar vor Ort.'));
 $mailNote=$confirmationSent?'Eine Bestätigung wurde an '.wsEsc($email).' geschickt.':'Deine Anmeldung ist gespeichert. Die automatische Bestätigungsmail konnte technisch nicht versendet werden.';
 wsPage('Anmeldung eingegangen','<p>Dein Platz für den Regelworkshop ist vorgemerkt.</p><div class="summary"><strong>'.wsEsc($workshop['title']).'</strong><br>'.wsEsc($workshop['date']).' · '.wsEsc($workshop['time']).'<br>'.wsEsc($workshop['location']).'<br>'.wsEsc($workshop['address']).'<br><br>'.wsEsc($payText).'</div><p>'.$mailNote.'</p><p>Falls du doch nicht teilnehmen kannst, nutze den Abmeldelink in deiner Bestätigungsmail oder schreibe an <a href="mailto:turniere@tennis-schiri.de">turniere@tennis-schiri.de</a>.</p>');
