@@ -35,8 +35,62 @@
  function safeIcs(value){return String(value).replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');}
  function mapsUrl(address){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address);}
  function officialLogo(venue,location){
-  if(/bad saarow/i.test(venue+' '+location))return {src:'../assets/partner/sunball-tenniscenter.png',alt:'SUNBALL Tennis Center Bad Saarow'};
+  const label=venue+' '+location;
+  if(/ahlbeck/i.test(label))return {src:'../assets/venues/tc-blau-weiss-ahlbeck.png',alt:'Original-Logo TC Blau-Weiß Ahlbeck'};
+  if(/neuenhagen|ntc\s*93/i.test(label))return {src:'../assets/venues/ntc-93.jpg',alt:'Original-Logo Neuenhagener Tennisclub 93'};
+  if(/bad saarow|sunball/i.test(label))return {src:'../assets/partner/sunball-tenniscenter.png',alt:'SUNBALL Tennis Center Bad Saarow'};
   return null;
+ }
+ function installBackLink(id){
+  const link=$('event-back');
+  if(!link)return;
+  // Direct visitors land at the selected event in the overview.
+  link.href='./#'+encodeURIComponent(id);
+  let origin=null;
+  try{if(document.referrer)origin=new URL(document.referrer);}catch(_){}
+  if(origin?.origin===location.origin &&
+     origin.pathname!==location.pathname){
+    link.addEventListener('click',event=>{
+      event.preventDefault();
+      history.back();
+    });
+  }
+ }
+ function renderCompetitions(official){
+  const competitions=official?.competitions?.filter(c=>c&&typeof c.name==='string')||[];
+  if(competitions.length<10)return false;
+  const panel=$('event-competitions-panel');
+  const host=$('event-competitions-groups');
+  if(!panel||!host)return false;
+  const singlesWomen=[],singlesMen=[],doubles=[];
+  for(const item of competitions){
+   const name=item.name;
+   if(/^Damen .* Einzel/i.test(name))singlesWomen.push(name);
+   else if(/^Herren .* Einzel/i.test(name))singlesMen.push(name);
+   else doubles.push(name);
+  }
+  const groups=[['Damen · Einzel',singlesWomen],['Herren · Einzel',singlesMen],['Doppel & Mixed',doubles]];
+  for(const [heading,entries] of groups){
+   if(!entries.length)continue;
+   const section=newEl('section',undefined,'tourney-competition-group');
+   const title=newEl('h3',heading);
+   const list=newEl('ul');
+   for(const label of entries){
+    const clean=label.replace(/ \(-\)$/,'');
+    const item=newEl('li',clean.replace(/ \(S-4\)$/,''));
+    if(/\(S-4\)$/.test(label))item.append(newEl('span','S4','tourney-competition-grade'));
+    list.append(item);
+   }
+   section.append(title,list);host.append(section);
+  }
+  $('event-competitions-count').textContent=competitions.length+' Konkurrenzen';
+  const source=window.TSNuLiga?.validSource(official.source_url);
+  if(source){
+   const a=$('event-competitions-source');
+   a.href=source;a.hidden=false;
+  }
+  panel.hidden=false;
+  return true;
  }
  function row(title,value){
   const wrap=document.createElement('div');
@@ -145,6 +199,15 @@
    const description=VALUE(card.querySelector('.workshop-event-description,.tournament-data-note'));
    const time=workshop?(place.match(/(\d{1,2}:\d{2})\s*Uhr/)||[])[1]||'':'';
    const event={id,title,location:place,date,venue,address,meta,details,type:workshop?'workshop':'turnier',time};
+   installBackLink(id);
+   if(workshop){
+    document.body.classList.add('is-workshop-detail');
+    $('event-workshop-spotlight').hidden=false;
+    $('event-facts-title').textContent='Alles zum Workshop';
+    $('event-my-day')?.closest('.tourney-detail-panel')?.setAttribute('hidden','');
+   }
+   const official=!workshop&&window.TSNuLiga?.get?await window.TSNuLiga.get(id):null;
+   const expanded=renderCompetitions(official);
    const myDay=$('event-my-day');
    if(myDay)myDay.href='../mein-turniertag/?turnier='+encodeURIComponent(id);
    document.title=title+' | Termine | Tennis-Schiri';
@@ -157,7 +220,10 @@
    if(time)row('Beginn',time+' Uhr');
    row('Veranstaltungsort',venue);
    if(address)row('Anschrift',address);
-   for(const pair of details)row(pair[0],pair[1]);
+   for(const pair of details){
+    if(expanded&&pair[0]==='Konkurrenzen')continue;
+    row(pair[0],pair[1]);
+   }
    if(description){$('event-description').textContent=description;$('event-description').hidden=false;}
    $('event-venue').textContent=venue;
    $('event-address').textContent=address||'Anschrift noch nicht veröffentlicht';
@@ -175,10 +241,10 @@
    }else{
     $('event-registration').appendChild(newEl('span',VALUE(card.querySelector('.tournament-soon'))||'Weitere Informationen folgen','tournament-soon'));
    }
-   if(!workshop&&window.TSNuLiga?.get){
-    const official=await window.TSNuLiga.get(id);
-    const source=window.TSNuLiga.validSource(official?.source_url);
-    if(source)addAction($('event-registration'),source,'Offizielle TVBB-Daten ↗',true,true);
+   if(!workshop&&official){
+    const source=window.TSNuLiga.validSource(official.source_url);
+    if(source)addAction($('event-registration'),source,
+      source.includes('tmv.liga.nu')?'Offizielle TMV-Daten ↗':'Offizielle TVBB-Daten ↗',true,true);
    }
    renderMap(address);
    installCalendar(event);
