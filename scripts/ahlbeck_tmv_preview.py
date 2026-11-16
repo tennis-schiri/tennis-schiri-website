@@ -33,8 +33,7 @@ def main():
     candidates = [
         r for r in records
         if r["date_start"] == DATE.isoformat()
-        and ("krohn" in simplified(r["official_title"]) or
-             "ahlbeck" in simplified(r["official_title"]))
+        and "krohn" in simplified(r["official_title"])
     ]
     if not candidates:
         print("::warning::Kein eindeutig passender Ahlbeck-Eintrag vom 19.08.2027.")
