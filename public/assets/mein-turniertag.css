@@ -66,3 +66,221 @@
 @media(max-width:900px){.mt-layout{grid-template-columns:1fr}.mt-right{position:static;grid-row:1;grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.mt-right{grid-template-columns:1fr}.mt-plan-grid{grid-template-columns:1fr}.mt-picker,.mt-plan,.mt-check-section,.mt-progress-panel,.mt-important,.mt-after{padding:19px}.mt-event{flex-direction:column;align-items:flex-start}.mt-event-actions{flex-direction:row;flex-wrap:wrap}.mt-picker-row select{flex-basis:100%}}
 @media print{.site-head,footer,.mt-hero .breadcrumb,.mt-picker-row,.mt-picker-link,.mt-right,.mt-after,.mt-muted,.back-to-top{display:none!important}.interior-hero{background:#fff!important;color:#000!important;padding:10px 0}.interior-hero h1,.interior-hero p{color:#000!important}.mt-main{background:#fff}.mt-layout{display:block}.mt-plan,.mt-check-section,.mt-picker{break-inside:avoid;box-shadow:none;border:1px solid #999;padding:10px}.mt-check-item{padding:5px 7px}.mt-check-item span{text-decoration:none!important;color:#000!important}.mt-checklist{gap:8px}.mt-check-section{margin-bottom:8px}.mt-intro{margin-bottom:10px}}
+
+
+/* A4-Einblatt-Druck: eigenständige, schmale Druckansicht statt Weblayout */
+.mt-print-sheet{display:none!important}
+@page{size:A4 portrait;margin:9mm}
+@media print{
+  html,body{
+    width:auto!important;
+    min-width:0!important;
+    height:auto!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+    color:#18362a!important;
+    font-family:Arial,Helvetica,sans-serif!important;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+  /* Exakt das Druckblatt zeigen; Menüs, Footer, Formulare und Overlay ausblenden. */
+  body>*:not(#mt-print-sheet){display:none!important}
+  #mt-print-sheet{
+    display:block!important;
+    position:static!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    border:none!important;
+    background:#fff!important;
+    color:#18362a!important;
+    font-size:9pt;
+    line-height:1.31;
+  }
+  #mt-print-sheet *{box-sizing:border-box}
+  .mt-print-head{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:end;
+    gap:1mm 4mm;
+    border-bottom:1.2pt solid #244f36;
+    padding-bottom:3mm;
+    margin-bottom:3mm;
+  }
+  .mt-print-brand{
+    grid-column:1 / -1;
+    font-size:8.5pt;
+    font-weight:900;
+    letter-spacing:.08em;
+    color:#355c42;
+  }
+  .mt-print-head h1{
+    font-size:21pt;
+    line-height:1.05;
+    margin:0!important;
+    color:#173f2c!important;
+    letter-spacing:-.025em;
+  }
+  .mt-print-created{
+    font-size:8pt;
+    color:#55705c;
+    text-align:right;
+    white-space:nowrap;
+    padding-bottom:1mm;
+  }
+  .mt-print-event{
+    padding:2.5mm 3mm;
+    border:1px solid #c8d9c8;
+    border-radius:2mm;
+    background:#f3f8f0!important;
+    margin-bottom:2.5mm;
+    break-inside:avoid;
+  }
+  .mt-print-caption{
+    display:block;
+    font-size:7pt;
+    color:#57725c;
+    letter-spacing:.11em;
+    font-weight:900;
+    margin-bottom:1mm;
+  }
+  .mt-print-event h2{
+    margin:0 0 1mm!important;
+    font-size:12.5pt;
+    line-height:1.18;
+    color:#1c4932!important;
+  }
+  .mt-print-event-meta{
+    margin:0!important;
+    font-size:8pt;
+    line-height:1.25;
+    color:#4b6955;
+  }
+  .mt-print-schedule{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:3mm;
+    margin-bottom:2.5mm;
+  }
+  .mt-print-schedule-block{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:3mm;
+    border-bottom:1px solid #bdcbbc;
+    padding:1mm 0 2mm;
+  }
+  .mt-print-schedule-block span{font-size:8.5pt;color:#385744}
+  .mt-print-schedule-block strong{font-size:10pt;white-space:nowrap}
+  .mt-print-notes{
+    border:1px solid #d4dfd1;
+    border-radius:2mm;
+    padding:2mm 3mm;
+    min-height:16mm;
+    margin-bottom:2.6mm;
+    overflow:hidden;
+    break-inside:avoid;
+  }
+  .mt-print-notes strong{display:block;font-size:8.5pt;margin-bottom:1mm}
+  .mt-print-notes p{
+    font-size:8.5pt;
+    line-height:1.27;
+    margin:0!important;
+    overflow-wrap:anywhere;
+    max-height:12mm;
+    overflow:hidden;
+  }
+  .mt-print-checks-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:3mm;
+    padding-bottom:2mm;
+  }
+  .mt-print-checks-title h2{
+    margin:0!important;
+    font-size:12.5pt;
+    color:#204b34!important;
+  }
+  .mt-print-checks-title span{font-size:8pt;color:#667d69;white-space:nowrap}
+  .mt-print-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    align-items:start;
+    gap:3mm;
+    margin:0;
+    padding:0;
+  }
+  .mt-print-phase{
+    margin:0!important;
+    padding:3mm 3mm 3.2mm;
+    border:1px solid #c5d4c2;
+    border-radius:2mm;
+    background:#fff!important;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .mt-print-phase-heading{
+    display:flex;
+    gap:2mm;
+    align-items:center;
+    border-bottom:1px solid #e2e8e0;
+    margin-bottom:2mm;
+    padding-bottom:1.7mm;
+  }
+  .mt-print-number{
+    flex:none;
+    display:inline-flex;
+    width:7mm;
+    height:7mm;
+    align-items:center;
+    justify-content:center;
+    border-radius:1.5mm;
+    background:#e6f0df!important;
+    color:#285336!important;
+    font-weight:900;
+    font-size:8pt;
+  }
+  .mt-print-phase h3{
+    font-size:10.5pt;
+    line-height:1.15;
+    margin:0!important;
+    color:#214b34!important;
+  }
+  .mt-print-items{display:grid;gap:1.1mm}
+  .mt-print-item{
+    display:grid;
+    grid-template-columns:4.2mm minmax(0,1fr);
+    align-items:start;
+    gap:2mm;
+    font-size:8.45pt;
+    line-height:1.25;
+    color:#263e30;
+    min-width:0;
+    break-inside:avoid;
+  }
+  .mt-print-box{
+    display:grid;
+    place-items:center;
+    width:3.6mm;
+    height:3.6mm;
+    border:.8pt solid #6e8771;
+    border-radius:.65mm;
+    color:#15482f;
+    font-size:8.5pt;
+    font-weight:900;
+    line-height:1;
+  }
+  .mt-print-box.is-checked{border-color:#265a38;background:#e4f1db!important}
+  .mt-print-footer{
+    margin-top:3mm;
+    padding-top:2mm;
+    border-top:.6pt solid #d6e1d5;
+    color:#566b59;
+    font-size:7.5pt;
+    line-height:1.25;
+    break-inside:avoid;
+  }
+}
