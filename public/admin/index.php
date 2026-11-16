@@ -315,7 +315,7 @@ if($view==='contacts'){
 if($view==='workshops'){
  $selected=(string)($_GET['workshop']??'');
  if(!isset($workshops[$selected]))$selected=array_key_first($workshops)??'';
- $html='<section class="panel"><h2>Regelworkshops</h2><p>Online-Anmeldungen, Mitgliedsstatus, Teilnahmebeitrag und Zahlungsstatus werden hier verwaltet. Workshop-Anmeldungen sind ausdrücklich <strong>kein Newsletter-Verteiler</strong>.</p>';
+ $html='<section class="panel"><h2>Regelworkshops</h2><p>Online-Anmeldungen, Anspruch auf kostenfreie Teilnahme (NTC-Mitglieder bzw. Angehörige jugendlicher Mitglieder), Teilnahmebeitrag und Zahlungsstatus werden hier verwaltet. Workshop-Anmeldungen sind ausdrücklich <strong>kein Newsletter-Verteiler</strong>.</p>';
  if(!$workshops)$html.='<p class="warning">Noch keine Regelworkshops hinterlegt.</p>';
  else{
   $html.='<form method="get"><input type="hidden" name="view" value="workshops"><label>Workshop wählen</label><select name="workshop">';
@@ -332,7 +332,7 @@ if($view==='workshops'){
   $members=count(array_filter($rows,static fn($r)=>(int)$r['is_member']===1&&$r['status']==='registered'));
   $open=count(array_filter($rows,static fn($r)=>(int)$r['fee_cents']>0&&$r['payment_status']==='open'&&$r['status']==='registered'));
   $paid=count(array_filter($rows,static fn($r)=>$r['payment_status']==='paid'&&$r['status']==='registered'));
-  $html.='<section class="panel"><div class="row row-between"><div><h2>'.$e($ws['title']).'</h2><p>'.$e($ws['date']).' · '.$e($ws['time']).'<br>'.$e($ws['location']).'</p></div><a class="button button-secondary" href="/leistungen/#'.$e($ws['id']).'" target="_blank" rel="noopener">Workshopseite ↗</a></div><div class="grid"><div class="tile"><div class="stat">'.$registered.'</div><h3>Angemeldet</h3></div><div class="tile"><div class="stat">'.$members.'</div><h3>NTC 93 · frei</h3></div><div class="tile"><div class="stat">'.$open.'</div><h3>15 € noch offen</h3></div><div class="tile"><div class="stat">'.$paid.'</div><h3>Bezahlt</h3></div></div></section>';
+  $html.='<section class="panel"><div class="row row-between"><div><h2>'.$e($ws['title']).'</h2><p>'.$e($ws['date']).' · '.$e($ws['time']).'<br>'.$e($ws['location']).'</p></div><a class="button button-secondary" href="/leistungen/#'.$e($ws['id']).'" target="_blank" rel="noopener">Workshopseite ↗</a></div><div class="grid"><div class="tile"><div class="stat">'.$registered.'</div><h3>Angemeldet</h3></div><div class="tile"><div class="stat">'.$members.'</div><h3>Kostenfrei</h3></div><div class="tile"><div class="stat">'.$open.'</div><h3>Zahlung offen</h3></div><div class="tile"><div class="stat">'.$paid.'</div><h3>Bezahlt</h3></div></div></section>';
   $html.='<section class="panel"><h2>Anmeldungen</h2>';
   if(!$rows)$html.='<p class="muted">Noch keine Online-Anmeldungen.</p>';
   else{
@@ -340,7 +340,7 @@ if($view==='workshops'){
    foreach($rows as $r){
     $statusOptions='';foreach(['registered'=>'angemeldet','cancelled'=>'abgemeldet'] as $v=>$label)$statusOptions.='<option value="'.$v.'"'.($r['status']===$v?' selected':'').'>'.$label.'</option>';
     $payOptions='';foreach(['open'=>'offen','paid'=>'bezahlt','waived'=>'entfällt'] as $v=>$label)$payOptions.='<option value="'.$v.'"'.($r['payment_status']===$v?' selected':'').'>'.$label.'</option>';
-    $member=(int)$r['is_member']===1?'<span class="badge">NTC 93 · frei</span>':'<span class="badge gray">Gast</span>';
+    $member=(int)$r['is_member']===1?'<span class="badge">Kostenfrei</span>':'<span class="badge gray">Gast</span>';
     $html.='<tr><td><strong>'.$e($r['name']).'</strong><br><a href="mailto:'.$e($r['email']).'">'.$e($r['email']).'</a><br><small>'.$e($r['club']?:'kein Verein angegeben').'</small><br>'.$member.'<br><small>Anmeldung: '.date('d.m.Y H:i',(int)$r['created_at']).'</small></td><td><strong>'.$e(workshopFeeLabel((int)$r['fee_cents'])).'</strong><br>'.$e(workshopPaymentMethodLabel((string)$r['payment_method'])).'<br><small>'.$e(workshopPaymentStatusLabel((string)$r['payment_status'])).'</small></td>';
     $html.='<td><form method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_update"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><label>Status</label><select name="status">'.$statusOptions.'</select><label>Zahlung</label><select name="payment_status">'.$payOptions.'</select><label>Interne Notiz</label><input type="text" name="notes" maxlength="1000" value="'.$e($r['notes']).'"><button type="submit">Speichern</button></form></td>';
     $html.='<td><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="confirmation"><button class="button-secondary" type="submit">Bestätigung erneut</button></form><br><br><form class="inline" method="post">'.boCsrf().'<input type="hidden" name="action" value="workshop_mail"><input type="hidden" name="workshop" value="'.$e($selected).'"><input type="hidden" name="registration_id" value="'.(int)$r['id'].'"><input type="hidden" name="mail_kind" value="reminder"><button class="button-secondary" type="submit">Erinnerung senden</button></form>';
