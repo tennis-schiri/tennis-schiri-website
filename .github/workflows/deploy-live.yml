@@ -190,6 +190,7 @@ jobs:
           php tests/backoffice-test.php
           php -l tests/workshop-test.php
           php tests/workshop-test.php
+          python tests/workshop-pricing-content-test.py
           # Katalog vor jedem Upload frisch aus den Turnier-/Workshopseiten erzeugen.
           python scripts/build_newsletter_events.py --output public/data/newsletter-events.json
           cp public/data/newsletter-events.json _live_upload/data/newsletter-events.json
