@@ -18,7 +18,7 @@
     let scrollScheduled = false;
 
     function updateVisibility() {
-      const threshold = Math.max(420, Math.round(window.innerHeight * 0.55));
+      const threshold = Math.max(260, Math.round(window.innerHeight * 0.35));
       const visible = window.scrollY > threshold;
       button.classList.toggle("is-visible", visible);
       button.tabIndex = visible ? 0 : -1;
