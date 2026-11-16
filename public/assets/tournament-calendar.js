@@ -166,10 +166,11 @@
  }
  async function listing(events){
   const grid=document.getElementById('tourney-grid');
-  const pager=document.getElementById('tourney-pagination');
-  const controls=document.getElementById('tourney-page-controls');
-  const status=document.getElementById('tourney-page-status');
-  if(!grid||!pager||!controls||!status)return;
+  const pagers=[
+   {nav:document.getElementById('tourney-pagination-top'),controls:document.getElementById('tourney-page-controls-top'),status:document.getElementById('tourney-page-status-top')},
+   {nav:document.getElementById('tourney-pagination'),controls:document.getElementById('tourney-page-controls'),status:document.getElementById('tourney-page-status')}
+  ];
+  if(!grid||pagers.some(p=>!p.nav||!p.controls||!p.status))return;
   const all=Array.from(grid.querySelectorAll(':scope > .tourney-card'));
   const today=dayBerlin(),clock=clockBerlin();
   const enriched=all.map(node=>{
@@ -203,7 +204,7 @@
   archive.appendChild(summary);
   const oldGrid=document.createElement('div');oldGrid.className='tourney-grid';archive.appendChild(oldGrid);
   for(const e of past){e.node.classList.add('archived-tourney');oldGrid.appendChild(e.node);}
-  pager.after(archive);archive.hidden=past.length===0;
+  pagers[1].nav.after(archive);archive.hidden=past.length===0;
   if(!upcoming.length){
    const empty=document.createElement('p');empty.className='info-note';empty.textContent='Aktuell sind keine weiteren Turniere angekündigt. Vergangene Termine findest du im Archiv.';
    grid.appendChild(empty);
@@ -226,12 +227,15 @@
    current=Math.min(totalPages,Math.max(1,page));
    const first=(current-1)*pageSize;
    for(const [i,e] of upcoming.entries())e.node.hidden=i<first||i>=first+pageSize;
-   status.textContent=upcoming.length?'Turniere '+(first+1)+'–'+Math.min(upcoming.length,first+pageSize)+' von '+upcoming.length:'Keine kommenden Turniere';
-   controls.replaceChildren();
-   const prev=makeButton('‹ Zurück',current-1,false);prev.disabled=current===1;controls.appendChild(prev);
-   for(let p=1;p<=totalPages;p++)controls.appendChild(makeButton(String(p),p,p===current));
-   const next=makeButton('Weiter ›',current+1,false);next.disabled=current===totalPages;controls.appendChild(next);
-   pager.hidden=totalPages<=1;
+   const label=upcoming.length?'Turniere '+(first+1)+'–'+Math.min(upcoming.length,first+pageSize)+' von '+upcoming.length:'Keine kommenden Turniere';
+   for(const pager of pagers){
+    pager.status.textContent=label;
+    pager.controls.replaceChildren();
+    const prev=makeButton('‹ Zurück',current-1,false);prev.disabled=current===1;pager.controls.appendChild(prev);
+    for(let p=1;p<=totalPages;p++)pager.controls.appendChild(makeButton(String(p),p,p===current));
+    const next=makeButton('Weiter ›',current+1,false);next.disabled=current===totalPages;pager.controls.appendChild(next);
+    pager.nav.hidden=totalPages<=1;
+   }
    if(update){
     const url=new URL(location.href);
     if(current===1)url.searchParams.delete('seite');else url.searchParams.set('seite',String(current));
@@ -245,10 +249,12 @@
    render(target?.page||fromQuery(),false,false);
    if(target?.element)requestAnimationFrame(()=>target.element.scrollIntoView({block:'start'}));
   }
-  controls.addEventListener('click',ev=>{
-   const b=ev.target.closest('button[data-page]');if(!b||b.disabled)return;
-   render(Number(b.dataset.page),true,true);
-  });
+  for(const pager of pagers){
+   pager.controls.addEventListener('click',ev=>{
+    const b=ev.target.closest('button[data-page]');if(!b||b.disabled)return;
+    render(Number(b.dataset.page),true,true);
+   });
+  }
   document.querySelectorAll('.venue-event-list a[href^="#turnier-"]').forEach(a=>{
    a.addEventListener('click',ev=>{
     const id=a.getAttribute('href').slice(1);
