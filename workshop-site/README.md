@@ -1,23 +1,46 @@
-# Tennis-Schiri · Regelworkshop-Webpräsentation
+# Tennis-Schiri · Regelworkshop-Webpräsentation (Vollfassung)
 
-Separate Web-Präsentation für https://workshop.tennis-schiri.de – unabhängig von der Hauptwebsite.
+**Stand: 17. November 2026**
 
-**Aktueller Stand:** interaktive **Demo** mit 17 Ansichten, sechs Quizfragen, Kapitelwahl, Vollbild und Schwarzblende. Die vollständige PowerPoint mit 136 Folien bleibt separat. Originalvideos sind aus urheberrechtlichen Gründen nicht in der öffentlichen Demo enthalten.
+Die Web-Präsentation wurde aus der neu gestalteten PowerPoint-Vollfassung erstellt. Sie enthält **136 Folien**, **27 gesonderte Antwort-/Auflösungsfolien**, **25 eingebettete Originalvideos** in komprimierter Form und die Referentennotizen aus der PowerPoint.
 
-**Fernbedienung:** Rechts / Bild ab / Leertaste = weiter bzw. Antwort aufdecken; Links / Bild auf = zurück; F = Vollbild; G = Kapitelwahl; B = Schwarzblende; H = Hilfe; Pos1 / Ende = erster / letzter Bildschirm.
+- Quellcode des Hauptdokuments: `workshop-site/index.html`
+- Vollständiges Bild-, Script- und Medienpaket: `workshop-site/bundle/part01` bis `part11`
+- Prüfsumme des durch Aneinanderhängen rekonstruierten ZIP: `958b6b2004c56f65e2967c03979b102e04346a0b40707662483618c16d09f8b6`
+- Google-Drive-Ausgabe (ZIP, lokal nutzbar): https://drive.google.com/file/d/1Rm6_pAdcoCOwjdA5QBtsU3GBYSC7z-AJ/view
 
-## ALL-INKL und GitHub vorbereiten
+## Präsentation und Fernbedienung
 
-1. Die Subdomain muss auf `/workshop-tennis-schiri-de/` zeigen.
-2. Einen **separaten FTP-Benutzer** in ALL-INKL anlegen, dessen Startverzeichnis auf **genau diesen Ordner** begrenzt ist. Wenn dieser Benutzer per FTP angemeldet ist, entspricht das Startverzeichnis `/`.
-3. Im Repository unter **Settings → Secrets and variables → Actions** folgende Repository Secrets einrichten:
-   - `FTP_WORKSHOP_HOST` – FTP-Hostname
-   - `FTP_WORKSHOP_USER` – separater FTP-Benutzer
-   - `FTP_WORKSHOP_PASSWORD` – dessen Passwort
-4. [WORKSHOP – Website manuell live hochladen](https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-workshop.yml) öffnen und **Run workflow** wählen.
+- `→`, `Bild ab`, `Leertaste`: weiter / Quizauflösung auf nächster Folie.
+- `←`, `Bild auf`: zurück.
+- `F`: Vollbild.
+- `G`: Kapitelübersicht.
+- `S` oder `/`: Suche nach Begriffen und Folien.
+- `N`: Referentennotizen anzeigen (auf dem Beamer sichtbar!).
+- `B`: Bildschirm schwarz.
+- `P`: Video abspielen oder pausieren.
+- `Pos1` / `Ende`: erste/letzte Folie.
+- `#folie=78`: gezielter Einstieg per URL.
 
-Keine Passwörter in Chat oder Repository schreiben. Der Workflow lädt ausschließlich `workshop-site/index.html`, `workshop-site/robots.txt` und das freigestellte TS09c-Logo aus `branding/` hoch. Er löscht keine Dateien auf dem Webspace.
+Ein USB-Presenter muss die üblichen Tastaturbefehle senden. **Vor dem tatsächlichen Workshop testen.**
 
-Die Demo hat eine `noindex`-Anweisung, **ist damit aber nicht passwortgeschützt**. Vor einer öffentlichen Nutzung alle Regelinhalte und Mediendateien rechtlich und fachlich freigeben.
+## Veröffentlichung
 
-© Tennis-Schiri · TS-WORKSHOP-2026
+Die Subdomain `workshop.tennis-schiri.de` zeigt auf `/workshop-tennis-schiri-de/` im ALL-INKL-Webspace.
+
+GitHub-Workflow: https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-workshop.yml
+
+Benötigte GitHub-Actions-Secrets:
+- `FTP_WORKSHOP_HOST`
+- `FTP_WORKSHOP_USER`
+- `FTP_WORKSHOP_PASSWORD`
+
+**Wichtig:** Der separate FTP-Benutzer muss mit dem Startverzeichnis `/workshop-tennis-schiri-de/` eingerichtet sein. Der Workflow lädt nur die 169 Dateien der Workshop-Webpräsentation hoch. Die Hauptwebsite wird nicht verändert. Er wird **nur manuell** über den Button **Run workflow** gestartet.
+
+## Vor der Veröffentlichung prüfen
+
+Die Website ist durch `noindex` **nicht** gegen unbefugten Zugriff geschützt. Die Bilder und Videos aus der vorliegenden Präsentation werden auf einer öffentlich abrufbaren Subdomain veröffentlicht. Vor dem Upload sind Nutzungs-, Vorführ- und Weiterverbreitungsrechte an den Clips und Fremdbildern zu klären.
+
+TVBB- und andere veranstaltungsbezogene Regelungen beziehen sich auf den Arbeitsstand der Vortragsunterlagen vom 20.03.2026. Vor der Vorführung gegen aktuelle ITF-, DTB- und TVBB-Regeln prüfen.
+
+© Tennis-Schiri · TS-WORKSHOP-2026.
