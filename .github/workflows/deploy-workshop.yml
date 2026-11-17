@@ -88,7 +88,7 @@ jobs:
               "49:'media/clip-108.mp4',51:'media/clip-109.mp4',"
               "55:'media/clip-110.mp4',59:'media/clip-113.mp4',"
               "61:'media/clip-117.mp4'};"
-              "const currentVideo=s=>s.video||contextualVideoMap[s.no]||null;\\n"
+              "const currentVideo=s=>s.video||contextualVideoMap[s.no]||null;\n"
           )
           anchor = 'const byId=id=>document.getElementById(id);'
           if js.count(anchor) != 1: raise SystemExit('App-JS Struktur verändert (byId)')
@@ -98,8 +98,6 @@ jobs:
               ("if(!s.video)return;if(!videoLayer.classList.contains('open'))",
                "if(!currentVideo(s))return;if(!videoLayer.classList.contains('open'))"),
               ('video.src=s.video;', 'video.src=currentVideo(s);'),
-              ("if(!s.video)return;if(!videoLayer.classList.contains('open'))playVideo(true);",
-               "if(!currentVideo(s))return;if(!videoLayer.classList.contains('open'))playVideo(true);"),
           )
           for old_text, new_text in patches:
               if old_text not in js: raise SystemExit('App-JS Video-Anker fehlt: ' + old_text)
