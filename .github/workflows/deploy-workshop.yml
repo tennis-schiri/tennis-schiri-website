@@ -1,0 +1,87 @@
+name: WORKSHOP – Website manuell live hochladen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tennis-schiri-workshop-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Nur workshop.tennis-schiri.de aktualisieren
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Code auschecken
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Workshop-Paket vorbereiten
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s workshop-site/index.html
+          test -s workshop-site/robots.txt
+          test -s branding/tennis-schiri-ts09c-header-transparent.png
+          mkdir -p _workshop_upload/assets
+          cp workshop-site/index.html _workshop_upload/index.html
+          cp workshop-site/robots.txt _workshop_upload/robots.txt
+          cp branding/tennis-schiri-ts09c-header-transparent.png _workshop_upload/assets/logo.png
+          grep -q "noindex,nofollow" _workshop_upload/index.html
+          grep -q "Disallow: /" _workshop_upload/robots.txt
+          grep -q "Tennis-Schiri Workshop-Präsentation" _workshop_upload/index.html
+          echo "17-Folien-Demo geprüft; keine Originalvideos werden hochgeladen."
+
+      - name: Separate FTPS-Zugangsdaten prüfen
+        shell: bash
+        env:
+          FTP_WORKSHOP_HOST: ${{ secrets.FTP_WORKSHOP_HOST }}
+          FTP_WORKSHOP_USER: ${{ secrets.FTP_WORKSHOP_USER }}
+          FTP_WORKSHOP_PASSWORD: ${{ secrets.FTP_WORKSHOP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$FTP_WORKSHOP_HOST" || { echo "::error::FTP_WORKSHOP_HOST fehlt"; exit 1; }
+          test -n "$FTP_WORKSHOP_USER" || { echo "::error::FTP_WORKSHOP_USER fehlt"; exit 1; }
+          test -n "$FTP_WORKSHOP_PASSWORD" || { echo "::error::FTP_WORKSHOP_PASSWORD fehlt"; exit 1; }
+
+      - name: Nur in das Workshop-FTP-Startverzeichnis übertragen
+        shell: bash
+        env:
+          FTP_WORKSHOP_HOST: ${{ secrets.FTP_WORKSHOP_HOST }}
+          FTP_WORKSHOP_USER: ${{ secrets.FTP_WORKSHOP_USER }}
+          FTP_WORKSHOP_PASSWORD: ${{ secrets.FTP_WORKSHOP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          # Sicherheitsvorgabe: dieser FTP-Benutzer MUSS im ALL-INKL KAS
+          # auf /workshop-tennis-schiri-de/ begrenzt sein.
+          # URLs beziehen sich auf das FTP-Startverzeichnis, keine Löschung.
+          while IFS= read -r -d '' file; do
+            relative="$(realpath --relative-to=_workshop_upload "$file")"
+            echo "Workshop-Datei: $relative"
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
+              --retry 2 --connect-timeout 20 --max-time 120 \
+              --user "$FTP_WORKSHOP_USER:$FTP_WORKSHOP_PASSWORD" \
+              --upload-file "$file" "ftp://$FTP_WORKSHOP_HOST:21/$relative"
+          done < <(find _workshop_upload -type f -print0 | sort -z)
+
+      - name: Neue Subdomain prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(curl -sS -L -o /tmp/workshop-live.html -w '%{http_code}' \
+            --max-time 35 -H 'Cache-Control: no-cache' \
+            "https://workshop.tennis-schiri.de/?commit=$GITHUB_SHA")"
+          if [ "$status" != "200" ]; then
+            echo "::error::workshop.tennis-schiri.de meldet HTTP $status"
+            exit 1
+          fi
+          if ! grep -q "Tennis-Schiri Workshop-Präsentation" /tmp/workshop-live.html; then
+            echo "::error::Subdomain liefert nicht die neue Workshop-Präsentation. Bitte Domain-Zielverzeichnis im KAS prüfen."
+            exit 1
+          fi
+          echo "Workshop-Präsentation ist unter https://workshop.tennis-schiri.de abrufbar."
