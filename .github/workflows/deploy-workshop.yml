@@ -1,4 +1,4 @@
-name: WORKSHOP – Website manuell live hochladen
+name: WORKSHOP – vollständige Website manuell live hochladen
 
 on:
   workflow_dispatch:
@@ -14,28 +14,36 @@ jobs:
   deploy:
     name: Nur workshop.tennis-schiri.de aktualisieren
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - name: Code auschecken
         uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - name: Workshop-Paket vorbereiten
+      - name: Vollständiges Workshop-Paket rekonstruieren und prüfen
         shell: bash
         run: |
           set -euo pipefail
-          test -s workshop-site/index.html
-          test -s workshop-site/robots.txt
-          test -s branding/tennis-schiri-ts09c-header-transparent.png
-          mkdir -p _workshop_upload/assets
-          cp workshop-site/index.html _workshop_upload/index.html
-          cp workshop-site/robots.txt _workshop_upload/robots.txt
-          cp branding/tennis-schiri-ts09c-header-transparent.png _workshop_upload/assets/logo.png
+          test "$(find workshop-site/bundle -maxdepth 1 -type f -name 'part[0-9][0-9]' | wc -l)" -eq 11
+          cat workshop-site/bundle/part[0-9][0-9] > /tmp/workshop-full.zip
+          echo '958b6b2004c56f65e2967c03979b102e04346a0b40707662483618c16d09f8b6  /tmp/workshop-full.zip' | sha256sum -c -
+          unzip -tqq /tmp/workshop-full.zip
+          mkdir -p _workshop_upload
+          unzip -q /tmp/workshop-full.zip -d _workshop_upload
+          for file in index.html assets/app.css assets/app.js assets/logo.png sw.js slides.json slides/slide-001.webp slides/slide-136.webp media/clip-107.mp4 media/clip-131.mp4; do
+            test -s "_workshop_upload/$file" || { echo "::error::Datei fehlt: $file"; exit 1; }
+          done
+          slides="$(find _workshop_upload/slides -type f -name 'slide-*.webp' | wc -l)"
+          videos="$(find _workshop_upload/media -type f -name 'clip-*.mp4' | wc -l)"
+          test "$slides" -eq 136 || { echo "::error::Erwartet 136 Folien, vorhanden: $slides"; exit 1; }
+          test "$videos" -eq 25 || { echo "::error::Erwartet 25 Videos, vorhanden: $videos"; exit 1; }
+          grep -q "Tennis-Schiri Workshop-Präsentation" _workshop_upload/index.html
           grep -q "noindex,nofollow" _workshop_upload/index.html
           grep -q "Disallow: /" _workshop_upload/robots.txt
-          grep -q "Tennis-Schiri Workshop-Präsentation" _workshop_upload/index.html
-          echo "17-Folien-Demo geprüft; keine Originalvideos werden hochgeladen."
+          node --check _workshop_upload/assets/app.js
+          python -m json.tool _workshop_upload/slides.json >/dev/null
+          echo "136 Folien, 25 Videos und Workshop-Steuerung geprüft."
 
       - name: Separate FTPS-Zugangsdaten prüfen
         shell: bash
@@ -84,4 +92,7 @@ jobs:
             echo "::error::Subdomain liefert nicht die neue Workshop-Präsentation. Bitte Domain-Zielverzeichnis im KAS prüfen."
             exit 1
           fi
-          echo "Workshop-Präsentation ist unter https://workshop.tennis-schiri.de abrufbar."
+          for path in slides/slide-001.webp slides/slide-136.webp media/clip-107.mp4 media/clip-131.mp4; do
+            curl --head --fail --silent --show-error --location --retry 2 --max-time 35 "https://workshop.tennis-schiri.de/$path" -o /dev/null || exit 1
+          done
+          echo "136 Workshop-Folien und Videos sind unter workshop.tennis-schiri.de verfügbar."
