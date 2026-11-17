@@ -82,6 +82,24 @@ jobs:
           Path('_workshop_upload/assets/app.js').write_text(js.replace(old, new), encoding='utf-8')
           deck = Path('_workshop_upload/_private/index.html')
           html = deck.read_text(encoding='utf-8')
+          # WICHTIG: Die direkt bearbeitbare HTML-Quelldatei enthielt eine
+          # ältere Folienliste; sie driftete ab Folie 8 vom gerenderten
+          # PowerPoint-/ZIP-Bestand ab. Das ZIP-slides.json ist kanonisch.
+          import json
+          import re
+          canonical = json.loads(Path('/tmp/workshop-extracted/slides.json').read_text(encoding='utf-8'))
+          actual = canonical.get('slides', [])
+          if len(actual) != 136 or [x['no'] for x in actual] != list(range(1, 137)):
+              raise SystemExit('Folienliste im ZIP unvollständig oder nicht sequentiell')
+          if sum(bool(x.get('video')) for x in actual) != 25:
+              raise SystemExit('Videozuordnung im ZIP passt nicht zu 25 Clips')
+          # JSON im script-Element darf kein HTML-Tag schließen.
+          payload = json.dumps(canonical, ensure_ascii=False, separators=(',', ':')).replace('<', r'\\u003c')
+          pattern = r'(<script id="workshop-data" type="application/json">)([\\s\\S]*?)(</script>)'
+          html, count = re.subn(pattern, lambda m: m.group(1) + payload + m.group(3), html, count=1)
+          if count != 1:
+              raise SystemExit('Workshop-Datenblock in der HTML-Präsentation nicht gefunden')
+          print('Folien- und Video-Metadaten auf ZIP-Original synchronisiert (136/25).')
           insert = ('<a href="/logout.php" aria-label="Workshop verlassen" '
                     'style="display:inline-flex;align-items:center;padding:8px 13px;'
                     'border:1px solid #54755f;border-radius:9px;text-decoration:none;'
