@@ -1,46 +1,44 @@
-# Tennis-Schiri · Regelworkshop-Webpräsentation (Vollfassung)
+# Tennis-Schiri · Workshop-Website
 
-**Stand: 17. November 2026**
+Stand: 17. November 2026. Die Subdomain erhält eine öffentliche Startseite und eine serverseitig passwortgeschützte Präsentation mit 136 Folien und 25 Videos.
 
-Die Web-Präsentation wurde aus der neu gestalteten PowerPoint-Vollfassung erstellt. Sie enthält **136 Folien**, **27 gesonderte Antwort-/Auflösungsfolien**, **25 eingebettete Originalvideos** in komprimierter Form und die Referentennotizen aus der PowerPoint.
+## Seiten
 
-- Quellcode des Hauptdokuments: `workshop-site/index.html`
-- Vollständiges Bild-, Script- und Medienpaket: `workshop-site/bundle/part01` bis `part11`
-- Prüfsumme des durch Aneinanderhängen rekonstruierten ZIP: `958b6b2004c56f65e2967c03979b102e04346a0b40707662483618c16d09f8b6`
-- Google-Drive-Ausgabe (ZIP, lokal nutzbar): https://drive.google.com/file/d/1Rm6_pAdcoCOwjdA5QBtsU3GBYSC7z-AJ/view
+- Öffentliche Startseite: https://workshop.tennis-schiri.de/
+- Passwort-Login: https://workshop.tennis-schiri.de/login.php
+- Geschützte Präsentation: https://workshop.tennis-schiri.de/presentation.php
+- Logout: https://workshop.tennis-schiri.de/logout.php
 
-## Präsentation und Fernbedienung
+Die Startseite liegt in workshop-site/startseite.html. Der originale Präsentations-Quelltext bleibt als workshop-site/index.html im Repository und wird beim Deployment ausschließlich unter dem gesperrten Server-Verzeichnis /_private/index.html veröffentlicht. Folien, Referentennotizen und Videos werden nur mit gültiger Session über resource.php ausgeliefert.
 
-- `→`, `Bild ab`, `Leertaste`: weiter / Quizauflösung auf nächster Folie.
-- `←`, `Bild auf`: zurück.
-- `F`: Vollbild.
-- `G`: Kapitelübersicht.
-- `S` oder `/`: Suche nach Begriffen und Folien.
-- `N`: Referentennotizen anzeigen (auf dem Beamer sichtbar!).
-- `B`: Bildschirm schwarz.
-- `P`: Video abspielen oder pausieren.
-- `Pos1` / `Ende`: erste/letzte Folie.
-- `#folie=78`: gezielter Einstieg per URL.
+Der Link zur Hauptwebsite https://tennis-schiri.de/ steht auf der öffentlichen Startseite ausschließlich unten im Bereich Backend.
 
-Ein USB-Presenter muss die üblichen Tastaturbefehle senden. **Vor dem tatsächlichen Workshop testen.**
+## Neues GitHub-Secret
 
-## Veröffentlichung
+Zusätzlich zu den drei bereits vorhandenen FTPS-Secrets (FTP_WORKSHOP_HOST, FTP_WORKSHOP_USER, FTP_WORKSHOP_PASSWORD) wird ein weiteres Secret benötigt:
 
-Die Subdomain `workshop.tennis-schiri.de` zeigt auf `/workshop-tennis-schiri-de/` im ALL-INKL-Webspace.
+WORKSHOP_ACCESS_PASSWORD — frei zu wählendes Workshop-Passwort mit mindestens 12 Zeichen.
 
-GitHub-Workflow: https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-workshop.yml
+Hier hinterlegen: https://github.com/tennis-schiri/tennis-schiri-website/settings/secrets/actions
 
-Benötigte GitHub-Actions-Secrets:
-- `FTP_WORKSHOP_HOST`
-- `FTP_WORKSHOP_USER`
-- `FTP_WORKSHOP_PASSWORD`
+Das Passwort niemals im Chat, im Repository oder als normale Datei speichern. Der Workflow erzeugt beim Deployment einen PHP-Passwort-Hash, der nur im gesperrten Serververzeichnis liegt.
 
-**Wichtig:** Der separate FTP-Benutzer muss mit dem Startverzeichnis `/workshop-tennis-schiri-de/` eingerichtet sein. Der Workflow lädt nur die 169 Dateien der Workshop-Webpräsentation hoch. Die Hauptwebsite wird nicht verändert. Er wird **nur manuell** über den Button **Run workflow** gestartet.
+## Manueller Upload
 
-## Vor der Veröffentlichung prüfen
+https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-workshop.yml
 
-Die Website ist durch `noindex` **nicht** gegen unbefugten Zugriff geschützt. Die Bilder und Videos aus der vorliegenden Präsentation werden auf einer öffentlich abrufbaren Subdomain veröffentlicht. Vor dem Upload sind Nutzungs-, Vorführ- und Weiterverbreitungsrechte an den Clips und Fremdbildern zu klären.
+Erst nach dem neuen Secret über Run workflow (main) starten. Der Workflow prüft die ZIP-Prüfsumme der 11 Paket-Teile, stellt die 136 Folien und 25 Clips in /_private/ bereit, generiert den Passwort-Hash und lädt zuerst die Apache-Schutzregeln ins ALL-INKL-FTP-Verzeichnis /workshop-tennis-schiri-de/. Danach prüft er per HTTP, dass Bilder und Videos ohne Anmeldung gesperrt sind.
 
-TVBB- und andere veranstaltungsbezogene Regelungen beziehen sich auf den Arbeitsstand der Vortragsunterlagen vom 20.03.2026. Vor der Vorführung gegen aktuelle ITF-, DTB- und TVBB-Regeln prüfen.
+Der separate ALL-INKL-FTP-User muss genau auf den Workshop-Ordner beschränkt sein. Die Hauptwebsite bleibt unangetastet.
+
+## Steuerung
+
+Pfeiltasten/Bild auf-ab/Leertaste für Folien, G Kapitel, S Suche, N Notizen, P Video, F Vollbild, B Schwarzblende. Das konkrete USB-Presenter-Modell vorher testen.
+
+## Sicherheitsgrenze und Urheberrecht
+
+**Wichtig:** Das Repository tennis-schiri/tennis-schiri-website ist öffentlich. Die Workshop-Bundle-Dateien und ältere GitHub-Commits bleiben damit auch unabhängig von der passwortgeschützten Subdomain einsehbar. Für echte Vertraulichkeit müsste das Material in ein privates Repository umziehen und aus der öffentlichen Historie verschwinden. Browser-Kopien, die schon bei Nutzern liegen, können nicht nachträglich zurückgeholt werden.
+
+Video-/Bildrechte und Aktualität der ITF-, DTB- und TVBB-Regelhinweise müssen vor öffentlicher Nutzung geprüft werden.
 
 © Tennis-Schiri · TS-WORKSHOP-2026.
