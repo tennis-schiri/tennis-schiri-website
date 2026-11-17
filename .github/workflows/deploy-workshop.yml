@@ -31,6 +31,8 @@ jobs:
           unzip -tqq /tmp/workshop-full.zip
           mkdir -p _workshop_upload
           unzip -q /tmp/workshop-full.zip -d _workshop_upload
+          # Vollständiges HTML bleibt als direkt editierbare Datei im Repository.
+          cp workshop-site/index.html _workshop_upload/index.html
           for file in index.html assets/app.css assets/app.js assets/logo.png sw.js slides.json slides/slide-001.webp slides/slide-136.webp media/clip-107.mp4 media/clip-131.mp4; do
             test -s "_workshop_upload/$file" || { echo "::error::Datei fehlt: $file"; exit 1; }
           done
