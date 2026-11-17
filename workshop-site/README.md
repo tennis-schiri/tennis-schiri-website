@@ -42,3 +42,22 @@ Pfeiltasten/Bild auf-ab/Leertaste für Folien, G Kapitel, S Suche, N Notizen, P 
 Video-/Bildrechte und Aktualität der ITF-, DTB- und TVBB-Regelhinweise müssen vor öffentlicher Nutzung geprüft werden.
 
 © Tennis-Schiri · TS-WORKSHOP-2026.
+
+
+## Redaktionelle Reihenfolge (Web-Präsentation)
+
+Die Vortragsfolge wurde nach inhaltlicher Prüfung der vollständigen 136 Folien umgestellt, ohne Inhalte oder Medien zu entfernen. Quizfragen und Antworten bleiben stets direkt nacheinander.
+
+- Geschichte: Jeu-de-Paume-Video direkt im historischen Abschnitt (neue Folie 8).
+- Regelfälle: Ballkontakt-Videos direkt nach den Ballkontaktfragen (56–57).
+- Schlägerwurf: drei Beispielvideos direkt nach der Frage (60–62).
+- Netzberührung: vier Videobeispiele beim betreffenden Regelfall (67–70).
+- Spielen über/neben dem Netz: vier weitere Beispiele beim passenden Fall (73–76).
+- Elf nicht eindeutig beschriftete Bonusvideos: als **optionales Videolabor** vor Quellen und Abschluss.
+- Quellen-/Prüffolie: vor der abschließenden Dankesfolie.
+- Der Schluss „Danke für eure Aufmerksamkeit“ ist die letzte Folie (136).
+
+Die Original-Bild- und Videodateien behalten ihre Dateinamen und Herkunftsnummern. Das Skript `editorial_order.py` stellt die richtige Zuordnung beim Upload her und passt die sichtbare Web-Foliennummer an. Die frühere ZIP-Downloadfassung und die lokale PowerPoint bleiben unverändert; eine Umstellung dieser Dateien benötigt jeweils eine gesonderte neue Ausgabe.
+
+**Live-Upload bleibt ausschließlich manuell:** https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-workshop.yml
+
