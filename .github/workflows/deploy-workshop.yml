@@ -94,8 +94,8 @@ jobs:
           if sum(bool(x.get('video')) for x in actual) != 25:
               raise SystemExit('Videozuordnung im ZIP passt nicht zu 25 Clips')
           # JSON im script-Element darf kein HTML-Tag schließen.
-          payload = json.dumps(canonical, ensure_ascii=False, separators=(',', ':')).replace('<', r'\\u003c')
-          pattern = r'(<script id="workshop-data" type="application/json">)([\\s\\S]*?)(</script>)'
+          payload = json.dumps(canonical, ensure_ascii=False, separators=(',', ':')).replace('<', r'\u003c')
+          pattern = r'(<script id="workshop-data" type="application/json">)([\s\S]*?)(</script>)'
           html, count = re.subn(pattern, lambda m: m.group(1) + payload + m.group(3), html, count=1)
           if count != 1:
               raise SystemExit('Workshop-Datenblock in der HTML-Präsentation nicht gefunden')
