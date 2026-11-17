@@ -2,7 +2,7 @@
 
 Separate Web-Präsentation für https://workshop.tennis-schiri.de – unabhängig von der Hauptwebsite.
 
-**Aktueller Stand:** interaktive **Demo** mit 17 Ansichten, fünf Quizfragen, Kapitelwahl, Vollbild und Schwarzblende. Die vollständige PowerPoint mit 136 Folien bleibt separat. Originalvideos sind aus urheberrechtlichen Gründen nicht in der öffentlichen Demo enthalten.
+**Aktueller Stand:** interaktive **Demo** mit 17 Ansichten, sechs Quizfragen, Kapitelwahl, Vollbild und Schwarzblende. Die vollständige PowerPoint mit 136 Folien bleibt separat. Originalvideos sind aus urheberrechtlichen Gründen nicht in der öffentlichen Demo enthalten.
 
 **Fernbedienung:** Rechts / Bild ab / Leertaste = weiter bzw. Antwort aufdecken; Links / Bild auf = zurück; F = Vollbild; G = Kapitelwahl; B = Schwarzblende; H = Hilfe; Pos1 / Ende = erster / letzter Bildschirm.
 
