@@ -1,4 +1,4 @@
-name: WORKSHOP – vollständige Website manuell live hochladen
+name: WORKSHOP – Startseite und geschützten Bereich live hochladen
 
 on:
   workflow_dispatch:
@@ -12,42 +12,114 @@ concurrency:
 
 jobs:
   deploy:
-    name: Nur workshop.tennis-schiri.de aktualisieren
+    name: Workshop separat ins FTP-Verzeichnis übertragen
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
-      - name: Code auschecken
+      - name: Repository auschecken
         uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - name: Vollständiges Workshop-Paket rekonstruieren und prüfen
+      - name: Workshop-Secrets prüfen
         shell: bash
+        env:
+          FTP_WORKSHOP_HOST: ${{ secrets.FTP_WORKSHOP_HOST }}
+          FTP_WORKSHOP_USER: ${{ secrets.FTP_WORKSHOP_USER }}
+          FTP_WORKSHOP_PASSWORD: ${{ secrets.FTP_WORKSHOP_PASSWORD }}
+          WORKSHOP_ACCESS_PASSWORD: ${{ secrets.WORKSHOP_ACCESS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$FTP_WORKSHOP_HOST" || { echo "::error::FTP_WORKSHOP_HOST fehlt"; exit 1; }
+          test -n "$FTP_WORKSHOP_USER" || { echo "::error::FTP_WORKSHOP_USER fehlt"; exit 1; }
+          test -n "$FTP_WORKSHOP_PASSWORD" || { echo "::error::FTP_WORKSHOP_PASSWORD fehlt"; exit 1; }
+          test -n "$WORKSHOP_ACCESS_PASSWORD" || { echo "::error::WORKSHOP_ACCESS_PASSWORD fehlt"; exit 1; }
+          if [ "$(printf %s "$WORKSHOP_ACCESS_PASSWORD" | wc -c)" -lt 12 ]; then
+            echo "::error::WORKSHOP_ACCESS_PASSWORD muss mindestens 12 Zeichen lang sein."
+            exit 1
+          fi
+          echo "Alle vier Secrets vorhanden. Passwort wird nicht im Log ausgegeben."
+
+      - name: Präsentation rekonstruieren und sicheren Webroot erzeugen
+        shell: bash
+        env:
+          WORKSHOP_ACCESS_PASSWORD: ${{ secrets.WORKSHOP_ACCESS_PASSWORD }}
         run: |
           set -euo pipefail
           test "$(find workshop-site/bundle -maxdepth 1 -type f -name 'part[0-9][0-9]' | wc -l)" -eq 11
           cat workshop-site/bundle/part[0-9][0-9] > /tmp/workshop-full.zip
           echo '958b6b2004c56f65e2967c03979b102e04346a0b40707662483618c16d09f8b6  /tmp/workshop-full.zip' | sha256sum -c -
           unzip -tqq /tmp/workshop-full.zip
-          mkdir -p _workshop_upload
-          unzip -q /tmp/workshop-full.zip -d _workshop_upload
-          # Vollständiges HTML bleibt als direkt editierbare Datei im Repository.
-          cp workshop-site/index.html _workshop_upload/index.html
-          for file in index.html assets/app.css assets/app.js assets/logo.png sw.js slides.json slides/slide-001.webp slides/slide-136.webp media/clip-107.mp4 media/clip-131.mp4; do
-            test -s "_workshop_upload/$file" || { echo "::error::Datei fehlt: $file"; exit 1; }
+          mkdir -p /tmp/workshop-extracted _workshop_upload/_private _workshop_upload/assets
+          unzip -q /tmp/workshop-full.zip -d /tmp/workshop-extracted
+
+          # Öffentlich: nur Startseite, Login/PHP-Gateways und unsensitive UI-Assets.
+          cp workshop-site/startseite.html _workshop_upload/index.html
+          cp workshop-site/access.css _workshop_upload/access.css
+          cp workshop-site/login.php workshop-site/logout.php workshop-site/security.php \
+             workshop-site/resource.php workshop-site/presentation.php _workshop_upload/
+          cp workshop-site/.htaccess workshop-site/robots.txt workshop-site/sw.js _workshop_upload/
+          cp /tmp/workshop-extracted/assets/app.css _workshop_upload/assets/
+          cp /tmp/workshop-extracted/assets/logo.png _workshop_upload/assets/
+
+          # Privat: HTML mit Referentennotizen, JSON, alle 136 Folienbilder und 25 Clips.
+          cp workshop-site/index.html _workshop_upload/_private/index.html
+          cp -r /tmp/workshop-extracted/slides /tmp/workshop-extracted/media _workshop_upload/_private/
+          cp /tmp/workshop-extracted/slides.json _workshop_upload/_private/slides.json
+          cp workshop-site/deny-private.htaccess _workshop_upload/_private/.htaccess
+
+          # Offline-Service-Worker im bestehenden Presenter-Bundle deaktivieren,
+          # damit Medien nach dem Logout nicht aus Browser-Caches geladen werden.
+          python3 - <<'PY'
+          from pathlib import Path
+          js = Path('/tmp/workshop-extracted/assets/app.js').read_text(encoding='utf-8')
+          old = "if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});"
+          new = ("if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations()"
+                 ".then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{})};"
+                 "if('caches' in window){caches.keys().then(keys=>Promise.all(keys"
+                 ".filter(k=>k.startsWith('ts-workshop-')).map(k=>caches.delete(k)))).catch(()=>{})};")
+          if old not in js: raise SystemExit("Service-Worker-Einbindung verändert; Build stoppen.")
+          Path('_workshop_upload/assets/app.js').write_text(js.replace(old, new), encoding='utf-8')
+          deck = Path('_workshop_upload/_private/index.html')
+          html = deck.read_text(encoding='utf-8')
+          insert = ('<a href="/logout.php" aria-label="Workshop verlassen" '
+                    'style="display:inline-flex;align-items:center;padding:8px 13px;'
+                    'border:1px solid #54755f;border-radius:9px;text-decoration:none;'
+                    'color:#d2fc46;font-weight:800;white-space:nowrap">Abmelden ↗</a>')
+          if html.count('</nav>') != 1: raise SystemExit("Präsentationsnavigation unerwartet; Build stoppen.")
+          deck.write_text(html.replace('</nav>', insert+'</nav>',1), encoding='utf-8')
+          PY
+
+          # Hash nur aus GitHub Secret erzeugen, nie das Klartext-Passwort veröffentlichen.
+          php -r 'file_put_contents("_workshop_upload/_private/password-hash.php", "<?php\nreturn " . var_export(password_hash(getenv("WORKSHOP_ACCESS_PASSWORD"), PASSWORD_DEFAULT), true) . ";\n");'
+          unset WORKSHOP_ACCESS_PASSWORD
+
+          test "$(find _workshop_upload/_private/slides -type f -name 'slide-*.webp' | wc -l)" -eq 136
+          test "$(find _workshop_upload/_private/media -type f -name 'clip-*.mp4' | wc -l)" -eq 25
+          for file in \
+            index.html access.css login.php security.php resource.php \
+            presentation.php logout.php .htaccess robots.txt sw.js \
+            _private/index.html _private/slides.json _private/password-hash.php \
+            _private/.htaccess _private/slides/slide-001.webp _private/slides/slide-136.webp \
+            _private/media/clip-107.mp4 _private/media/clip-131.mp4 \
+            assets/app.css assets/app.js assets/logo.png; do
+            test -s "_workshop_upload/$file" || { echo "::error::Fehlende Datei: $file"; exit 1; }
           done
-          slides="$(find _workshop_upload/slides -type f -name 'slide-*.webp' | wc -l)"
-          videos="$(find _workshop_upload/media -type f -name 'clip-*.mp4' | wc -l)"
-          test "$slides" -eq 136 || { echo "::error::Erwartet 136 Folien, vorhanden: $slides"; exit 1; }
-          test "$videos" -eq 25 || { echo "::error::Erwartet 25 Videos, vorhanden: $videos"; exit 1; }
-          grep -q "Tennis-Schiri Workshop-Präsentation" _workshop_upload/index.html
-          grep -q "noindex,nofollow" _workshop_upload/index.html
-          grep -q "Disallow: /" _workshop_upload/robots.txt
+          grep -q 'KENNST DU' _workshop_upload/index.html
+          grep -q 'Backend' _workshop_upload/index.html
+          grep -q 'https://tennis-schiri.de/' _workshop_upload/index.html
+          grep -q 'Tennis-Schiri Workshop-Präsentation' _workshop_upload/_private/index.html
+          grep -q 'Require all denied' _workshop_upload/_private/.htaccess
+          grep -q 'RewriteRule .*slides/' _workshop_upload/.htaccess
+          ! grep -q 'serviceWorker.register' _workshop_upload/assets/app.js
           node --check _workshop_upload/assets/app.js
-          python -m json.tool _workshop_upload/slides.json >/dev/null
-          echo "136 Folien, 25 Videos und Workshop-Steuerung geprüft."
+          python3 -m json.tool _workshop_upload/_private/slides.json > /dev/null
+          for php_file in _workshop_upload/*.php _workshop_upload/_private/password-hash.php; do
+            php -l "$php_file" >/dev/null
+          done
+          echo "Startseite, serverseitiger Passwortschutz, 136 Folien und 25 Videos geprüft."
 
-      - name: Separate FTPS-Zugangsdaten prüfen
+      - name: Nur Workshop-FTP-Webspace per FTPS aktualisieren
         shell: bash
         env:
           FTP_WORKSHOP_HOST: ${{ secrets.FTP_WORKSHOP_HOST }}
@@ -55,46 +127,54 @@ jobs:
           FTP_WORKSHOP_PASSWORD: ${{ secrets.FTP_WORKSHOP_PASSWORD }}
         run: |
           set -euo pipefail
-          test -n "$FTP_WORKSHOP_HOST" || { echo "::error::FTP_WORKSHOP_HOST fehlt"; exit 1; }
-          test -n "$FTP_WORKSHOP_USER" || { echo "::error::FTP_WORKSHOP_USER fehlt"; exit 1; }
-          test -n "$FTP_WORKSHOP_PASSWORD" || { echo "::error::FTP_WORKSHOP_PASSWORD fehlt"; exit 1; }
-
-      - name: Nur in das Workshop-FTP-Startverzeichnis übertragen
-        shell: bash
-        env:
-          FTP_WORKSHOP_HOST: ${{ secrets.FTP_WORKSHOP_HOST }}
-          FTP_WORKSHOP_USER: ${{ secrets.FTP_WORKSHOP_USER }}
-          FTP_WORKSHOP_PASSWORD: ${{ secrets.FTP_WORKSHOP_PASSWORD }}
-        run: |
-          set -euo pipefail
-          # Sicherheitsvorgabe: dieser FTP-Benutzer MUSS im ALL-INKL KAS
-          # auf /workshop-tennis-schiri-de/ begrenzt sein.
-          # URLs beziehen sich auf das FTP-Startverzeichnis, keine Löschung.
-          while IFS= read -r -d '' file; do
+          # ALL-INKL FTP-Benutzer MUSS bereits auf
+          # /workshop-tennis-schiri-de/ eingeschränkt sein.
+          # Der Workflow löscht NICHTS und fasst die Hauptwebsite NICHT an.
+          upload_one() {
+            local file="$1"
+            local relative
             relative="$(realpath --relative-to=_workshop_upload "$file")"
-            echo "Workshop-Datei: $relative"
+            echo "Lade hoch: $relative"
             curl --fail --silent --show-error --ssl-reqd --ftp-pasv --ftp-create-dirs \
               --retry 2 --connect-timeout 20 --max-time 120 \
               --user "$FTP_WORKSHOP_USER:$FTP_WORKSHOP_PASSWORD" \
               --upload-file "$file" "ftp://$FTP_WORKSHOP_HOST:21/$relative"
+          }
+          # Sicherheitsregeln zuerst aktivieren, auch für alte Medien.
+          upload_one _workshop_upload/.htaccess
+          upload_one _workshop_upload/_private/.htaccess
+          # Öffentliche Startseite erst ganz zum Schluss austauschen.
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              _workshop_upload/.htaccess|_workshop_upload/_private/.htaccess|_workshop_upload/index.html) continue ;;
+            esac
+            upload_one "$file"
           done < <(find _workshop_upload -type f -print0 | sort -z)
+          upload_one _workshop_upload/index.html
+          echo "Sicherer Workshop-Webspace übertragen."
 
-      - name: Neue Subdomain prüfen
+      - name: Startseite und echten Passwortschutz verifizieren
         shell: bash
         run: |
           set -euo pipefail
-          status="$(curl -sS -L -o /tmp/workshop-live.html -w '%{http_code}' \
-            --max-time 35 -H 'Cache-Control: no-cache' \
-            "https://workshop.tennis-schiri.de/?commit=$GITHUB_SHA")"
-          if [ "$status" != "200" ]; then
-            echo "::error::workshop.tennis-schiri.de meldet HTTP $status"
-            exit 1
-          fi
-          if ! grep -q "Tennis-Schiri Workshop-Präsentation" /tmp/workshop-live.html; then
-            echo "::error::Subdomain liefert nicht die neue Workshop-Präsentation. Bitte Domain-Zielverzeichnis im KAS prüfen."
-            exit 1
-          fi
-          for path in slides/slide-001.webp slides/slide-136.webp media/clip-107.mp4 media/clip-131.mp4; do
-            curl --head --fail --silent --show-error --location --retry 2 --max-time 35 "https://workshop.tennis-schiri.de/$path" -o /dev/null || exit 1
-          done
-          echo "136 Workshop-Folien und Videos sind unter workshop.tennis-schiri.de verfügbar."
+          base="https://workshop.tennis-schiri.de"
+          http_code() {
+            curl -sS -o /tmp/workshop-check-body -D /tmp/workshop-check-headers \
+              -w '%{http_code}' --max-time 40 -H 'Cache-Control: no-cache' "$1"
+          }
+          code="$(http_code "$base/?commit=$GITHUB_SHA")"
+          test "$code" = "200" || { echo "::error::Startseite HTTP $code"; exit 1; }
+          grep -q 'KENNST DU' /tmp/workshop-check-body || { echo "::error::Startseite nicht aktualisiert"; exit 1; }
+          code="$(http_code "$base/login.php")"
+          test "$code" = "200" || { echo "::error::Login HTTP $code"; exit 1; }
+          code="$(http_code "$base/presentation.php")"
+          test "$code" = "302" || { echo "::error::Präsentation ohne Passwort erreichbar (HTTP $code)"; exit 1; }
+          code="$(http_code "$base/slides/slide-001.webp")"
+          test "$code" = "401" || { echo "::error::Folienbild nicht geschützt (HTTP $code)"; exit 1; }
+          code="$(http_code "$base/media/clip-107.mp4")"
+          test "$code" = "401" || { echo "::error::Videodatei nicht geschützt (HTTP $code)"; exit 1; }
+          code="$(http_code "$base/slides.json")"
+          test "$code" = "401" || { echo "::error::Metadaten nicht geschützt (HTTP $code)"; exit 1; }
+          code="$(http_code "$base/_private/slides/slide-001.webp")"
+          test "$code" = "403" || { echo "::error::Privatordner nicht gesperrt (HTTP $code)"; exit 1; }
+          echo "✓ Öffentliche Startseite und Passwortsperre erfolgreich geprüft."
