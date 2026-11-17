@@ -33,6 +33,11 @@ def get_partners() -> list[dict]:
         link = attr(a.group(), "href")
         src = attr(image.group(), "src")
         title = strip_tags(heading.group(1))
+        # TENNILO is shown on the partner page and already added once as
+        # a distinct in-house project to the newsletter partner catalog.
+        # Its original logo lives outside assets/partner/.
+        if title == "TENNILO" and link == "https://tennilo.de/" and src == "../assets/tennilo-logo.png":
+            continue
         if not re.fullmatch(r"https://[^\s<>\"']+", link):
             raise ValueError(f"Ungültige Partneradresse: {title}")
         if not src.startswith("../assets/partner/") or ".." in src[len("../assets/"):]:
