@@ -1,2 +1,10 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /presentation.php
+Disallow: /login.php
+Disallow: /resource.php
+Disallow: /logout.php
+Disallow: /_private/
+Disallow: /slides/
+Disallow: /media/
+Disallow: /slides.json
