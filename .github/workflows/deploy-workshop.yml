@@ -89,6 +89,9 @@ jobs:
           if html.count('</nav>') != 1: raise SystemExit("Präsentationsnavigation unerwartet; Build stoppen.")
           deck.write_text(html.replace('</nav>', insert+'</nav>',1), encoding='utf-8')
           PY
+          # Das Bild-/Videopaket bleibt unverändert; nur die Vortragsreihenfolge,
+          # die neue Zählung und die Verknüpfung zu Originalassets werden angepasst.
+          python3 workshop-site/editorial_order.py
 
           # Hash nur aus GitHub Secret erzeugen, nie das Klartext-Passwort veröffentlichen.
           php -r 'file_put_contents("_workshop_upload/_private/password-hash.php", "<?php\nreturn " . var_export(password_hash(getenv("WORKSHOP_ACCESS_PASSWORD"), PASSWORD_DEFAULT), true) . ";\n");'
@@ -112,6 +115,8 @@ jobs:
           grep -q 'Require all denied' _workshop_upload/_private/.htaccess
           grep -q 'RewriteRule .*slides/' _workshop_upload/.htaccess
           ! grep -q 'serviceWorker.register' _workshop_upload/assets/app.js
+          grep -q 'editorial-counter' _workshop_upload/_private/index.html
+          grep -q 'assetNo||s.no' _workshop_upload/assets/app.js
           node --check _workshop_upload/assets/app.js
           python3 -m json.tool _workshop_upload/_private/slides.json > /dev/null
           for php_file in _workshop_upload/*.php _workshop_upload/_private/password-hash.php; do
