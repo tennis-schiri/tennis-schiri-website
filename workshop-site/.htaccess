@@ -1,0 +1,14 @@
+# TENNIS-SCHIRI Workshop — öffentliche Startseite, geschützte Mediendateien
+Options -Indexes
+DirectoryIndex index.html
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^slides/(slide-[0-9]{3}\.webp)$ resource.php?path=slides/$1 [QSA,L,NC]
+RewriteRule ^media/(clip-[0-9]{3}\.mp4)$ resource.php?path=media/$1 [QSA,L,NC]
+RewriteRule ^slides\.json$ resource.php?path=slides.json [QSA,L,NC]
+# Nicht mehr verwendeten Offline-Service-Worker nicht öffentlich anbieten.
+</IfModule>
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "same-origin"
+</IfModule>
