@@ -61,3 +61,13 @@ Die Original-Bild- und Videodateien behalten ihre Dateinamen und Herkunftsnummer
 
 **Live-Upload bleibt ausschließlich manuell:** https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-workshop.yml
 
+
+## Korrektur der Folienfolge (17.11.2026)
+
+Die bearbeitbare HTML-Quelldatei hatte eine **abweichende eingebettete Folienliste**: Bereits ab Folie 8 fehlten bzw. verschoben sich Metadaten gegenüber den tatsächlich gerenderten 136 PowerPoint-Bildern. Das konnte zu falschen Kapitel- und Titelanzeigen, unpassender Suche und falsch zugeordneten Video-Buttons führen.
+
+Der Deploy-Workflow ersetzt den HTML-Datenblock nun **vor dem Upload** durch die kanonische `slides.json` aus dem per SHA-256 geprüften Komplettpaket. Er prüft exakt 136 fortlaufende Foliennummern sowie 25 Videodatei-Zuordnungen. Die 136 Bildschirmfolien selbst bleiben unverändert.
+
+Zusätzlich können ausgewählte Videos kontextbezogen bei den Regelfragen bzw. der Tennisgeschichte gestartet werden. Die vollständige Sammlung der 25 Videos ist weiterhin als optionales Videolabor erreichbar.
+
+Die Präsentation wurde bereits lokal mit dem korrigierten JavaScript-Syntaxcheck und dem synchronisierten JSON-Datenblock geprüft. Der erfolgreiche Login sowie die Videowiedergabe müssen nach dem nächsten manuellen Live-Upload im Zielbrowser getestet werden.
