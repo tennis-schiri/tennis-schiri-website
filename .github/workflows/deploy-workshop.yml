@@ -79,7 +79,32 @@ jobs:
                  "if('caches' in window){caches.keys().then(keys=>Promise.all(keys"
                  ".filter(k=>k.startsWith('ts-workshop-')).map(k=>caches.delete(k)))).catch(()=>{})};")
           if old not in js: raise SystemExit("Service-Worker-Einbindung verändert; Build stoppen.")
-          Path('_workshop_upload/assets/app.js').write_text(js.replace(old, new), encoding='utf-8')
+          js = js.replace(old, new)
+          # Videos, die in der PowerPoint gebündelt am Ende stehen, sind in
+          # der Webversion zusätzlich unmittelbar beim zugehörigen Fall startbar.
+          # Die 25 Original-Videofolien im Bonuslabor bleiben erhalten.
+          context_map = (
+              "const contextualVideoMap={7:'media/clip-107.mp4',"
+              "49:'media/clip-108.mp4',51:'media/clip-109.mp4',"
+              "55:'media/clip-110.mp4',59:'media/clip-113.mp4',"
+              "61:'media/clip-117.mp4'};"
+              "const currentVideo=s=>s.video||contextualVideoMap[s.no]||null;\\n"
+          )
+          anchor = 'const byId=id=>document.getElementById(id);'
+          if js.count(anchor) != 1: raise SystemExit('App-JS Struktur verändert (byId)')
+          js = js.replace(anchor, context_map + anchor, 1)
+          patches = (
+              ('videoBtn.hidden=!s.video;', 'videoBtn.hidden=!currentVideo(s);'),
+              ("if(!s.video)return;if(!videoLayer.classList.contains('open'))",
+               "if(!currentVideo(s))return;if(!videoLayer.classList.contains('open'))"),
+              ('video.src=s.video;', 'video.src=currentVideo(s);'),
+              ("if(!s.video)return;if(!videoLayer.classList.contains('open'))playVideo(true);",
+               "if(!currentVideo(s))return;if(!videoLayer.classList.contains('open'))playVideo(true);"),
+          )
+          for old_text, new_text in patches:
+              if old_text not in js: raise SystemExit('App-JS Video-Anker fehlt: ' + old_text)
+              js = js.replace(old_text, new_text)
+          Path('_workshop_upload/assets/app.js').write_text(js, encoding='utf-8')
           deck = Path('_workshop_upload/_private/index.html')
           html = deck.read_text(encoding='utf-8')
           # WICHTIG: Die direkt bearbeitbare HTML-Quelldatei enthielt eine
