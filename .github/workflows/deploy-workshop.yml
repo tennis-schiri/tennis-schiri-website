@@ -80,6 +80,8 @@ jobs:
           python3 -m pip install --disable-pip-version-check --quiet 'Pillow==11.3.0'
           python3 workshop-site/reorder.py
           cp workshop-site/deny-private.htaccess _workshop_upload/_private/.htaccess
+          mkdir -p _workshop_upload/_private/live-state
+          cp workshop-site/deny-private.htaccess _workshop_upload/_private/live-state/.htaccess
 
           # Service-Worker deaktivieren; alte Offline-Caches nicht weiter nutzen.
           # Im Hauptvortrag ist Folie 123 der Abschluss; die anschließenden
@@ -200,10 +202,11 @@ jobs:
           # Sicherheitsregeln zuerst aktivieren, auch für alte Medien.
           upload_one _workshop_upload/.htaccess
           upload_one _workshop_upload/_private/.htaccess
+          upload_one _workshop_upload/_private/live-state/.htaccess
           # Öffentliche Startseite erst ganz zum Schluss austauschen.
           while IFS= read -r -d '' file; do
             case "$file" in
-              _workshop_upload/.htaccess|_workshop_upload/_private/.htaccess|_workshop_upload/index.html) continue ;;
+              _workshop_upload/.htaccess|_workshop_upload/_private/.htaccess|_workshop_upload/_private/live-state/.htaccess|_workshop_upload/index.html) continue ;;
             esac
             upload_one "$file"
           done < <(find _workshop_upload -type f -print0 | sort -z)
