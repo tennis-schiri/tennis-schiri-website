@@ -1,0 +1,76 @@
+/* © Tennis-Schiri Regelworkshop · responsive visual system 2026 */
+:root{--rw-bg:#071b12;--rw-card:#0d271b;--rw-accent:#d2fc46;--rw-text:#f3f9ee;--rw-muted:#b8d0bf}
+.workshop-stage{position:absolute;inset:0;z-index:2;overflow:hidden;background:#091f16}
+.frame.rich-enabled #slide-image{display:none}
+.frame.rich-enabled .slide-badge,.frame.rich-enabled .progress-track{display:none}
+.frame.rich-enabled .clickarea{z-index:3;width:4%;top:5%;bottom:7%}
+.workshop-stage[hidden]{display:none!important}
+.rw-card{color:var(--rw-text);position:relative;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;
+ background:radial-gradient(ellipse 60% 85% at 100% 100%,#24513d88,transparent 75%),linear-gradient(125deg,#0b271c,#071910);
+ font:500 clamp(10px,1.2vw,19px)/1.3 Inter,Aptos,system-ui,sans-serif;isolation:isolate}
+.rw-card:before{content:"";position:absolute;right:-14%;top:-59%;width:64%;aspect-ratio:1;border:2px solid #d2fc4615;border-radius:50%;z-index:-1}
+.rw-top{display:flex;justify-content:space-between;align-items:center;gap:1em;margin:2.3% 4.8% 0;padding-bottom:1.2%;border-bottom:1px solid #91b78c48;flex:0 0 auto}
+.rw-kicker{font-weight:850;color:var(--rw-accent);text-transform:uppercase;font-size:.72em;letter-spacing:.15em}
+.rw-number{white-space:nowrap;font-size:.66em;font-weight:850;letter-spacing:.1em;color:#b6ccae}
+.rw-main{display:flex;flex:1;align-items:stretch;gap:3.5%;padding:2.2% 4.8% 1%;min-height:0;overflow:hidden}
+.rw-copy{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto;scrollbar-width:thin;padding:0 .4em .7em 0}
+.rw-title{font-size:clamp(18px,3.25vw,52px);line-height:1.06;letter-spacing:-.055em;font-weight:900;margin:.12em 0 .3em;text-wrap:balance}
+.rw-standfirst{color:#d2f1d3;font-size:1.28em;margin:0 0 .9em}
+.rw-points{display:flex;flex-direction:column;gap:.5em;margin:.2em 0 .4em}
+.rw-point{font-size:clamp(12px,1.65vw,25px);line-height:1.26;max-width:95%;margin:0;color:#ebf7e8}
+.rw-point:nth-child(2n){color:#bcd9c4}.rw-point:nth-child(1){font-weight:750}
+.rw-with-photo .rw-copy{flex:1.2}.rw-portrait{align-self:stretch;flex:.75;max-width:36%;min-width:0;overflow:hidden;border:1px solid #d2fc464d;border-radius:2% 2% 18% 2%;box-shadow:0 18px 55px #0009}
+.rw-portrait img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 24%;filter:contrast(1.06)}
+.rw-card.rw-with-photo .rw-title{font-size:clamp(20px,3.5vw,59px)}
+.rw-graphic{margin:auto 0 .5em;padding:.1em .2em;max-height:57%;min-height:22%;display:flex;align-items:center;justify-content:center}
+.rw-graphic svg{width:100%;height:100%;max-height:100%;display:block}
+.rw-card.rw-net .rw-copy,.rw-card:has(.rw-graphic) .rw-copy{overflow:hidden}
+.rw-card:has(.rw-graphic) .rw-points{display:none}
+.rw-card:has(.rw-graphic) .rw-title{font-size:clamp(21px,3.3vw,51px)}
+.rw-card:has(.rw-graphic) .rw-graphic{flex:1}
+.rw-hint{font-size:.83em;color:#c1d5c0;margin:.5em 0;max-width:75ch}
+.rw-source-details{font-size:.8em;margin:auto 0 .35em;color:#c2daca;border:1px solid #688e7255;border-radius:.5em;max-height:58%;overflow:auto}
+.rw-source-details summary{padding:.52em .75em;cursor:pointer;position:sticky;top:0;background:#193c2d;color:#e6f5de;font-weight:800;list-style:disclosure-closed}
+.rw-source-details[open] summary{list-style:disclosure-open}
+.rw-source-text{white-space:pre-wrap;padding:.85em 1em;max-height:18em;overflow:auto;line-height:1.4;overflow-wrap:anywhere}
+.rw-foot{border-top:1px solid #9bbf9040;margin:0 4.8% 1.7%;padding-top:1.1%;display:flex;justify-content:space-between;align-items:center;gap:1em;font-size:.65em;color:#b2cfb4;font-weight:700;flex:0 0 auto}
+.rw-original{font:inherit;cursor:pointer;border:0;background:none;color:var(--rw-accent);padding:0 .4em}
+.rw-original:hover{text-decoration:underline}
+.rw-choices{display:grid;gap:.65em;grid-template-columns:repeat(3,minmax(0,1fr));margin:.3em 0 1em}
+.rw-choice{display:flex;flex-direction:column;align-items:flex-start;gap:.6em;text-align:left;line-height:1.17;font-weight:750;font-size:clamp(11px,1.47vw,22px);padding:1em;background:#173f2a;border:2px solid #5f886965;border-radius:.75em;color:#f7ffe9;cursor:pointer;min-height:7em}
+.rw-choice:hover:not(:disabled),.rw-choice.is-voted{border-color:var(--rw-accent);background:#294f30}
+.rw-choice:disabled{cursor:default;opacity:.87}.rw-choice-letter{border-radius:.35em;background:var(--rw-accent);color:#0b2916;padding:.18em .5em;font-size:1.12em}
+.rw-answer{padding:.65em 0;margin:.2em 0 .45em;color:var(--rw-accent);font-weight:850;font-size:clamp(19px,2.6vw,40px);line-height:1.22;text-wrap:balance}
+.rw-type-answer .rw-title{font-size:clamp(18px,2.75vw,43px)}
+.rw-tally{color:var(--rw-accent);font-weight:850}
+.rw-video-card .rw-title{font-size:clamp(18px,2.6vw,43px);margin:0 0 .24em}
+.rw-video-card .rw-standfirst{font-size:.9em;margin:0 0 .1em}
+.rw-video-card .rw-copy{overflow:hidden}
+.rw-video{width:100%;height:100%;min-height:0;max-height:76%;object-fit:contain;border-radius:.65em;background:#000;box-shadow:0 8px 28px #000b;flex:1}
+.rw-video-error{color:#ffba9d;font-weight:700}
+@media(max-width:820px){
+ .rw-card{font-size:clamp(11px,1.8vw,16px)}
+ .rw-title{font-size:clamp(21px,4vw,37px)}
+ .rw-point{font-size:clamp(13px,2.2vw,22px)}
+ .rw-choice{font-size:clamp(11px,1.8vw,18px)}
+}
+@media(max-width:640px){
+ .rw-card{min-height:100%;font-size:14px}
+ .rw-top{margin:20px 21px 0;padding-bottom:10px}
+ .rw-main{padding:20px 21px;flex-direction:column;overflow-y:auto;gap:15px}
+ .rw-copy{overflow:visible}
+ .rw-title,.rw-card.rw-with-photo .rw-title{font-size:clamp(28px,6.7vw,42px)}
+ .rw-point{font-size:clamp(16px,4.1vw,20px)}
+ .rw-points{gap:.6em}.rw-choices{grid-template-columns:1fr}
+ .rw-choice{font-size:16px;padding:12px;min-height:0;flex-direction:row;align-items:center}
+ .rw-answer{font-size:clamp(24px,6vw,36px)}
+ .rw-source-details{font-size:13px;max-height:none;margin:12px 0}
+ .rw-source-text{max-height:50vh}
+ .rw-portrait{max-width:none;flex:0 0 auto;min-height:230px;max-height:310px;border-radius:18px}
+ .rw-portrait img{object-position:center 28%}
+ .rw-graphic{min-height:160px;max-height:300px}
+ .rw-card:has(.rw-graphic) .rw-copy{overflow:visible}
+ .rw-foot{margin:0 21px 15px;padding-top:12px;font-size:10px}
+ .rw-video{height:46vh;min-height:220px;max-height:52vh;flex:0 0 auto}
+}
+@media(prefers-reduced-motion:reduce){.rw-card *{animation:none!important;transition:none!important}}
