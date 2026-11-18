@@ -79,6 +79,30 @@ jobs:
           # aus dem geprüften Originalpaket gemeinsam rekonstruiert.
           python3 -m pip install --disable-pip-version-check --quiet 'Pillow==11.3.0'
           python3 workshop-site/reorder.py
+          # Comic-Historienbilder aus archivierten, bytegenauen Originalexports.
+          # Die Binärpakete sind in Teilblobs gespeichert, weil GitHub Contents
+          # große generierte Bilder nicht als normalen Text behandelt.
+          mkdir -p /tmp/workshop-comics _workshop_upload/_private/comics
+          cat workshop-site/comic-source/hc01/part[0-9][0-9].bin > /tmp/workshop-comics/hc01.png
+          cat workshop-site/comic-source/hc02/part[0-9][0-9].bin > /tmp/workshop-comics/hc02.png
+          echo '5a3a75513f836c1e289c4d3185bec5c3aa25045fd5fdcaa4d1996be359411570  /tmp/workshop-comics/hc01.png' | sha256sum -c -
+          echo '0a195e65aa40e598b63f05ec5045c3b336af822faa04f8ed07a4c8afaf118812  /tmp/workshop-comics/hc02.png' | sha256sum -c -
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps
+          for asset in ('hc01','hc02'):
+              src=Path('/tmp/workshop-comics')/(asset+'.png')
+              out=Path('_workshop_upload/_private/comics')/(asset+'.webp')
+              with Image.open(src) as image:
+                  if image.width < 1200 or image.height < 850:
+                      raise SystemExit(f'Comicgrafik {asset} unerwartet niedrig aufgelöst')
+                  image=ImageOps.exif_transpose(image).convert('RGB')
+                  image.thumbnail((1800,1100),Image.Resampling.LANCZOS)
+                  image.save(out,'WEBP',quality=87,method=6)
+              with Image.open(out) as verify:
+                  if verify.format!='WEBP':raise SystemExit(f'{asset} ist kein WEBP')
+              print(f'{asset}: {out.stat().st_size//1024} KiB in gesicherter Webgrafik')
+          PY
           cp workshop-site/deny-private.htaccess _workshop_upload/_private/.htaccess
           mkdir -p _workshop_upload/_private/live-state
           cp workshop-site/deny-private.htaccess _workshop_upload/_private/live-state/.htaccess
@@ -127,8 +151,8 @@ jobs:
           # Player geladen und übernimmt dessen bestehende F/Vollbild-Taste.
           if html.count('</head>') != 1 or html.count('</body>') != 1:
               raise SystemExit('Ungewöhnliche Dokumentstruktur; Vollbild-Integration abgebrochen')
-          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-6"></head>', 1)
-          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-6" defer></script><script src="assets/presenter-enhance.js?v=20261118-6" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
+          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-comic01"></head>', 1)
+          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-comic01" defer></script><script src="assets/presenter-enhance.js?v=20261118-comic01" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
           deck.write_text(html,encoding='utf-8')
           PY
 
@@ -144,6 +168,7 @@ jobs:
             _private/index.html _private/slides.json _private/password-hash.php \
             _private/.htaccess _private/slides/slide-001.webp _private/slides/slide-136.webp \
             _private/media/clip-107.mp4 _private/media/clip-131.mp4 \
+            _private/comics/hc01.webp _private/comics/hc02.webp \
             assets/app.css assets/app.js assets/logo.png \
             assets/presenter-mode.css assets/presenter-mode.js assets/workshop-michael-tennis.jpg \
             assets/workshop-michael-portrait.jpg assets/workshop-slide.css assets/workshop-slide.js \
@@ -237,6 +262,8 @@ jobs:
           test "$code" = "401" || { echo "::error::Folienbild nicht geschützt (HTTP $code)"; exit 1; }
           code="$(http_code "$base/media/clip-107.mp4")"
           test "$code" = "401" || { echo "::error::Videodatei nicht geschützt (HTTP $code)"; exit 1; }
+          code="$(http_code "$base/resource.php?path=comics/hc01.webp")"
+          test "$code" = "401" || { echo "::error::Comicmotiv ohne Login erreichbar: HTTP $code"; exit 1; }
           code="$(http_code "$base/slides.json")"
           test "$code" = "401" || { echo "::error::Metadaten nicht geschützt (HTTP $code)"; exit 1; }
           code="$(http_code "$base/_private/slides/slide-001.webp")"
@@ -284,6 +311,13 @@ jobs:
           test "$code" = "206" || { echo "::error::Videostream beantwortet Range nicht mit HTTP 206, sondern $code"; exit 1; }
           test "$(wc -c < /tmp/ws-video.part)" -eq 1024 || { echo "::error::MP4-Byte-Range falsch"; exit 1; }
           echo "Videostreaming: HTTP 206 / 1024 Bytes geprüft."
+          for comic in hc01 hc02; do
+            code="$(curl -sS -b "$cookie" -o /tmp/ws-video.part -w '%{http_code}' --max-time 35 "$base/resource.php?path=comics/$comic.webp")"
+            test "$code" = "200" || { echo "::error::Comicmotiv $comic wird nicht ausgeliefert (HTTP $code)"; exit 1; }
+            test "$(wc -c < /tmp/ws-video.part)" -gt 30000 || { echo "::error::Comicmotiv $comic leer oder beschädigt"; exit 1; }
+          done
+          echo "Beide Comic-Historienmotive geschützt und abrufbar."
+
 
           # Live-Raum testweise anlegen und wieder schließen.
           code="$(curl -sS -b "$cookie" -X POST -H 'Content-Type: application/json' \
