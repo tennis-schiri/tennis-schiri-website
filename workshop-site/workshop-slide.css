@@ -1,7 +1,7 @@
 /* © Tennis-Schiri Regelworkshop · responsive visual system 2026 */
 :root{--rw-bg:#071b12;--rw-card:#0d271b;--rw-accent:#d2fc46;--rw-text:#f3f9ee;--rw-muted:#b8d0bf}
 .workshop-stage{position:absolute;inset:0;z-index:2;overflow:hidden;background:#091f16}
-.frame.rich-enabled #slide-image{display:none}
+.frame.rich-enabled #slide-image{display:none!important}
 .frame.rich-enabled .slide-badge,.frame.rich-enabled .progress-track{display:none}
 .frame.rich-enabled .clickarea{z-index:3;width:4%;top:5%;bottom:7%}
 .workshop-stage[hidden]{display:none!important}
@@ -74,3 +74,23 @@
  .rw-video{height:46vh;min-height:220px;max-height:52vh;flex:0 0 auto}
 }
 @media(prefers-reduced-motion:reduce){.rw-card *{animation:none!important;transition:none!important}}
+
+/* Originalansicht, Referentenraum und Teilnehmerfreigabe */
+.original-close{position:absolute;right:18px;top:17px;z-index:15;border:1px solid #b4e286;border-radius:9px;color:#eaffdb;background:#102f1fe8;font:800 13px system-ui,sans-serif;padding:10px 14px;cursor:pointer}
+.original-close[hidden]{display:none!important}
+#host-live-button{background:#d2fc46!important;color:#10291a!important;font-weight:850!important}
+#host-live-button.is-live{background:#c5ffc1!important}
+.host-room-panel{position:fixed;inset:0;z-index:170;display:grid;place-items:center;padding:20px;background:#031009e6;backdrop-filter:blur(10px)}
+.host-room-panel[hidden]{display:none!important}
+.host-room-box{width:min(560px,100%);max-height:90dvh;overflow:auto;position:relative;padding:40px;border:1px solid #8fb27b;border-radius:21px;background:#153423;color:#f8fff0;box-shadow:0 24px 95px #000b}
+.host-room-dismiss{position:absolute;right:20px;top:20px;border:0;background:transparent;color:#f1ffea;cursor:pointer;font-size:20px}
+.host-room-kicker{font:850 12px system-ui,sans-serif;color:#d2fc46;letter-spacing:.15em;margin:0 0 15px}
+.host-room-box h2{font:900 clamp(25px,5vw,43px)/1.08 system-ui,sans-serif;letter-spacing:-.06em;margin:0 0 16px}
+.host-room-box p{color:#d7e9d4}
+.host-room-code{display:block;text-align:center;border:1px dashed #d2fc46a0;border-radius:16px;padding:22px;margin:25px 0 15px;font:900 clamp(30px,7vw,63px)/1.1 ui-monospace,monospace;letter-spacing:.18em;color:#d2fc46}
+.host-room-link{font:600 12px/1.5 ui-monospace,monospace;overflow-wrap:anywhere;color:#bdd7c1}
+.host-room-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+.host-room-actions button{border-radius:9px;padding:12px 15px;color:#142f1b;background:#d2fc46;border:1px solid #d2fc46;font:800 13px system-ui,sans-serif;cursor:pointer}
+.host-room-actions button:last-child{color:#f5fff4;border-color:#749276;background:#254732}
+.host-room-status{font-size:13px;min-height:22px}
+@media(max-width:640px){.host-room-box{padding:29px 21px}.host-room-code{letter-spacing:.1em}}
