@@ -105,18 +105,31 @@ Alle 25 Webvideos sind direkt per HTML5-Player abspielbar, inklusive Pausen- und
 
 Browser- und Mehrgerätetests nach dem manuellen Live-Upload sind erforderlich. Auch die Aktualität der Regelaussagen, besonders bei TVBB-Saisonbestimmungen, muss fachlich überprüft werden.
 
-## Historienbilder im Comic-Stil (HC01 / HC02)
+## Bildfüllende Folien mit fließendem Text (Version IM02)
 
-Im Abschnitt **Tennisgeschichte** sind neue historische Illustrationen integriert. Der stilistische Ansatz greift den freigegebenen Testentwurf **HC01** auf: warme Farben, prägnante Tuschekonturen, erzählerische Komposition und erkennbar historische Kleidung/Schläger.
+Bei **bildbasierten Folien** wird die Illustration bzw. das Originalfoto nun als vollflächiger Hintergrund eingesetzt. Überschrift, Originalangaben und Bedienelemente liegen **darüber**, eingebettet in einen weichen Verlauf. Das bisherige Tennis-Schiri-Grunddesign bleibt mit Dunkelgrün, Lime-Akzenten und klarer Navigation erhalten. Auf Smartphone/Tablet steht das Bild im oberen Bereich, darunter fließt der Text auf einem kontrastreichen Hintergrund weiter. Die ursprüngliche Folie bleibt über **„Originalfolie ansehen“** abrufbar.
 
-- **HC01 – Lawn Tennis um 1887:** künstlerische Neugestaltung auf Basis der Datei Lawn-tennis-Prang-1887.jpg aus dem Google-Drive-Ordner Regelkurs. Im Workshop auf den Folien **11 und 12**.
-- **HC02 – Jeu de Paume im 17. Jahrhundert:** künstlerische Neugestaltung auf Basis des Motivs French_Jeu_de_Paume_in_the_17th_century.jpg. Im Workshop auf **Folie 5, 7 und 10**.
+**Keine mehrfach verwendeten Bildhintergründe:** Die Bildzuordnung in `workshop-slide.js` ist explizit und wird beim Deployment auf Dubletten kontrolliert.
 
-Die beiden generierten Originalgrafiken sind im Drive-Ordner Regelkurs separat als Historie_Comic_HC01_Lawn_Tennis_1887.png und Historie_Comic_HC02_Jeu_de_Paume.png abgelegt. In GitHub liegen ihre originalen PNG-Bytes, durch Base64-Blobpakete in jeweils 12 bzw. 11 Teile geteilt. Der Upload-Workflow setzt sie mit **SHA-256-Verifikation** zusammen und erzeugt daraus hochaufgelöste WebP-Webbilder.
+| Folie | Eigenständiges Bildmotiv | Darstellung |
+|---|---|---|
+| 3 | Tennisaktionsfoto des Referenten | echtes Foto, bildfüllend |
+| 4 | zweites Tennisfoto des Referenten | echtes Foto, bildfüllend |
+| 5 | HC02 – Jeu de Paume | Comic-Illustration |
+| 6 | Jeu-de-Paume-Originalzeichnung | historische Quelle |
+| 7 | Wingfield-Porträt | historische Quelle |
+| 10 | Wimbledon 1877 | historische Quelle |
+| 11 | HC01 – Lawn Tennis 1887 | Comic-Illustration |
+| 12 | farbiges Lawn-Tennis-Bild 1887 | historische Quelle |
+| 120 | drittes Tennisfoto des Referenten | echtes Foto, bildfüllend |
 
-Die Bilder werden als **„Comic-Interpretation · historisch inspiriert“** gekennzeichnet und nicht als fotografische oder dokumentarisch exakte Belege ausgegeben. Über **„Originalfolie ansehen“** kann der Präsentationsnutzer jederzeit zur bisherigen Originalansicht wechseln. Die neuen Bilder werden über die bestehende geschützte resource.php-Session ausgeliefert, nicht frei auf der Startseite veröffentlicht. Die Kapitel außerhalb der Geschichte, insbesondere Netzmaße und Regelfragen, bleiben sachlich bebildert.
+Die historischen Originale stammen aus dem Drive-Ordner **Regelkurs** und liegen im Repository unter `workshop-site/history-originals/`. Sie werden beim Deployment nach `_private/history/` kopiert und ausschließlich mit gültiger Workshop-Session per `resource.php` ausgeliefert. Die zwei bereits erstellten Comicbilder HC01 und HC02 werden aus den überprüften GitHub-Binärteilen erzeugt und ebenso geschützt ausgeliefert. Ihre Kennzeichnung **„Comic-Interpretation · kein Originalfoto“** wird sichtbar über dem Bild eingeblendet.
 
-Die historischen Comicgrafiken sind für Web-Präsentation, Tablet und Smartphone unterschiedlich groß gestaltet. Der Workflow prüft beide Bilder nach dem Upload mit und ohne Anmeldung.
+**Historische Gestaltung:** Georgia-/Serif-Schrift für Titel und Inhalt, warme Creme-, Sepia- und Goldakzente statt der sonst üblichen Lime-Typografie. Historische Quellen und Comic-Interpretationen werden bewusst unterschieden. Folie 8 (Video) und Folie 9 (Textthema zur Zählweise) bleiben ohne wiederholtes Hintergrundmotiv, nutzen aber die warme historische Typografie.
+
+**Bewusste Ausnahme:** technische Netzhöhen, Platzmaße, Ausrüstungsgrafiken, Regelfragen und Videos bekommen kein beliebiges dekoratives Vollbildfoto, damit Maße, Interaktionen und Play-Bedienelemente lesbar bleiben.
+
+Die Website bleibt passwortgeschützt, alle **136 Folien**, **27 Frage-/Antwort-Paare** und **25 Videofolien** bleiben erhalten. Der manuelle Upload und der anschließende Mehrgerätetest sind weiterhin erforderlich.
 
 ## Presenter-Bedienung
 
