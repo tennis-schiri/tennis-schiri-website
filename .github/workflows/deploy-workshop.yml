@@ -89,12 +89,26 @@ jobs:
               ("case'End':e.preventDefault();jump(S.length);break;",
                "case'End':e.preventDefault();jump(S.find(s=>s.main_end)?.no||S.length);break;"),
               ("Erste / letzte Folie","Erste / Abschlussfolie"),
+              ("counter.textContent=String(s.no).padStart(3,'0')+' / '+S.length;",
+               "counter.textContent=s.no<=parsed.main_end?(String(s.no).padStart(3,'0')+' / '+parsed.main_end):('BONUS '+String(s.no-parsed.main_end).padStart(2,'0')+' / '+(S.length-parsed.main_end));"),
+              ("progress.style.width=(100*s.no/S.length)+'%';",
+               "progress.style.width=(100*(s.no<=parsed.main_end?s.no/parsed.main_end:(s.no-parsed.main_end)/(S.length-parsed.main_end)))+'%';"),
+              ("window.__workshop={slideCount:S.length,",
+               "window.__workshop={mainSlideCount:parsed.main_end,bonusSlideCount:S.length-parsed.main_end,slideCount:S.length,"),
           )
           for before,after in replacements:
               if js.count(before) != 1:
                   raise SystemExit('Presenter-JavaScript unerwartet verändert: ' + before[:75])
               js=js.replace(before,after,1)
           app.write_text(js,encoding='utf-8')
+          # Versionierte Assets verhindern, dass die frühere Reihenfolge aus
+          # Browser-Caches geladen wird, obwohl die neuen Bilder bereits online sind.
+          deck = Path('_workshop_upload/_private/index.html')
+          html = deck.read_text(encoding='utf-8')
+          if html.count('20261117-1') != 2:
+              raise SystemExit('CSS/JS Versionierung in Workshop HTML unerwartet')
+          html = html.replace('20261117-1','20261118-v4')
+          deck.write_text(html,encoding='utf-8')
           PY
 
           # Hash nur aus GitHub Secret erzeugen, nie das Klartext-Passwort veröffentlichen.
