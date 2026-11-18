@@ -404,8 +404,8 @@
  .home-v2 .hero-foot{display:none}
  .home-v2 .hero-stat-value{font-size:38px}
  .home-v2 .hero-stat .hero-stat-label{font-size:14px}
- .home-v2 .hero-plate .date{font-size:18px}
- .home-v2 .hero-plate-title{font-size:12px}
+ .home-v2 .hero-plate .date{font-size:24px}
+ .home-v2 .hero-plate-title{font-size:17px}
  .home-v2 .home-activity-pair{grid-template-columns:1fr}
  .home-v2 .home-activity-pair .community-panel{grid-template-columns:45px minmax(0,1fr)}
  .home-v2 .home-activity-pair .home-news-heading{margin-bottom:12px}
@@ -419,14 +419,15 @@
  .home-v2 .hero-inner{grid-template-columns:1fr;gap:22px;align-items:start;padding-top:118px;padding-bottom:33px}
  .home-v2 .hero h1{font-size:clamp(51px,10vw,72px)}
  .home-v2 .hero-side{grid-column:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .home-v2 .hero-stat,.home-v2 .hero-side .hero-plate{min-width:0;padding:15px}
+ .home-v2 .hero-stat{min-width:0;padding:15px}
+ .home-v2 .hero-side .hero-plate{min-width:0;padding:18px 16px}
  .home-v2 .hero-stat-period{display:none}
  .home-v2 .hero-stat-value{font-size:38px}
  .home-v2 .hero-stat .hero-stat-detail{display:none}
  .home-v2 .hero-stat-actions{margin-top:9px}
  .home-v2 .hero-stat-actions button{font-size:10px}
- .home-v2 .hero-plate .date{font-size:17px}
- .home-v2 .hero-plate-title{font-size:12px}
+ .home-v2 .hero-plate .date{font-size:clamp(20px,3.2vw,24px)}
+ .home-v2 .hero-plate-title{font-size:15px}
  .home-v2 .quicknav-inner{grid-template-columns:repeat(3,minmax(0,1fr))}
  .home-v2 .quick{padding:15px 12px}
  .home-v2 .quick h3{font-size:13px}
@@ -449,6 +450,9 @@
  .home-v2 .hero-inner{padding-top:116px}
  .home-v2 .hero h1{font-size:clamp(48px,11vw,64px)}
  .home-v2 .hero-desc{font-size:13px}
+ .home-v2 .hero-side .hero-plate{padding:21px}
+ .home-v2 .hero-plate .date{font-size:clamp(25px,6.3vw,31px)}
+ .home-v2 .hero-plate-title{font-size:19px}
  .home-v2 .quick:first-child{padding-left:0}
  .home-v2 .quick:last-child{padding-right:0}
  .home-v2 .quick-index{font-size:8px}
