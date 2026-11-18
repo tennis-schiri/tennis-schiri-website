@@ -242,3 +242,62 @@ jobs:
           code="$(http_code "$base/_private/slides/slide-001.webp")"
           test "$code" = "403" || { echo "::error::Privatordner nicht gesperrt (HTTP $code)"; exit 1; }
           echo "✓ Öffentliche Startseite und Passwortsperre erfolgreich geprüft."
+
+      - name: Echten Login, Videostreaming und mobile Live-Räume testen
+        shell: bash
+        env:
+          WORKSHOP_ACCESS_PASSWORD: ${{ secrets.WORKSHOP_ACCESS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          base="https://workshop.tennis-schiri.de"
+          cookie="$(mktemp)"
+          trap 'rm -f "$cookie" /tmp/ws-login.html /tmp/ws-asset.json /tmp/ws-video.part /tmp/ws-room.json /tmp/ws-check.json' EXIT
+
+          # Anmeldung mit dem echten GitHub-Secret und Session-Cookie,
+          # ohne das Passwort im Log anzuzeigen.
+          curl -sS --max-time 35 -c "$cookie" -b "$cookie" "$base/login.php" -o /tmp/ws-login.html
+          csrf="$(grep -oE 'name="csrf" value="[a-f0-9]{48}"' /tmp/ws-login.html | cut -d '"' -f 4)"
+          test -n "$csrf" || { echo "::error::Login-CSRF-Token fehlt"; exit 1; }
+          code="$(curl -sS -o /dev/null -w '%{http_code}' \
+            -c "$cookie" -b "$cookie" --max-time 35 \
+            --data-urlencode "csrf=$csrf" \
+            --data-urlencode "password=$WORKSHOP_ACCESS_PASSWORD" "$base/login.php")"
+          test "$code" = "303" || { echo "::error::Passwortlogin fehlgeschlagen: HTTP $code"; exit 1; }
+          unset WORKSHOP_ACCESS_PASSWORD
+
+          code="$(curl -sS -b "$cookie" -o /dev/null -w '%{http_code}' --max-time 35 "$base/presentation.php")"
+          test "$code" = "200" || { echo "::error::Angemeldete Präsentation HTTP $code"; exit 1; }
+          code="$(curl -sS -b "$cookie" -o /dev/null -w '%{http_code}' --max-time 35 "$base/teilnehmen.php")"
+          test "$code" = "200" || { echo "::error::Angemeldete Teilnehmerseite HTTP $code"; exit 1; }
+          curl -fsS -b "$cookie" --max-time 35 "$base/resource.php?path=slides.json" -o /tmp/ws-asset.json
+          python3 - <<'PY'
+          import json
+          slides=json.load(open('/tmp/ws-asset.json'))['slides']
+          assert len(slides)==136 and sum(bool(x.get('video')) for x in slides)==25
+          assert len([x for x in slides if x['type']=='question'])==27
+          print('136 Folien, 27 Fragen und 25 Videoreferenzen authentifiziert ausgelesen.')
+          PY
+
+          # Video-Player auf iOS/Safari und Android brauchen Byte-Range-Streaming.
+          code="$(curl -sS -b "$cookie" -H 'Range: bytes=0-1023' \
+            -o /tmp/ws-video.part -w '%{http_code}' --max-time 35 "$base/media/clip-107.mp4")"
+          test "$code" = "206" || { echo "::error::Videostream beantwortet Range nicht mit HTTP 206, sondern $code"; exit 1; }
+          test "$(wc -c < /tmp/ws-video.part)" -eq 1024 || { echo "::error::MP4-Byte-Range falsch"; exit 1; }
+          echo "Videostreaming: HTTP 206 / 1024 Bytes geprüft."
+
+          # Live-Raum testweise anlegen und wieder schließen.
+          code="$(curl -sS -b "$cookie" -X POST -H 'Content-Type: application/json' \
+            -d '{"slide":1}' -o /tmp/ws-room.json -w '%{http_code}' \
+            --max-time 35 "$base/live.php?op=create")"
+          test "$code" = "200" || { echo "::error::Live-Raum konnte nicht erstellt werden (HTTP $code)"; exit 1; }
+          room="$(python3 -c 'import json; print(json.load(open("/tmp/ws-room.json"))["room"])')"
+          token="$(python3 -c 'import json; print(json.load(open("/tmp/ws-room.json"))["host_token"])')"
+          code="$(curl -sS -b "$cookie" -o /tmp/ws-check.json -w '%{http_code}' \
+            --max-time 35 "$base/live.php?op=status&room=$room")"
+          test "$code" = "200" || { echo "::error::Live-Status HTTP $code"; exit 1; }
+          python3 -c 'import json; a=json.load(open("/tmp/ws-check.json")); assert a["active"] and a["slide"]==1'
+          code="$(curl -sS -b "$cookie" -X POST -H 'Content-Type: application/json' \
+            -d "{\"room\":\"$room\",\"host_token\":\"$token\"}" -o /tmp/ws-check.json \
+            -w '%{http_code}' --max-time 35 "$base/live.php?op=end")"
+          test "$code" = "200" || { echo "::error::Live-Raum konnte nicht geschlossen werden"; exit 1; }
+          echo "✓ Echter Passwortlogin, 136 Folien, 25 Medienreferenzen, Video-Range und Live-Raum geprüft."
