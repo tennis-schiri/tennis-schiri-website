@@ -24,7 +24,7 @@ header('Referrer-Policy: same-origin');
 <title>Workshop live verfolgen · Tennis-Schiri</title>
 <link rel="icon" href="assets/logo.png">
 <link rel="stylesheet" href="access.css?v=20261118-photo1">
-<link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-immersive02">
+<link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-noscroll-comic03">
 <link rel="stylesheet" href="assets/participant.css?v=20261118-comic01">
 </head>
 <body class="participant-body">
@@ -65,6 +65,6 @@ header('Referrer-Policy: same-origin');
 </main>
 <footer class="participant-footer"><span>© Tennis-Schiri · Regelworkshop</span><a href="/">Workshop-Startseite</a></footer>
 </div>
-<script src="assets/workshop-slide.js?v=20261118-immersive02" defer></script>
+<script src="assets/workshop-slide.js?v=20261118-noscroll-comic03" defer></script>
 <script src="assets/participant.js?v=20261118-comic01" defer></script>
 </body></html>
