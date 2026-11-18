@@ -1,0 +1,56 @@
+/* © Tennis-Schiri: bildschirmfüllende Web-Präsentation (v20261118-2)
+   Echte Browser-Vollbildansicht mit identischem CSS-Fallback für iOS. */
+html.presenter-active,body.presenter-active{overflow:hidden!important;background:#000!important}
+.shell.presentation-view,.shell.presentation-view:fullscreen{
+ position:fixed!important;inset:0!important;z-index:70!important;width:100vw!important;
+ height:100dvh!important;min-height:100dvh!important;margin:0!important;
+ padding:0!important;gap:0!important;display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:center!important;overflow:hidden!important;
+ background:#000!important
+}
+.shell.presentation-view .header,.shell.presentation-view .toolbar,
+.shell.presentation-view .smallprint{display:none!important}
+.shell.presentation-view .view{
+ width:100vw!important;height:100dvh!important;min-height:0!important;flex:1 1 auto!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;padding:0!important;overflow:hidden!important
+}
+.shell.presentation-view .frame{
+ position:relative!important;flex:0 0 auto!important;display:block!important;
+ width:min(100vw,177.77778dvh)!important;height:min(100dvh,56.25vw)!important;
+ max-width:none!important;max-height:none!important;aspect-ratio:16/9!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ background:#000!important;overflow:hidden!important
+}
+.shell.presentation-view .slide{display:block;width:100%!important;height:100%!important;object-fit:contain!important}
+.shell.presentation-view .frame::after,.shell.presentation-view .progress-track,
+.shell.presentation-view .slide-badge{display:none!important}
+.shell.presentation-view .clickarea{top:0!important;bottom:0!important;width:9%!important;opacity:0}
+.shell.presentation-view .clickarea:hover,.shell.presentation-view .clickarea:focus-visible{opacity:1}
+.shell.presentation-view .video-layer{border-radius:0!important}
+.presenter-exit{
+ position:fixed;right:17px;top:17px;z-index:101;
+ border:1px solid #e3f9bf7d;border-radius:10px;padding:11px 15px;
+ background:#092014ef;color:#e9ffcf;font:750 13px/1.2 Inter,system-ui,sans-serif;
+ opacity:.08;transition:opacity .18s ease,background .18s ease;cursor:pointer
+}
+.presenter-exit[hidden]{display:none!important}
+.presenter-exit:hover,.presenter-exit:focus-visible{opacity:1;background:#224331}
+.presenter-exit:focus-visible{outline:3px solid #d2fc46;outline-offset:3px}
+.presenter-launch{
+ position:fixed;inset:0;z-index:120;display:grid;place-items:center;
+ padding:24px;background:#041108ea;backdrop-filter:blur(13px)
+}
+.presenter-launch[hidden]{display:none!important}
+.presenter-launch-card{
+ width:min(480px,100%);padding:38px;border-radius:20px;
+ color:#f7ffe8;background:#163122;border:1px solid #8bc0718c;
+ text-align:center;box-shadow:0 30px 80px #0009
+}
+.presenter-launch-card h2{font:900 clamp(26px,5vw,42px)/1.09 Inter,system-ui,sans-serif;letter-spacing:-.055em;margin:0 0 15px}
+.presenter-launch-card p{font:500 15px/1.55 Inter,system-ui,sans-serif;color:#c1d7c1;margin:0 0 26px}
+.presenter-launch-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+.presenter-launch-actions button{font:750 14px Inter,system-ui,sans-serif;padding:13px 20px;cursor:pointer;border-radius:10px;border:1px solid #6d8c73;color:#e6f4e4;background:#1b3827}
+.presenter-launch-actions button.primary{color:#10220f;background:#d2fc46;border-color:#d2fc46}
+@media(max-width:660px){.presenter-exit{right:9px;top:9px;padding:9px 11px;font-size:12px}.presenter-launch-card{padding:27px 22px}}
+@media(prefers-reduced-motion:reduce){.presenter-exit{transition:none}}
