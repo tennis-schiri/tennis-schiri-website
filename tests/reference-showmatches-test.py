@@ -13,10 +13,10 @@ expect={
     "Steffi Graf": ("Gabriela Sabatini","Berlin","25. September 2004","LINIENRICHTER"),
     "Ivan Lendl": ("Carl-Uwe Steeb","Seeburg","2011","STUHLSCHIEDSRICHTER"),
 }
-section=re.search(r'<section class="ref-showmatches"\b.*?</section>',page,re.S)
+section=re.search(r'<section class="ref-showmatches".*?</section>',page,re.S)
 if not section:
     raise SystemExit("Eigenständige Showmatch-Sektion fehlt")
-cards=re.findall(r'<article class="ref-showmatch(?: ref-showmatch--chair)?"\b.*?</article>',section.group(),re.S)
+cards=re.findall(r'<article class="ref-showmatch(?: ref-showmatch--chair)?".*?</article>',section.group(),re.S)
 if len(cards)!=len(expect):
     raise SystemExit(f"Erwartet {len(expect)} Showmatch-Referenzen, gefunden {len(cards)}")
 for leader,(opponent,place,when,role) in expect.items():
