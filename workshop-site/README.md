@@ -63,6 +63,16 @@ GitHub Actions → Workflow → Run workflow → Branch main → Run workflow.
 
 **Es findet kein automatischer Upload statt.** Der FTPS-Account muss im ALL-INKL-KAS auf /workshop-tennis-schiri-de/ eingeschränkt sein. Die Tennis-Schiri-Hauptwebsite bleibt unverändert. Nach Upload prüft der Workflow, dass Startseite/Passwort-Login erreichbar sind und Präsentation, Bilder und Videos anonym gesperrt sind.
 
+## Original-Tennisfoto und separate Vollbild-Vorführung
+
+Die öffentliche Startseite nutzt **das authentische Tennisaktionsfoto aus Google Drive** (bereits in der TS-Website als `public/assets/michael-wiedeck-spiel.jpg` vorhanden), statt der gezeichneten Tennisplatzgrafik. Der Build kopiert diese Originaldatei als `/assets/workshop-michael-tennis.jpg` in die Workshop-Subdomain. Das Markenlogo bleibt unverändert.
+
+In der passwortgeschützten Web-Präsentation führt die Taste **F** oder der Button **„⛶ Präsentieren“** in eine echte Vollbild-Vorführansicht. Dort werden Kopfzeile, Navigation und Rahmen ausgeblendet, und die 16:9-Folien sind so groß wie möglich. **Esc** oder der diskrete Button oben rechts beendet die Ansicht. Pfeile/Bild auf-ab/Leertaste funktionieren weiterhin; Kapitel (G), Suche (S) und Notizen (N) können auch im Vollbild aufgerufen werden.
+
+Ein direkter Präsentationsaufruf nach Login ist unter `/presentation.php?present=1` möglich. Wegen Browser-Sicherheitsregeln muss man dort zunächst auf **„Präsentation starten“** klicken; ein ungefragter automatischer Fullscreen-Start ist nicht möglich. Auf Geräten ohne Fullscreen-API bleibt die bildschirmfüllende CSS-Vorführansicht verfügbar.
+
+Der Presenter-JavaScript/CSS-Code liegt in `workshop-site/presenter-mode.js` und `presenter-mode.css` und wird vom Workshop-Workflow gemeinsam mit den 136 Folien hochgeladen. Der Zugriffsschutz wird dadurch nicht geändert.
+
 ## Presenter-Bedienung
 
 - Rechts/Bild↓/Leertaste: weiter; Links/Bild↑: zurück.
