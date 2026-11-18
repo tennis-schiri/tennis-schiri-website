@@ -63,18 +63,113 @@
 .home-v2 .hero-stat .hero-stat-detail{font-size:11px;min-height:0;margin-bottom:9px}
 .home-v2 .hero-stat-actions{padding-top:9px}
 .home-v2 .hero-stat-actions button{padding:6px 10px}
+/* Hero-Turnierkarte: klarer visueller Schwerpunkt statt zweiter heller Statistikkarte. */
 .home-v2 .hero-side .hero-plate{
   position:relative;top:auto;right:auto;bottom:auto;
-  width:100%;max-width:100%;margin:0;
-  transform:none;box-shadow:none;
-  border:1px solid #d3e3c5;border-radius:16px;
-  padding:17px 20px;min-height:0;
-  background:#f9fbf6;color:#193d2b;
+  isolation:isolate;
+  width:100%;max-width:100%;min-width:0;margin:0;
+  transform:none;
+  overflow:hidden;
+  border:2px solid #c8f16d;
+  border-radius:19px;
+  padding:21px 22px 20px;
+  min-height:0;
+  background:radial-gradient(ellipse at 100% 0%,rgba(177,239,83,.21) 0%,transparent 54%),
+             linear-gradient(143deg,#245a3c 0%,#183d31 55%,#102d28 100%);
+  color:#f8fff3;
+  box-shadow:0 6px 0 rgba(200,241,109,.11),0 18px 46px rgba(4,25,17,.36);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
 }
-.home-v2 .hero-plate .date{font-size:clamp(19px,2.4vw,26px)}
-.home-v2 .hero-plate .location{font-size:12px}
-.home-v2 .hero-plate-title{font-size:14px;line-height:1.4}
-.home-v2 .hero-plate-cta{font-size:12px}
+.home-v2 .hero-side .hero-plate::after{
+  content:"";
+  position:absolute;
+  width:170px;height:170px;
+  top:-100px;right:-83px;
+  border:1px solid rgba(200,241,109,.26);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+}
+.home-v2 .hero-side .hero-plate:hover{
+  transform:translateY(-4px);
+  border-color:#e7ffa5;
+  box-shadow:0 7px 0 rgba(200,241,109,.1),0 25px 54px rgba(4,25,17,.44);
+}
+.home-v2 .hero-side .hero-plate:focus-visible{outline:3px solid #f6ffc9;outline-offset:4px}
+.home-v2 .hero-plate .small{
+  width:max-content;
+  max-width:100%;
+  padding:7px 12px;
+  background:#c8f16d;
+  color:#163c2a;
+  border:1px solid #dcffa5;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.105em;
+}
+.home-v2 .hero-plate-dot{
+  background:#255639;
+  box-shadow:0 0 0 3px rgba(28,85,45,.12);
+}
+.home-v2 .hero-plate .date{
+  display:block;
+  margin:17px 0 9px;
+  font-size:clamp(27px,2.6vw,34px);
+  line-height:1.06;
+  font-weight:950;
+  letter-spacing:-.055em;
+  white-space:normal;
+  color:#d8ff89;
+}
+.home-v2 .hero-plate-title{
+  display:block;
+  font-size:clamp(17px,1.7vw,21px);
+  line-height:1.22;
+  font-weight:900;
+  letter-spacing:-.03em;
+  color:#fff;
+  overflow-wrap:break-word;
+}
+.home-v2 .hero-plate-place{
+  display:block;
+  margin-top:8px;
+  font-size:12px;
+  line-height:1.5;
+  color:#d5e8da;
+}
+.home-v2 .hero-plate-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:19px;
+  padding:13px 16px;
+  border-radius:11px;
+  background:#c8f16d;
+  color:#183a28;
+  font-size:13px;
+  font-weight:950;
+  box-shadow:0 5px 0 rgba(4,25,17,.19);
+}
+.home-v2 .hero-side .hero-plate:hover .hero-plate-cta{background:#e0ff9b}
+.home-v2 .hero-plate-cta span{font-size:20px;line-height:1}
+@media(max-width:960px){
+  .home-v2 .hero-plate .date{font-size:clamp(23px,3vw,28px)}
+  .home-v2 .hero-plate-title{font-size:17px}
+}
+@media(max-width:760px){
+  .home-v2 .hero-side .hero-plate{padding:18px 16px}
+  .home-v2 .hero-plate .date{font-size:clamp(20px,3.2vw,24px)}
+  .home-v2 .hero-plate-title{font-size:15px}
+  .home-v2 .hero-plate-cta{padding:11px 12px;font-size:12px}
+}
+@media(max-width:620px){
+  .home-v2 .hero-side .hero-plate{padding:21px}
+  .home-v2 .hero-plate .date{font-size:clamp(25px,6.3vw,31px)}
+  .home-v2 .hero-plate-title{font-size:19px}
+}
+@media(prefers-reduced-motion:reduce){
+  .home-v2 .hero-side .hero-plate{transition:none}
+  .home-v2 .hero-side .hero-plate:hover{transform:none}
+}
 
 /* Die Schnellzugriffe sind jetzt eine einfache Navigationsleiste */
 .home-v2 .quicknav{margin:0;position:relative;z-index:2;background:#fff;border-top:1px solid #dce6d7;border-bottom:1px solid #dce6d7}
