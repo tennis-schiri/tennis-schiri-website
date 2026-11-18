@@ -105,6 +105,19 @@ Alle 25 Webvideos sind direkt per HTML5-Player abspielbar, inklusive Pausen- und
 
 Browser- und Mehrgerätetests nach dem manuellen Live-Upload sind erforderlich. Auch die Aktualität der Regelaussagen, besonders bei TVBB-Saisonbestimmungen, muss fachlich überprüft werden.
 
+## Historienbilder im Comic-Stil (HC01 / HC02)
+
+Im Abschnitt **Tennisgeschichte** sind neue historische Illustrationen integriert. Der stilistische Ansatz greift den freigegebenen Testentwurf **HC01** auf: warme Farben, prägnante Tuschekonturen, erzählerische Komposition und erkennbar historische Kleidung/Schläger.
+
+- **HC01 – Lawn Tennis um 1887:** künstlerische Neugestaltung auf Basis der Datei Lawn-tennis-Prang-1887.jpg aus dem Google-Drive-Ordner Regelkurs. Im Workshop auf den Folien **11 und 12**.
+- **HC02 – Jeu de Paume im 17. Jahrhundert:** künstlerische Neugestaltung auf Basis des Motivs French_Jeu_de_Paume_in_the_17th_century.jpg. Im Workshop auf **Folie 5, 7 und 10**.
+
+Die beiden generierten Originalgrafiken sind im Drive-Ordner Regelkurs separat als Historie_Comic_HC01_Lawn_Tennis_1887.png und Historie_Comic_HC02_Jeu_de_Paume.png abgelegt. In GitHub liegen ihre originalen PNG-Bytes, durch Base64-Blobpakete in jeweils 12 bzw. 11 Teile geteilt. Der Upload-Workflow setzt sie mit **SHA-256-Verifikation** zusammen und erzeugt daraus hochaufgelöste WebP-Webbilder.
+
+Die Bilder werden als **„Comic-Interpretation · historisch inspiriert“** gekennzeichnet und nicht als fotografische oder dokumentarisch exakte Belege ausgegeben. Über **„Originalfolie ansehen“** kann der Präsentationsnutzer jederzeit zur bisherigen Originalansicht wechseln. Die neuen Bilder werden über die bestehende geschützte resource.php-Session ausgeliefert, nicht frei auf der Startseite veröffentlicht. Die Kapitel außerhalb der Geschichte, insbesondere Netzmaße und Regelfragen, bleiben sachlich bebildert.
+
+Die historischen Comicgrafiken sind für Web-Präsentation, Tablet und Smartphone unterschiedlich groß gestaltet. Der Workflow prüft beide Bilder nach dem Upload mit und ohne Anmeldung.
+
 ## Presenter-Bedienung
 
 - Rechts/Bild↓/Leertaste: weiter; Links/Bild↑: zurück.
