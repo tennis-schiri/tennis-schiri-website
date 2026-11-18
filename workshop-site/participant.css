@@ -1,0 +1,63 @@
+/* Tennis-Schiri Workshop · responsive participant companion */
+*{box-sizing:border-box}
+body.participant-body{margin:0;min-height:100svh;color:#f6fbf0;background:radial-gradient(ellipse at 80% -5%,#254b3180,transparent 50%),#06190f;font:500 16px/1.5 Inter,Aptos,system-ui,sans-serif}
+.participant-app{max-width:1600px;margin:auto;min-height:100svh;display:flex;flex-direction:column}
+.participant-header{height:89px;padding:14px clamp(20px,4vw,60px);display:flex;align-items:center;gap:20px;border-bottom:1px solid #afca9850}
+.participant-brand img{width:200px;height:auto;max-height:62px;object-fit:contain;display:block}
+.participant-type{font:850 11px/1.2 system-ui,sans-serif;letter-spacing:.17em;color:#d2fc46;margin:auto}
+.participant-logout{text-decoration:none;color:#c8dfce;font-size:13px}
+.participant-logout:hover{text-decoration:underline}
+.participant-layout{width:min(1220px,calc(100% - 48px));margin:0 auto;flex:1;padding:30px 0 40px}
+.join-card{display:flex;justify-content:space-between;align-items:end;gap:22px;margin-bottom:26px}
+.room-form label{display:block;color:#c1d2c3;font-size:13px;font-weight:800;margin-bottom:8px}
+.room-inputs{display:flex;gap:9px;align-items:stretch}
+.room-inputs input{width:170px;text-transform:uppercase;letter-spacing:.2em;color:#f4ffe9;background:#132f20;border:1px solid #6d956f;border-radius:10px;padding:11px 14px;font:bold 20px/1.2 ui-monospace,monospace}
+.room-inputs button,.participant-controls button,.participant-navigation button,.participant-original-view button{border:1px solid #a6cb75;background:#d2fc46;color:#0e2b18;font:800 14px/1.2 system-ui,sans-serif;border-radius:10px;padding:12px 17px;cursor:pointer}
+.room-inputs button:hover,.participant-controls button:hover,.participant-navigation button:hover,.participant-original-view button:hover{filter:brightness(1.07)}
+.participant-controls{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.connect-status{font-size:12px;color:#b6d1b9}.connect-status[data-status=online]{color:#d2fc46}.connect-status[data-status=error]{color:#ffb19f}
+.participant-controls button{background:#193d27;color:#def4d7}
+.participant-controls button[aria-pressed=false]{background:#314530;color:#e5f8d8}
+button:disabled{opacity:.45;cursor:not-allowed!important}
+.participant-stage{position:relative;width:100%;aspect-ratio:16/9;min-height:450px;max-height:740px;overflow:hidden;border:1px solid #658e6b;border-radius:18px;background:#0a2217;box-shadow:0 30px 75px #0008}
+.participant-stage>.rw-card{height:100%}
+.participant-placeholder{min-height:100%;padding:clamp(25px,6vw,80px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;background:linear-gradient(120deg,#0e321f,#081c12)}
+.participant-placeholder strong{font-size:clamp(35px,6vw,75px);letter-spacing:-.07em;line-height:1;color:#d2fc46}
+.participant-placeholder p{max-width:650px;color:#d8ebd7;font-size:clamp(16px,2vw,23px)}
+.participant-original-view{width:100%;height:100%;display:grid;align-content:start;gap:12px;padding:16px;overflow:auto;background:#060d08}
+.participant-original-view button{justify-self:start}
+.participant-original-view img{max-width:100%;max-height:90%;object-fit:contain;justify-self:center}
+.participant-navigation{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:17px}
+.participant-navigation button{min-width:115px;background:#1a3a29;color:#f5ffe7;border-color:#608c67}
+.participant-navigation span{color:#d2fc46;font:850 15px/1 ui-monospace,monospace;white-space:nowrap}
+.participant-help{margin:30px 0 10px;padding:25px 30px;border:1px solid #42664a;border-radius:16px;background:#102c1e;display:grid;grid-template-columns:.5fr 1fr 1fr;gap:24px;align-items:center}
+.participant-help h2{font-size:31px;letter-spacing:-.06em;line-height:1.1;color:#d2fc46;margin:0}
+.participant-help p{font-size:14px;color:#c1d5c1;margin:0}
+.participant-footer{padding:25px clamp(20px,4vw,60px);display:flex;justify-content:space-between;gap:18px;border-top:1px solid #77997845;color:#9fb6a0;font-size:12px}
+.participant-footer a{color:#bed2c1}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@media(max-width:900px){
+ .join-card{align-items:stretch;flex-direction:column}
+ .participant-controls{width:100%;flex-direction:row;align-items:center;justify-content:space-between}
+ .participant-help{grid-template-columns:1fr 1fr}.participant-help h2{grid-column:1/-1}
+ .participant-stage{min-height:400px}
+}
+@media(max-width:640px){
+ .participant-header{height:auto;min-height:72px;padding:12px 18px;gap:8px}
+ .participant-brand img{width:145px}.participant-type{font-size:8px;letter-spacing:.09em}.participant-logout{font-size:11px}
+ .participant-layout{width:100%;padding:17px 0 30px}
+ .join-card{margin:0 16px 16px}
+ .room-form,.room-inputs{width:100%}.room-inputs input{flex:1;min-width:0;width:50%}
+ .room-inputs button{font-size:13px;padding:12px}
+ .participant-controls{gap:10px}.connect-status{font-size:11px}
+ .participant-controls button{padding:10px;font-size:12px}
+ .participant-stage{border-radius:0;border-left:0;border-right:0;aspect-ratio:auto;height:min(72svh,800px);min-height:540px;max-height:none}
+ .participant-stage .rw-card{height:100%}
+ .participant-navigation{margin:16px}
+ .participant-navigation button{min-width:92px;padding:11px;font-size:13px}
+ .participant-navigation span{font-size:13px}
+ .participant-help{margin:0 16px 20px;display:block;padding:21px}
+ .participant-help h2{font-size:28px}.participant-help p{margin:10px 0}
+ .participant-footer{padding:17px;font-size:11px}
+}
+@media(max-height:650px) and (min-width:700px){.participant-stage{min-height:330px}}
