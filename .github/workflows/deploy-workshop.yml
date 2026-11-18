@@ -71,6 +71,7 @@ jobs:
           # Originalbild in der TS-Hauptwebsite, auch beim Workshop ausliefern.
           cp public/assets/michael-wiedeck-spiel.jpg _workshop_upload/assets/workshop-michael-tennis.jpg
           cp public/assets/michael-wiedeck-tennis.jpg _workshop_upload/assets/workshop-michael-portrait.jpg
+          cp public/assets/michael-wiedeck-portrait.jpg _workshop_upload/assets/workshop-michael-kneeling.jpg
           cp workshop-site/presenter-mode.css workshop-site/presenter-mode.js \
              workshop-site/workshop-slide.css workshop-site/workshop-slide.js \
              workshop-site/presenter-enhance.js workshop-site/participant.css workshop-site/participant.js _workshop_upload/assets/
@@ -82,7 +83,12 @@ jobs:
           # Comic-Historienbilder aus archivierten, bytegenauen Originalexports.
           # Die Binärpakete sind in Teilblobs gespeichert, weil GitHub Contents
           # große generierte Bilder nicht als normalen Text behandelt.
-          mkdir -p /tmp/workshop-comics _workshop_upload/_private/comics
+          mkdir -p /tmp/workshop-comics _workshop_upload/_private/comics _workshop_upload/_private/history
+          cp workshop-site/history-originals/jeu-de-paume-original.jpg \
+             workshop-site/history-originals/wingfield-original.jpg \
+             workshop-site/history-originals/wimbledon-1877-original.jpg \
+             workshop-site/history-originals/lawn-tennis-1887-original.jpg \
+             _workshop_upload/_private/history/
           cat workshop-site/comic-source/hc01/part[0-9][0-9].bin > /tmp/workshop-comics/hc01.png
           cat workshop-site/comic-source/hc02/part[0-9][0-9].bin > /tmp/workshop-comics/hc02.png
           echo '5a3a75513f836c1e289c4d3185bec5c3aa25045fd5fdcaa4d1996be359411570  /tmp/workshop-comics/hc01.png' | sha256sum -c -
@@ -151,8 +157,8 @@ jobs:
           # Player geladen und übernimmt dessen bestehende F/Vollbild-Taste.
           if html.count('</head>') != 1 or html.count('</body>') != 1:
               raise SystemExit('Ungewöhnliche Dokumentstruktur; Vollbild-Integration abgebrochen')
-          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-comic01"></head>', 1)
-          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-comic01" defer></script><script src="assets/presenter-enhance.js?v=20261118-comic01" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
+          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-immersive02"></head>', 1)
+          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-immersive02" defer></script><script src="assets/presenter-enhance.js?v=20261118-immersive02" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
           deck.write_text(html,encoding='utf-8')
           PY
 
@@ -169,9 +175,12 @@ jobs:
             _private/.htaccess _private/slides/slide-001.webp _private/slides/slide-136.webp \
             _private/media/clip-107.mp4 _private/media/clip-131.mp4 \
             _private/comics/hc01.webp _private/comics/hc02.webp \
+            _private/history/jeu-de-paume-original.jpg _private/history/wingfield-original.jpg \
+            _private/history/wimbledon-1877-original.jpg _private/history/lawn-tennis-1887-original.jpg \
             assets/app.css assets/app.js assets/logo.png \
             assets/presenter-mode.css assets/presenter-mode.js assets/workshop-michael-tennis.jpg \
-            assets/workshop-michael-portrait.jpg assets/workshop-slide.css assets/workshop-slide.js \
+            assets/workshop-michael-portrait.jpg assets/workshop-michael-kneeling.jpg \
+            assets/workshop-slide.css assets/workshop-slide.js \
             assets/presenter-enhance.js assets/participant.css assets/participant.js; do
             test -s "_workshop_upload/$file" || { echo "::error::Fehlende Datei: $file"; exit 1; }
           done
@@ -193,6 +202,22 @@ jobs:
           grep -q 'workshop-michael-tennis.jpg' _workshop_upload/index.html
           test "$(wc -c < _workshop_upload/assets/workshop-michael-tennis.jpg)" -gt 100000
           node --check _workshop_upload/assets/presenter-mode.js
+          # Kein Historienbild mehrfach belegen; nur der Spezialfall
+          # eines ausdrücklich gewünschten Repeats dürfte diese Prüfung ändern.
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          source=Path('_workshop_upload/assets/workshop-slide.js').read_text(encoding='utf-8')
+          block=source.split('const imagery={',1)[1].split('};',1)[0]
+          used=re.findall(r"src:'([^']+)'",block)
+          assert len(used)==9, f'Bildbelegung unerwartet: {len(used)}'
+          assert len(set(used))==len(used), 'Doppeltes Motiv auf Bildfolien'
+          for name in ('jeu-de-paume','wingfield','wimbledon-1877','lawn-tennis-1887'):
+              path=Path('_workshop_upload/_private/history')/(name+'-original.jpg')
+              assert path.stat().st_size>100000, f'Bildquelle fehlt oder beschädigt: {name}'
+          assert 'rw-immersive' in source and 'rw-vintage' in source
+          print('9 unterschiedliche Bildhintergründe, davon 6 historische Motive, geprüft.')
+          PY
           node --check _workshop_upload/assets/workshop-slide.js
           node --check _workshop_upload/assets/presenter-enhance.js
           node --check _workshop_upload/assets/participant.js
@@ -264,6 +289,8 @@ jobs:
           test "$code" = "401" || { echo "::error::Videodatei nicht geschützt (HTTP $code)"; exit 1; }
           code="$(http_code "$base/resource.php?path=comics/hc01.webp")"
           test "$code" = "401" || { echo "::error::Comicmotiv ohne Login erreichbar: HTTP $code"; exit 1; }
+          code="$(http_code "$base/resource.php?path=history/jeu-de-paume-original.jpg")"
+          test "$code" = "401" || { echo "::error::Historische Originalbilder ohne Passwort erreichbar (HTTP $code)"; exit 1; }
           code="$(http_code "$base/slides.json")"
           test "$code" = "401" || { echo "::error::Metadaten nicht geschützt (HTTP $code)"; exit 1; }
           code="$(http_code "$base/_private/slides/slide-001.webp")"
@@ -317,6 +344,13 @@ jobs:
             test "$(wc -c < /tmp/ws-video.part)" -gt 30000 || { echo "::error::Comicmotiv $comic leer oder beschädigt"; exit 1; }
           done
           echo "Beide Comic-Historienmotive geschützt und abrufbar."
+          for original in jeu-de-paume wingfield wimbledon-1877 lawn-tennis-1887; do
+            code="$(curl -sS -b "$cookie" -o /tmp/ws-video.part -w '%{http_code}' --max-time 35 "$base/resource.php?path=history/$original-original.jpg")"
+            test "$code" = "200" || { echo "::error::Historisches Originalbild $original HTTP $code"; exit 1; }
+            test "$(wc -c < /tmp/ws-video.part)" -gt 100000 || { echo "::error::Bild $original nicht vollständig"; exit 1; }
+          done
+          echo "Vier unterschiedliche geschützte Historienoriginale abrufbar."
+
 
 
           # Live-Raum testweise anlegen und wieder schließen.
