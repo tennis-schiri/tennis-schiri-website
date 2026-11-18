@@ -161,8 +161,8 @@ jobs:
           # Player geladen und übernimmt dessen bestehende F/Vollbild-Taste.
           if html.count('</head>') != 1 or html.count('</body>') != 1:
               raise SystemExit('Ungewöhnliche Dokumentstruktur; Vollbild-Integration abgebrochen')
-          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-immersive02"></head>', 1)
-          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-immersive02" defer></script><script src="assets/presenter-enhance.js?v=20261118-immersive02" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
+          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-noscroll-comic03"></head>', 1)
+          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-noscroll-comic03" defer></script><script src="assets/presenter-enhance.js?v=20261118-noscroll-comic03" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
           deck.write_text(html,encoding='utf-8')
           PY
 
