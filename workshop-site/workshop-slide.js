@@ -15,9 +15,9 @@
     '<g fill="#f6ffeb" font-weight="850" font-family="system-ui,sans-serif" font-size="26">',
     '<text x="78" y="31" text-anchor="middle">1,07 m</text><text x="902" y="31" text-anchor="middle">1,07 m</text>',
     '<text x="490" y="83" text-anchor="middle" fill="#d2fc46">91,4 cm</text>',
-    '<text x="274" y="330" text-anchor="middle" font-size="20">EINZELSTÜTZE</text>',
+    '<text x="274" y="330" text-anchor="middle" font-size="20">EINZELSTÜTZE</text><text x="274" y="353" text-anchor="middle" font-size="13">91,4 cm außerhalb</text>',
     '<text x="490" y="330" text-anchor="middle" font-size="20">MITTELBAND</text>',
-    '<text x="706" y="330" text-anchor="middle" font-size="20">EINZELSTÜTZE</text></g></svg>'
+    '<text x="706" y="330" text-anchor="middle" font-size="20">EINZELSTÜTZE</text><text x="706" y="353" text-anchor="middle" font-size="13">91,4 cm außerhalb</text></g></svg>'
   ].join('');
   const svgCourt=[
     '<svg viewBox="0 0 940 440" role="img" aria-label="Tennisplatz mit Einzel- und Doppellinien">',
@@ -81,7 +81,7 @@
       content.append(list);
       if(s.no===14||s.no===15){
         const graphic=make('div','rw-graphic');graphic.innerHTML=s.no===15?svgNet:svgCourt;content.append(graphic);
-        if(s.no===15)content.append(make('p','rw-hint','Einzelstützen: Bei Verwendung eines Doppelnetzes im Einzel auf die korrekte Position und die 91,4-cm-Markierung achten.'));
+        if(s.no===15)content.append(make('p','rw-hint','Zwei verschiedene Maße: 91,4 cm Netzhöhe in der Mitte. Einzelstützen stehen jeweils 91,4 cm außerhalb der Einzel-Seitenlinie und halten die Netzkante dort auf 1,07 m.'));
       }
       if(s.no!==1)details(content,compact(s.notes));
     }
