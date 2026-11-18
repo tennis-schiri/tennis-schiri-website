@@ -4,7 +4,7 @@ require __DIR__ . '/security.php';
 workshop_require_auth(false);
 
 $path = $_GET['path'] ?? '';
-if (!is_string($path) || !preg_match('~^(?:slides/slide-[0-9]{3}\.webp|media/clip-[0-9]{3}\.mp4|comics/hc0[12]\.webp|history/(?:jeu-de-paume-original|wingfield-original|wimbledon-1877-original|lawn-tennis-1887-original)\.jpg|slides\.json)$~D', $path)) {
+if (!is_string($path) || !preg_match('~^(?:slides/slide-[0-9]{3}\.webp|media/clip-[0-9]{3}\.mp4|comics/(?:hc0[12]|jeu-de-paume-original-comic|wingfield-original-comic|wimbledon-1877-original-comic|lawn-tennis-1887-original-comic)\.webp|history/(?:jeu-de-paume-original|wingfield-original|wimbledon-1877-original|lawn-tennis-1887-original)\.jpg|slides\.json)$~D', $path)) {
     http_response_code(404);
     exit;
 }
