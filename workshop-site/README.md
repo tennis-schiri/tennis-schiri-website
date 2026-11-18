@@ -62,12 +62,28 @@ Die Original-Bild- und Videodateien behalten ihre Dateinamen und Herkunftsnummer
 **Live-Upload bleibt ausschließlich manuell:** https://github.com/tennis-schiri/tennis-schiri-website/actions/workflows/deploy-workshop.yml
 
 
-## Korrektur der Folienfolge (17.11.2026)
 
-Die bearbeitbare HTML-Quelldatei hatte eine **abweichende eingebettete Folienliste**: Bereits ab Folie 8 fehlten bzw. verschoben sich Metadaten gegenüber den tatsächlich gerenderten 136 PowerPoint-Bildern. Das konnte zu falschen Kapitel- und Titelanzeigen, unpassender Suche und falsch zugeordneten Video-Buttons führen.
+## Didaktisch überarbeitete Vollfassung (18.11.2026)
 
-Der Deploy-Workflow ersetzt den HTML-Datenblock nun **vor dem Upload** durch die kanonische `slides.json` aus dem per SHA-256 geprüften Komplettpaket. Er prüft exakt 136 fortlaufende Foliennummern sowie 25 Videodatei-Zuordnungen. Die 136 Bildschirmfolien selbst bleiben unverändert.
+Der neue Build wurde aus dem Originalmaterial reorganisiert. **Keine der 136 Folien, 27 Frage-/Auflösungs-Paare oder 25 Originalvideos wird entfernt.** Die Reihenfolge von Folienbild, interner Foliennummer, Referentennotiz, Kapiteltitel und Suche wird gemeinsam aus dem Originalpaket neu aufgebaut. Die auf Folienbildern gedruckten Nummern und Kapitellabels werden passend aktualisiert.
 
-Zusätzlich können ausgewählte Videos kontextbezogen bei den Regelfragen bzw. der Tennisgeschichte gestartet werden. Die vollständige Sammlung der 25 Videos ist weiterhin als optionales Videolabor erreichbar.
+Die Kapitel sind nun:
 
-Die Präsentation wurde bereits lokal mit dem korrigierten JavaScript-Syntaxcheck und dem synchronisierten JSON-Datenblock geprüft. Der erfolgreiche Login sowie die Videowiedergabe müssen nach dem nächsten manuellen Live-Upload im Zielbrowser getestet werden.
+1. Einstieg und Vorstellung (1–4)
+2. Tennisgeschichte, mit historischem Clip (5–12)
+3. Spielfeld und Netz (13–17)
+4. Schläger und Besaitung (18–23)
+5. Zählweise und Tie-Break (24–32)
+6. Matchablauf, Wahl, Seitenwechsel und Fehlerkorrekturen (33–42)
+7. Spiel ohne Schiedsrichter mit Ballabdruck-, Ausruf- und Spielstandfällen (43–60)
+8. Weitere Regelfälle, **mit Videos direkt beim passenden Thema** (61–93)
+9. TVBB: Melde- und Spielberechtigung, OSR, Coaching, Doppel, Wetter (94–118)
+10. Regelwerke / Aktualitätscheck (119)
+11. Fazit und Dank (120–123)
+12. Optionales Bonusarchiv mit alten nuLiga-Ansichten und weiteren Videos (124–136)
+
+Die Abschlussfolie ist **123**. Der normale Vorwärts-Presenter stoppt dort; die 13 optionalen Archivfolien sind über **Kapitel → BONUS · ARCHIV** erreichbar. Das Archiv bleibt bewusst außerhalb des durchgehenden Vortrags. Alle Q/A-Paare sind weiterhin unmittelbar benachbart.
+
+`workshop-site/reorder.py` ist das Quellskript für die Reihenfolge. Der Workflow rekonstruiert das unveränderte Originalpaket und baut beim manuellen Deploy die neu beschrifteten Folienbilder samt konsistenten Metadaten. Der Workflow nutzt dazu Pillow und überprüft die Anzahl von Folien, Videos und den Passwortschutz. Das alte `editorial_order.py` wird nicht mehr ausgeführt.
+
+Der getrennte Passwortschutz, die Startseite und die drei FTP-Secrets plus `WORKSHOP_ACCESS_PASSWORD` bleiben unverändert.
