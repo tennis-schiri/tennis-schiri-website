@@ -4,7 +4,7 @@ require __DIR__ . '/security.php';
 workshop_require_auth(false);
 
 $path = $_GET['path'] ?? '';
-if (!is_string($path) || !preg_match('~^(?:slides/slide-[0-9]{3}\.webp|media/clip-[0-9]{3}\.mp4|comics/hc0[12]\.webp|slides\.json)$~D', $path)) {
+if (!is_string($path) || !preg_match('~^(?:slides/slide-[0-9]{3}\.webp|media/clip-[0-9]{3}\.mp4|comics/hc0[12]\.webp|history/(?:jeu-de-paume-original|wingfield-original|wimbledon-1877-original|lawn-tennis-1887-original)\.jpg|slides\.json)$~D', $path)) {
     http_response_code(404);
     exit;
 }
@@ -22,7 +22,7 @@ if ($private === false || $file === false || !str_starts_with($file, $private . 
     exit;
 }
 $type = str_ends_with($path, '.mp4') ? 'video/mp4'
-    : (str_ends_with($path, '.webp') ? 'image/webp' : 'application/json; charset=utf-8');
+    : (str_ends_with($path, '.webp') ? 'image/webp' : (str_ends_with($path, '.jpg') ? 'image/jpeg' : 'application/json; charset=utf-8'));
 header('Content-Type: ' . $type);
 header('X-Content-Type-Options: nosniff');
 header('Accept-Ranges: bytes');
