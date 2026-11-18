@@ -62,77 +62,40 @@ jobs:
           cp /tmp/workshop-extracted/assets/app.css _workshop_upload/assets/
           cp /tmp/workshop-extracted/assets/logo.png _workshop_upload/assets/
 
-          # Privat: HTML mit Referentennotizen, JSON, alle 136 Folienbilder und 25 Clips.
-          cp workshop-site/index.html _workshop_upload/_private/index.html
-          cp -r /tmp/workshop-extracted/slides /tmp/workshop-extracted/media _workshop_upload/_private/
-          cp /tmp/workshop-extracted/slides.json _workshop_upload/_private/slides.json
+          # Neue didaktische Reihenfolge: Bilder, Metadaten und Kapitel werden
+          # aus dem geprüften Originalpaket gemeinsam rekonstruiert.
+          python3 -m pip install --disable-pip-version-check --quiet 'Pillow==11.3.0'
+          python3 workshop-site/reorder.py
           cp workshop-site/deny-private.htaccess _workshop_upload/_private/.htaccess
 
-          # Offline-Service-Worker im bestehenden Presenter-Bundle deaktivieren,
-          # damit Medien nach dem Logout nicht aus Browser-Caches geladen werden.
+          # Service-Worker deaktivieren; alte Offline-Caches nicht weiter nutzen.
+          # Im Hauptvortrag ist Folie 123 der Abschluss; die anschließenden
+          # Bonus-/Archivfolien sind bewusst nur über die Kapitelwahl erreichbar.
           python3 - <<'PY'
           from pathlib import Path
+          app = Path('_workshop_upload/assets/app.js')
           js = Path('/tmp/workshop-extracted/assets/app.js').read_text(encoding='utf-8')
           old = "if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});"
           new = ("if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations()"
                  ".then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{})};"
                  "if('caches' in window){caches.keys().then(keys=>Promise.all(keys"
                  ".filter(k=>k.startsWith('ts-workshop-')).map(k=>caches.delete(k)))).catch(()=>{})};")
-          if old not in js: raise SystemExit("Service-Worker-Einbindung verändert; Build stoppen.")
-          js = js.replace(old, new)
-          # Videos, die in der PowerPoint gebündelt am Ende stehen, sind in
-          # der Webversion zusätzlich unmittelbar beim zugehörigen Fall startbar.
-          # Die 25 Original-Videofolien im Bonuslabor bleiben erhalten.
-          context_map = (
-              "const contextualVideoMap={7:'media/clip-107.mp4',"
-              "49:'media/clip-108.mp4',51:'media/clip-109.mp4',"
-              "55:'media/clip-110.mp4',59:'media/clip-113.mp4',"
-              "61:'media/clip-117.mp4'};"
-              "const currentVideo=s=>s.video||contextualVideoMap[s.no]||null;\n"
+          replacements = (
+              (old,new),
+              ("function next(){if(at<S.length-1)jump(at+2)}",
+               "function next(){if(at<S.length-1&&!S[at].main_end)jump(at+2)}"),
+              ("byId('next-btn').disabled=at>=S.length-1;",
+               "byId('next-btn').disabled=at>=S.length-1||!!s.main_end;"),
+              ("case'End':e.preventDefault();jump(S.length);break;",
+               "case'End':e.preventDefault();jump(S.find(s=>s.main_end)?.no||S.length);break;"),
+              ("Erste / letzte Folie","Erste / Abschlussfolie"),
           )
-          anchor = 'const byId=id=>document.getElementById(id);'
-          if js.count(anchor) != 1: raise SystemExit('App-JS Struktur verändert (byId)')
-          js = js.replace(anchor, context_map + anchor, 1)
-          patches = (
-              ('videoBtn.hidden=!s.video;', 'videoBtn.hidden=!currentVideo(s);'),
-              ("if(!s.video)return;if(!videoLayer.classList.contains('open'))",
-               "if(!currentVideo(s))return;if(!videoLayer.classList.contains('open'))"),
-              ('video.src=s.video;', 'video.src=currentVideo(s);'),
-          )
-          for old_text, new_text in patches:
-              if old_text not in js: raise SystemExit('App-JS Video-Anker fehlt: ' + old_text)
-              js = js.replace(old_text, new_text)
-          Path('_workshop_upload/assets/app.js').write_text(js, encoding='utf-8')
-          deck = Path('_workshop_upload/_private/index.html')
-          html = deck.read_text(encoding='utf-8')
-          # WICHTIG: Die direkt bearbeitbare HTML-Quelldatei enthielt eine
-          # ältere Folienliste; sie driftete ab Folie 8 vom gerenderten
-          # PowerPoint-/ZIP-Bestand ab. Das ZIP-slides.json ist kanonisch.
-          import json
-          import re
-          canonical = json.loads(Path('/tmp/workshop-extracted/slides.json').read_text(encoding='utf-8'))
-          actual = canonical.get('slides', [])
-          if len(actual) != 136 or [x['no'] for x in actual] != list(range(1, 137)):
-              raise SystemExit('Folienliste im ZIP unvollständig oder nicht sequentiell')
-          if sum(bool(x.get('video')) for x in actual) != 25:
-              raise SystemExit('Videozuordnung im ZIP passt nicht zu 25 Clips')
-          # JSON im script-Element darf kein HTML-Tag schließen.
-          payload = json.dumps(canonical, ensure_ascii=False, separators=(',', ':')).replace('<', r'\u003c')
-          pattern = r'(<script id="workshop-data" type="application/json">)([\s\S]*?)(</script>)'
-          html, count = re.subn(pattern, lambda m: m.group(1) + payload + m.group(3), html, count=1)
-          if count != 1:
-              raise SystemExit('Workshop-Datenblock in der HTML-Präsentation nicht gefunden')
-          print('Folien- und Video-Metadaten auf ZIP-Original synchronisiert (136/25).')
-          insert = ('<a href="/logout.php" aria-label="Workshop verlassen" '
-                    'style="display:inline-flex;align-items:center;padding:8px 13px;'
-                    'border:1px solid #54755f;border-radius:9px;text-decoration:none;'
-                    'color:#d2fc46;font-weight:800;white-space:nowrap">Abmelden ↗</a>')
-          if html.count('</nav>') != 1: raise SystemExit("Präsentationsnavigation unerwartet; Build stoppen.")
-          deck.write_text(html.replace('</nav>', insert+'</nav>',1), encoding='utf-8')
+          for before,after in replacements:
+              if js.count(before) != 1:
+                  raise SystemExit('Presenter-JavaScript unerwartet verändert: ' + before[:75])
+              js=js.replace(before,after,1)
+          app.write_text(js,encoding='utf-8')
           PY
-          # Das Bild-/Videopaket bleibt unverändert; nur die Vortragsreihenfolge,
-          # die neue Zählung und die Verknüpfung zu Originalassets werden angepasst.
-          python3 workshop-site/editorial_order.py
 
           # Hash nur aus GitHub Secret erzeugen, nie das Klartext-Passwort veröffentlichen.
           php -r 'file_put_contents("_workshop_upload/_private/password-hash.php", "<?php\nreturn " . var_export(password_hash(getenv("WORKSHOP_ACCESS_PASSWORD"), PASSWORD_DEFAULT), true) . ";\n");'
@@ -156,8 +119,8 @@ jobs:
           grep -q 'Require all denied' _workshop_upload/_private/.htaccess
           grep -q 'RewriteRule .*slides/' _workshop_upload/.htaccess
           ! grep -q 'serviceWorker.register' _workshop_upload/assets/app.js
-          grep -q 'editorial-counter' _workshop_upload/_private/index.html
-          grep -q 'assetNo||s.no' _workshop_upload/assets/app.js
+          test -s _workshop_upload/_private/original-to-current.json
+          grep -q 'main_end' _workshop_upload/_private/slides.json
           node --check _workshop_upload/assets/app.js
           python3 -m json.tool _workshop_upload/_private/slides.json > /dev/null
           for php_file in _workshop_upload/*.php _workshop_upload/_private/password-hash.php; do
