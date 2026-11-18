@@ -54,3 +54,7 @@ html.presenter-active,body.presenter-active{overflow:hidden!important;background
 .presenter-launch-actions button.primary{color:#10220f;background:#d2fc46;border-color:#d2fc46}
 @media(max-width:660px){.presenter-exit{right:9px;top:9px;padding:9px 11px;font-size:12px}.presenter-launch-card{padding:27px 22px}}
 @media(prefers-reduced-motion:reduce){.presenter-exit{transition:none}}
+
+/* Kapitel, Suchfenster, Notizen und Schwarzblende bleiben auch im Vollbild sichtbar. */
+body.presenter-active .modal-layer{z-index:135!important}
+body.presenter-active .blackout{z-index:140!important}
