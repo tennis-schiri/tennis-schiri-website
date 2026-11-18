@@ -6,7 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
 header('X-Content-Type-Options: nosniff');
 
-function respond(int $code, array $payload): never {
+function respond(int $code, array $payload): void {
     http_response_code($code);
     echo json_encode($payload, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
     exit;
@@ -34,6 +34,7 @@ function response_view(array $data): array {
 }
 function room_update(string $code, callable $fn): ?array {
     $file=room_path($code);
+    if (!is_file($file)) return null;
     $handle=@fopen($file,'c+');
     if (!$handle) return null;
     try {
