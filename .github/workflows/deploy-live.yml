@@ -166,6 +166,7 @@ jobs:
           node --check public/assets/back-to-top.js
           node --check public/assets/tournament-detail.js
           python tests/tournament-detail-test.py
+          python tests/reference-showmatches-test.py
           python tests/ahlbeck-competition-test.py
           node --check public/assets/rules-library.js
           python tests/rules-library-test.py
