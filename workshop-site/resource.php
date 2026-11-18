@@ -9,7 +9,14 @@ if (!is_string($path) || !preg_match('~^(?:slides/slide-[0-9]{3}\.webp|media/cli
     exit;
 }
 $private = realpath(__DIR__ . '/_private');
-$file = realpath(__DIR__ . '/_private/' . $path);
+// Optionale Originalvideos in besserer Auflösung (eigener geschützter FTP-Ordner).
+// Fehlt ein HQ-Clip, verwenden wir die kompakte H.264/MP4-Fassung aus dem Build.
+$source = __DIR__ . '/_private/' . $path;
+if (str_starts_with($path, 'media/')) {
+    $hq = __DIR__ . '/_private/media-hq/' . basename($path);
+    if (is_file($hq)) $source = $hq;
+}
+$file = realpath($source);
 if ($private === false || $file === false || !str_starts_with($file, $private . DIRECTORY_SEPARATOR) || !is_file($file)) {
     http_response_code(404);
     exit;
