@@ -110,7 +110,9 @@
     if(Math.abs(diff)>90){if(diff>0)prev.click();else next.click()}
   },{passive:true});
   try{
-    const res=await call('/resource.php?path=slides.json');
+    const catalogResponse=await fetch('/resource.php?path=slides.json',{credentials:'same-origin',cache:'no-store'});
+    if(!catalogResponse.ok)throw Error('Folienkatalog HTTP '+catalogResponse.status);
+    const res=await catalogResponse.json();
     slides=res.slides||[];
     if(slides.length!==136)throw Error('Unvollständige Folienliste');
     jump(1,false);
