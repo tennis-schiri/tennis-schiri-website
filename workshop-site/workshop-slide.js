@@ -86,6 +86,26 @@
       if(s.no!==1)details(content,compact(s.notes));
     }
     area.append(content);
+    // Historiemotive: als Comic-Interpretation kenntlich, Originalfolie bleibt
+    // über den unveränderten Original-Button im Footer erreichbar.
+    const historicalArt={
+      5:{file:'hc02',alt:'Illustrierte Szene des Jeu de Paume in einer französischen Halle des 17. Jahrhunderts'},
+      7:{file:'hc02',alt:'Comic-Interpretation eines historischen Jeu-de-Paume-Spiels'},
+      10:{file:'hc02',alt:'Historisch inspirierte Hallentennis-Szene mit zeittypischer Kleidung und hölzernen Schlägern'},
+      11:{file:'hc01',alt:'Comic-Interpretation von Lawn Tennis im ausgehenden 19. Jahrhundert'},
+      12:{file:'hc01',alt:'Historisches Lawn Tennis mit zeittypischen Schlägern, Spielern und Zuschauern'}
+    };
+    if(historicalArt[s.no]){
+      const chosen=historicalArt[s.no];
+      const figure=make('figure','rw-history-art');
+      const img=make('img','rw-history-image');
+      img.src='/resource.php?path=comics/'+chosen.file+'.webp';
+      img.alt=chosen.alt+'; moderne künstlerische Neugestaltung, kein historisches Original';
+      img.loading='lazy';img.decoding='async';
+      figure.append(img,make('figcaption','rw-history-caption','COMIC-INTERPRETATION · HISTORISCH INSPIRIERT'));
+      area.append(figure);card.classList.add('rw-history-slide');
+      if([5,11].includes(s.no))card.classList.add('rw-history-feature');
+    }
     if([1,3,4,120,123].includes(s.no)){
       const aside=make('aside','rw-portrait');
       const photo=make('img');photo.src=s.no===4?'assets/workshop-michael-portrait.jpg':'assets/workshop-michael-tennis.jpg';photo.alt='Original-Tennisfoto mit Schläger auf dem Sandplatz';photo.loading='lazy';aside.append(photo);area.append(aside);card.classList.add('rw-with-photo');
