@@ -60,6 +60,7 @@
     const imageData=imagery[s.no];
     if(imageData){
       card.classList.add('rw-immersive','rw-image-'+imageData.kind);
+      if(s.no===6||s.no===7)card.classList.add('rw-art-portrait');
       const background=make('figure','rw-immersive-media');
       const img=make('img','rw-immersive-image');img.src=imageData.src;
       img.alt=imageData.alt;img.loading='lazy';img.decoding='async';
