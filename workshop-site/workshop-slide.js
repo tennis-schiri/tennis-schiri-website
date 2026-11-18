@@ -165,6 +165,23 @@
       const btn=make('button','rw-original','Originalfolie ansehen ↗');btn.type='button';btn.addEventListener('click',opts.onOriginal);foot.append(btn);
     }else foot.append(make('span','','TENNIS-SCHIRI · REGELWORKSHOP'));
     card.append(foot);host.append(card);
+    // Verkleinert überschießende Inhalte vor der Anzeige; KEIN Scrollen,
+    // KEIN Abschneiden langer Regelfalltexte ohne Größenanpassung.
+    if(typeof window!=='undefined'&&typeof window.requestAnimationFrame==='function'){
+      window.requestAnimationFrame(()=>{
+        if(!card.isConnected||s.type==='video')return;
+        const copy=card.querySelector('.rw-copy');
+        if(!copy||copy.clientHeight<30)return;
+        const scalable=copy.querySelectorAll('.rw-title,.rw-point,.rw-choice,.rw-answer,.rw-hint,.rw-standfirst,.rw-source-open');
+        for(let attempt=0;attempt<7;attempt++){
+          if(copy.scrollHeight<=copy.clientHeight+2)break;
+          scalable.forEach(node=>{
+            const current=parseFloat(window.getComputedStyle(node).fontSize);
+            if(Number.isFinite(current)&&current>10.5)node.style.setProperty('font-size',Math.max(10.5,current*.91)+'px','important');
+          });
+        }
+      });
+    }
   }
   window.TSWorkshopSlide={render,options,compact};
 })();
