@@ -31,10 +31,48 @@
     '<text x="24" y="225" transform="rotate(-90 24 225)" text-anchor="middle">10,97 m · DOPPEL</text>',
     '<text x="909" y="225" transform="rotate(90 909 225)" text-anchor="middle">8,23 m · EINZEL</text></g></svg>'
   ].join('');
-  function details(parent,text){
+  function readInPages(text,label){
+    // Volle Originaltexte bleiben vorhanden, aber nie als Scrollfeld IN der Folie.
+    // Die Zusatzinformation öffnet sich in einem separaten, paginierten Fenster.
+    const normalized=String(text).trim();
+    const pages=[];
+    const words=normalized.split(/\\s+/).filter(Boolean);
+    let page='';
+    for(const word of words){
+      if(page.length+word.length+1>440&&page){pages.push(page);page='';}
+      page+=(page?' ':'')+word;
+    }
+    if(page)pages.push(page);
+    let i=0;
+    const overlay=make('div','rw-notes-overlay');
+    overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');
+    overlay.setAttribute('aria-label',label||'Zusätzliche Originalinformationen');
+    const panel=make('section','rw-notes-panel');
+    const head=make('div','rw-notes-head');
+    const heading=make('h2','',label||'Originalinformationen');
+    const close=make('button','rw-notes-close','✕ Schließen');
+    close.type='button';
+    head.append(heading,close);
+    const body=make('div','rw-notes-body');
+    const nav=make('div','rw-notes-nav');
+    const prev=make('button','','← Zurück'),counter=make('span','',''),next=make('button','','Weiter →');
+    prev.type=next.type='button';nav.append(prev,counter,next);
+    function paint(){body.textContent=pages[i]||'';counter.textContent=(i+1)+' / '+pages.length;prev.disabled=i===0;next.disabled=i===pages.length-1;}
+    const onKey=e=>{if(e.key==='Escape'){e.preventDefault();dismiss()}};
+    function dismiss(){document.removeEventListener('keydown',onKey,true);overlay.remove();}
+    close.addEventListener('click',dismiss);
+    overlay.addEventListener('click',e=>{if(e.target===overlay)dismiss()});
+    prev.addEventListener('click',()=>{if(i>0){i--;paint()}});
+    next.addEventListener('click',()=>{if(i<pages.length-1){i++;paint()}});
+    panel.append(head,body,nav);overlay.append(panel);
+    document.body.append(overlay);document.addEventListener('keydown',onKey,true);
+    paint();close.focus();
+  }
+  function details(parent,text,label='Mehr aus dem Original'){
     if(!text)return;
-    const d=make('details','rw-source-details');d.append(make('summary','', 'Mehr aus dem Original'));
-    d.append(make('div','rw-source-text',text));parent.append(d);
+    const button=make('button','rw-source-open',label+' ↗');
+    button.type='button';button.addEventListener('click',()=>readInPages(text,label));
+    parent.append(button);
   }
   // Jede bildbasierte Folie bekommt ein eigenes Motiv; keine Doppelbelegung.
   // Technische Zeichnungen und Regelfragen bleiben bewusst auf ruhigem Hintergrund.
@@ -107,10 +145,11 @@
     }else{
       const seen=new Set([s.title.toLowerCase(),'REGELFRAGE'.toLowerCase()]);
       const lines=raw.filter(x=>!seen.has(x.toLowerCase())&&!x.startsWith('SPRECHER-IMPULS'));
-      const max=s.no===1?3:10;
+      const max=s.no===1?2:4;
       const list=make('div','rw-points');
       lines.slice(0,max).forEach(x=>list.append(make('p','rw-point',x)));
       content.append(list);
+      if(lines.length>max)details(content,lines.slice(max).join('  ·  '),'Weitere Folieninhalte');
       if(s.no===14||s.no===15){
         const graphic=make('div','rw-graphic');graphic.innerHTML=s.no===15?svgNet:svgCourt;content.append(graphic);
         if(s.no===15)content.append(make('p','rw-hint','Zwei verschiedene Maße: 91,4 cm Netzhöhe in der Mitte. Einzelstützen stehen jeweils 91,4 cm außerhalb der Einzel-Seitenlinie und halten die Netzkante dort auf 1,07 m.'));
