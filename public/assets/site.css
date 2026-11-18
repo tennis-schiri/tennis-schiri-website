@@ -3041,3 +3041,102 @@ html[data-theme="dark"] .service-detail-panel:target { border-color: #96c75e; }
  }
  .tourney-pages .tourney-page-status{font-size:12px}
 }
+
+
+/* Referenzen: dokumentierte Showmatches als eigenständige Tennis-Schiri-Highlights */
+.ref-showmatches{
+  margin-top:clamp(34px,5vw,66px);
+  padding:clamp(23px,3.5vw,42px);
+  background:linear-gradient(135deg,#173e32 0%,#1b4937 57%,#215440 100%);
+  color:#f6fdf4;
+  border:1px solid #3b6c4e;
+  border-radius:24px;
+  box-shadow:0 16px 38px rgba(19,53,35,.12);
+}
+.ref-showmatches-heading{max-width:760px;margin-bottom:25px}
+.ref-showmatches-heading .eyebrow{color:#c8f16d}
+.ref-showmatches-heading h2{
+  font-size:clamp(27px,3.4vw,41px);
+  letter-spacing:-.045em;
+  line-height:1.12;
+  margin:11px 0 12px;
+  color:#fff;
+}
+.ref-showmatches-heading p{
+  font-size:14px;
+  line-height:1.65;
+  color:#d9eadf;
+  margin:0;
+}
+.ref-showmatches-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:13px;
+}
+.ref-showmatch{
+  min-width:0;
+  padding:22px 20px 21px;
+  background:#f5faf1;
+  border:1px solid #d4e4ce;
+  border-radius:16px;
+  color:#254331;
+}
+.ref-showmatch-role{
+  display:inline-flex;
+  font-size:10px;
+  letter-spacing:.11em;
+  font-weight:900;
+  padding:7px 9px;
+  border-radius:99px;
+  background:#e3efd6;
+  color:#2f653e;
+}
+.ref-showmatch--chair .ref-showmatch-role{
+  background:#e0e8ff;
+  color:#364c91;
+}
+.ref-showmatch h3{
+  font-size:clamp(17px,1.85vw,23px);
+  letter-spacing:-.04em;
+  line-height:1.22;
+  margin:18px 0 15px;
+  color:#193d2b;
+}
+.ref-showmatch h3 span{color:#76a056;margin:0 2px}
+.ref-showmatch p{
+  margin:0;
+  font-size:12px;
+  font-weight:650;
+  line-height:1.5;
+  color:#607365;
+}
+.ref-showmatches-contact{margin:22px 0 0}
+@media(max-width:890px){
+  .ref-showmatches-grid{grid-template-columns:1fr}
+  .ref-showmatch{padding:20px}
+  .ref-showmatch h3{margin:13px 0 8px}
+}
+@media(max-width:620px){
+  .ref-showmatches{border-radius:17px}
+  .ref-showmatches-heading{margin-bottom:20px}
+  .ref-showmatches-heading p{font-size:13px}
+}
+[data-theme="dark"] .ref-showmatches{
+  border-color:#4d785a;
+  background:linear-gradient(135deg,#172c26,#244637);
+}
+[data-theme="dark"] .ref-showmatch{
+  border-color:#365d47;
+  background:#233c31;
+  color:#eff8ed;
+}
+[data-theme="dark"] .ref-showmatch h3{color:#f4fff2}
+[data-theme="dark"] .ref-showmatch p{color:#bed3c4}
+[data-theme="dark"] .ref-showmatch-role{
+  color:#c9eaa5;
+  background:#32573a;
+}
+[data-theme="dark"] .ref-showmatch--chair .ref-showmatch-role{
+  color:#d2dcff;
+  background:#33466b;
+}
