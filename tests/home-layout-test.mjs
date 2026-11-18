@@ -11,6 +11,18 @@ assert.match(html,/href="assets\/home-refresh\.css\?v=[a-zA-Z0-9._-]+"/);
 assert.match(html,/src="assets\/home-rule-question\.js\?v=[a-zA-Z0-9._-]+"/);
 assert.ok(html.includes('class="rules-next-question"'), 'Random practice question control missing');
 assert.ok(html.includes('src="assets/home-refresh.js?v=1"'));
+assert.ok(html.includes('assets/home-refresh.css?v=5'), 'New hero design must bypass stale CSS');
+assert.ok(html.includes('class="hero-plate"'), 'Next tournament hero card must remain present');
+for(const rule of [
+ '.home-v2 .hero-side .hero-plate{',
+ 'border:2px solid #c8f16d',
+ 'linear-gradient(143deg,#245a3c',
+ '.home-v2 .hero-plate .date{',
+ '.home-v2 .hero-plate-cta{',
+ '.home-v2 .hero-side .hero-plate:hover',
+ '@media(max-width:620px)'
+])assert.ok(css.includes(rule),'High-contrast tournament card rule missing: '+rule);
+
 const sections=['id="start"','class="tennis-quote-strip"','class="quicknav"','id="aktuelles"','id="turniere"','id="spielerhilfen"','id="regelwissen"','id="leistungen"','id="instagram"','id="tennilo"','id="newsletter"','class="community-spotlight"','id="ueber-mich"','id="kontakt"'];
 let last=-1;
 for(const token of sections){
