@@ -8,3 +8,5 @@ Disallow: /_private/
 Disallow: /slides/
 Disallow: /media/
 Disallow: /slides.json
+Disallow: /teilnehmen.php
+Disallow: /live.php
