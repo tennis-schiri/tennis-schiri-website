@@ -4,7 +4,7 @@
  const shell=document.getElementById('shell');
  const btn=document.getElementById('full-btn');
  if(!shell||!btn)return;
- const fullscreenSupported=!!(shell.requestFullscreen||shell.webkitRequestFullscreen);
+ const fullscreenSupported=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
  let active=false;
  btn.textContent='⛶ Präsentieren';
  btn.title='Präsentationsmodus ohne Kopfzeile/Leiste (F)';
@@ -28,7 +28,7 @@
    btn.setAttribute('aria-label','Präsentationsmodus beenden');
    if(fullscreenSupported){
      try{
-       const request=(shell.requestFullscreen||shell.webkitRequestFullscreen).bind(shell);
+       const request=(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen).bind(document.documentElement);
        const p=request({navigationUI:'hide'});
        if(p&&typeof p.catch==='function')p.catch(()=>{/* CSS-Fallback bleibt aktiv */});
      }catch(e){/* Fallback für iOS/ältere Safari-Versionen */}
@@ -54,6 +54,7 @@
  // Den bisherigen F-Shortcut des Workshop-Players bewusst ersetzen.
  document.addEventListener('keydown',e=>{
    if(!e.altKey&&!e.ctrlKey&&!e.metaKey&&e.key.toLowerCase()==='f'&&
+      !document.getElementById('modal-layer')?.classList.contains('open')&&
       !['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)){
      e.preventDefault();e.stopImmediatePropagation();
      active?leave():enter();return;
