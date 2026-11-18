@@ -4,7 +4,7 @@ require __DIR__ . '/security.php';
 workshop_require_auth(false);
 
 $path = $_GET['path'] ?? '';
-if (!is_string($path) || !preg_match('~^(?:slides/slide-[0-9]{3}\.webp|media/clip-[0-9]{3}\.mp4|slides\.json)$~D', $path)) {
+if (!is_string($path) || !preg_match('~^(?:slides/slide-[0-9]{3}\.webp|media/clip-[0-9]{3}\.mp4|comics/hc0[12]\.webp|slides\.json)$~D', $path)) {
     http_response_code(404);
     exit;
 }
