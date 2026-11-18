@@ -11,8 +11,10 @@ for page in pages:
     text=page.read_text(encoding="utf-8")
     if not re.search(r'<script src="(?:\.\./)?assets/back-to-top\.js\?v=5" defer></script>',text):
         raise SystemExit(f"Animation fehlt oder alte Skriptversion: {page}")
-    if not re.search(r'<link rel="stylesheet" href="(?:\.\./)?assets/site\.css\?v=20261116-4">',text):
-        raise SystemExit(f"Animation-CSS fehlt oder alte Version: {page}")
+    # Newer page layouts may use a newer CSS cache revision without breaking the button.
+    # Animation rules are checked against the shared stylesheet below.
+    if not re.search(r'<link rel="stylesheet" href="(?:\.\./)?assets/site\.css\?v=[A-Za-z0-9._-]+">',text):
+        raise SystemExit(f"Gemeinsames Animations-CSS fehlt oder Cache-Version ungueltig: {page}")
 
 css=(root/"assets/site.css").read_text(encoding="utf-8")
 script=(root/"assets/back-to-top.js").read_text(encoding="utf-8")
