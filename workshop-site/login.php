@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!doctype html><html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="theme-color" content="#071710"><title>Workshop-Zugang · Tennis-Schiri</title>
-<link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="access.css?v=20261117-2"></head><body><div class="site">
+<link rel="icon" href="assets/logo.png"><link rel="stylesheet" href="access.css?v=20261118-photo1"></head><body><div class="site">
 <header class="mast wrap"><img class="brand" src="assets/logo.png" alt="Tennis-Schiri"><span class="mast-mark">Geschützter Bereich</span></header>
 <main class="login-layout wrap"><section class="login-card" aria-labelledby="heading">
 <p class="eyebrow">Tennis-Schiri · Regelworkshop</p><h1 id="heading">BEREIT FÜR <span style="color:var(--lime)">DEN WORKSHOP?</span></h1>
