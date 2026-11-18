@@ -2,7 +2,7 @@
 """Deterministic reordering of the exact 136 slides and 25 videos in the 2026 workshop bundle."""
 import copy, json, re, shutil
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 BLOCKS = [
  ("START", [1,2,3,4]),
@@ -39,6 +39,20 @@ def label(n):
 def recolor(image_path,output_path,n,source):
     im=Image.open(image_path).convert('RGB')
     if im.size!=(1265,712): raise RuntimeError(f'Unexpected image dimensions for {source}')
+    # Auf der Vorstellungsfolie (Original Nr. 3) statt des früheren
+    # Porträts vor einer gelben Wand das bereits von dir gelieferte
+    # authentische Tennis-Aktionsfoto aus der TS-Website verwenden.
+    # Das Foto bleibt im Original erhalten; hier wird nur der sichtbare
+    # Ausschnitt im vorgesehenen Bildfeld passend zugeschnitten.
+    if source == 3:
+        tennis_photo=Path('public/assets/michael-wiedeck-spiel.jpg')
+        if not tennis_photo.is_file():
+            raise SystemExit('Tennisfoto für Wer steht vor euch? fehlt')
+        with Image.open(tennis_photo) as original_photo:
+            portrait=ImageOps.fit(original_photo.convert('RGB'),(416,309),
+                                  method=Image.Resampling.LANCZOS,
+                                  centering=(0.5,0.15))
+        im.paste(portrait,(156,296))
     d=ImageDraw.Draw(im)
     bg=im.getpixel((1258,705))
     dark=sum(bg)/3<100
