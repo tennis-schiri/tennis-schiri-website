@@ -2,8 +2,15 @@
 declare(strict_types=1);
 require __DIR__ . '/security.php';
 workshop_session_start();
+// Zulässige Rücksprungziele: nur Präsentation und Teilnehmeransicht der eigenen Website.
+$next = $_GET['next'] ?? null;
+if (is_string($next) && preg_match('~^/teilnehmen\\.php(?:\\?room=[A-HJ-NP-Z2-9]{6})?$~D', $next)) {
+    $_SESSION['workshop_after_login'] = $next;
+}
+$destination = $_SESSION['workshop_after_login'] ?? '/presentation.php';
 if (workshop_is_authenticated()) {
-    header('Location: /presentation.php', true, 302);
+    unset($_SESSION['workshop_after_login']);
+    header('Location: ' . $destination, true, 302);
     exit;
 }
 if (empty($_SESSION['workshop_csrf'])) {
@@ -28,7 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['workshop_authenticated'] = time();
             $_SESSION['workshop_last_seen'] = time();
             unset($_SESSION['workshop_failures'], $_SESSION['workshop_lock_until'], $_SESSION['workshop_csrf']);
-            header('Location: /presentation.php', true, 303);
+            $destination = $_SESSION['workshop_after_login'] ?? '/presentation.php';
+            unset($_SESSION['workshop_after_login']);
+            header('Location: ' . $destination, true, 303);
             exit;
         }
         $_SESSION['workshop_failures'] = (int)($_SESSION['workshop_failures'] ?? 0) + 1;
