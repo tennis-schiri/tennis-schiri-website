@@ -75,6 +75,36 @@ Ein direkter Präsentationsaufruf nach Login ist unter `/presentation.php?presen
 
 Der Presenter-JavaScript/CSS-Code liegt in `workshop-site/presenter-mode.js` und `presenter-mode.css` und wird vom Workshop-Workflow gemeinsam mit den 136 Folien hochgeladen. Der Zugriffsschutz wird dadurch nicht geändert.
 
+## Überarbeitete Web-Folien: Design und Originalinhalte
+
+Die 136 Webfolien nutzen im Standardmodus **keine statischen Vollseitenbilder** mehr. Titel, Kernaussagen, Fragen, Auflösungen und Video-Player werden als echtes HTML einheitlich dunkelgrün gestaltet. Texte und Vektorgrafiken bleiben auf Projektoren, Tablets und Smartphones scharf. Der bisherige Bildsatz ist vollständig erhalten und über **„Originalfolie ansehen“** erreichbar.
+
+- **Folie 014:** Vektorbasierte Tennisplatzgrafik mit Einzel-/Doppellinien und korrekt ausgerichtetem Netz.
+- **Folie 015:** Neue Netzgrafik mit klarer Absenkung in der Mitte. **91,4 cm Netzhöhe** und **91,4 cm Abstand der Einzelstützen außerhalb der Einzel-Seitenlinien** sind zwei unterschiedliche Maße. Die Einzelstützen stützen das Netz auf **1,07 m**.
+- **Folien 001, 003, 004, 120 und 123:** Großflächige Original-Tennisfotos.
+- **Originalmaterial:** Die Quellenzuordnungen decken alle 97 Folien der ursprünglichen PowerPoint ab. Zusätzliche Originaldetails stehen unter **„Mehr aus dem Original“**. Auf Fragefolien werden Auflösungen nicht vorweggenommen.
+
+## Teilnahme auf Smartphone und Tablet
+
+- Teilnehmerseite: https://workshop.tennis-schiri.de/teilnehmen.php
+- Referentenansicht: https://workshop.tennis-schiri.de/presentation.php
+- Der Referent startet mit **„● Live starten“** einen eigenen Raum, erhält einen **sechsstelligen Raumcode** sowie einen kopierbaren Teilnahmelink.
+- Teilnehmer melden sich mit dem vorhandenen Workshop-Passwort an und geben den Raumcode ein. Sie sehen die aktuelle Folie nach maximal etwa **2,3 Sekunden** Abfrageintervall.
+- Mit „Live folgen“ lässt sich die Synchronisierung pausieren oder wieder aufnehmen. Eigenständiges Blättern bleibt möglich.
+- Bei den 27 Regelfragen kann über **A/B/C** abgestimmt werden. Pro Browser-Sitzung wird eine Stimme je Frage und Raum gezählt. Die Summe ist auf der Referentenfolie sichtbar.
+- Der Presenter steuert den Raum mit einem sessiongebundenen Host-Token, Teilnehmer können ihn nicht weiterschalten.
+- Alle Inhalte können auch ohne Raum im eigenen Tempo gelesen und die Videos abgespielt werden.
+
+Die Live-Daten werden ohne externen Dienst über PHP und geschützte JSON-Dateien im Serververzeichnis _private/live-state/ abgewickelt. Es werden dabei keine Teilnehmernamen gespeichert. Raumstände laufen nach spätestens acht Stunden Inaktivität ab.
+
+## Videoqualität
+
+Alle 25 Webvideos sind direkt per HTML5-Player abspielbar, inklusive Pausen- und Spulfunktion. Die MP4s verwenden H.264; 24 enthalten AAC-Ton, ein Originalclip hat keine Tonspur. PHP unterstützt HTTP-Byte-Ranges für Mobilgeräte.
+
+**Qualitätseinschränkung:** Die derzeitige kompakte Webfassung hat nur rund **320 Pixel Videobreite**. Sie ist kompatibel, aber nicht hochauflösend. Optional bevorzugt das Backend Originalvideos im geschützten FTP-Unterordner _private/media-hq/ (Dateinamen clip-107.mp4 bis clip-131.mp4). Ohne diese zusätzlichen Originaldateien werden weiterhin die kompakten Clips abgespielt; der GitHub-Workflow löscht bereits hochgeladene HD-Videos nicht.
+
+Browser- und Mehrgerätetests nach dem manuellen Live-Upload sind erforderlich. Auch die Aktualität der Regelaussagen, besonders bei TVBB-Saisonbestimmungen, muss fachlich überprüft werden.
+
 ## Presenter-Bedienung
 
 - Rechts/Bild↓/Leertaste: weiter; Links/Bild↑: zurück.
