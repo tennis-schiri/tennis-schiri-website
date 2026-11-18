@@ -59,7 +59,7 @@ def recolor(image_path,output_path,n,source):
         d.text((1079-(bbox[2]-bbox[0])/2,57),text,font=font2,
             fill=(215,253,71) if dark else (58,95,66))
     # Chapter cover slides also print the chapter number in the body.
-    if source in (39,76,106,136) and new_label!=orig[source-1]['chapter']:
+    if source in (39,76,105,106,136) and new_label!=orig[source-1]['chapter']:
         d.rectangle((67,126,835,178),fill=im.getpixel((11,151)))
         font3=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',24)
         d.text((72,128),new_label.upper(),font=font3,fill=(215,253,71) if dark else (52,105,69))
