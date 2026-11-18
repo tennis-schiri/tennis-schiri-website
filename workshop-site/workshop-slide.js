@@ -36,10 +36,40 @@
     const d=make('details','rw-source-details');d.append(make('summary','', 'Mehr aus dem Original'));
     d.append(make('div','rw-source-text',text));parent.append(d);
   }
+  // Jede bildbasierte Folie bekommt ein eigenes Motiv; keine Doppelbelegung.
+  // Technische Zeichnungen und Regelfragen bleiben bewusst auf ruhigem Hintergrund.
+  const imagery={
+    3: {src:'assets/workshop-michael-tennis.jpg',alt:'Tennis-Aktionsfoto von Michael Wiedeck',focal:'58% 32%',kind:'photo'},
+    4: {src:'assets/workshop-michael-portrait.jpg',alt:'Michael Wiedeck auf dem Tennisplatz',focal:'54% 32%',kind:'photo'},
+    5: {src:'resource.php?path=comics/hc02.webp',alt:'Comic-Interpretation von Jeu de Paume im 17. Jahrhundert',focal:'62% 48%',kind:'illustration'},
+    6: {src:'resource.php?path=history/jeu-de-paume-original.jpg',alt:'Historische Darstellung des Jeu de Paume',focal:'70% 44%',kind:'original'},
+    7: {src:'resource.php?path=history/wingfield-original.jpg',alt:'Historische Darstellung von Walter Clopton Wingfield mit Tennisschläger',focal:'67% 32%',kind:'original'},
+    10:{src:'resource.php?path=history/wimbledon-1877-original.jpg',alt:'Historische Illustration eines frühen Wimbledon-Turniers',focal:'65% 53%',kind:'original'},
+    11:{src:'resource.php?path=comics/hc01.webp',alt:'Comic-Interpretation von Lawn Tennis im 19. Jahrhundert',focal:'62% 50%',kind:'illustration'},
+    12:{src:'resource.php?path=history/lawn-tennis-1887-original.jpg',alt:'Historische farbige Illustration Lawn Tennis 1887',focal:'65% 55%',kind:'original'},
+    120:{src:'assets/workshop-michael-kneeling.jpg',alt:'Tennisporträt auf dem Sandplatz',focal:'58% 37%',kind:'photo'}
+  };
+  const uniqueImages=Object.values(imagery).map(item=>item.src);
+  if(new Set(uniqueImages).size!==uniqueImages.length)throw Error('Workshop: Bildmotive dürfen sich nicht wiederholen');
   function render(host,s,opts={}){
     if(!host||!s)return;
     host.replaceChildren();
     const card=make('article','rw-card rw-type-'+s.type);
+    const isHistory=String(s.chapter).includes('GESCHICHTE');
+    if(isHistory)card.classList.add('rw-history-slide','rw-vintage');
+    const imageData=imagery[s.no];
+    if(imageData){
+      card.classList.add('rw-immersive','rw-image-'+imageData.kind);
+      const background=make('figure','rw-immersive-media');
+      const img=make('img','rw-immersive-image');img.src=imageData.src;
+      img.alt=imageData.alt;img.loading='lazy';img.decoding='async';
+      img.style.objectPosition=imageData.focal;
+      background.append(img);
+      const credit=imageData.kind==='illustration'?'COMIC-INTERPRETATION · KEIN ORIGINALFOTO':
+                   imageData.kind==='original'?'HISTORISCHE ORIGINALVORLAGE':'TENNISFOTO';
+      background.append(make('figcaption','rw-immersive-credit',credit));
+      card.append(background);
+    }
     const header=make('header','rw-top');
     header.append(make('span','rw-kicker',s.type==='question'?'DEINE ENTSCHEIDUNG':s.type==='answer'?'DIE AUFLÖSUNG':s.type==='video'?'VIDEOANALYSE':s.chapter));
     header.append(make('span','rw-number',s.no<=123?'FOLIE '+String(s.no).padStart(3,'0'):'BONUS '+String(s.no-123).padStart(2,'0')));
@@ -86,30 +116,6 @@
       if(s.no!==1)details(content,compact(s.notes));
     }
     area.append(content);
-    // Historiemotive: als Comic-Interpretation kenntlich, Originalfolie bleibt
-    // über den unveränderten Original-Button im Footer erreichbar.
-    const historicalArt={
-      5:{file:'hc02',alt:'Illustrierte Szene des Jeu de Paume in einer französischen Halle des 17. Jahrhunderts'},
-      7:{file:'hc02',alt:'Comic-Interpretation eines historischen Jeu-de-Paume-Spiels'},
-      10:{file:'hc02',alt:'Historisch inspirierte Hallentennis-Szene mit zeittypischer Kleidung und hölzernen Schlägern'},
-      11:{file:'hc01',alt:'Comic-Interpretation von Lawn Tennis im ausgehenden 19. Jahrhundert'},
-      12:{file:'hc01',alt:'Historisches Lawn Tennis mit zeittypischen Schlägern, Spielern und Zuschauern'}
-    };
-    if(historicalArt[s.no]){
-      const chosen=historicalArt[s.no];
-      const figure=make('figure','rw-history-art');
-      const img=make('img','rw-history-image');
-      img.src='/resource.php?path=comics/'+chosen.file+'.webp';
-      img.alt=chosen.alt+'; moderne künstlerische Neugestaltung, kein historisches Original';
-      img.loading='lazy';img.decoding='async';
-      figure.append(img,make('figcaption','rw-history-caption','COMIC-INTERPRETATION · HISTORISCH INSPIRIERT'));
-      area.append(figure);card.classList.add('rw-history-slide');
-      if([5,11].includes(s.no))card.classList.add('rw-history-feature');
-    }
-    if([1,3,4,120,123].includes(s.no)){
-      const aside=make('aside','rw-portrait');
-      const photo=make('img');photo.src=s.no===4?'assets/workshop-michael-portrait.jpg':'assets/workshop-michael-tennis.jpg';photo.alt='Original-Tennisfoto mit Schläger auf dem Sandplatz';photo.loading='lazy';aside.append(photo);area.append(aside);card.classList.add('rw-with-photo');
-    }
     if(s.type==='video')card.classList.add('rw-video-card');
     card.append(area);
     const foot=make('footer','rw-foot');
