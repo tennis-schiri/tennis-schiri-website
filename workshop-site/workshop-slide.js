@@ -39,15 +39,15 @@
   // Jede bildbasierte Folie bekommt ein eigenes Motiv; keine Doppelbelegung.
   // Technische Zeichnungen und Regelfragen bleiben bewusst auf ruhigem Hintergrund.
   const imagery={
-    3: {src:'assets/workshop-michael-tennis.jpg',alt:'Tennis-Aktionsfoto von Michael Wiedeck',focal:'58% 32%',kind:'photo'},
-    4: {src:'assets/workshop-michael-portrait.jpg',alt:'Michael Wiedeck auf dem Tennisplatz',focal:'54% 32%',kind:'photo'},
+    3: {src:'assets/workshop-michael-tennis.jpg',alt:'Tennis-Aktionsfoto von Michael Wiedeck',focal:'50% 0%',kind:'photo'},
+    4: {src:'assets/workshop-michael-portrait.jpg',alt:'Michael Wiedeck auf dem Tennisplatz',focal:'50% 0%',kind:'photo'},
     5: {src:'resource.php?path=comics/hc02.webp',alt:'Comic-Interpretation von Jeu de Paume im 17. Jahrhundert',focal:'62% 48%',kind:'illustration'},
-    6: {src:'resource.php?path=history/jeu-de-paume-original.jpg',alt:'Historische Darstellung des Jeu de Paume',focal:'70% 44%',kind:'original'},
-    7: {src:'resource.php?path=history/wingfield-original.jpg',alt:'Historische Darstellung von Walter Clopton Wingfield mit Tennisschläger',focal:'67% 32%',kind:'original'},
-    10:{src:'resource.php?path=history/wimbledon-1877-original.jpg',alt:'Historische Illustration eines frühen Wimbledon-Turniers',focal:'65% 53%',kind:'original'},
+    6: {src:'resource.php?path=comics/jeu-de-paume-original-comic.webp',alt:'Historische Darstellung des Jeu de Paume',focal:'70% 44%',kind:'illustration'},
+    7: {src:'resource.php?path=comics/wingfield-original-comic.webp',alt:'Historische Darstellung von Walter Clopton Wingfield mit Tennisschläger',focal:'67% 32%',kind:'illustration'},
+    10:{src:'resource.php?path=comics/wimbledon-1877-original-comic.webp',alt:'Historische Illustration eines frühen Wimbledon-Turniers',focal:'65% 53%',kind:'illustration'},
     11:{src:'resource.php?path=comics/hc01.webp',alt:'Comic-Interpretation von Lawn Tennis im 19. Jahrhundert',focal:'62% 50%',kind:'illustration'},
-    12:{src:'resource.php?path=history/lawn-tennis-1887-original.jpg',alt:'Historische farbige Illustration Lawn Tennis 1887',focal:'65% 55%',kind:'original'},
-    120:{src:'assets/workshop-michael-kneeling.jpg',alt:'Tennisporträt auf dem Sandplatz',focal:'58% 37%',kind:'photo'}
+    12:{src:'resource.php?path=comics/lawn-tennis-1887-original-comic.webp',alt:'Historische farbige Illustration Lawn Tennis 1887',focal:'65% 55%',kind:'illustration'},
+    120:{src:'assets/workshop-michael-kneeling.jpg',alt:'Tennisporträt auf dem Sandplatz',focal:'50% 0%',kind:'photo'}
   };
   const uniqueImages=Object.values(imagery).map(item=>item.src);
   if(new Set(uniqueImages).size!==uniqueImages.length)throw Error('Workshop: Bildmotive dürfen sich nicht wiederholen');
@@ -61,6 +61,7 @@
     if(imageData){
       card.classList.add('rw-immersive','rw-image-'+imageData.kind);
       if(s.no===6||s.no===7)card.classList.add('rw-art-portrait');
+      if(imageData.kind==='photo')card.classList.add('rw-person-photo');
       const background=make('figure','rw-immersive-media');
       const img=make('img','rw-immersive-image');img.src=imageData.src;
       img.alt=imageData.alt;img.loading='lazy';img.decoding='async';
