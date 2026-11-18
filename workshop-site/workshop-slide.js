@@ -7,14 +7,14 @@
   const svgNet=[
     '<svg viewBox="0 0 980 360" role="img" aria-label="Tennisnetz mit deutlich abgesenkter Netzmitte">',
     '<defs><pattern id="netmesh" width="25" height="23" patternUnits="userSpaceOnUse"><path d="M25 0H0V23" fill="none" stroke="#a9c6aa" opacity=".55"/></pattern></defs>',
-    '<path d="M78 74 Q490 174 902 74 V284 H78Z" fill="url(#netmesh)" stroke="#9dbea1" stroke-width="2"/>',
-    '<path d="M78 74 Q490 174 902 74" fill="none" stroke="#f7fff1" stroke-width="8" stroke-linecap="round"/>',
-    '<path d="M490 149 V284" stroke="#d2fc46" stroke-width="10"/>',
+    '<path d="M78 74 Q490 136 902 74 V284 H78Z" fill="url(#netmesh)" stroke="#9dbea1" stroke-width="2"/>',
+    '<path d="M78 74 Q490 136 902 74" fill="none" stroke="#f7fff1" stroke-width="8" stroke-linecap="round"/>',
+    '<path d="M490 105 V284" stroke="#d2fc46" stroke-width="10"/>',
     '<path d="M78 52 V291 M902 52 V291" stroke="#f7fff1" stroke-width="13" stroke-linecap="round"/>',
-    '<path d="M274 112 V290 M706 112 V290" stroke="#d2fc46" stroke-width="4"/>',
+    '<path d="M274 91 V290 M706 91 V290" stroke="#d2fc46" stroke-width="4"/>',
     '<g fill="#f6ffeb" font-weight="850" font-family="system-ui,sans-serif" font-size="26">',
     '<text x="78" y="31" text-anchor="middle">1,07 m</text><text x="902" y="31" text-anchor="middle">1,07 m</text>',
-    '<text x="490" y="120" text-anchor="middle" fill="#d2fc46">91,4 cm</text>',
+    '<text x="490" y="83" text-anchor="middle" fill="#d2fc46">91,4 cm</text>',
     '<text x="274" y="330" text-anchor="middle" font-size="20">EINZELSTÜTZE</text>',
     '<text x="490" y="330" text-anchor="middle" font-size="20">MITTELBAND</text>',
     '<text x="706" y="330" text-anchor="middle" font-size="20">EINZELSTÜTZE</text></g></svg>'
@@ -88,7 +88,7 @@
     area.append(content);
     if([1,3,4,120,123].includes(s.no)){
       const aside=make('aside','rw-portrait');
-      const photo=make('img');photo.src='assets/workshop-michael-tennis.jpg';photo.alt='Original-Tennisfoto mit Schläger auf dem Sandplatz';photo.loading='lazy';aside.append(photo);area.append(aside);card.classList.add('rw-with-photo');
+      const photo=make('img');photo.src=s.no===4?'assets/workshop-michael-portrait.jpg':'assets/workshop-michael-tennis.jpg';photo.alt='Original-Tennisfoto mit Schläger auf dem Sandplatz';photo.loading='lazy';aside.append(photo);area.append(aside);card.classList.add('rw-with-photo');
     }
     if(s.type==='video')card.classList.add('rw-video-card');
     card.append(area);
