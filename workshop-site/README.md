@@ -131,6 +131,20 @@ Die historischen Originale stammen aus dem Drive-Ordner **Regelkurs** und liegen
 
 Die Website bleibt passwortgeschützt, alle **136 Folien**, **27 Frage-/Antwort-Paare** und **25 Videofolien** bleiben erhalten. Der manuelle Upload und der anschließende Mehrgerätetest sind weiterhin erforderlich.
 
+## Überarbeitung: Bilddarstellung, Scrollfreiheit, Video und Comicserie (18.11.2026)
+
+**Verbindliche Folienregeln:** Keine inneren Scrollflächen. Beamer- und Teilnehmerfolien haben eine feste, durchgängig sichtbare Inhaltsfläche. Die Schrift ist gegenüber den Vorversionen kleiner und wird bei besonders umfangreichen Texten weiter angepasst. Sichtbar stehen höchstens vier Kernaussagen; weitere Inhalte und sämtliche Originalinformationen bleiben über einen **seitenweise blätterbaren Dialog** erreichbar (kein Scrollen innerhalb der Folie).
+
+**Gesicht sichtbar:** Die drei vorhandenen Tennisfotos werden mit manueller Kopf-/Gesichtsfokussierung angezeigt. Auf Folie 3, 4 und 120 liegt die Person groß rechts, der Inhalt auf einem dunklen Verlauf links. Das Hochformatfoto wird oben ausgerichtet, nicht im Körpermittelpunkt. Im mobilen Hochformat bleibt das Gesicht im oberen Bildbereich.
+
+**Videos:** Auf sämtlichen 25 Videofolien ist der Player das Hauptelement mit rund 83 % der Folienhöhe und 96 % der Breite; auf dem Handy ist die Videoansicht ebenfalls maximiert. Die Videowiedergabe bleibt manuell (Play/Pause und Spulen), mit PHP-Byte-Range-Streaming für iOS/Android. Die Auflösung der zugrunde liegenden kompakten Videos ändert sich dadurch nicht; für HD-Qualität sind weiterhin die optionalen Originaldateien nötig.
+
+**Alle historischen Bildfolien als Comic:** Folie 5 und 11 verwenden die bereits genehmigten, hochauflösenden Comicillustrationen HC02 und HC01. Folien 6, 7, 10 und 12 verwenden jeweils eine eigene, im Build aus den historischen Vorlagen erzeugte **farbig getönte Tusche-/Comicfassung** von Jeu de Paume, Wingfield, Wimbledon 1877 bzw. Lawn Tennis 1887. Dafür gibt es `workshop-site/comicize_history.py`; die Originalszenen bleiben erhalten und sind separat passwortgeschützt verfügbar. Keine historische Bildfolie zeigt mehr direkt eine unbehandelte Originalgrafik. Die Illustrationen werden nicht als historische Fotos ausgegeben.
+
+**Vintage-Stil:** Für den Geschichtsteil bleiben warme Creme-/Gold-/Sepiatöne und historisch anmutende Serifenschriften. Außerhalb der Geschichte bleibt die Tennis-Schiri-Gestaltung Dunkelgrün/Lime maßgeblich. Die Historiemotive werden je Folie nur einmal vergeben.
+
+**Test:** Der Build prüft 136 Folien, 27 Fragen, 25 Videodateien und die Existenz aller sechs Comicfassungen. Danach kontrolliert er ihren geschützten Zugriff sowie das HTTP-206-Streaming. Abschließende Darstellungstests auf dem tatsächlichen Beamer, iPhone und Tablet bleiben erforderlich.
+
 ## Presenter-Bedienung
 
 - Rechts/Bild↓/Leertaste: weiter; Links/Bild↑: zurück.
