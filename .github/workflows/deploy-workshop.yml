@@ -62,14 +62,18 @@ jobs:
           cp workshop-site/startseite.html _workshop_upload/index.html
           cp workshop-site/access.css _workshop_upload/access.css
           cp workshop-site/login.php workshop-site/logout.php workshop-site/security.php \
-             workshop-site/resource.php workshop-site/presentation.php _workshop_upload/
+             workshop-site/resource.php workshop-site/presentation.php \
+             workshop-site/teilnehmen.php workshop-site/live.php _workshop_upload/
           cp workshop-site/.htaccess workshop-site/robots.txt workshop-site/sw.js _workshop_upload/
           cp /tmp/workshop-extracted/assets/app.css _workshop_upload/assets/
           cp /tmp/workshop-extracted/assets/logo.png _workshop_upload/assets/
           # Das vom Nutzer bereitgestellte Tennis-Aktionsfoto, bereits als
           # Originalbild in der TS-Hauptwebsite, auch beim Workshop ausliefern.
           cp public/assets/michael-wiedeck-spiel.jpg _workshop_upload/assets/workshop-michael-tennis.jpg
-          cp workshop-site/presenter-mode.css workshop-site/presenter-mode.js _workshop_upload/assets/
+          cp public/assets/michael-wiedeck-tennis.jpg _workshop_upload/assets/workshop-michael-portrait.jpg
+          cp workshop-site/presenter-mode.css workshop-site/presenter-mode.js \
+             workshop-site/workshop-slide.css workshop-site/workshop-slide.js \
+             workshop-site/presenter-enhance.js workshop-site/participant.css workshop-site/participant.js _workshop_upload/assets/
 
           # Neue didaktische Reihenfolge: Bilder, Metadaten und Kapitel werden
           # aus dem geprüften Originalpaket gemeinsam rekonstruiert.
@@ -121,8 +125,8 @@ jobs:
           # Player geladen und übernimmt dessen bestehende F/Vollbild-Taste.
           if html.count('</head>') != 1 or html.count('</body>') != 1:
               raise SystemExit('Ungewöhnliche Dokumentstruktur; Vollbild-Integration abgebrochen')
-          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"></head>', 1)
-          html = html.replace('</body>', '<script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
+          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-6"></head>', 1)
+          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-6" defer></script><script src="assets/presenter-enhance.js?v=20261118-6" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
           deck.write_text(html,encoding='utf-8')
           PY
 
@@ -134,12 +138,14 @@ jobs:
           test "$(find _workshop_upload/_private/media -type f -name 'clip-*.mp4' | wc -l)" -eq 25
           for file in \
             index.html access.css login.php security.php resource.php \
-            presentation.php logout.php .htaccess robots.txt sw.js \
+            presentation.php logout.php teilnehmen.php live.php .htaccess robots.txt sw.js \
             _private/index.html _private/slides.json _private/password-hash.php \
             _private/.htaccess _private/slides/slide-001.webp _private/slides/slide-136.webp \
             _private/media/clip-107.mp4 _private/media/clip-131.mp4 \
             assets/app.css assets/app.js assets/logo.png \
-            assets/presenter-mode.css assets/presenter-mode.js assets/workshop-michael-tennis.jpg; do
+            assets/presenter-mode.css assets/presenter-mode.js assets/workshop-michael-tennis.jpg \
+            assets/workshop-michael-portrait.jpg assets/workshop-slide.css assets/workshop-slide.js \
+            assets/presenter-enhance.js assets/participant.css assets/participant.js; do
             test -s "_workshop_upload/$file" || { echo "::error::Fehlende Datei: $file"; exit 1; }
           done
           grep -q 'KENNST DU' _workshop_upload/index.html
@@ -152,10 +158,17 @@ jobs:
           test -s _workshop_upload/_private/original-to-current.json
           grep -q 'main_end' _workshop_upload/_private/slides.json
           grep -q 'presenter-mode.js' _workshop_upload/_private/index.html
+          grep -q 'workshop-slide.js' _workshop_upload/_private/index.html
+          grep -q 'presenter-enhance.js' _workshop_upload/_private/index.html
+          grep -q 'participant.js' _workshop_upload/teilnehmen.php
+          grep -q 'live.php' _workshop_upload/assets/participant.js
           grep -q 'presenter-mode.css' _workshop_upload/_private/index.html
           grep -q 'workshop-michael-tennis.jpg' _workshop_upload/index.html
           test "$(wc -c < _workshop_upload/assets/workshop-michael-tennis.jpg)" -gt 100000
           node --check _workshop_upload/assets/presenter-mode.js
+          node --check _workshop_upload/assets/workshop-slide.js
+          node --check _workshop_upload/assets/presenter-enhance.js
+          node --check _workshop_upload/assets/participant.js
           node --check _workshop_upload/assets/app.js
           python3 -m json.tool _workshop_upload/_private/slides.json > /dev/null
           for php_file in _workshop_upload/*.php _workshop_upload/_private/password-hash.php; do
@@ -211,6 +224,10 @@ jobs:
           grep -q 'KENNST DU' /tmp/workshop-check-body || { echo "::error::Startseite nicht aktualisiert"; exit 1; }
           code="$(http_code "$base/login.php")"
           test "$code" = "200" || { echo "::error::Login HTTP $code"; exit 1; }
+          code="$(http_code "$base/teilnehmen.php")"
+          test "$code" = "302" || { echo "::error::Teilnehmeransicht ohne Passwort erreichbar (HTTP $code)"; exit 1; }
+          code="$(http_code "$base/live.php?op=status&room=ABC234")"
+          test "$code" = "401" || { echo "::error::Live-Endpunkt nicht geschützt (HTTP $code)"; exit 1; }
           code="$(http_code "$base/presentation.php")"
           test "$code" = "302" || { echo "::error::Präsentation ohne Passwort erreichbar (HTTP $code)"; exit 1; }
           code="$(http_code "$base/slides/slide-001.webp")"
