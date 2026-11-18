@@ -36,7 +36,7 @@
     // Die Zusatzinformation öffnet sich in einem separaten, paginierten Fenster.
     const normalized=String(text).trim();
     const pages=[];
-    const words=normalized.split(/\\s+/).filter(Boolean);
+    const words=normalized.split(/\s+/).filter(Boolean);
     let page='';
     for(const word of words){
       if(page.length+word.length+1>440&&page){pages.push(page);page='';}
