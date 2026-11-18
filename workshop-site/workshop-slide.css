@@ -253,3 +253,127 @@
 @media(prefers-reduced-motion:reduce){
  .rw-immersive-image{transform:none!important}
 }
+
+
+/* IM03 — Workshop-Präsentation: Null-Scroll-Folien, gut lesbare aber kompakte Typografie */
+.rw-card,.rw-card .rw-main,.rw-card .rw-copy,
+.rw-immersive .rw-main,.rw-immersive .rw-copy,
+.rw-card:has(.rw-graphic) .rw-copy,
+.rw-history-slide .rw-main,.rw-history-slide .rw-copy{
+ overflow:hidden!important;overscroll-behavior:none!important;
+}
+.rw-card .rw-top{margin-top:1.75%;padding-bottom:.75%}
+.rw-card .rw-main{padding-top:1.35%;padding-bottom:.8%;min-height:0}
+.rw-card .rw-title,.rw-immersive .rw-title,.rw-card.rw-with-photo .rw-title,
+.rw-history-slide .rw-title{
+ font-size:clamp(18px,2.5vw,35px)!important;line-height:1.07!important;
+ margin:.05em 0 .28em!important
+}
+.rw-card .rw-point,.rw-immersive .rw-point,.rw-history-slide .rw-point{
+ font-size:clamp(12px,1.36vw,19px)!important;line-height:1.25!important;
+ margin:0!important
+}
+.rw-card .rw-points{gap:.4em!important}
+.rw-card .rw-standfirst{font-size:clamp(11px,1.4vw,19px);margin:0 0 .45em}
+.rw-card .rw-foot{margin-bottom:1.2%;padding-top:.55%}
+.rw-source-open{
+ cursor:pointer;align-self:flex-start;background:#123825e8;
+ border:1px solid #a1c78a91;color:#d2fc46;border-radius:7px;
+ padding:.48em .72em;font:750 clamp(10px,.95vw,15px)/1.2 Inter,system-ui,sans-serif;
+ margin:.5em 0 .3em;max-width:100%;text-align:left
+}
+.rw-source-open:focus-visible,.rw-source-open:hover{background:#285039;border-color:#d2fc46}
+.rw-vintage .rw-source-open{background:#3f2b1ee9;border-color:#e5bd8a;color:#ffdf9d}
+.rw-answer{font-size:clamp(18px,2.15vw,34px)!important}
+.rw-graphic{min-height:0!important;max-height:62%!important}
+.rw-card:has(.rw-graphic) .rw-title{font-size:clamp(16px,2.25vw,33px)!important}
+.rw-card .rw-hint{font-size:clamp(10px,.96vw,14px);line-height:1.28}
+.rw-card .rw-choice{font-size:clamp(11px,1.14vw,18px)!important;padding:.65em!important;min-height:5em!important}
+.rw-card .rw-choices{gap:.5em;margin:.2em 0 .4em}
+
+/* Portraits: Gesicht zuerst, keine übertriebene Cover-Mitte */
+.rw-person-photo .rw-immersive-image{
+ position:absolute;top:0;right:0;width:58%;height:100%;max-width:none;
+ object-fit:cover!important;object-position:center top!important;
+ filter:contrast(1.04) saturate(1.08)
+}
+.rw-person-photo .rw-immersive-media{
+ background:linear-gradient(95deg,#051e13 0%,#0c291b 52%,#254633 100%)
+}
+.rw-person-photo .rw-immersive-media:after{
+ background:linear-gradient(90deg,#071b12 0%,#081f16f7 27%,#08261cde 41%,#08251a4d 57%,transparent 75%),
+            linear-gradient(0deg,#061b1282,transparent 21%)
+}
+.rw-person-photo .rw-copy{flex:0 1 49%;width:49%;max-width:49%}
+
+/* Videofolien: Player bekommt die gesamte freie 16:9-Fläche. */
+.rw-video-card .rw-top{position:absolute;z-index:6;left:0;right:0;top:0;margin:0;padding:1.2% 3.5% .6%;
+ background:linear-gradient(180deg,#04150df2,#04150d9c,transparent);border:0}
+.rw-video-card .rw-main{position:static!important;display:block!important;padding:0!important}
+.rw-video-card .rw-copy{position:static!important;display:block!important;padding:0!important}
+.rw-video-card .rw-title{position:absolute;top:4.4%;left:3.5%;right:3.5%;
+ font-size:clamp(13px,1.55vw,23px)!important;z-index:6;
+ text-shadow:0 2px 8px #000!important;max-height:5.8%;overflow:hidden}
+.rw-video-card .rw-standfirst,.rw-video-card .rw-hint{display:none!important}
+.rw-video-card .rw-video{
+ position:absolute;z-index:3;top:10.3%;left:2%;width:96%;height:83%;min-height:0;max-height:none!important;
+ border-radius:5px!important;object-fit:contain;background:#000;box-shadow:none;
+}
+.rw-video-card .rw-foot{position:absolute;z-index:6;left:3.5%;right:3.5%;bottom:0;margin:0;padding:.45% 0 .5%;
+ background:linear-gradient(0deg,#04150df0,#04150d66);border:0}
+
+/* Zusatzinformationen sind ein eigenes, seitenweise lesbares Fenster.
+   Auch dieses Fenster hat KEINE Text-Scrollfläche. */
+.rw-notes-overlay{
+ position:fixed;inset:0;z-index:240;display:grid;place-items:center;
+ padding:clamp(12px,3vw,35px);background:#03130de8;backdrop-filter:blur(9px)
+}
+.rw-notes-panel{
+ width:min(790px,100%);height:min(540px,88dvh);
+ background:linear-gradient(145deg,#183c2a,#0c2619);
+ border:1px solid #acd18f;border-radius:16px;padding:clamp(18px,3vw,31px);
+ box-shadow:0 30px 95px #000b;display:flex;flex-direction:column;
+ justify-content:space-between;gap:14px;overflow:hidden
+}
+.rw-notes-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rw-notes-head h2{font:800 clamp(18px,2vw,26px)/1.1 Inter,system-ui,sans-serif;color:#f6ffec;margin:0}
+.rw-notes-close,.rw-notes-nav button{
+ cursor:pointer;border:1px solid #a4c68e;border-radius:8px;background:#204831;color:#f5ffe8;
+ padding:9px 13px;font:750 13px Inter,system-ui,sans-serif;white-space:nowrap
+}
+.rw-notes-body{
+ white-space:normal;flex:1;display:flex;align-items:center;
+ font:500 clamp(14px,1.6vw,20px)/1.42 Inter,system-ui,sans-serif;
+ color:#ecf7eb;overflow:hidden;overflow-wrap:anywhere
+}
+.rw-notes-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#d2fc46;font-weight:800}
+.rw-notes-nav button:disabled{opacity:.35;cursor:default}
+@media(max-width:640px){
+ .rw-card .rw-top{margin-top:10px;padding-bottom:8px}
+ .rw-card .rw-main{padding:10px 14px 8px!important}
+ .rw-card .rw-title,.rw-immersive .rw-title{font-size:clamp(19px,5.4vw,26px)!important;margin:0 0 .3em!important}
+ .rw-card .rw-point,.rw-immersive .rw-point{font-size:clamp(12px,3.4vw,16px)!important;line-height:1.25}
+ .rw-card .rw-foot{margin:0 14px 8px;padding:7px 0 0}
+ .rw-immersive .rw-main{display:flex!important;flex-direction:column!important;justify-content:flex-end!important}
+ .rw-immersive .rw-copy{width:100%!important;max-width:100%!important;flex:0 0 auto!important;padding:0!important}
+ .rw-immersive .rw-main{padding:24% 15px 10px!important}
+ .rw-immersive .rw-immersive-media{height:100%!important;inset:0!important}
+ .rw-immersive .rw-immersive-media:after{
+   background:linear-gradient(180deg,#09251920 0%,#08221a40 22%,#082019dd 48%,#071d16fc 72%,#071b14ff 100%)
+ }
+ .rw-vintage.rw-immersive .rw-immersive-media:after{
+   background:linear-gradient(180deg,#34211727 0%,#33211483 30%,#2b1c12e9 60%,#21170fff 100%)
+ }
+ .rw-person-photo .rw-immersive-image{
+  width:100%;height:65%;object-fit:cover!important;object-position:center 5%!important
+ }
+ .rw-art-portrait .rw-immersive-image{width:100%;height:68%}
+ .rw-card .rw-choices{grid-template-columns:1fr!important;gap:6px}
+ .rw-card .rw-choice{min-height:0!important;padding:8px!important;font-size:13px!important}
+ .rw-video-card .rw-main{padding:0!important}
+ .rw-video-card .rw-video{top:12%;height:79%;left:1%;width:98%}
+ .rw-video-card .rw-title{top:5%;font-size:12px!important}
+ .rw-notes-panel{height:min(470px,88dvh);padding:17px}
+ .rw-notes-body{font-size:14px;line-height:1.38}
+ .rw-notes-close,.rw-notes-nav button{font-size:11px;padding:8px}
+}
