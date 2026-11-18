@@ -95,36 +95,146 @@
 .host-room-status{font-size:13px;min-height:22px}
 @media(max-width:640px){.host-room-box{padding:29px 21px}.host-room-code{letter-spacing:.1em}}
 
-/* Historische Comic-Illustrationen: bilddominant, nicht als Quellenfoto ausgeben. */
-.rw-history-slide .rw-main{gap:2.5%;align-items:stretch}
-.rw-history-slide .rw-copy{flex:0 0 39%;justify-content:center;padding-right:.5em}
-.rw-history-slide .rw-title{font-size:clamp(23px,3.1vw,47px);line-height:1.06}
-.rw-history-slide .rw-point{font-size:clamp(13px,1.45vw,23px)}
-.rw-history-slide .rw-source-details{margin:.6em 0;max-height:35%}
-.rw-history-art{position:relative;flex:1;min-width:0;margin:0;display:flex;overflow:hidden;align-self:stretch;
-  border:1px solid #d2fc4655;border-radius:12px;box-shadow:0 14px 50px #010d08aa;background:#182e1d}
-.rw-history-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;
-  transition:transform .3s ease}
-.rw-history-art:hover .rw-history-image{transform:scale(1.025)}
-.rw-history-art::after{content:"";position:absolute;inset:48% 0 0;background:linear-gradient(180deg,transparent,#06130a77);pointer-events:none}
-.rw-history-caption{position:absolute;bottom:13px;left:14px;right:14px;z-index:1;max-width:max-content;
-  padding:.6em .9em;border-radius:7px;background:#102e21d9;border:1px solid #d2fc465e;
-  color:#e9ffd3;font-size:.64em;line-height:1.15;font-weight:850;letter-spacing:.09em}
-.rw-history-feature .rw-copy{flex-basis:33%}
-.rw-history-feature .rw-history-art{flex:1.35}
-@media(max-width:820px) and (min-width:641px){
- .rw-history-slide .rw-copy{flex-basis:43%}
- .rw-history-slide .rw-title{font-size:clamp(20px,3.3vw,31px)}
- .rw-history-slide .rw-point{font-size:clamp(12px,2vw,18px)}
+/* Bildfolien · fullscreen Hintergrundbild + fließende, barrierearme Leseschicht.
+   TS-Markendesign bleibt (Waldgrün, Lime, klare Kanten). Vintage nur Historie. */
+.rw-card.rw-immersive{background:#061b12;color:#f8fff3}
+.rw-immersive:before{display:none}
+.rw-immersive-media{
+ position:absolute;inset:0;z-index:0;margin:0;overflow:hidden;pointer-events:none;
+ background:#0b2217
 }
+.rw-immersive-image{
+ display:block;width:100%;height:100%;object-fit:cover;
+ filter:saturate(1.03) contrast(1.055);
+ transform:scale(1.004)
+}
+.rw-immersive-media:after{
+ content:"";position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(90deg,#04160ff5 0%,#061c14ee 20%,#082419d4 42%,#0924176b 62%,#0b26140b 100%),
+            linear-gradient(0deg,#04140fd9 0%,transparent 24%),
+            linear-gradient(180deg,#0618106b 0%,transparent 27%)
+}
+.rw-immersive-credit{
+ position:absolute;z-index:2;right:2.7%;bottom:7.2%;
+ font-size:clamp(8px,.67vw,11px);font-family:Inter,system-ui,sans-serif;letter-spacing:.13em;
+ font-weight:800;line-height:1.35;color:#f1fae7;
+ background:#08261dc4;padding:.55em .85em;border:1px solid #e5ffcf4d;border-radius:6px;
+ max-width:44%;text-align:right
+}
+.rw-immersive .rw-top,
+.rw-immersive .rw-main,
+.rw-immersive .rw-foot{position:relative;z-index:2}
+.rw-immersive .rw-top{border-bottom-color:#e3fbd34d}
+.rw-immersive .rw-kicker{color:#d2fc46}
+.rw-immersive .rw-number{color:#e7f8db}
+.rw-immersive .rw-main{align-items:center;gap:0;padding-top:1.3%;padding-bottom:1.6%}
+.rw-immersive .rw-copy{
+ flex:0 1 58%;width:58%;max-width:58%;align-self:stretch;
+ padding:.3em .7em .3em 0;justify-content:center;
+ overflow-y:auto;scrollbar-width:thin;
+ text-shadow:0 2px 10px #03150caa
+}
+.rw-immersive .rw-title{
+ font-size:clamp(22px,3.6vw,57px);font-weight:900;line-height:1.065;
+ color:#fffdf5;text-shadow:0 4px 22px #031309d5
+}
+.rw-immersive .rw-point{
+ font-size:clamp(12px,1.6vw,25px);line-height:1.27;color:#f4fff1;
+ max-width:96%;text-shadow:0 2px 13px #001107da
+}
+.rw-immersive .rw-point:nth-child(2n){color:#e2efdb}
+.rw-immersive .rw-source-details{
+ margin:1.1em 0 0;max-height:38%;background:#09281de0;color:#ecf9e8;
+ border-color:#bad5a47d;text-shadow:none
+}
+.rw-immersive .rw-source-details summary{background:#143c2be9;color:#e8f7db}
+.rw-immersive .rw-foot{color:#e8f5e5;border-top-color:#e5f1db50}
+.rw-immersive .rw-original{color:#d2fc46}
+.rw-immersive .rw-main:after{content:"";flex:1;min-width:0}
+
+/* Historie · moderne Comic-Dramaturgie, aber typografisch im 19. Jahrhundert.
+   Die Bildquellen bleiben gekennzeichnet, keine frei erfundenen Originalfotos. */
+.rw-vintage{
+ --rw-accent:#edc985;--rw-muted:#e9d9b9;
+ background:linear-gradient(135deg,#2e2317,#102216)!important;color:#fff2d8;
+}
+.rw-vintage .rw-kicker{color:#efcb87;letter-spacing:.18em}
+.rw-vintage .rw-title{
+ font-family:Georgia,"Times New Roman",serif;
+ font-style:italic;font-weight:700;line-height:1.06;letter-spacing:-.047em;
+ color:#fff0cc;text-wrap:balance;text-shadow:0 4px 19px #160b05d9
+}
+.rw-vintage .rw-standfirst,.rw-vintage .rw-point{
+ font-family:Georgia,"Times New Roman",serif;color:#fff2d4
+}
+.rw-vintage .rw-point:nth-child(2n){color:#f0dcb8}
+.rw-vintage .rw-foot,.rw-vintage .rw-number{color:#eee0c8}
+.rw-vintage .rw-original{color:#f3d595}
+.rw-vintage .rw-source-details{border-color:#d6ac754e;background:#2c2119df}
+.rw-vintage .rw-source-details summary{background:#4a3423e9;color:#ffe8bd}
+.rw-vintage.rw-immersive .rw-immersive-media:after{
+ background:linear-gradient(90deg,#251609f7 0%,#291b0ff1 19%,#392514e0 38%,#50321d87 59%,#40210b0a 100%),
+            linear-gradient(0deg,#291706c9 0%,transparent 25%),
+            linear-gradient(180deg,#26150880 0%,transparent 32%)
+}
+.rw-vintage.rw-immersive .rw-kicker,.rw-vintage.rw-immersive .rw-original{color:#f3d38e}
+.rw-vintage.rw-immersive .rw-title{color:#fff3d7}
+.rw-vintage.rw-immersive .rw-point{color:#fff4db}
+.rw-vintage.rw-immersive .rw-point:nth-child(2n){color:#f0d9b5}
+.rw-vintage.rw-immersive .rw-source-details{background:#2d2018e6}
+.rw-vintage.rw-immersive .rw-source-details summary{background:#4b3422e9}
+.rw-vintage.rw-immersive .rw-immersive-credit{
+ color:#ffe8bc;background:#32241acc;border-color:#eac28a74
+}
+
+/* Tablet: großer Hintergrund, kompakter Text, keine Nebenkästen. */
+@media(max-width:900px) and (min-width:641px){
+ .rw-immersive .rw-copy{flex-basis:63%;width:63%;max-width:63%}
+ .rw-immersive .rw-title{font-size:clamp(22px,3.8vw,37px)}
+ .rw-immersive .rw-point{font-size:clamp(12px,1.87vw,20px)}
+ .rw-immersive .rw-immersive-media:after{
+  background:linear-gradient(90deg,#071c14f8 0%,#071c14ed 32%,#09251bb3 57%,#081b124a 77%,transparent 100%)
+ }
+ .rw-vintage.rw-immersive .rw-immersive-media:after{
+  background:linear-gradient(90deg,#251609f8 0%,#291b0ff0 35%,#392514c7 60%,#40210b22 100%)
+ }
+}
+
+/* Smartphone: Bild oben breit; Inhalt fließt auf einer dunklen Verlaufsfläche
+   direkt darüber/darunter, ohne zu winzigem 16:9-Text zu schrumpfen. */
 @media(max-width:640px){
- .rw-history-slide .rw-main{display:flex;flex-direction:column;overflow-y:auto}
- .rw-history-slide .rw-copy,.rw-history-feature .rw-copy{flex:0 0 auto;overflow:visible}
- .rw-history-slide .rw-title{font-size:clamp(27px,6.7vw,38px)}
- .rw-history-slide .rw-point{font-size:clamp(15px,3.9vw,19px)}
- .rw-history-art,.rw-history-feature .rw-history-art{flex:0 0 auto;min-height:245px;
-   height:clamp(245px,53vw,380px);border-radius:13px}
- .rw-history-image{object-fit:cover}
- .rw-history-caption{font-size:10px;bottom:9px;left:9px}
+ .rw-immersive{height:100%;min-height:100%}
+ .rw-immersive .rw-immersive-media{inset:0 0 auto;height:65%}
+ .rw-immersive .rw-immersive-image{height:100%;object-position:center top!important}
+ .rw-immersive .rw-immersive-media:after{
+  background:linear-gradient(180deg,#03150c4d 0%,#071d1444 25%,#081d15a8 48%,#081d15fa 79%,#071b12 100%)
+ }
+ .rw-vintage.rw-immersive .rw-immersive-media:after{
+  background:linear-gradient(180deg,#29180b45 0%,#311d0c62 27%,#2e1c0bd9 58%,#261a10ff 100%)
+ }
+ .rw-immersive .rw-top{margin:17px 19px 0;padding-bottom:11px}
+ .rw-immersive .rw-main{
+  display:block;padding:clamp(150px,27svh,240px) 20px 16px;
+  overflow-y:auto;overscroll-behavior:contain
+ }
+ .rw-immersive .rw-copy{
+  width:100%;max-width:100%;min-height:0;display:block;
+  padding:0;overflow:visible;text-shadow:0 2px 14px #001107
+ }
+ .rw-immersive .rw-main:after{display:none}
+ .rw-immersive .rw-title{font-size:clamp(29px,7vw,43px);line-height:1.05}
+ .rw-immersive .rw-point{font-size:clamp(16px,4.2vw,21px);line-height:1.34}
+ .rw-immersive .rw-source-details{max-height:none;background:#0a291fef;margin:16px 0}
+ .rw-vintage.rw-immersive .rw-source-details{background:#2c2117ef}
+ .rw-immersive .rw-immersive-credit{
+  position:absolute;top:55px;right:12px;bottom:auto;max-width:55%;
+  font-size:8px;padding:5px 7px
+ }
+ .rw-immersive .rw-foot{
+  margin:0 19px 13px;padding-top:10px;
+  background:transparent;border-top:1px solid #e7f7de44
+ }
 }
-@media(prefers-reduced-motion:reduce){.rw-history-image{transition:none!important}}
+@media(prefers-reduced-motion:reduce){
+ .rw-immersive-image{transform:none!important}
+}
