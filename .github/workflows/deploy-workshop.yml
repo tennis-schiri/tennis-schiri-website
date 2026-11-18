@@ -109,6 +109,10 @@ jobs:
                   if verify.format!='WEBP':raise SystemExit(f'{asset} ist kein WEBP')
               print(f'{asset}: {out.stat().st_size//1024} KiB in gesicherter Webgrafik')
           PY
+          # Sämtliche vier übrigen historischen Originalgrafiken werden
+          # reproduzierbar zu warm eingefärbten Vintage-Comicfassungen.
+          # Die Originalquellen bleiben separat verfügbar.
+          python3 workshop-site/comicize_history.py
           cp workshop-site/deny-private.htaccess _workshop_upload/_private/.htaccess
           mkdir -p _workshop_upload/_private/live-state
           cp workshop-site/deny-private.htaccess _workshop_upload/_private/live-state/.htaccess
@@ -175,6 +179,10 @@ jobs:
             _private/.htaccess _private/slides/slide-001.webp _private/slides/slide-136.webp \
             _private/media/clip-107.mp4 _private/media/clip-131.mp4 \
             _private/comics/hc01.webp _private/comics/hc02.webp \
+            _private/comics/jeu-de-paume-original-comic.webp \
+            _private/comics/wingfield-original-comic.webp \
+            _private/comics/wimbledon-1877-original-comic.webp \
+            _private/comics/lawn-tennis-1887-original-comic.webp \
             _private/history/jeu-de-paume-original.jpg _private/history/wingfield-original.jpg \
             _private/history/wimbledon-1877-original.jpg _private/history/lawn-tennis-1887-original.jpg \
             assets/app.css assets/app.js assets/logo.png \
@@ -350,6 +358,13 @@ jobs:
             test "$(wc -c < /tmp/ws-video.part)" -gt 100000 || { echo "::error::Bild $original nicht vollständig"; exit 1; }
           done
           echo "Vier unterschiedliche geschützte Historienoriginale abrufbar."
+          for comic in jeu-de-paume-original wingfield-original wimbledon-1877-original lawn-tennis-1887-original; do
+            code="$(curl -sS -b "$cookie" -o /tmp/ws-video.part -w '%{http_code}' --max-time 35 "$base/resource.php?path=comics/$comic-comic.webp")"
+            test "$code" = "200" || { echo "::error::Comic $comic nicht abrufbar (HTTP $code)"; exit 1; }
+            test "$(wc -c < /tmp/ws-video.part)" -gt 30000 || { echo "::error::Comic $comic beschädigt"; exit 1; }
+          done
+          echo "Alle sechs historischen Comics abrufbar."
+
 
 
 
