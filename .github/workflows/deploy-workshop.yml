@@ -21,6 +21,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Python für die Folienbild-Erzeugung einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Workshop-Secrets prüfen
         shell: bash
         env:
