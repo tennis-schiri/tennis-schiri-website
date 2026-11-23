@@ -27,8 +27,8 @@ for leader,(opponent,place,when,role) in expect.items():
         raise SystemExit("Fehlerhafte Begegnung / Rolle / Termin: "+leader)
 if "Dazu Einsätze bei Showmatches." in page:
     raise SystemExit("Alter unspezifischer Platzhalter steht noch auf der Seite")
-if "site.css?v=20261118-1" not in page:
-    raise SystemExit("Referenzen laden nicht die aktualisierten Styles")
+if not re.search(r'<link\s+rel="stylesheet"\s+href="\.\./assets/site\.css\?v=[A-Za-z0-9._-]+">', page):
+    raise SystemExit("Referenzen laden nicht das gemeinsame CSS mit Cache-Version")
 for selector in (".ref-showmatches", ".ref-showmatches-grid", ".ref-showmatch--chair",
                  '[data-theme="dark"] .ref-showmatch', "@media(max-width:890px)"):
     if selector not in css:
