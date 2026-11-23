@@ -74,7 +74,7 @@ jobs:
           cp public/assets/michael-wiedeck-portrait.jpg _workshop_upload/assets/workshop-michael-kneeling.jpg
           cp workshop-site/presenter-mode.css workshop-site/presenter-mode.js \
              workshop-site/workshop-slide.css workshop-site/workshop-slide.js \
-             workshop-site/presenter-enhance.js workshop-site/participant.css workshop-site/participant.js _workshop_upload/assets/
+             workshop-site/welcome-editor.js workshop-site/presenter-enhance.js workshop-site/participant.css workshop-site/participant.js _workshop_upload/assets/
 
           # Neue didaktische Reihenfolge: Bilder, Metadaten und Kapitel werden
           # aus dem geprüften Originalpaket gemeinsam rekonstruiert.
@@ -161,8 +161,8 @@ jobs:
           # Player geladen und übernimmt dessen bestehende F/Vollbild-Taste.
           if html.count('</head>') != 1 or html.count('</body>') != 1:
               raise SystemExit('Ungewöhnliche Dokumentstruktur; Vollbild-Integration abgebrochen')
-          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261118-noscroll-comic03"></head>', 1)
-          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261118-noscroll-comic03" defer></script><script src="assets/presenter-enhance.js?v=20261118-noscroll-comic03" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
+          html = html.replace('</head>', '<link rel="stylesheet" href="assets/presenter-mode.css?v=20261118-2"><link rel="stylesheet" href="assets/workshop-slide.css?v=20261123-welcome04"></head>', 1)
+          html = html.replace('</body>', '<script src="assets/workshop-slide.js?v=20261123-welcome04" defer></script><script src="assets/welcome-editor.js?v=20261123-welcome04" defer></script><script src="assets/presenter-enhance.js?v=20261123-welcome04" defer></script><script src="assets/presenter-mode.js?v=20261118-2" defer></script></body>', 1)
           deck.write_text(html,encoding='utf-8')
           PY
 
@@ -189,7 +189,7 @@ jobs:
             assets/presenter-mode.css assets/presenter-mode.js assets/workshop-michael-tennis.jpg \
             assets/workshop-michael-portrait.jpg assets/workshop-michael-kneeling.jpg \
             assets/workshop-slide.css assets/workshop-slide.js \
-            assets/presenter-enhance.js assets/participant.css assets/participant.js; do
+            assets/welcome-editor.js assets/presenter-enhance.js assets/participant.css assets/participant.js; do
             test -s "_workshop_upload/$file" || { echo "::error::Fehlende Datei: $file"; exit 1; }
           done
           grep -q 'KENNST DU' _workshop_upload/index.html
@@ -204,6 +204,7 @@ jobs:
           grep -q 'presenter-mode.js' _workshop_upload/_private/index.html
           grep -q 'workshop-slide.js' _workshop_upload/_private/index.html
           grep -q 'presenter-enhance.js' _workshop_upload/_private/index.html
+          grep -q 'welcome-editor.js' _workshop_upload/_private/index.html
           grep -q 'participant.js' _workshop_upload/teilnehmen.php
           grep -q 'live.php' _workshop_upload/assets/participant.js
           grep -q 'presenter-mode.css' _workshop_upload/_private/index.html
@@ -227,6 +228,7 @@ jobs:
           print('9 unterschiedliche Bildhintergründe, davon 6 historische Motive, geprüft.')
           PY
           node --check _workshop_upload/assets/workshop-slide.js
+          node --check _workshop_upload/assets/welcome-editor.js
           node --check _workshop_upload/assets/presenter-enhance.js
           node --check _workshop_upload/assets/participant.js
           node --check _workshop_upload/assets/app.js
