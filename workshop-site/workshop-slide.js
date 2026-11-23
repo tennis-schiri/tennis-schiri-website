@@ -89,9 +89,52 @@
   };
   const uniqueImages=Object.values(imagery).map(item=>item.src);
   if(new Set(uniqueImages).size!==uniqueImages.length)throw Error('Workshop: Bildmotive dürfen sich nicht wiederholen');
+  // Individuelle Begrüßungsfolie für jeden Verein / Workshoptermin.
+  // Ausschließlich textContent: Nutzereingaben können kein HTML einschleusen.
+  function renderWelcome(host,welcome={}){
+    const card=make('article','rw-card rw-welcome');
+    const bg=make('div','rw-welcome-court');
+    bg.setAttribute('aria-hidden','true');
+    card.append(bg);
+    const header=make('header','rw-welcome-head');
+    header.append(make('span','rw-welcome-eyebrow','TENNIS-SCHIRI · REGELWORKSHOP'));
+    header.append(make('span','rw-welcome-number','01 / 123'));
+    card.append(header);
+    const main=make('div','rw-welcome-main');
+    const above=make('p','rw-welcome-overline','Schön, dass ihr da seid!');main.append(above);
+    main.append(make('h1','rw-welcome-title','Herzlich willkommen'));
+    main.append(make('p','rw-welcome-subtitle','zum Regelworkshop'));
+    const detail=make('div','rw-welcome-details');
+    const venue=make('section','rw-welcome-venue');
+    venue.append(make('span','rw-welcome-label','VEREIN / ORT'));
+    const parts=[welcome.verein,welcome.ort].filter(x=>typeof x==='string'&&x.trim());
+    venue.append(make('strong','rw-welcome-venue-text'+(!parts.length?' rw-empty':''),parts.join(' · ')||'Verein / Ort'));
+    detail.append(venue);
+    const row=make('div','rw-welcome-date-row');
+    const date=make('section','rw-welcome-field');
+    date.append(make('span','rw-welcome-label','DATUM'));
+    let dateText='Datum';
+    if(typeof welcome.datum==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(welcome.datum)){
+      const [year,month,day]=welcome.datum.split('-');
+      dateText=day+'.'+month+'.'+year;
+    }
+    date.append(make('strong',!welcome.datum?'rw-empty':'',dateText));row.append(date);
+    const time=make('section','rw-welcome-field');
+    time.append(make('span','rw-welcome-label','UHRZEIT'));
+    time.append(make('strong',!welcome.uhrzeit?'rw-empty':'',(welcome.uhrzeit||'Uhrzeit')+(welcome.uhrzeit?' Uhr':'')));
+    row.append(time);detail.append(row);main.append(detail);
+    card.append(main);
+    const foot=make('footer','rw-welcome-foot');
+    foot.append(make('span','','WISSEN · ENTSCHEIDEN · TENNIS'));
+    foot.append(make('span','','TENNIS-SCHIRI'));
+    card.append(foot);
+    host.append(card);
+  }
+
   function render(host,s,opts={}){
     if(!host||!s)return;
     host.replaceChildren();
+    if(s.no===1){renderWelcome(host,opts.welcome||{});return;}
     const card=make('article','rw-card rw-type-'+s.type);
     const isHistory=String(s.chapter).includes('GESCHICHTE');
     if(isHistory)card.classList.add('rw-history-slide','rw-vintage');
