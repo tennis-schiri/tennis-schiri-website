@@ -90,6 +90,12 @@ for index,old_no in enumerate(order,1):
         s['optional']=True
     if old_no==135:
         s['main_end']=True
+    if old_no==1:
+        # Veranstaltungsdaten werden vom Referenten direkt in der Weboberfläche
+        # gesetzt; nie einen alten Vereins-/Terminstand aus der 2026-PPT zeigen.
+        s['title']='HERZLICH WILLKOMMEN ZUM REGELWORKSHOP'
+        s['text']=['Herzlich willkommen zum Regelworkshop','Verein / Ort','Datum / Uhrzeit']
+        s['notes']='Begrüßungsfolie: Verein, Ort, Datum und Uhrzeit über „Startfolie bearbeiten“ eintragen.'
     if old_no==39:
         s['title']='REGELFÄLLE: WAS WÜRDEST DU ENTSCHEIDEN?'
     new.append(s)
