@@ -25,11 +25,33 @@ function load_room(string $code): ?array {
     if (($data['updated_at']??0) < time()-8*3600) return null;
     return $data;
 }
+function normalize_welcome(mixed $input): array {
+    $out=['verein'=>'','ort'=>'','datum'=>'','uhrzeit'=>''];
+    if (!is_array($input)) return $out;
+    foreach (['verein'=>85,'ort'=>85] as $key=>$limit) {
+        $value=$input[$key]??'';
+        if (!is_string($value)) continue;
+        $value=trim(preg_replace('/\\s+/u', ' ', $value)??'');
+        $chars=preg_split('//u',$value,-1,PREG_SPLIT_NO_EMPTY);
+        $out[$key]=is_array($chars)?implode('',array_slice($chars,0,$limit)):'';
+    }
+    $date=$input['datum']??'';
+    if (is_string($date)&&preg_match('/^\\d{4}-\\d{2}-\\d{2}$/D',$date)) {
+        $parsed=DateTimeImmutable::createFromFormat('!Y-m-d',$date);
+        if ($parsed!==false&&$parsed->format('Y-m-d')===$date) $out['datum']=$date;
+    }
+    $time=$input['uhrzeit']??'';
+    if (is_string($time)&&preg_match('/^(?:[01]\\d|2[0-3]):[0-5]\\d$/D',$time)) {
+        $out['uhrzeit']=$time;
+    }
+    return $out;
+}
 function response_view(array $data): array {
     $slide=(int)($data['slide']??1);
     $votes=$data['votes'][(string)$slide]??['A'=>0,'B'=>0,'C'=>0];
     return ['ok'=>true,'room'=>$data['room'],'active'=>(bool)($data['active']??false),
         'slide'=>$slide,'updated_at'=>(int)($data['updated_at']??0),
+        'welcome'=>normalize_welcome($data['welcome']??[]),
         'votes'=>$votes,'total'=>array_sum($votes)];
 }
 function room_update(string $code, callable $fn): ?array {
@@ -87,7 +109,7 @@ if ($action==='create') {
     }
     if ($room==='') respond(503,['error'=>'Raumcode nicht verfügbar']);
     $state=['room'=>$room,'active'=>true,'slide'=>max(1,min(136,(int)($data['slide']??1))),
-        'updated_at'=>time(),'votes'=>[]];
+        'updated_at'=>time(),'welcome'=>normalize_welcome($data['welcome']??[]),'votes'=>[]];
     $created=@file_put_contents(room_path($room),json_encode($state),LOCK_EX);
     if ($created===false) respond(503,['error'=>'Live-Raum kann nicht gespeichert werden']);
     $_SESSION['workshop_host_room']=$room;
@@ -123,6 +145,15 @@ if ($action==='slide') {
     $slide=max(1,min(136,(int)($data['slide']??1)));
     $state=room_update($code,static function(array $state) use($slide): array {
         $state['slide']=$slide;$state['updated_at']=time();$state['active']=true;return $state;
+    });
+    respond($state?200:404,$state?response_view($state):['error'=>'Raum nicht gefunden']);
+}
+if ($action==='welcome') {
+    // Nur der Referent mit dem Host-Token kann Datum, Uhrzeit und Veranstaltungsort
+    // des laufenden Raumes ändern. Teilnehmer haben ausschließlich Lesezugriff.
+    $welcome=normalize_welcome($data['welcome']??[]);
+    $state=room_update($code,static function(array $state) use($welcome): array {
+        $state['welcome']=$welcome;$state['updated_at']=time();return $state;
     });
     respond($state?200:404,$state?response_view($state):['error'=>'Raum nicht gefunden']);
 }
