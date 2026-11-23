@@ -31,17 +31,17 @@ function normalize_welcome(mixed $input): array {
     foreach (['verein'=>85,'ort'=>85] as $key=>$limit) {
         $value=$input[$key]??'';
         if (!is_string($value)) continue;
-        $value=trim(preg_replace('/\\s+/u', ' ', $value)??'');
+        $value=trim(preg_replace('/\s+/u', ' ', $value)??'');
         $chars=preg_split('//u',$value,-1,PREG_SPLIT_NO_EMPTY);
         $out[$key]=is_array($chars)?implode('',array_slice($chars,0,$limit)):'';
     }
     $date=$input['datum']??'';
-    if (is_string($date)&&preg_match('/^\\d{4}-\\d{2}-\\d{2}$/D',$date)) {
+    if (is_string($date)&&preg_match('/^\d{4}-\d{2}-\d{2}$/D',$date)) {
         $parsed=DateTimeImmutable::createFromFormat('!Y-m-d',$date);
         if ($parsed!==false&&$parsed->format('Y-m-d')===$date) $out['datum']=$date;
     }
     $time=$input['uhrzeit']??'';
-    if (is_string($time)&&preg_match('/^(?:[01]\\d|2[0-3]):[0-5]\\d$/D',$time)) {
+    if (is_string($time)&&preg_match('/^(?:[01]\d|2[0-3]):[0-5]\d$/D',$time)) {
         $out['uhrzeit']=$time;
     }
     return $out;
