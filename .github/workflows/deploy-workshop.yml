@@ -205,6 +205,8 @@ jobs:
           grep -q 'workshop-slide.js' _workshop_upload/_private/index.html
           grep -q 'presenter-enhance.js' _workshop_upload/_private/index.html
           grep -q 'welcome-editor.js' _workshop_upload/_private/index.html
+          grep -q 'Herzlich willkommen' _workshop_upload/assets/workshop-slide.js
+          grep -q 'Startfolie bearbeiten' _workshop_upload/assets/welcome-editor.js
           grep -q 'participant.js' _workshop_upload/teilnehmen.php
           grep -q 'live.php' _workshop_upload/assets/participant.js
           grep -q 'presenter-mode.css' _workshop_upload/_private/index.html
@@ -372,7 +374,7 @@ jobs:
 
           # Live-Raum testweise anlegen und wieder schließen.
           code="$(curl -sS -b "$cookie" -X POST -H 'Content-Type: application/json' \
-            -d '{"slide":1}' -o /tmp/ws-room.json -w '%{http_code}' \
+            -d '{"slide":1,"welcome":{"verein":"Testverein","ort":"Testort","datum":"2026-11-23","uhrzeit":"19:00"}}' -o /tmp/ws-room.json -w '%{http_code}' \
             --max-time 35 "$base/live.php?op=create")"
           test "$code" = "200" || { echo "::error::Live-Raum konnte nicht erstellt werden (HTTP $code)"; exit 1; }
           room="$(python3 -c 'import json; print(json.load(open("/tmp/ws-room.json"))["room"])')"
@@ -381,6 +383,14 @@ jobs:
             --max-time 35 "$base/live.php?op=status&room=$room")"
           test "$code" = "200" || { echo "::error::Live-Status HTTP $code"; exit 1; }
           python3 -c 'import json; a=json.load(open("/tmp/ws-check.json")); assert a["active"] and a["slide"]==1'
+          python3 -c 'import json; a=json.load(open("/tmp/ws-check.json")); assert a["welcome"]["verein"]=="Testverein" and a["welcome"]["ort"]=="Testort"'
+          code="$(curl -sS -b "$cookie" -X POST -H 'Content-Type: application/json' \
+            -d "{\"room\":\"$room\",\"host_token\":\"$token\",\"welcome\":{\"verein\":\"Aktualisiert\",\"ort\":\"Vereinsheim\",\"datum\":\"2026-11-24\",\"uhrzeit\":\"18:30\"}}" \
+            -o /tmp/ws-check.json -w '%{http_code}' --max-time 35 "$base/live.php?op=welcome")"
+          test "$code" = "200" || { echo "::error::Live-Begrüßung ließ sich nicht bearbeiten (HTTP $code)"; exit 1; }
+          python3 -c 'import json; a=json.load(open("/tmp/ws-check.json")); assert a["welcome"]["verein"]=="Aktualisiert" and a["welcome"]["uhrzeit"]=="18:30"'
+          echo "✓ Die Begrüßungsfolie kann während der Live-Sitzung aktualisiert werden."
+
           code="$(curl -sS -b "$cookie" -X POST -H 'Content-Type: application/json' \
             -d "{\"room\":\"$room\",\"host_token\":\"$token\"}" -o /tmp/ws-check.json \
             -w '%{http_code}' --max-time 35 "$base/live.php?op=end")"
