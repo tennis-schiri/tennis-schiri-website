@@ -145,6 +145,32 @@ Die Website bleibt passwortgeschützt, alle **136 Folien**, **27 Frage-/Antwort-
 
 **Test:** Der Build prüft 136 Folien, 27 Fragen, 25 Videodateien und die Existenz aller sechs Comicfassungen. Danach kontrolliert er ihren geschützten Zugriff sowie das HTTP-206-Streaming. Abschließende Darstellungstests auf dem tatsächlichen Beamer, iPhone und Tablet bleiben erforderlich.
 
+## Individuelle Begrüßungsfolie: Verein, Ort, Datum und Uhrzeit
+
+**Folie 1** ist jetzt eine individuelle Begrüßungsfolie im Tennis-Schiri-Design:
+
+> Herzlich willkommen zum Regelworkshop
+>
+> **Verein / Ort** · **Datum** · **Uhrzeit**
+
+Es bleiben genau **136 Folien**; Folie 2 ist weiterhin der Fahrplan.
+
+### So wird die Folie ohne Codeänderung angepasst
+
+1. Nach der Anmeldung den Webvortrag unter /presentation.php öffnen.
+2. In der unteren Referentenleiste **„✎ Startfolie bearbeiten“** anklicken.
+3. **Verein**, **Ort**, **Datum** und **Uhrzeit** eintragen (alle Felder optional).
+4. **„Speichern und anzeigen“** wählen. Die erste Folie aktualisiert sich sofort.
+
+Es gibt auch **„Felder leeren“** und **„Abbrechen“**. Im Vollbildmodus lässt sich die Folie anschließend ohne sichtbare Bedienelemente projizieren. Alle Angaben werden als reiner Text angezeigt, nicht als HTML.
+
+**Speicherung:** Die Eingaben bleiben **im Browser des verwendeten Präsentationsrechners** gespeichert (localStorage, kein zusätzliches Secret, keine FTP-Anpassung). Auf einem anderen Rechner bzw. in einem anderen Browser müssen sie dort neu eingetragen werden.
+
+**Teilnehmer-Synchronisierung:** Wenn der Referent einen Live-Raum startet, werden die aktuellen Willkommen-Daten übernommen. Bei nachträglichen Änderungen aktualisieren sich die Teilnehmeransichten automatisch, auch ohne Folienwechsel. Nur der Referent mit dem geschützten Host-Token kann die Daten des laufenden Raums ändern. Die 136 Folien und der Passwortschutz bleiben unverändert.
+
+Der GitHub-Actions-Workflow bindet welcome-editor.js vor presenter-enhance.js ein, prüft die JavaScript-Syntax und testet das Erstellen und nachträgliche Ändern der Begrüßungsdaten über die Live-API.
+
+
 ## Presenter-Bedienung
 
 - Rechts/Bild↓/Leertaste: weiter; Links/Bild↑: zurück.
