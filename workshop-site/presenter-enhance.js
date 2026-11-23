@@ -19,7 +19,7 @@
       original=true;stage.hidden=true;frame.classList.remove('rich-enabled');
       const back=document.getElementById('original-close');
       if(back)back.hidden=false;
-    },isHost:!!room,votes:room&&latestVotes||null});
+    },isHost:!!room,votes:room&&latestVotes||null,welcome:window.TSWorkshopWelcome?.get()||{}});
     if(!original){stage.hidden=false;frame.classList.add('rich-enabled')}
   };
   const originalClose=document.createElement('button');
@@ -49,6 +49,15 @@
       body:method==='POST'?JSON.stringify(data):undefined});
     const obj=await res.json();if(!res.ok||!obj.ok)throw Error(obj.error||'Live-Raum nicht erreichbar');return obj;
   };
+  // Ohne Dateibearbeitung: direkt im Presenter die erste Folie konfigurieren.
+  window.TSWorkshopWelcome?.install(toolbar,updated=>{
+    if(index()===1)showRich();
+    if(room&&hostToken){
+      call('welcome',{room,host_token:hostToken,welcome:updated}).catch(error=>{
+        setLiveStatus('Begrüßung lokal gespeichert, Live-Synchronisierung fehlgeschlagen: '+error.message);
+      });
+    }
+  });
   const joinUrl=()=>new URL('/teilnehmen.php?room='+room,location.href).href;
   function setLiveStatus(text){panel.querySelector('#host-room-status').textContent=text}
   function showPanel(){
@@ -68,7 +77,7 @@
     if(room){showPanel();return}
     live.disabled=true;panel.hidden=false;setLiveStatus('Live-Raum wird angelegt ...');
     try{
-      const data=await call('create',{slide:index()});
+      const data=await call('create',{slide:index(),welcome:window.TSWorkshopWelcome?.get()||{}});
       room=data.room;hostToken=data.host_token;live.textContent='● Live: '+room;
       live.classList.add('is-live');showPanel();
     }catch(e){setLiveStatus('Fehler: '+e.message)}finally{live.disabled=false}
