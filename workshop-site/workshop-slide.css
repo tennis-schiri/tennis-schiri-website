@@ -377,3 +377,102 @@
  .rw-notes-body{font-size:14px;line-height:1.38}
  .rw-notes-close,.rw-notes-nav button{font-size:11px;padding:8px}
 }
+
+
+/* BEGRÜSSUNGSFOLIE · pro Workshop anpassbar, bewusst ohne Bildwiederholung.
+   CSS-Tennisfeld im Hintergrund, Markenfarben TS und feste 16:9-Komposition. */
+.rw-card.rw-welcome{
+ background:radial-gradient(ellipse 62% 78% at 92% 46%,#2d5a34 0%,transparent 72%),
+ linear-gradient(120deg,#071910,#103622 58%,#10281b);
+ color:#f4f9ed;display:flex;flex-direction:column;
+}
+.rw-welcome:before{display:none}
+.rw-welcome-court{
+ position:absolute;right:-7%;top:10%;width:60%;height:80%;
+ transform:perspective(450px) rotateY(-17deg) rotate(-13deg);
+ border:clamp(2px,.32vw,5px) solid #d0f74955;
+ background:
+ linear-gradient(90deg,transparent calc(50% - 1px),#d0f74955 50%,transparent calc(50% + 1px)),
+ linear-gradient(180deg,transparent calc(50% - 1px),#d0f74966 50%,transparent calc(50% + 1px)),
+ #214c2c45;
+ opacity:.53;
+ border-radius:5px;pointer-events:none
+}
+.rw-welcome-court:after{
+ content:"";position:absolute;inset:17% 0;
+ border-top:2px solid #d0f7497c;border-bottom:2px solid #d0f7497c;
+}
+.rw-welcome-head,.rw-welcome-foot{
+ position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:1em
+}
+.rw-welcome-head{margin:3.4% 5.2% 0;padding-bottom:1%;border-bottom:1px solid #a1c28e5f}
+.rw-welcome-eyebrow{font:850 clamp(10px,1.05vw,16px)/1.2 Inter,system-ui,sans-serif;color:#d2fc46;letter-spacing:.17em}
+.rw-welcome-number{font:800 clamp(10px,.9vw,13px)/1.2 Inter,system-ui,sans-serif;color:#d4e4d2}
+.rw-welcome-main{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;
+ justify-content:center;align-items:flex-start;padding:1.5% 5.2% 2%;min-height:0;max-width:100%}
+.rw-welcome-overline{font:650 clamp(11px,1.5vw,22px)/1.3 Inter,system-ui,sans-serif;color:#d3e5ce;margin:0 0 1.1%}
+.rw-welcome-title{font:900 clamp(22px,4.25vw,65px)/1.06 Inter,system-ui,sans-serif;
+ letter-spacing:-.052em;margin:0;color:#fffef4;text-wrap:balance}
+.rw-welcome-subtitle{font:850 clamp(21px,3.35vw,51px)/1.1 Inter,system-ui,sans-serif;
+ letter-spacing:-.05em;color:#d2fc46;margin:.06em 0 3.2%}
+.rw-welcome-details{width:min(69%,720px);max-width:70%;display:grid;gap:clamp(6px,1.05vw,16px)}
+.rw-welcome-label{font:850 clamp(9px,.84vw,13px)/1.2 Inter,system-ui,sans-serif;
+ letter-spacing:.14em;color:#c7e5bd;display:block;margin-bottom:.38em}
+.rw-welcome-venue-text{font:800 clamp(17px,2.2vw,34px)/1.15 Inter,system-ui,sans-serif;
+ color:#f3ffeb;letter-spacing:-.035em;overflow-wrap:anywhere}
+.rw-welcome-date-row{display:flex;gap:clamp(12px,3vw,48px)}
+.rw-welcome-field{min-width:0}
+.rw-welcome-field strong{font:800 clamp(13px,1.65vw,25px)/1.15 Inter,system-ui,sans-serif;color:#f3ffeb}
+.rw-welcome .rw-empty{font-weight:650;color:#b0c9ae;opacity:.76}
+.rw-welcome-foot{margin:0 5.2% 2.5%;padding-top:1%;border-top:1px solid #a1c28e5f;
+ font:800 clamp(9px,.74vw,12px)/1.2 Inter,system-ui,sans-serif;
+ letter-spacing:.13em;color:#d2e6d0}
+
+/* Schneller Editor nur in der Referentenansicht, nicht auf dem Beamer. */
+#edit-welcome-btn{color:#e9ffce!important;border-color:#7c9a70!important}
+.welcome-editor-overlay{
+ position:fixed;inset:0;z-index:300;display:grid;place-items:center;
+ padding:20px;background:#020d08e9;backdrop-filter:blur(9px)
+}
+.welcome-editor-overlay[hidden]{display:none!important}
+.welcome-editor-box{
+ width:min(540px,100%);max-height:96dvh;overflow:auto;position:relative;
+ padding:clamp(21px,3vw,36px);border-radius:19px;
+ border:1px solid #8fbd80;background:linear-gradient(145deg,#1b402b,#0c2619);
+ color:#f5fff0;box-shadow:0 25px 90px #000b
+}
+.welcome-editor-heading{margin:0 0 9px;font:900 clamp(24px,4vw,34px)/1.1 Inter,system-ui,sans-serif;letter-spacing:-.055em}
+.welcome-editor-description{font:500 14px/1.5 Inter,system-ui,sans-serif;color:#c0d7c0;margin:0 0 22px}
+.welcome-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.welcome-editor-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.welcome-editor-field.wide{grid-column:1/-1}
+.welcome-editor-field label{font:750 13px/1.35 Inter,system-ui,sans-serif;color:#d7efcf}
+.welcome-editor-field input{
+ width:100%;border:1px solid #66876c;border-radius:9px;
+ background:#081b12;color:#fff;font:500 16px/1.3 Inter,system-ui,sans-serif;
+ padding:12px 13px;min-height:47px
+}
+.welcome-editor-field input:focus-visible{outline:2px solid #d2fc46;outline-offset:2px}
+.welcome-editor-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:24px}
+.welcome-editor-actions button{
+ cursor:pointer;border-radius:9px;padding:12px 16px;
+ border:1px solid #739777;color:#efffe6;background:#21432f;
+ font:800 14px/1.2 Inter,system-ui,sans-serif
+}
+.welcome-editor-actions button.primary{background:#d2fc46;border-color:#d2fc46;color:#0d2616}
+.welcome-editor-hint{font:500 12px/1.45 Inter,system-ui,sans-serif;color:#bdd5ba;margin:14px 0 0}
+@media(max-width:640px){
+ .rw-welcome-head{margin:18px 17px 0;padding-bottom:10px}
+ .rw-welcome-main{padding:16px 18px 15px;justify-content:center}
+ .rw-welcome-court{width:90%;height:46%;right:-28%;top:2%;opacity:.36}
+ .rw-welcome-overline{font-size:13px;margin-bottom:14px}
+ .rw-welcome-title{font-size:clamp(26px,7vw,39px)}
+ .rw-welcome-subtitle{font-size:clamp(23px,6.2vw,35px);margin:4px 0 25px}
+ .rw-welcome-details{width:100%;max-width:100%;gap:19px}
+ .rw-welcome-venue-text{font-size:clamp(20px,5.2vw,27px)}
+ .rw-welcome-label{font-size:11px}
+ .rw-welcome-field strong{font-size:17px}
+ .rw-welcome-foot{margin:0 18px 17px;padding-top:10px;font-size:9px}
+ .welcome-editor-grid{grid-template-columns:1fr}
+ .welcome-editor-field.wide{grid-column:auto}
+}
