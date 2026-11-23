@@ -10,7 +10,7 @@
   const prev=document.getElementById('participant-prev');
   const next=document.getElementById('participant-next');
   if(!stage||!window.TSWorkshopSlide)return;
-  let slides=[],room=null,slide=1,remoteSlide=1,following=true,voted={};
+  let slides=[],room=null,slide=1,remoteSlide=1,following=true,voted={},welcome={};
   let currentStatus=null,loading=false,originalView=false;
   const setStatus=(text,type)=>{connect.textContent=text;connect.dataset.status=type||''};
   const call=async(url,options)=>{
@@ -33,7 +33,8 @@
     }else{
       const myVote=voted[(room||'solo')+':'+slide];
       window.TSWorkshopSlide.render(stage,s,{
-        voted:myVote,
+        voted:myVote,welcome,
+
         onVote:async(answer)=>{
           const key=(room||'solo')+':'+slide;
           if(voted[key])return;
@@ -52,6 +53,13 @@
     prev.disabled=slide===1;
     next.disabled=slide>=136||slide===123;
     document.title='Folie '+slide+' · '+s.title+' · Regelworkshop';
+  };
+  // Willkommensdaten aus dem Referentenraum auch ohne Folienwechsel aktualisieren.
+  const applyWelcome=next=>{
+    const updated=next&&typeof next==='object'?next:{};
+    if(JSON.stringify(updated)===JSON.stringify(welcome))return;
+    welcome=updated;
+    if(slides.length&&slide===1&&!originalView)render();
   };
   const jump=(num,userInitiated=false)=>{
     const n=Math.max(1,Math.min(136,Number(num)||1));
@@ -76,6 +84,7 @@
       setStatus('Verbinde ...','connecting');
       const res=await call('/live.php?op=status&room='+encodeURIComponent(clean));
       room=clean;following=true;currentStatus=res;remoteSlide=res.slide;
+      applyWelcome(res.welcome);
       followButton.disabled=false;followButton.textContent='● Live folgen';followButton.setAttribute('aria-pressed','true');
       setStatus(res.active?'Verbunden · Raum '+room:'Live-Raum beendet · weiter selbst navigieren',res.active?'online':'offline');
       jump(res.slide,false);
@@ -89,6 +98,7 @@
     try{
       const res=await call('/live.php?op=status&room='+encodeURIComponent(room));
       currentStatus=res;remoteSlide=res.slide;
+      applyWelcome(res.welcome);
       if(res.active){
         setStatus('Live · Raum '+room+' · Folie '+res.slide,'online');
         if(following)jump(res.slide,false);
