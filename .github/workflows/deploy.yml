@@ -21,6 +21,23 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Aktuelle TENNILO-Markenbilder abrufen
+        uses: actions/checkout@v4
+        with:
+          repository: tennis-schiri/tennilo-website
+          ref: main
+          path: tennilo-brand-source
+          persist-credentials: false
+
+      - name: Korrigierte TENNILO-Logos bereitstellen
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet 'Pillow>=10,<13'
+          (cd tennilo-brand-source && python3 scripts/prepare_transparent_logos.py)
+          cp tennilo-brand-source/public/assets/tennilo-score-cutout.png public/assets/tennilo-score-cutout.png
+          cp tennilo-brand-source/public/assets/tennilo-logo.png public/assets/tennilo-logo.png
+          cp tennilo-brand-source/public/assets/tennilo-icon.png public/assets/tennilo-icon.png
+
       - name: Website-Dateien prüfen
         shell: bash
         run: |
@@ -125,6 +142,9 @@ jobs:
             public/datenschutz/index.html \
             public/partner/index.html \
             public/robots.txt \
+            public/assets/tennilo-logo.png \
+            public/assets/tennilo-icon.png \
+            public/assets/tennilo-score-cutout.png \
             public/assets/instagram/*.jpg \
             public/assets/instagram/*.png \
             public/assets/instagram/*.webp \
