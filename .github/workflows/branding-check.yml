@@ -64,6 +64,8 @@ jobs:
         run: |
           python tests/site-branding-test.py
           python tests/favicon-test.py
+      - name: TENNILO-Projektseite und Screenshots prüfen
+        run: python tests/projects-page-test.py
       - name: Regelwissen und Startseiten-Regelfrage prüfen
         run: |
           node --check public/assets/rules-library.js
