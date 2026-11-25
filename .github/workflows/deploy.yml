@@ -55,6 +55,7 @@ jobs:
             public/ueber-mich/index.html \
             public/referenzen/index.html \
             public/leistungen/index.html \
+            public/projekte/index.html \
             public/regelwissen/index.html \
             public/kontakt/index.html \
             public/aktuelles/index.html \
@@ -63,6 +64,12 @@ jobs:
             public/partner/index.html \
             public/favicon.svg \
             public/assets/site.css \
+            public/assets/project-showcase.css \
+            public/assets/projekte-score-watch.png \
+            public/assets/projekte-score-phone.png \
+            public/assets/projekte-score-board.png \
+            public/assets/projekte-clubdisplay-vorschau.svg \
+            public/assets/projekte-clubdisplay-logo.png \
             public/assets/home-refresh.css \
             public/assets/home-refresh.js \
             public/assets/home-rule-question.js \
@@ -86,6 +93,7 @@ jobs:
             public/robots.txt; do
             test -s "$file" || { echo "::error::Fehlende Datei: $file"; exit 1; }
           done
+          python tests/projects-page-test.py
           for file in public/index.html public/*/index.html; do
             grep -qi 'noindex' "$file" || { echo "::error::noindex fehlt: $file"; exit 1; }
           done
@@ -108,6 +116,12 @@ jobs:
           for file in \
             public/favicon.svg \
             public/assets/site.css \
+            public/assets/project-showcase.css \
+            public/assets/projekte-score-watch.png \
+            public/assets/projekte-score-phone.png \
+            public/assets/projekte-score-board.png \
+            public/assets/projekte-clubdisplay-vorschau.svg \
+            public/assets/projekte-clubdisplay-logo.png \
             public/assets/home-refresh.css \
             public/assets/home-refresh.js \
             public/assets/home-rule-question.js \
@@ -137,6 +151,7 @@ jobs:
             public/ueber-mich/index.html \
             public/referenzen/index.html \
             public/leistungen/index.html \
+            public/projekte/index.html \
             public/regelwissen/index.html \
             public/kontakt/index.html \
             public/aktuelles/index.html \

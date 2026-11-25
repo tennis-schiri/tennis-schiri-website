@@ -33,7 +33,7 @@ footer .brand-logo img{width:243px}
 @media(max-width:850px){.site-head .brand-logo img{width:230px}}
 @media(max-width:620px){.site-head .brand-logo img{width:195px}footer .brand-logo img{width:215px}}
 
-.nav{display:flex;gap:25px;margin-left:auto;align-items:center}
+.nav{display:flex;gap:13px;margin-left:auto;align-items:center}
 .nav a{font-size:13px;font-weight:650;color:#d6e1d6;transition:color .2s}
 .nav a:hover{color:var(--lime)}
 .header-action{background:var(--lime);border:0;border-radius:999px;padding:13px 20px;color:#193124;font-weight:800;font-size:12px;white-space:nowrap}
@@ -3143,4 +3143,13 @@ html[data-theme="dark"] .service-detail-panel:target { border-color: #96c75e; }
 [data-theme="dark"] .ref-showmatch--chair .ref-showmatch-role{
   color:#d2dcff;
   background:#33466b;
+}
+
+/* Acht Hauptmenüpunkte: ausreichend Platz und frühzeitiges Mobilmenü */
+@media (min-width:851px) and (max-width:1220px){
+ .site-head .header-action{margin-left:auto}
+ .site-head .mobile-toggle{display:block}
+ .site-head .nav{display:none;position:absolute;top:85px;left:24px;right:24px;flex-direction:column;align-items:stretch;gap:0;margin:0;padding:15px;background:#1c3832;border:1px solid #506458;border-radius:14px;box-shadow:0 20px 30px rgba(11,30,27,.5);max-height:calc(100dvh - 93px);overflow-y:auto}
+ .site-head .nav.open{display:flex}
+ .site-head .nav a{padding:12px;font-size:14px}
 }

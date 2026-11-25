@@ -79,11 +79,11 @@ jobs:
           if out.exists():
               shutil.rmtree(out)
           shutil.copytree(src, out)
-          # Alle 15 Inhaltsseiten erhalten die Live-Robots-Regeln.
+          # Alle 16 Inhaltsseiten erhalten die Live-Robots-Regeln.
           # Die Google-Search-Console-Bestaetigungsdatei bleibt unveraendert.
           pages = sorted(out.rglob("index.html"))
-          if len(pages) != 15:
-              raise SystemExit(f"Erwartet 15 Seiten, gefunden: {len(pages)}")
+          if len(pages) != 16:
+              raise SystemExit(f"Erwartet 16 Seiten, gefunden: {len(pages)}")
           for page in pages:
               raw = page.read_text(encoding="utf-8")
               rel = "assets" if page == out / "index.html" else "../assets"
@@ -129,8 +129,10 @@ jobs:
           )
           (out / ".htaccess").write_text("# Kanonische Domain (unabhaengig von der alten WordPress-Installation)\nRewriteEngine On\nRewriteCond %{HTTP_HOST} ^www\\.tennis-schiri\\.de$ [NC]\nRewriteRule ^(.*)$ https://tennis-schiri.de/$1 [R=301,L]\n\n# Alte WordPress-Pfade auf passende neue Informationsseiten umleiten\nRewriteRule ^anfrage/?$ /kontakt/ [R=301,L]\nRewriteRule ^black-sea-games/?$ /partner/ [R=301,L]\nRewriteRule ^veranstaltungen/?$ /turniere/ [R=301,L]\nRewriteRule ^veranstaltungen/kalender/?$ /turniere/ [R=301,L]\nRewriteRule ^veranstaltungen/meine-buchungen/?$ /turniere/ [R=301,L]\nRewriteRule ^2026/06/15/neuer-livescore-bei-meinen-turnieren/?$ /aktuelles/ [R=301,L]\nRewriteRule ^2025/10/09/save-the-date-hallen-lk-turniere-in-neuenhagen-bei-berlin-2025-2026/?$ /turniere/ [R=301,L]\nRewriteRule ^2025/10/01/save-the-date-hallen-lk-turniere-in-bad-saarow/?$ /turniere/ [R=301,L]\nRewriteRule ^2021/04/13/lk-turniere-in-der-gartenstadt-neuenhagen-bei-berlin-2021/?$ /turniere/ [R=301,L]\nRewriteRule ^2021/04/13/hello-world/?$ /ueber-mich/ [R=301,L]\n", encoding="utf-8")
           for required in [
-              "index.html", "impressum/index.html", "datenschutz/index.html",
-              "favicon.svg", "assets/site.css", "assets/instagram.js",
+              "index.html", "impressum/index.html", "datenschutz/index.html", "projekte/index.html",
+              "favicon.svg", "assets/site.css", "assets/project-showcase.css", "assets/instagram.js",
+              "assets/projekte-score-watch.png", "assets/projekte-score-phone.png", "assets/projekte-score-board.png",
+              "assets/projekte-clubdisplay-logo.png", "assets/projekte-clubdisplay-vorschau.svg",
               "assets/branding/ts-logo-hell.png",
               "assets/branding/ts-logo-dunkel.png",
               "assets/branding/ts-logo-ball.png",
@@ -231,6 +233,7 @@ jobs:
           php -l tests/newsletter-partners-test.php
           php tests/newsletter-partners-test.php
           python tests/site-branding-test.py
+          python tests/projects-page-test.py
           python tests/favicon-test.py
           test -s public/newsletter/index.html
           # Private Konfiguration und personenbezogene Datensaetze gehoeren nicht ins Repository.

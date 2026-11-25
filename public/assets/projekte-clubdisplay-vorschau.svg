@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="title desc">
+<title id="title">TENNILO ClubDisplay – illustrative Bildschirmvorschau</title>
+<desc id="desc">Schematische Vorschau eines Vereinsdisplays mit Mannschaftsbegegnungen, Terminen, Wetter und Navigation. Keine echte Bildschirmaufnahme.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071a2c"/><stop offset="1" stop-color="#12384b"/></linearGradient>
+ <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#183b4e"/><stop offset="1" stop-color="#0e2a3d"/></linearGradient>
+ <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#38e2e0"/><stop offset="1" stop-color="#1fc3d7"/></linearGradient>
+</defs>
+<rect width="1600" height="900" rx="30" fill="url(#bg)"/>
+<rect x="1.5" y="1.5" width="1597" height="897" rx="29" fill="none" stroke="#466779" stroke-width="3"/>
+<rect width="1600" height="124" rx="30" fill="#091f30"/>
+<rect y="94" width="1600" height="30" fill="#091f30"/>
+<path d="M0 124H1600" stroke="#28495b" stroke-width="2"/>
+<rect x="45" y="30" width="7" height="65" rx="3" fill="#23d7dc"/>
+<text x="74" y="70" font-size="41" font-family="Arial,Helvetica,sans-serif" font-weight="900" fill="#f4fbfd" letter-spacing="1.5">TENNILO</text>
+<text x="75" y="100" font-size="21" font-family="Arial,Helvetica,sans-serif" font-weight="600" fill="#25d7dc" letter-spacing="3">CLUBDISPLAY</text>
+<text x="870" y="76" font-size="22" font-family="Arial,Helvetica,sans-serif" fill="#a9c8d5">DIGITALE VEREINSINFOS</text>
+<text x="1252" y="76" font-size="44" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#f8fbfd">14:25</text>
+<rect x="1378" y="37" width="180" height="58" rx="16" fill="#153c4e" stroke="#386175"/>
+<text x="1403" y="72" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="#eaf9fd">18°  ☁</text>
+<rect x="42" y="150" width="1516" height="48" rx="15" fill="#12364a"/>
+<circle cx="70" cy="173" r="8" fill="#33e4cb"/>
+<text x="92" y="182" font-size="22" font-family="Arial,Helvetica,sans-serif" font-weight="700" fill="#d2e7ee">INFOMODUS  ·  VEREINSÜBERSICHT</text>
+<rect x="1380" y="158" width="151" height="34" rx="17" fill="#114d57" stroke="#1ad6d7"/>
+<text x="1416" y="182" font-size="17" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#4ae8e6">DEMO</text>
+<rect x="42" y="222" width="924" height="464" rx="23" fill="url(#panel)" stroke="#31566a" stroke-width="2"/>
+<text x="75" y="273" font-size="22" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#22d2da" letter-spacing="2">MANNSCHAFTSSPIELE</text>
+<text x="75" y="318" font-size="37" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#f2fafc">Was im Verein ansteht</text>
+<rect x="75" y="350" width="857" height="132" rx="15" fill="#103247" stroke="#3b6276" stroke-width="1.5"/>
+<rect x="93" y="369" width="155" height="95" rx="12" fill="#1fd5d5"/>
+<text x="108" y="407" font-size="17" font-family="Arial,Helvetica,sans-serif" font-weight="700" fill="#053442">NÄCHSTES</text>
+<text x="109" y="441" font-size="25" font-family="Arial,Helvetica,sans-serif" font-weight="900" fill="#053442">HEIMSPIEL</text>
+<text x="270" y="400" font-size="26" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#f0f9fc">Vereinsmannschaft</text>
+<text x="270" y="441" font-size="23" font-family="Arial,Helvetica,sans-serif" fill="#c3dbe6">gegen Gastverein</text>
+<rect x="772" y="381" width="131" height="54" rx="13" fill="#1c4c60"/>
+<text x="804" y="415" font-size="22" font-family="Arial,Helvetica,sans-serif" font-weight="900" fill="#30dce1">– : –</text>
+<rect x="75" y="500" width="857" height="152" rx="15" fill="#103247" stroke="#3b6276" stroke-width="1.5"/>
+<text x="106" y="540" font-size="21" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#f0f9fc">Vereinstermine</text>
+<text x="106" y="574" font-size="20" font-family="Arial,Helvetica,sans-serif" fill="#b2d0dd">Termine, Veranstaltungen und Hinweise auf einen Blick</text>
+<path d="M106 599H889" stroke="#31566a" stroke-width="2"/>
+<text x="107" y="629" font-size="18" font-family="Arial,Helvetica,sans-serif" fill="#60e4e1">Aktuelle Informationen · automatisch wechselnde Ansichten</text>
+<rect x="990" y="222" width="568" height="219" rx="23" fill="url(#panel)" stroke="#31566a" stroke-width="2"/>
+<text x="1021" y="270" font-size="22" font-family="Arial,Helvetica,sans-serif" font-weight="800" letter-spacing="1" fill="#2ddbdd">WETTER AM VEREIN</text>
+<text x="1020" y="347" font-size="71" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#f3fafd">18 °C</text>
+<text x="1265" y="347" font-size="24" font-family="Arial,Helvetica,sans-serif" fill="#d3e8f0">Leicht bewölkt</text>
+<text x="1021" y="402" font-size="21" font-family="Arial,Helvetica,sans-serif" fill="#afcfdd">Aktuell &amp; Vorhersage</text>
+<rect x="990" y="464" width="568" height="222" rx="23" fill="url(#panel)" stroke="#31566a" stroke-width="2"/>
+<text x="1021" y="511" font-size="22" font-family="Arial,Helvetica,sans-serif" font-weight="800" letter-spacing="1" fill="#2ddbdd">GASTRONOMIE &amp; PARTNER</text>
+<text x="1021" y="555" font-size="28" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#f2fafc">Neuigkeiten aus dem Club</text>
+<text x="1021" y="593" font-size="21" font-family="Arial,Helvetica,sans-serif" fill="#bad4e0">Öffnungszeiten, Aktionen,</text>
+<text x="1021" y="624" font-size="21" font-family="Arial,Helvetica,sans-serif" fill="#bad4e0">Sponsoren und Hinweise</text>
+<rect x="43" y="716" width="1515" height="102" rx="22" fill="#092538" stroke="#31546a" stroke-width="1.5"/>
+<rect x="59" y="731" width="278" height="72" rx="13" fill="url(#accent)"/>
+<text x="142" y="776" font-size="24" font-family="Arial,Helvetica,sans-serif" font-weight="800" fill="#082c39">Übersicht</text>
+<g fill="#d8ecf1" font-size="22" font-family="Arial,Helvetica,sans-serif" font-weight="700">
+<text x="388" y="775">Spiele</text>
+<text x="598" y="775">Termine</text>
+<text x="804" y="775">Wetter</text>
+<text x="1014" y="775">Gastronomie</text>
+<text x="1321" y="775">Plätze</text>
+</g>
+<text x="50" y="861" font-size="19" font-family="Arial,Helvetica,sans-serif" fill="#a5c8d6" letter-spacing="1">ILLUSTRATIVE UI-VORSCHAU · BEISPIELDATEN · KEIN ORIGINAL-SCREENSHOT</text>
+</svg>

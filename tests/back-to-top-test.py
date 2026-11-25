@@ -5,7 +5,7 @@ import re
 
 root=Path(__file__).resolve().parents[1]/"public"
 pages=[p for p in root.rglob("*.html") if p.name in ("index.html","termin.html")]
-if len(pages)<16:
+if len(pages)<17:
     raise SystemExit("Es fehlen erwartete Seiten im Website-Check")
 for page in pages:
     text=page.read_text(encoding="utf-8")

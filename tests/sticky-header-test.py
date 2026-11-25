@@ -19,8 +19,8 @@ if "scroll-padding-top:112px" not in css or "scroll-padding-top:93px" not in css
 if "max-height:calc(100dvh - 93px)" not in css:
     raise SystemExit("Mobiles Klappmenü muss bei kleinen Displays scrollbar bleiben")
 pages=sorted(ROOT.rglob("index.html"))+[ROOT/"turniere"/"termin.html"]
-if len(pages)!=16:
-    raise SystemExit(f"Erwartet 16 Website-Dokumente, gefunden: {len(pages)}")
+if len(pages)!=17:
+    raise SystemExit(f"Erwartet 17 Website-Dokumente, gefunden: {len(pages)}")
 for page in pages:
     html=page.read_text(encoding="utf-8")
     if '<header class="site-head"' not in html:
@@ -29,4 +29,4 @@ for page in pages:
         raise SystemExit("Alte CSS-Cacheversion: "+str(page))
     if 'id="menu-toggle"' not in html or 'id="site-nav"' not in html:
         raise SystemExit("Mobiles Menü fehlt: "+str(page))
-print("Sticky Navigation: Desktop, Mobilmenü, Sprungmarken und 16 Seiten geprüft.")
+print("Sticky Navigation: Desktop, Mobilmenü, Sprungmarken und 17 Seiten geprüft.")
