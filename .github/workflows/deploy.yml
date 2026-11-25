@@ -37,6 +37,8 @@ jobs:
           cp tennilo-brand-source/public/assets/tennilo-score-cutout.png public/assets/tennilo-score-cutout.png
           cp tennilo-brand-source/public/assets/tennilo-logo.png public/assets/tennilo-logo.png
           cp tennilo-brand-source/public/assets/tennilo-icon.png public/assets/tennilo-icon.png
+          cp tennilo-brand-source/public/assets/clubdisplay.png public/assets/tennilo-clubdisplay.png
+          test -s public/assets/tennilo-clubdisplay.png
 
       - name: Website-Dateien prüfen
         shell: bash
