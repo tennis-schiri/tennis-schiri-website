@@ -28,7 +28,7 @@ for token in (
     'kein', 'Prototyp',
 ):
     assert token in page, f"Projektseite unvollständig: {token}"
-assert 'keine echte Bildschirmaufnahme' in page.lower(), "Illustration muss gekennzeichnet bleiben"
+assert 'keine echte bildschirmaufnahme' in page.lower(), "Illustration muss gekennzeichnet bleiben"
 assert 'project-features' in style and '.ts-projects-grid' in style
 assert '<meta name="robots" content="noindex,nofollow,noarchive">' in page
 
