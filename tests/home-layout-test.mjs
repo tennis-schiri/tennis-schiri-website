@@ -11,8 +11,14 @@ assert.match(html,/href="assets\/home-refresh\.css\?v=[a-zA-Z0-9._-]+"/);
 assert.match(html,/src="assets\/home-rule-question\.js\?v=[a-zA-Z0-9._-]+"/);
 assert.ok(html.includes('class="rules-next-question"'), 'Random practice question control missing');
 assert.ok(html.includes('src="assets/home-refresh.js?v=1"'));
-assert.ok(html.includes('assets/home-refresh.css?v=5'), 'New hero design must bypass stale CSS');
+assert.ok(html.includes('assets/home-refresh.css?v=6'), 'Homepage improvements must bypass stale CSS');
 assert.ok(html.includes('class="hero-plate"'), 'Next tournament hero card must remain present');
+assert.ok(css.includes('Startseite 2.2 ·'), 'Compact homepage refinement missing');
+assert.ok(css.includes('.home-v2 #tennilo.ts-projects-teaser{'), 'TENNILO project card background must be restored');
+assert.ok(css.includes('.home-v2 #regelwissen{'), 'Knowledge and rule areas must have clear separation');
+assert.ok(css.includes('.home-v2 .home-zone--closing .community-spotlight{'), 'Newsletter and community need a clear dividing line');
+assert.ok(css.includes('.home-v2 .hero h1{font-size:clamp(45px,5vw,68px)'), 'Hero heading must use the reduced font scale');
+
 for(const rule of [
  '.home-v2 .hero-side .hero-plate{',
  'border:2px solid #c8f16d',
