@@ -71,6 +71,7 @@ jobs:
             public/assets/projekte-clubdisplay-vorschau.svg \
             public/assets/projekte-clubdisplay-logo.png \
             public/assets/home-refresh.css \
+            public/assets/home-structure.css \
             public/assets/home-refresh.js \
             public/assets/home-rule-question.js \
             public/assets/nuliga-tournaments.js \
@@ -123,6 +124,7 @@ jobs:
             public/assets/projekte-clubdisplay-vorschau.svg \
             public/assets/projekte-clubdisplay-logo.png \
             public/assets/home-refresh.css \
+            public/assets/home-structure.css \
             public/assets/home-refresh.js \
             public/assets/home-rule-question.js \
             public/assets/nuliga-tournaments.js \

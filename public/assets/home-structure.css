@@ -1,0 +1,579 @@
+/* Tennis-Schiri / Startseite 3.0
+   Redaktionelles Layout: eine klare Hero-Buehne, ein kompakter Terminbereich,
+   zusammengefasste Hilfen und ruhige, klar getrennte Inhaltsmodule.
+   Markenfarben, Originalfotos, Formulare und bestehende Interaktionen bleiben erhalten. */
+
+/* Ein gemeinsamer vertikaler Rhythmus statt mehrerer konkurrierender Streifen. */
+.home-v2{--home-gap:clamp(46px,5.4vw,70px)}
+.home-v2 #home-main{overflow:clip}
+.home-v2 .home-zone{border-top:1px solid #d5e1d3}
+.home-v2 .home-zone--calendar{background:#fff}
+.home-v2 .home-zone--news{background:#f3f7ef}
+.home-v2 .home-zone--knowledge{background:#edf2e9}
+.home-v2 .home-zone--services{background:#f7f8f4}
+.home-v2 .home-zone--profile{background:#edf2e9}
+.home-v2 .home-zone--activity{background:#fff}
+.home-v2 .home-zone--closing{background:#f7f8f4}
+.home-v2 .section-head{align-items:flex-end;gap:25px;margin-bottom:26px}
+.home-v2 .section-head h2{font-size:clamp(30px,3.8vw,43px);line-height:1.13;letter-spacing:-.05em}
+.home-v2 .section-head .eyebrow.kicker{font-size:11px;letter-spacing:.13em}
+.home-v2 .section-head .small{max-width:380px;font-size:13px;line-height:1.6}
+.home-v2 .section-link{font-size:13px;font-weight:800}
+.home-v2 .btn{min-height:44px;padding:12px 19px;font-size:12px}
+.home-v2 #turniere .section-head,
+.home-v2 #leistungen .section-head,
+.home-v2 #instagram .section-head{border-bottom:0;padding-bottom:0}
+.home-v2 #turniere .section-head .eyebrow.kicker:before,
+.home-v2 #leistungen .section-head .eyebrow.kicker:before,
+.home-v2 #instagram .section-head .eyebrow.kicker:before{display:none}
+
+/* 01 / Einstiegsbuehne: echte Tennisfotografie statt der zwei grossen,
+   visuell konkurrierenden Widget-Karten. */
+.home-v2 .hero{
+ background:#132e29;
+ min-height:0;
+}
+.home-v2 .hero-inner{
+ min-height:0;
+ padding-top:141px;
+ padding-bottom:63px;
+ display:grid;
+ grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
+ gap:clamp(36px,5vw,75px);
+ align-items:center;
+}
+.home-v2 .hero-copy{padding:0;max-width:670px}
+.home-v2 .hero .eyebrow{font-size:11px;letter-spacing:.17em}
+.home-v2 .hero h1{
+ font-size:clamp(58px,6.1vw,89px);
+ line-height:.94;
+ letter-spacing:-.068em;
+ margin:19px 0 25px;
+ max-width:750px;
+}
+.home-v2 .hero-desc{font-size:16px;line-height:1.67;max-width:485px;margin-bottom:25px}
+.home-v2 .hero .actions{gap:10px}
+.home-v2 .hero .hero-foot{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:24px;
+ margin-top:39px;
+ padding-top:22px;
+ max-width:540px;
+ border-top:1px solid rgba(229,247,221,.22);
+}
+.home-v2 .hero-foot div{font-size:11px;line-height:1.55}
+.home-v2 .hero-foot strong{font-size:14px;color:#f2fae9}
+.home-v2 .hero-foot span{color:#bbd1c2}
+.home-v2 .hero-side{
+ width:100%;
+ max-width:none;
+ display:grid;
+ grid-template-columns:1fr;
+ gap:0;
+ min-width:0;
+ justify-self:stretch;
+}
+.home-v2 .home-hero-photo{
+ margin:0;
+ height:clamp(320px,34vw,440px);
+ position:relative;
+ overflow:hidden;
+ background:#244934;
+ border:1px solid rgba(205,234,207,.32);
+ border-radius:18px 18px 0 0;
+ isolation:isolate;
+}
+.home-v2 .home-hero-photo:after{
+ content:"";
+ position:absolute;
+ inset:35% 0 0;
+ background:linear-gradient(180deg,transparent 15%,rgba(5,29,25,.75) 100%);
+ pointer-events:none;
+}
+.home-v2 .home-hero-photo img{
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:cover;
+ object-position:center 38%;
+}
+.home-v2 .home-hero-photo figcaption{
+ position:absolute;
+ z-index:1;
+ left:21px;
+ right:20px;
+ bottom:19px;
+ color:#f6fff4;
+ font-weight:850;
+ font-size:11px;
+ letter-spacing:.13em;
+ line-height:1.5;
+}
+.home-v2 .hero-side .hero-plate{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto;
+ gap:3px 19px;
+ align-items:center;
+ position:relative;inset:auto;
+ width:100%;max-width:none;min-width:0;
+ margin:0;
+ padding:19px 23px;
+ transform:none;
+ min-height:0;
+ border:1px solid #527d50;
+ border-top:0;
+ border-radius:0 0 18px 18px;
+ background:#214837;
+ box-shadow:none;
+ color:#f7fff0;
+}
+.home-v2 .hero-side .hero-plate:hover{
+ transform:none;
+ background:#285640;
+ border-color:#84b374;
+ box-shadow:none;
+}
+.home-v2 .hero-side .hero-plate:after{display:none}
+.home-v2 .hero-side .hero-plate .small{
+ grid-column:1;grid-row:1;
+ border:0;border-radius:0;
+ padding:0;background:transparent;
+ color:#c8f16d;
+ font-size:10px;font-weight:800;letter-spacing:.13em;
+}
+.home-v2 .hero-plate .date{
+ grid-column:2;grid-row:1;
+ margin:0;
+ font-size:13px;
+ font-weight:850;
+ line-height:1.3;
+ color:#c8f16d;
+ text-align:right;
+ white-space:nowrap;
+ letter-spacing:0;
+}
+.home-v2 .hero-plate-title{
+ grid-column:1/-1;
+ margin-top:5px;
+ font-size:clamp(17px,1.6vw,21px);
+ line-height:1.25;
+ font-weight:850;
+ color:#fff;
+}
+.home-v2 .hero-plate-place{grid-column:1;grid-row:4;margin:0;color:#d3e2d5;font-size:12px}
+.home-v2 .hero-plate-cta{
+ grid-column:2;grid-row:4;
+ margin:0;
+ width:auto;
+ padding:0;
+ border:0;border-radius:0;
+ background:transparent;
+ color:#c8f16d;
+ box-shadow:none;
+ display:inline-flex;gap:7px;justify-content:flex-end;
+ font-size:12px;font-weight:800;
+}
+.home-v2 .hero-side .hero-plate:hover .hero-plate-cta{background:transparent}
+.home-v2 .hero-plate-cta span{font-size:17px}
+.home-v2 .hero-side .hero-plate:focus-visible{outline:3px solid #c8f16d;outline-offset:3px}
+
+/* 02 / Drei klare Wege plus ein dynamischer Datenpunkt in derselben Leiste. */
+.home-v2 .quicknav{
+ background:#fff;
+ border-top:0;
+ border-bottom:1px solid #dce6d7;
+ margin:0;
+}
+.home-v2 .quicknav-inner{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,.98fr);
+ gap:0;
+ box-shadow:none;
+ background:transparent;
+ align-items:stretch;
+}
+.home-v2 .quick{
+ display:flex;flex-direction:column;justify-content:center;
+ min-height:138px;
+ padding:23px 23px 22px;
+ border-right:1px solid #e1e8df;
+ gap:3px;
+}
+.home-v2 .quick:first-child{padding-left:0}
+.home-v2 .quick:last-of-type{padding-right:23px}
+.home-v2 .quick+.quick{border-color:#e1e8df}
+.home-v2 .quick-index{font-size:10px;letter-spacing:.08em;color:#6b9672}
+.home-v2 .quick h3{font-size:18px;line-height:1.2;margin:5px 0}
+.home-v2 .quick p{font-size:11px;line-height:1.55;max-width:250px;display:block}
+.home-v2 .quick-stat{
+ min-width:0;
+ padding:13px 10px 12px 24px;
+ background:#f0f5eb;
+ display:flex;
+ align-items:center;
+}
+.home-v2 .quick-stat .hero-stat{
+ margin:0;
+ width:100%;
+ padding:0;
+ background:transparent;
+ border:0;
+ border-radius:0;
+ box-shadow:none;
+ min-width:0;
+}
+.home-v2 .quick-stat .hero-stat:before{display:none}
+.home-v2 .quick-stat .hero-stat-head{gap:7px;margin:0 0 4px;flex-wrap:wrap}
+.home-v2 .quick-stat .hero-stat-eyebrow{font-size:9px;white-space:normal}
+.home-v2 .quick-stat .hero-stat-period{font-size:10px}
+.home-v2 .quick-stat .hero-stat-value{font-size:34px;line-height:1;margin:0}
+.home-v2 .quick-stat .hero-stat .hero-stat-label{font-size:12px;line-height:1.35;margin:5px 0 3px}
+.home-v2 .quick-stat .hero-stat .hero-stat-detail{font-size:10px;line-height:1.4;margin:0}
+.home-v2 .quick-stat .hero-stat-actions{padding-top:7px;margin-top:3px;gap:8px;align-items:center}
+.home-v2 .quick-stat .hero-stat-actions button{padding:5px 6px;font-size:10px}
+.home-v2 .quick-stat .hero-stat-link{font-size:10px}
+
+/* 03 / Terminbereich: starke Hauptinformation, danach exakt vier
+   dynamisch gefilterte Listeneintraege; keine zweite monumentale Karte. */
+.home-v2 #turniere{padding:clamp(52px,6vw,78px) 0}
+.home-v2 #turniere .section-head{margin-bottom:26px}
+.home-v2 #turniere .section-head h2{max-width:730px}
+.home-v2 #turniere .filters{
+ margin-bottom:22px;
+ padding:7px;
+ display:inline-flex;
+ flex-wrap:wrap;
+ gap:6px;
+ border:1px solid #dce6db;
+ border-radius:14px;
+ background:#f2f6f1;
+}
+.home-v2 #turniere .filter{
+ padding:8px 13px;
+ font-size:12px;
+}
+.home-v2 #turniere .featured-tournament{
+ margin-bottom:6px;
+ padding:26px 30px;
+ grid-template-columns:minmax(0,1fr) 145px;
+ border-radius:16px;
+ background:#183d31;
+ box-shadow:none;
+}
+.home-v2 #turniere .featured-tournament h3{font-size:clamp(24px,2.7vw,34px);line-height:1.16}
+.home-v2 #turniere .featured-tournament .featured-date{align-self:center}
+.home-v2 #turniere .featured-tournament .tournament-details{margin-top:15px;margin-bottom:9px}
+.home-v2 #turniere .events{display:grid;gap:0}
+.home-v2 #turniere .event.tournament-row{
+ padding:15px 11px;
+ gap:20px;
+ border-bottom:1px solid #e2e8e0;
+}
+.home-v2 #turniere .event.tournament-row .event-title{font-size:17px}
+.home-v2 #turniere .event.tournament-row .datebox .day{font-size:27px}
+.home-v2 #turniere .event.tournament-row .tournament-details{display:none}
+.home-v2 #turniere .home-tourney-footer{margin-top:9px;padding:17px 0}
+.home-v2 #turniere .fineprint{font-size:10px;color:#66796b}
+
+/* 04 / Eine dezente News-Notiz statt einer konkurrierenden Hauptsektion. */
+.home-v2 .home-zone--news .home-news{padding:29px 0}
+.home-v2 .home-zone--news .home-news>.container{
+ display:grid;
+ grid-template-columns:minmax(190px,.39fr) minmax(0,1.61fr);
+ gap:28px;
+ align-items:center;
+}
+.home-v2 .home-zone--news .home-news-heading{
+ display:grid;
+ gap:6px;
+ align-content:center;
+ margin:0;
+}
+.home-v2 .home-zone--news .home-news-heading h2{font-size:clamp(22px,2.4vw,29px);line-height:1.17}
+.home-v2 .home-zone--news .home-news-card{
+ padding:20px 24px;
+ border:1px solid #d9e3d5;
+ border-left:3px solid #84b474;
+ border-radius:12px;
+ background:#fff;
+ box-shadow:none;
+}
+.home-v2 .home-zone--news .home-news-card h3{font-size:19px}
+.home-v2 .home-zone--news .home-news-card p{font-size:12px;line-height:1.6}
+.home-v2 .home-zone--news .home-news-read{font-size:12px}
+
+/* 05 / Wissenszentrum: Spielerhilfen und Regelentscheidung in zwei
+   bewusst zusammengefassten Spalten statt untereinander gestapelten Baendern. */
+.home-v2 .home-knowledge-shell{padding-top:clamp(55px,6vw,76px);padding-bottom:clamp(55px,6vw,76px)}
+.home-v2 .home-chapter-header{
+ display:grid;
+ grid-template-columns:160px minmax(0,1fr);
+ gap:30px;
+ align-items:start;
+ padding-bottom:22px;
+ margin-bottom:23px;
+ border-bottom:1px solid #cadcc9;
+}
+.home-v2 .home-chapter-number{
+ padding-top:8px;
+ font-size:11px;
+ font-weight:850;
+ letter-spacing:.13em;
+ color:#50785a;
+}
+.home-v2 .home-chapter-header h2{
+ font-size:clamp(31px,3.8vw,43px);
+ color:#183d2d;
+ line-height:1.1;
+ margin:0 0 9px;
+ letter-spacing:-.054em;
+}
+.home-v2 .home-chapter-header p{margin:0;font-size:13px;color:#597160;line-height:1.6}
+.home-v2 .home-knowledge-grid{
+ display:grid;
+ grid-template-columns:minmax(0,.91fr) minmax(0,1.09fr);
+ gap:20px;
+ align-items:stretch;
+}
+.home-v2 .home-knowledge-grid>.section{min-width:0;min-height:0;margin:0;padding:0}
+.home-v2 .home-knowledge-grid>.section>.container{padding:0;max-width:none;margin:0}
+.home-v2 .home-knowledge-grid .home-guides{background:transparent}
+.home-v2 .home-knowledge-grid .home-guides .section-head{
+ display:block;
+ margin:0 0 16px;
+ padding:0;
+ border:0;
+}
+.home-v2 .home-knowledge-grid .home-guides .section-head h2{
+ font-size:clamp(23px,2.1vw,29px);
+ margin:6px 0 9px;
+ color:#1e4631;
+}
+.home-v2 .home-knowledge-grid .home-guides .section-head .small{font-size:12px;max-width:420px}
+.home-v2 .home-knowledge-grid .home-guide-grid{grid-template-columns:1fr;gap:13px}
+.home-v2 .home-knowledge-grid .home-guide-card{
+ min-height:0;
+ width:100%;
+ padding:22px;
+ border:1px solid #d6e5d4;
+ border-left:3px solid #a9c5a4;
+ background:#fff;
+ border-radius:14px;
+ box-shadow:none;
+}
+.home-v2 .home-knowledge-grid .home-guide-card h3{font-size:21px;line-height:1.2}
+.home-v2 .home-knowledge-grid .home-guide-card p{font-size:13px;line-height:1.6}
+.home-v2 .home-knowledge-grid .home-guide-action{font-size:12px}
+.home-v2 .home-knowledge-grid #regelwissen{
+ border:1px solid #cfdecb;
+ background:#fff;
+ border-radius:17px;
+ padding:22px;
+}
+.home-v2 .home-knowledge-grid .rules-layout{
+ display:grid;
+ grid-template-columns:1fr;
+ gap:18px;
+}
+.home-v2 .home-knowledge-grid .rules-copy h2{
+ font-size:clamp(25px,2.5vw,33px);
+ margin:6px 0 9px;
+ line-height:1.14;
+}
+.home-v2 .home-knowledge-grid .rules-copy p{font-size:13px;line-height:1.55;margin-bottom:12px}
+.home-v2 .home-knowledge-grid .rules-copy .btn{min-height:40px;padding:10px 14px}
+.home-v2 .home-knowledge-grid .rules-art{
+ min-width:0;
+ padding:23px 24px;
+ border-radius:13px;
+ background:#173b30;
+ border:1px solid #355d46;
+ box-shadow:none;
+}
+.home-v2 .home-knowledge-grid .rules-question{
+ font-size:clamp(25px,3vw,34px);
+ line-height:1.12;
+ margin:11px 0!important;
+}
+.home-v2 .home-knowledge-grid .rules-home-situation{font-size:12px}
+.home-v2 .home-knowledge-grid .rules-home-answer summary{font-size:12px}
+.home-v2 .home-knowledge-grid .rules-next-question{margin-top:12px}
+
+/* 06 / Leistungen und Workshop: drei gleichwertige Einstiege, eine
+   eindeutige Veranstaltungsaktion darunter. */
+.home-v2 #leistungen{padding:clamp(54px,6.2vw,80px) 0}
+.home-v2 #leistungen .section-head{margin-bottom:26px}
+.home-v2 .services-grid{gap:15px}
+.home-v2 .service{
+ padding:25px 25px 24px;
+ min-height:0;
+ border-radius:15px;
+ background:#fff;
+ border:1px solid #d9e5d7;
+ box-shadow:none;
+ display:flex;flex-direction:column;align-items:flex-start;
+}
+.home-v2 .service-number{width:37px;height:37px;margin-bottom:19px;font-size:16px}
+.home-v2 .service h3{font-size:21px;margin:0 0 10px;line-height:1.22}
+.home-v2 .services-grid .service p{font-size:13px;line-height:1.68;margin-bottom:17px}
+.home-v2 .services-grid .service a{margin-top:auto;font-size:12px;padding-top:8px}
+.home-v2 .home-workshop-details{margin-top:23px;border:1px solid #b9d1b3;border-radius:15px;background:#fff}
+.home-v2 .home-workshop-details>summary{
+ min-height:102px;
+ padding:22px 26px;
+ background:#e9f3e5;
+}
+.home-v2 .home-workshop-summary-label{font-size:10px}
+.home-v2 .home-workshop-details>summary strong{font-size:20px}
+.home-v2 .home-workshop-summary-location{font-size:12px}
+
+/* 07 / Produkte: beide gleich gross, beide mit Original-Logo, klaren CTAs. */
+.home-v2 #tennilo.ts-projects-teaser{
+ background:linear-gradient(180deg,#eff6ec 0%,#e8f1e4 100%);
+ color:#173529;
+ padding:clamp(54px,6.3vw,82px) 0;
+ border:0;
+}
+.home-v2 .ts-projects-teaser .ts-projects-top{margin-bottom:25px;align-items:center}
+.home-v2 .ts-projects-teaser h2{font-size:clamp(31px,3.6vw,42px)}
+.home-v2 .ts-projects-teaser .ts-projects-top p{font-size:14px;max-width:665px}
+.home-v2 .ts-projects-grid{gap:16px}
+.home-v2 .ts-project-card{border:1px solid #d1e1d4;border-radius:16px;box-shadow:none}
+.home-v2 .ts-project-card .ts-project-media{height:220px}
+.home-v2 .ts-project-card .ts-project-content{padding:25px 26px;gap:12px}
+.home-v2 .ts-project-card .ts-project-eyebrow{font-size:10px}
+.home-v2 .ts-project-card h3{font-size:24px}
+.home-v2 .ts-project-card p{font-size:13px;line-height:1.65}
+.home-v2 .ts-project-card .ts-project-footnote{font-size:11px}
+.home-v2 .ts-project-wordmark--club{
+ display:block;
+ width:min(100%,260px);
+ height:auto;
+ max-height:40px;
+ object-fit:contain;
+ object-position:left;
+ background:#10283c;
+ border-radius:5px;
+ padding:5px 7px;
+}
+.home-v2 .ts-project-card .ts-project-cta{font-size:12px}
+
+/* 08 / Neuigkeiten aus den Feeds bewusst nach den eigentlichen Angeboten. */
+.home-v2 .home-zone--activity{padding:clamp(43px,5vw,65px) 0}
+.home-v2 .home-zone--activity #instagram{padding:0}
+.home-v2 .home-zone--activity #instagram .section-head{margin-bottom:22px}
+.home-v2 .home-zone--activity #instagram .section-head h2{font-size:clamp(29px,3.1vw,37px)}
+.home-v2 .ig-feeds{gap:16px}
+.home-v2 .ig-account{border:1px solid #d8e5da;border-radius:15px;padding:21px;box-shadow:none}
+
+/* 09 / Newsletter und WhatsApp: ein gemeinsamer Kontaktbereich mit
+   zwei unterscheidbaren Aktionen; der Zitatstreifen ist ein dezenter Abschluss. */
+.home-v2 .newsletter-section{padding:clamp(52px,6vw,75px) 0;background:transparent}
+.home-v2 .newsletter-home-copy h2{font-size:clamp(32px,3.8vw,44px)}
+.home-v2 .newsletter-home-copy>p{font-size:14px}
+.home-v2 .newsletter-signup-home{border:1px solid #dbe6d6;border-radius:17px;padding:26px;box-shadow:none}
+.home-v2 .home-zone--closing .community-spotlight{
+ border-top:1px solid #d9e3d6;
+ padding:29px 0 55px;
+}
+.home-v2 .home-zone--closing .community-panel{border-radius:14px;box-shadow:none}
+.home-v2 .tennis-quote-strip{background:#fff;border-top:1px solid #dce5d8;border-bottom:1px solid #dce5d8}
+.home-v2 .tennis-quote-line{padding:19px 0;box-shadow:none}
+.home-v2 .tennis-quote-figure blockquote{font-size:clamp(16px,1.8vw,20px)}
+.home-v2 #ueber-mich{padding:clamp(45px,5.2vw,66px) 0}
+.home-v2 .about h2{font-size:clamp(33px,3.7vw,43px)}
+.home-v2 .about .lead{font-size:14px;line-height:1.7}
+.home-v2 #kontakt h2{font-size:clamp(25px,3vw,34px)}
+
+/* Ein konsequentes responsives Raster fuer Laptop, Tablet und Phone. */
+@media(max-width:1180px){
+ .home-v2 .hero-inner{grid-template-columns:minmax(0,1fr) minmax(0,.94fr);gap:30px}
+ .home-v2 .hero h1{font-size:clamp(50px,5.6vw,73px)}
+ .home-v2 .quicknav-inner{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home-v2 .quick{min-height:112px;padding:17px 20px;border-bottom:1px solid #e1e8df}
+ .home-v2 .quick:first-child{padding-left:20px}
+ .home-v2 .quick-stat{padding:16px 21px}
+ .home-v2 .home-knowledge-grid{gap:15px}
+}
+@media(max-width:960px){
+ .home-v2 .hero-inner{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);padding-top:121px}
+ .home-v2 .hero h1{font-size:clamp(47px,5.6vw,59px)}
+ .home-v2 .hero-desc{font-size:14px}
+ .home-v2 .home-hero-photo{height:320px}
+ .home-v2 .hero-foot{display:none}
+ .home-v2 .home-knowledge-grid{grid-template-columns:1fr;gap:18px}
+ .home-v2 .home-knowledge-grid .home-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home-v2 .home-knowledge-grid #regelwissen{padding:22px}
+ .home-v2 .home-knowledge-grid .rules-layout{grid-template-columns:1fr 1fr;align-items:center}
+ .home-v2 .services-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .home-v2 .service{padding:20px}
+ .home-v2 .service h3{font-size:19px}
+}
+@media(max-width:760px){
+ .home-v2 .hero-inner{grid-template-columns:1fr;gap:28px;padding-top:115px;padding-bottom:40px}
+ .home-v2 .hero-copy{max-width:600px}
+ .home-v2 .hero h1{font-size:clamp(52px,10.5vw,77px)}
+ .home-v2 .hero-desc{font-size:14px}
+ .home-v2 .hero-side{grid-column:1;grid-template-columns:minmax(0,1fr)}
+ .home-v2 .home-hero-photo{height:260px}
+ .home-v2 .hero-foot{display:none}
+ .home-v2 .home-hero-photo img{object-position:center 35%}
+ .home-v2 .home-chapter-header{grid-template-columns:1fr;gap:10px}
+ .home-v2 .home-chapter-number{padding-top:0}
+ .home-v2 .home-knowledge-grid .rules-layout{grid-template-columns:1fr}
+ .home-v2 .services-grid{grid-template-columns:1fr}
+ .home-v2 .service{padding:22px}
+ .home-v2 #turniere .section-head{flex-direction:column;align-items:flex-start}
+ .home-v2 .home-zone--news .home-news>.container{grid-template-columns:1fr;gap:15px}
+ .home-v2 .home-zone--news .home-news-heading{gap:7px}
+ .home-v2 .home-zone--news .home-news-heading h2{font-size:27px}
+ .home-v2 .ts-projects-grid{grid-template-columns:1fr}
+ .home-v2 .ts-project-card .ts-project-media{height:210px}
+ .home-v2 .newsletter-home-grid{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+ .home-v2 .hero-inner{padding-top:112px}
+ .home-v2 .hero h1{font-size:clamp(45px,11vw,61px)}
+ .home-v2 .hero-desc{font-size:13px}
+ .home-v2 .home-hero-photo{height:230px}
+ .home-v2 .home-hero-photo figcaption{font-size:9px;left:15px;bottom:15px}
+ .home-v2 .hero-side .hero-plate{padding:15px 16px;column-gap:8px}
+ .home-v2 .hero-plate .date{font-size:11px}
+ .home-v2 .hero-plate-title{font-size:17px}
+ .home-v2 .hero-plate-place{font-size:11px}
+ .home-v2 .quicknav-inner{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .home-v2 .quick{min-height:108px;padding:15px 12px}
+ .home-v2 .quick:first-child{padding-left:12px}
+ .home-v2 .quick-index{font-size:9px}
+ .home-v2 .quick h3{font-size:14px}
+ .home-v2 .quick p{display:block;font-size:10px}
+ .home-v2 .quick-stat{padding:12px;background:#f0f5eb}
+ .home-v2 .quick-stat .hero-stat .hero-stat-detail{display:none}
+ .home-v2 .quick-stat .hero-stat-period{display:none}
+ .home-v2 .quick-stat .hero-stat-value{font-size:28px}
+ .home-v2 .quick-stat .hero-stat .hero-stat-label{font-size:11px}
+ .home-v2 .quick-stat .hero-stat-actions button{padding:5px}
+ .home-v2 #turniere .featured-tournament{grid-template-columns:1fr;padding:21px}
+ .home-v2 #turniere .featured-tournament .featured-date{display:none}
+ .home-v2 #turniere .event.tournament-row{padding:14px 0}
+ .home-v2 .home-knowledge-grid .home-guide-grid{grid-template-columns:1fr}
+ .home-v2 .home-knowledge-grid #regelwissen{padding:17px}
+ .home-v2 .home-knowledge-grid .rules-art{padding:19px}
+ .home-v2 .home-chapter-header h2{font-size:31px}
+ .home-v2 .home-zone--news .home-news-card{padding:17px 19px}
+ .home-v2 .ts-project-card .ts-project-media{height:180px}
+ .home-v2 .ts-project-card .ts-project-content{padding:22px}
+ .home-v2 .newsletter-signup-home{padding:21px}
+}
+@media(max-width:390px){
+ .home-v2 .quicknav-inner{grid-template-columns:1fr 1fr}
+ .home-v2 .quick{min-height:113px}
+ .home-v2 .quick p{display:none}
+ .home-v2 .quick-stat{padding:12px 10px}
+ .home-v2 .hero-plate .date{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .home-v2 .home-hero-photo img{transition:none}
+ .home-v2 .hero-side .hero-plate{transition:none}
+}

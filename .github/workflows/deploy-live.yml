@@ -146,7 +146,7 @@ jobs:
               "assets/branding/ts-logo-ball.png",
               "assets/branding/ts-favicon.png",
               "assets/back-to-top.js", "assets/privacy-consent.js",
-              "assets/home-refresh.css", "assets/home-refresh.js", "assets/home-rule-question.js",
+              "assets/home-refresh.css", "assets/home-structure.css", "assets/home-refresh.js", "assets/home-rule-question.js",
               "assets/tournament-detail.css", "assets/tournament-detail.js",
               "assets/venues/ntc-93.png", "assets/venues/tc-blau-weiss-ahlbeck.png",
               "assets/venues/tc-rotation-friedrichsfelde.jpg",

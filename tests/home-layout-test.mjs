@@ -5,19 +5,23 @@ import vm from 'node:vm';
 
 const html=fs.readFileSync('public/index.html','utf8');
 const css=fs.readFileSync('public/assets/home-refresh.css','utf8');
+const layoutCss=fs.readFileSync('public/assets/home-structure.css','utf8');
 const script=fs.readFileSync('public/assets/home-refresh.js','utf8');
 assert.ok(html.includes('<body class="home-v2">'));
 assert.match(html,/href="assets\/home-refresh\.css\?v=[a-zA-Z0-9._-]+"/);
 assert.match(html,/src="assets\/home-rule-question\.js\?v=[a-zA-Z0-9._-]+"/);
 assert.ok(html.includes('class="rules-next-question"'), 'Random practice question control missing');
 assert.ok(html.includes('src="assets/home-refresh.js?v=1"'));
-assert.ok(html.includes('assets/home-refresh.css?v=6'), 'Homepage improvements must bypass stale CSS');
+assert.ok(html.includes('assets/home-refresh.css?v=7'), 'Rebuilt homepage CSS must bypass stale cache');
+assert.ok(html.includes('assets/home-structure.css?v=1'), 'Editorial layout CSS must be loaded last');
 assert.ok(html.includes('class="hero-plate"'), 'Next tournament hero card must remain present');
-assert.ok(css.includes('Startseite 2.2 ·'), 'Compact homepage refinement missing');
-assert.ok(css.includes('.home-v2 #tennilo.ts-projects-teaser{'), 'TENNILO project card background must be restored');
-assert.ok(css.includes('.home-v2 #regelwissen{'), 'Knowledge and rule areas must have clear separation');
-assert.ok(css.includes('.home-v2 .home-zone--closing .community-spotlight{'), 'Newsletter and community need a clear dividing line');
-assert.ok(css.includes('.home-v2 .hero h1{font-size:clamp(45px,5vw,68px)'), 'Hero heading must use the reduced font scale');
+assert.ok(layoutCss.includes('Startseite 3.0'), 'Editorial homepage design missing');
+assert.ok(layoutCss.includes('.home-v2 #tennilo.ts-projects-teaser{'), 'TENNILO project card surface needs correct colors');
+assert.ok(layoutCss.includes('.home-v2 .home-knowledge-grid{'), 'Knowledge content must share one grid');
+assert.ok(layoutCss.includes('.home-v2 .home-zone--closing .community-spotlight{'), 'Newsletter and community need clear separation');
+assert.ok(layoutCss.includes('.home-v2 .home-hero-photo{'), 'Hero must have authentic photographic focus');
+assert.ok(layoutCss.includes('.home-v2 .quicknav-inner{'), 'Direct entries and live statistic must share one navigation grid');
+assert.ok(layoutCss.includes('@media(max-width:620px)'), 'New content structure must adapt to smartphones');
 
 for(const rule of [
  '.home-v2 .hero-side .hero-plate{',
@@ -29,7 +33,7 @@ for(const rule of [
  '@media(max-width:620px)'
 ])assert.ok(css.includes(rule),'High-contrast tournament card rule missing: '+rule);
 
-const sections=['id="start"','class="tennis-quote-strip"','class="quicknav"','id="aktuelles"','id="turniere"','id="spielerhilfen"','id="regelwissen"','id="leistungen"','id="instagram"','id="tennilo"','id="newsletter"','class="community-spotlight"','id="ueber-mich"','id="kontakt"'];
+const sections=['id="start"','class="quicknav"','id="turniere"','id="aktuelles"','id="spielerhilfen"','id="regelwissen"','id="leistungen"','id="tennilo"','id="instagram"','id="newsletter"','class="community-spotlight"','class="tennis-quote-strip"','id="ueber-mich"','id="kontakt"'];
 let last=-1;
 for(const token of sections){
  const position=html.indexOf(token);
@@ -54,14 +58,16 @@ assert.ok(html.includes('<details class="home-workshop-details" id="regelworksho
 assert.ok(!html.includes('class="workshop-feature"'),'Duplicate full-size workshop promotion remained');
 
 assert.match(html,/href="assets\/home-refresh\.css\?v=[a-zA-Z0-9._-]+"/,'Homepage CSS cache must refresh');
-// Navigation from top to bottom: opening quote, news, events, services, links, contact.
+// Navigation from top to bottom: lead, events, short news, knowledge, services, products, community, contact.
 const between=(start,end)=>{
  const a=html.indexOf(start),b=html.indexOf(end,a+start.length);
  assert.ok(a>=0&&b>a,'Missing homepage zone: '+start);
  return html.slice(a,b);
 };
-const topNews=between('<div class="home-zone home-zone--news">','<div class="home-zone home-zone--calendar">');
-assert.ok(topNews.includes('id="aktuelles"')&&!topNews.includes('class="community-spotlight"'));
+const calendar=between('<div class="home-zone home-zone--calendar">','<div class="home-zone home-zone--news">');
+assert.ok(calendar.includes('id="turniere"')&&!calendar.includes('id="aktuelles"'),'Calendar should come before the news excerpt');
+const latest=between('<div class="home-zone home-zone--news">','<div class="home-zone home-zone--knowledge">');
+assert.ok(latest.includes('id="aktuelles"')&&!latest.includes('id="turniere"'));
 const connect=between('<div class="home-zone home-zone--closing">','<div class="home-zone home-zone--personal">');
 assert.ok(connect.includes('id="newsletter"')&&connect.includes('class="community-spotlight"'),'Newsletter and WhatsApp must share a zone');
 const bottom=between('<div class="home-zone home-zone--personal">','</main>');
@@ -71,7 +77,7 @@ assert.ok(!bottom.includes('id="newsletter"')&&!bottom.includes('id="tennilo"'),
 assert.ok(html.includes('</strong> <span>Turniere und Tennis-Community</span>'),'Hero copy needs visible word spacing');
 assert.ok(html.includes('</strong> <span>Erfahrung als lizenzierter Schiedsrichter</span>'),'Second hero line needs visible word spacing');
 
-for(const className of ['home-zone--news','home-zone--calendar','home-zone--knowledge','home-zone--services','home-zone--activity','home-zone--profile','home-zone--closing','home-zone--personal','home-guide-grid'])
+for(const className of ['home-zone--news','home-zone--calendar','home-zone--knowledge','home-zone--services','home-zone--activity','home-zone--profile','home-zone--closing','home-zone--personal','home-guide-grid','home-knowledge-grid','home-chapter-header','home-hero-photo','quick-stat'])
  assert.ok(html.includes(className),'Missing content group: '+className);
 for(const fragment of [
  '.home-v2 .home-zone{border-top:', '.home-v2 .section{padding:var(--home-gap)',
@@ -99,4 +105,8 @@ assert.equal(workshop.open,false,'Unrelated hash should not open registration');
 context.location.hash='#workshop-signup-home-title';
 callbacks.hashchange();
 assert.equal(workshop.open,true,'Form heading deep link must work');
-console.log('Homepage layout: adjusted hierarchy, 8 zones, '+eventCount+' tournaments, interactive sections and workshop deep links OK.');
+assert.ok(html.indexOf('id="tennilo"')<html.indexOf('id="instagram"'),'Products should precede secondary social updates');
+assert.ok(html.includes('src="assets/projekte-clubdisplay-logo.png"'), 'ClubDisplay original wordmark must accompany Score branding');
+assert.ok(html.includes('src="assets/michael-wiedeck-spiel.jpg"'), 'Authentic tennis image should replace widget clutter');
+assert.ok(!css.includes('Startseite 2.2 ·'), 'The unsuccessful typography-only patch must be rolled back');
+console.log('Homepage layout: clear photo hero, compact live strip, events first, grouped knowledge, two equal projects, 8 zones, '+eventCount+' tournaments and workshop deep links OK.');
