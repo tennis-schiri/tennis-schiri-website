@@ -38,12 +38,44 @@ official_blobs = {
     "projekte-score-phone.png": "c5f672b973408481204d17556fcbd43dbeac3b79",
     "projekte-score-board.png": "287fe6070dfb5785ea211772678b74c6f8ef4612",
     "projekte-clubdisplay-logo.png": "2d460f33f2856149b2d70eae4f0a0534e704fea0",
+    "tennilo-founders-logo.png": "2963c59312df4bf3f23cd211f4b7df369a31426b",
 }
 for filename, expected in official_blobs.items():
     data = (root / "assets" / filename).read_bytes()
     assert data.startswith(b"\x89PNG\r\n\x1a\n"), f"Ungültige Bilddatei: {filename}"
     blob = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
     assert blob == expected, f"Originalbild verändert: {filename}"
+
+# Founders is a distinct funding initiative; the project teaser must link
+# to the official information and never simulate a checkout on this website.
+founders_css = (root / "assets/tennilo-founders-showcase.css").read_text(encoding="utf-8")
+founders_poster = (root / "assets/tennilo-founders-video-poster.jpg").read_bytes()
+assert founders_poster.startswith(b"\xff\xd8"), "Founders video-poster missing or not JPEG"
+for token in (
+    'id="tennilo-founders"',
+    'https://tennilo.de/founders/',
+    'href="projekte/#founders"',
+    'src="assets/tennilo-founders-logo.png"',
+    'assets/tennilo-founders-showcase.css?v=1',
+):
+    assert token in home, f"Founders teaser missing: {token}"
+for token in (
+    'id="founders"',
+    'src="../assets/tennilo-founders-logo.png"',
+    'poster="../assets/tennilo-founders-video-poster.jpg"',
+    '<source src="../assets/tennilo-founders-video.mp4" type="video/mp4">',
+    'https://www.startnext.com/tennilo-founders',
+    '14. Dezember 2026',
+    'keine Bestellung oder Zahlung',
+    '../assets/tennilo-founders-showcase.css?v=1',
+):
+    assert token in page, f"Founders project detail missing: {token}"
+assert '.ts-founders-teaser' in founders_css and '.ts-founders-project' in founders_css
+for workflow in (".github/workflows/deploy-live.yml", ".github/workflows/deploy.yml"):
+    text = (root.parent / workflow).read_text(encoding="utf-8")
+    assert "cp tennilo-brand-source/public/assets/tennilo-founders-video.mp4 public/assets/tennilo-founders-video.mp4" in text, (
+        f"Original Founders video must be copied for actual deployment: {workflow}"
+    )
 
 svg = (root / "assets/projekte-clubdisplay-vorschau.svg").read_text(encoding="utf-8")
 assert 'KEIN ORIGINAL-SCREENSHOT' in svg
@@ -57,4 +89,4 @@ for p in pages:
     links = re.findall(r'<a href="(?:\.\./)?projekte/"[^>]*>Projekte</a>', html)
     if len(links) != 2:
         raise AssertionError(f"Projekte-Link fehlt in Navigation oder Footer: {p}")
-print("TENNILO-Projekte: zwei gleichwertige Teaser, Detailseite, Original-Screenshots, korrekt markierte Illustration und 17 Seiten geprüft.")
+print("TENNILO-Projekte: Score, ClubDisplay und Founders, Original-Screenshots, Kampagnenvideo, Kennzeichnung und 17 Seiten geprüft.")

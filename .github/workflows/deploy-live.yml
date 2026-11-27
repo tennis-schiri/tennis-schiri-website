@@ -46,6 +46,8 @@ jobs:
           cp tennilo-brand-source/public/assets/tennilo-logo.png public/assets/tennilo-logo.png
           cp tennilo-brand-source/public/assets/tennilo-icon.png public/assets/tennilo-icon.png
           cp tennilo-brand-source/public/assets/clubdisplay.png public/assets/tennilo-clubdisplay.png
+          cp tennilo-brand-source/public/assets/tennilo-founders-video.mp4 public/assets/tennilo-founders-video.mp4
+          test -s public/assets/tennilo-founders-video.mp4
           test -s public/assets/tennilo-clubdisplay.png
 
       - name: Freigegebenes TS-09c-Logo-Set bereitstellen
@@ -141,6 +143,8 @@ jobs:
               "favicon.svg", "assets/site.css", "assets/project-showcase.css", "assets/instagram.js",
               "assets/projekte-score-watch.png", "assets/projekte-score-phone.png", "assets/projekte-score-board.png",
               "assets/projekte-clubdisplay-logo.png", "assets/projekte-clubdisplay-vorschau.svg",
+              "assets/tennilo-founders-logo.png", "assets/tennilo-founders-video-poster.jpg",
+              "assets/tennilo-founders-video.mp4", "assets/tennilo-founders-showcase.css",
               "assets/branding/ts-logo-hell.png",
               "assets/branding/ts-logo-dunkel.png",
               "assets/branding/ts-logo-ball.png",

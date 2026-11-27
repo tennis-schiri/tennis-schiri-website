@@ -1,0 +1,104 @@
+/* TENNILO Founders on tennis-schiri.de · design aligned to existing TS green palette */
+.home-v2 .ts-founders-teaser{
+ display:grid;
+ grid-template-columns:minmax(210px,.43fr) minmax(0,1fr);
+ gap:clamp(22px,3.8vw,52px);
+ align-items:center;
+ margin:25px 0 0;
+ padding:clamp(23px,3.2vw,37px);
+ border:1px solid #31564d;
+ border-radius:17px;
+ color:#f2faef;
+ background:linear-gradient(125deg,#102b2b 0%,#153b35 100%);
+}
+.ts-founders-teaser-brand{min-width:0;display:grid;align-content:center;justify-items:start;gap:16px}
+.ts-founders-teaser-brand img{display:block;width:100%;max-width:290px;height:auto;object-fit:contain}
+.ts-founders-teaser-brand>span{
+ display:inline-flex;align-items:center;
+ font-size:10px;font-weight:800;letter-spacing:.09em;line-height:1.55;
+ color:#c8f16d;
+}
+.ts-founders-teaser-body{min-width:0}
+.ts-founders-kicker{color:#c8f16d;font-size:10px;font-weight:800;letter-spacing:.13em;line-height:1.5;margin-bottom:8px}
+.ts-founders-teaser-body h3{margin:0 0 10px;color:#fff;font-size:clamp(23px,2.4vw,31px);letter-spacing:-.043em;line-height:1.17}
+.ts-founders-teaser-body p{margin:0;max-width:760px;font-size:13px;line-height:1.67;color:#d4e5d9}
+.ts-founders-teaser-body p strong{color:#fff}
+.ts-founders-actions,.ts-founders-project-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.ts-founders-primary,.ts-founders-secondary{
+ display:inline-flex;align-items:center;justify-content:center;gap:9px;
+ padding:11px 16px;
+ min-height:42px;
+ border:1px solid #c8f16d;border-radius:10px;
+ color:#193829;background:#c8f16d;
+ font-size:12px;font-weight:850;line-height:1.4;
+ text-decoration:none;transition:background .18s ease,border-color .18s ease;
+}
+.ts-founders-primary:hover,.ts-founders-primary:focus-visible{background:#e2ffa8;border-color:#e2ffa8;color:#193829}
+.ts-founders-secondary{color:#e9f4ed;background:transparent;border-color:#67877b}
+.ts-founders-secondary:hover,.ts-founders-secondary:focus-visible{background:#284e47;color:#fff;border-color:#a1c3b0}
+.home-v2 .ts-founders-teaser-body .ts-founders-disclaimer{
+ margin-top:12px;
+ font-size:11px;line-height:1.55;
+ color:#aec6b8;
+}
+/* Full Founders feature on the projects page – not another product card. */
+.projects-page .ts-founders-project{
+ scroll-margin-top:106px;
+ background:#102a2b;color:#f1f8f0;
+ padding:clamp(55px,6.6vw,88px) 0;
+ border-top:1px solid #31544e;
+}
+.ts-founders-project-heading{
+ display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+ padding-bottom:23px;margin-bottom:30px;border-bottom:1px solid rgba(213,239,222,.2)
+}
+.ts-founders-project-index{font-weight:850;color:#c8f16d;font-size:11px;letter-spacing:.14em}
+.ts-founders-project-stage{font-weight:750;color:#c2d5ce;font-size:10px;letter-spacing:.09em}
+.ts-founders-project-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:clamp(26px,4.2vw,65px);align-items:center}
+.ts-founders-project-copy{min-width:0}
+.ts-founders-project-logo{display:block;width:min(100%,335px);height:auto;margin:0 0 24px}
+.ts-founders-project-copy h2{color:#fff;line-height:1.1;letter-spacing:-.05em;font-size:clamp(31px,3.6vw,46px);margin:0 0 20px}
+.ts-founders-project-copy>p{max-width:610px;color:#d0e1d7;font-size:14px;line-height:1.75;margin:0 0 13px}
+.ts-founders-project-copy>p strong{color:#fff}
+.ts-founders-project-date{
+ display:grid;gap:4px;
+ border-left:3px solid #c8f16d;padding:5px 0 5px 16px;margin:21px 0 20px;
+}
+.ts-founders-project-date span{font-size:10px;letter-spacing:.12em;font-weight:800;color:#b4d2b7}
+.ts-founders-project-date strong{font-size:18px;line-height:1.35;color:#f4ffdb}
+.ts-founders-project-date small{font-size:11px;line-height:1.55;color:#b2c7ba}
+.ts-founders-project-actions{margin-top:0}
+.ts-founders-project-film{
+ margin:0;padding:13px;
+ min-width:0;align-self:start;
+ background:#0b1c23;
+ border:1px solid #34595a;border-radius:17px;
+ box-shadow:0 20px 46px rgba(0,0,0,.2)
+}
+.ts-founders-project-film video{
+ display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;
+ border-radius:10px;background:#071e2a;
+}
+.ts-founders-project-film figcaption{font-size:11px;color:#b3cbc5;line-height:1.6;margin:11px 4px 1px}
+@media(max-width:980px){
+ .home-v2 .ts-founders-teaser{grid-template-columns:minmax(180px,.46fr) 1fr;gap:24px}
+ .ts-founders-project-grid{grid-template-columns:1fr}
+ .ts-founders-project-film{max-width:790px;width:100%;justify-self:center}
+}
+@media(max-width:720px){
+ .home-v2 .ts-founders-teaser{grid-template-columns:1fr;padding:23px;gap:16px}
+ .ts-founders-teaser-brand{gap:9px}
+ .ts-founders-teaser-brand img{max-width:260px}
+ .ts-founders-teaser-body h3{font-size:25px}
+ .ts-founders-project-heading{display:grid;gap:7px}
+}
+@media(max-width:460px){
+ .home-v2 .ts-founders-teaser{padding:20px;margin-top:17px}
+ .ts-founders-actions,.ts-founders-project-actions{align-items:stretch}
+ .ts-founders-actions>a,.ts-founders-project-actions>a{width:100%}
+ .ts-founders-project-date strong{font-size:16px}
+ .ts-founders-project-film{padding:8px}
+}
+@media(prefers-reduced-motion:reduce){
+ .ts-founders-primary,.ts-founders-secondary{transition:none}
+}

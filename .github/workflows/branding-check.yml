@@ -11,6 +11,7 @@ on:
       - 'tests/projects-page-test.py'
       - 'public/assets/project-showcase.css'
       - 'public/assets/projekte-*'
+      - 'public/assets/tennilo-founders-*'
       - 'public/assets/site.css'
       - 'public/assets/home-refresh.css'
       - 'public/assets/home-structure.css'

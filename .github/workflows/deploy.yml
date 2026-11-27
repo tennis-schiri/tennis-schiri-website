@@ -38,6 +38,8 @@ jobs:
           cp tennilo-brand-source/public/assets/tennilo-logo.png public/assets/tennilo-logo.png
           cp tennilo-brand-source/public/assets/tennilo-icon.png public/assets/tennilo-icon.png
           cp tennilo-brand-source/public/assets/clubdisplay.png public/assets/tennilo-clubdisplay.png
+          cp tennilo-brand-source/public/assets/tennilo-founders-video.mp4 public/assets/tennilo-founders-video.mp4
+          test -s public/assets/tennilo-founders-video.mp4
           test -s public/assets/tennilo-clubdisplay.png
 
       - name: Website-Dateien prüfen
@@ -65,6 +67,10 @@ jobs:
             public/favicon.svg \
             public/assets/site.css \
             public/assets/project-showcase.css \
+            public/assets/tennilo-founders-showcase.css \
+            public/assets/tennilo-founders-logo.png \
+            public/assets/tennilo-founders-video-poster.jpg \
+            public/assets/tennilo-founders-video.mp4 \
             public/assets/projekte-score-watch.png \
             public/assets/projekte-score-phone.png \
             public/assets/projekte-score-board.png \
@@ -118,6 +124,10 @@ jobs:
             public/favicon.svg \
             public/assets/site.css \
             public/assets/project-showcase.css \
+            public/assets/tennilo-founders-showcase.css \
+            public/assets/tennilo-founders-logo.png \
+            public/assets/tennilo-founders-video-poster.jpg \
+            public/assets/tennilo-founders-video.mp4 \
             public/assets/projekte-score-watch.png \
             public/assets/projekte-score-phone.png \
             public/assets/projekte-score-board.png \
